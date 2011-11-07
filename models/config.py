@@ -1,0 +1,1 @@
+response.generic_patterns = ['*']
