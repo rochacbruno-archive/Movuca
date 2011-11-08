@@ -9,7 +9,7 @@ dist
 build
 eggs
 errors
-session
+sessions
 cache
 parts
 bin
