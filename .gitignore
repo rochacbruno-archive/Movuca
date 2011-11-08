@@ -8,6 +8,9 @@
 dist
 build
 eggs
+errors
+session
+cache
 parts
 bin
 var
