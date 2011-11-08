@@ -1,1 +1,0 @@
-response.generic_patterns = ['*']

@@ -1,0 +1,8 @@
+timestamp: 2011-11-08T05:51:18.677122
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512)
+);
+success!
+timestamp: 2011-11-08T05:53:51.015247
+ALTER TABLE auth_user ADD email CHAR(512);

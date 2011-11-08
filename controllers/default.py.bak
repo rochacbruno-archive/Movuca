@@ -3,4 +3,4 @@
 
 
 def index():
-    return dict(message="teste")
+    return dict()

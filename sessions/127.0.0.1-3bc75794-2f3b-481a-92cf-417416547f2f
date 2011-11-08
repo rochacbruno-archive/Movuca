@@ -1,0 +1,14 @@
+(dp1
+S'last_query'
+p2
+S'db.auth_user.id>0'
+p3
+sS'_formkey[auth_user/1]'
+p4
+S'c5d36104-6990-4064-b0b1-b08ccd724df0'
+p5
+sS'_formkey[auth_user/create]'
+p6
+S'9b38ec73-1274-49bc-9fb7-37d7768f6fe0'
+p7
+s.
