@@ -6,3 +6,14 @@ CREATE TABLE auth_user(
 success!
 timestamp: 2011-11-08T05:53:51.015247
 ALTER TABLE auth_user ADD email CHAR(512);
+timestamp: 2011-11-08T07:00:30.507291
+ALTER TABLE auth_user ADD tel CHAR(512);
+timestamp: 2011-11-08T07:01:39.556086
+ALTER TABLE auth_user ADD tele CHAR(512);
+timestamp: 2011-11-08T07:31:55.542567
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    user INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!

@@ -6,6 +6,7 @@ class Config(object):
         # database
         self.db_migrate = True
         self.db_pool_size = 10
+        self.teste = False
 
         # auth
 

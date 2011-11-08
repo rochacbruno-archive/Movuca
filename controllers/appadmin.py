@@ -4,9 +4,10 @@
 # ## make sure administrator is on localhost
 # ###########################################################
 
-from datamodel.user import User
+from datamodel.user import User, Category
 db = DAL("sqlite://teste1.db")
 user = User(db)
+cat = Category(db)
 
 import os
 import socket
