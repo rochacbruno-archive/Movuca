@@ -15,8 +15,9 @@ class User(BaseModel):
                   Field('registration_key', length=512, writable=False, readable=False, default=''),
                   Field('reset_password_key', length=512, writable=False, readable=False, default=''),
                   Field('registration_id', length=512, writable=False, readable=False, default=''),
-                  Field('record_created', 'datetime', default=request.now, writable=False, readable=False),
-                  Field('record_updated', 'datetime', default=request.now, update=request.now, writable=False, readable=False)]
+                  #Field('record_created', 'datetime', default=request.now, writable=False, readable=False),
+                  #Field('record_updated', 'datetime', default=request.now, update=request.now, writable=False, readable=False)
+                  ]
     visibility = {'password': (True, False),
                   'registration_key': (False, False),
                   'reset_password_key': (False, False),

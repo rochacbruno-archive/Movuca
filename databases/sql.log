@@ -161,3 +161,33 @@ timestamp: 2011-11-08T09:35:43.233131
 ALTER TABLE auth_user ADD reset_password_key CHAR(512);
 timestamp: 2011-11-08T09:35:43.332941
 ALTER TABLE auth_user ADD registration_key CHAR(512);
+timestamp: 2011-11-08T11:01:23.237943
+ALTER TABLE auth_user ADD record_created TIMESTAMP;
+timestamp: 2011-11-08T11:01:23.335632
+ALTER TABLE auth_user ADD registration_id CHAR(512);
+timestamp: 2011-11-08T11:01:23.435808
+ALTER TABLE auth_user ADD record_updated TIMESTAMP;
+timestamp: 2011-11-08T11:01:23.534349
+ALTER TABLE auth_user ADD reset_password_key CHAR(512);
+timestamp: 2011-11-08T11:01:23.634337
+ALTER TABLE auth_user ADD registration_key CHAR(512);
+timestamp: 2011-11-08T11:04:39.265948
+ALTER TABLE auth_user ADD modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+timestamp: 2011-11-08T11:04:39.381082
+ALTER TABLE auth_user ADD is_active CHAR(1);
+timestamp: 2011-11-08T11:04:39.469004
+ALTER TABLE auth_user ADD created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+timestamp: 2011-11-08T11:04:39.558171
+ALTER TABLE auth_user ADD created_on TIMESTAMP;
+timestamp: 2011-11-08T11:04:39.697378
+ALTER TABLE auth_user ADD modified_on TIMESTAMP;
+timestamp: 2011-11-08T11:04:39.836992
+ALTER TABLE category ADD modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+timestamp: 2011-11-08T11:04:39.972562
+ALTER TABLE category ADD is_active CHAR(1);
+timestamp: 2011-11-08T11:04:40.060529
+ALTER TABLE category ADD created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+timestamp: 2011-11-08T11:04:40.148844
+ALTER TABLE category ADD created_on TIMESTAMP;
+timestamp: 2011-11-08T11:04:40.237683
+ALTER TABLE category ADD modified_on TIMESTAMP;

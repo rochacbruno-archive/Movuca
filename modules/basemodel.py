@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from gluon.dal import DAL
-#from gluon.tools import Auth
+from gluon.tools import Auth
 
 
 class BaseModel(object):
@@ -24,8 +24,8 @@ class BaseModel(object):
             self.auth.define_tables(migrate=self.migrate)
 
     def set_properties(self):
-        #fakeauth = Auth(DAL(None))
-        #self.properties.extend([fakeauth.signature])
+        fakeauth = Auth(DAL(None))
+        self.properties.extend([fakeauth.signature])
         self.entity = self.db.define_table(self.tablename,
                                            *self.properties,
                                            migrate=self.migrate,
@@ -37,6 +37,7 @@ class BaseModel(object):
             self.entity[field].requires = value
 
     def set_visibility(self):
+        self.entity.is_active.writable = self.entity.is_active.readable = False
         visibility = self.visibility if hasattr(self, 'visibility') else {}
         for field, value in visibility.items():
             self.entity[field].writable, self.entity[field].readable = value

@@ -4,9 +4,12 @@
 # ## make sure administrator is on localhost
 # ###########################################################
 
+from custom import Access, DataBase
 from datamodel.user import User, Category
-db = DAL("sqlite://teste4.db")
-user = User(db)
+db = DataBase()
+auth = Access(db)
+
+user = User(auth=auth)
 cat = Category(db)
 
 import os
