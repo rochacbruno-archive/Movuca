@@ -9,7 +9,7 @@ from datamodel.user import User, Category
 db = DataBase()
 auth = Access(db)
 
-user = User(auth=auth)
+auth_user = User(auth=auth)
 cat = Category(db)
 
 import os
