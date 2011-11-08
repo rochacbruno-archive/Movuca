@@ -5,7 +5,7 @@
 # ###########################################################
 
 from datamodel.user import User, Category
-db = DAL("sqlite://teste1.db")
+db = DAL("sqlite://teste4.db")
 user = User(db)
 cat = Category(db)
 

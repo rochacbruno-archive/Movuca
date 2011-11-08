@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from gluon.dal import DAL
+#from gluon.tools import Auth
 
 
 class BaseModel(object):
     def __init__(self, db=None, auth={}, migrate=None, format=None):
-        self.db = db or auth.get('db', None)
+        self.db = auth.db if hasattr(auth, 'db') else db
         assert isinstance(self.db, DAL)
         self.auth = auth
         from config import Config
         self.config = Config()
-        print self.config.teste
         self.migrate = migrate or self.config.db_migrate
         self.format = format
         self.set_properties()
@@ -24,6 +24,8 @@ class BaseModel(object):
             self.auth.define_tables(migrate=self.migrate)
 
     def set_properties(self):
+        #fakeauth = Auth(DAL(None))
+        #self.properties.extend([fakeauth.signature])
         self.entity = self.db.define_table(self.tablename,
                                            *self.properties,
                                            migrate=self.migrate,

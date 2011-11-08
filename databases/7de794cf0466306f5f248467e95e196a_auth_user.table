@@ -27,35 +27,35 @@ sS'sql'
 p14
 S'CHAR(512)'
 p15
-ssS'email'
+ssS'id'
 p16
 (dp17
 g11
-g12
-sg13
-I3
-sg14
-S'CHAR(512)'
+S'id'
 p18
-ssS'name'
+sg13
+I1
+sg14
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
 p19
-(dp20
+ssS'name'
+p20
+(dp21
 g11
 g12
 sg13
 I2
 sg14
-S'CHAR(512)'
-p21
-ssS'id'
+S'CHAR(512) NOT NULL'
 p22
-(dp23
+ssS'email'
+p23
+(dp24
 g11
-S'id'
-p24
+g12
 sg13
-I1
+I3
 sg14
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
+S'CHAR(512) NOT NULL UNIQUE'
 p25
 ss.
