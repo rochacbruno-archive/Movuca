@@ -4,13 +4,13 @@
 # ## make sure administrator is on localhost
 # ###########################################################
 
-from custom import Access, DataBase
-from datamodel.user import User, Category
+from movuca import Access, DataBase
 db = DataBase()
 auth = Access(db)
 
 #auth_user = User(auth=auth)
-cat = Category(db)
+#cat = Category(db)
+
 
 import os
 import socket

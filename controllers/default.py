@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from custom import Access, DataBase
+from movuca import Access, DataBase
 #from datamodel.user import User, Category
 db = DataBase()
 auth = Access(db)

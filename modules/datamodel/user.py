@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from gluon.dal import Field
-from basemodel import BaseModel, BaseAuth
+from basemodel import BaseAuth
 from gluon.validators import *
 
 
@@ -15,7 +15,7 @@ class User(BaseAuth):
                   Field("website", "string"),
                   Field("avatar", "upload"),
                   Field("thumbnail", "upload"),
-                  Field("photo_source", "string"),
+                  Field("photo_source", "integer", default=1),
                   Field("about", "text"),
                   Field("gender", "string"),
                   Field("birthdate", "datetime"),
@@ -69,14 +69,17 @@ class User(BaseAuth):
                          }
 
     def set_validators(self):
-        self.entity.nickname.requires = IS_NOT_IN_DB(self.db, self.entity.nickname)
+        from config import Config
+        config = Config()
+        from gluon import current
+        T = current.T
+        self.entity.nickname.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.nickname))
+        self.entity.twitter.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.twitter))
+        self.entity.facebook.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.facebook))
 
+        self.entity.photo_source.requires = IS_IN_SET(config.auth_photo_source)
+        self.entity.gender.requires = IS_IN_SET(config.auth_gender)
+        self.entity.privacy.requires = IS_IN_SET(config.auth_privacy)
+        self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
 
-class Category(BaseModel):
-    tablename = "category"
-    properties = [Field("title"),
-                  Field("user", "integer")]
-
-    def set_validators(self):
-        from gluon.validators import IS_IN_DB
-        self.entity.user.requires = IS_IN_DB(self.db, 'auth_user.id')
+        self.entity.website.requires = IS_EMPTY_OR(IS_URL())

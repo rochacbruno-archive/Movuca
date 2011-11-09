@@ -13,5 +13,25 @@ class Config(object):
         self.mail_login = 'teste:1234'
 
         # auth
+        from gluon import current
+        T = current.T
+        self.auth_formstyle = 'divs'
+        self.auth_photo_source = [
+                                  (1, T("upload")),
+                                  (2, "gravatar"),
+                                  (3, "facebook"),
+                                  (4, "twitter"),
+                                  (5, T("no photo")),
+                                 ]
+        self.auth_gender = [
+                           ("Male", T("Male")),
+                           ("Female", T("Female")),
+                           ("Not specified", T("Not specified")),
+                           ]
 
+        self.auth_privacy = [
+                            (1, T("Public")),
+                            (2, T("Visible only for contacts")),
+                            (3, T("Private")),
+                            ]
         # mail
