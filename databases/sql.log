@@ -191,3 +191,414 @@ timestamp: 2011-11-08T11:04:40.148844
 ALTER TABLE category ADD created_on TIMESTAMP;
 timestamp: 2011-11-08T11:04:40.237683
 ALTER TABLE category ADD modified_on TIMESTAMP;
+timestamp: 2011-11-08T22:02:01.992340
+ALTER TABLE auth_user ADD about TEXT;
+timestamp: 2011-11-08T22:02:02.117088
+ALTER TABLE auth_user ADD photo_source CHAR(512);
+timestamp: 2011-11-08T22:02:02.214957
+ALTER TABLE auth_user ADD twitter CHAR(512);
+timestamp: 2011-11-08T22:02:02.316450
+ALTER TABLE auth_user ADD thumbnail CHAR(512);
+timestamp: 2011-11-08T22:02:02.415627
+ALTER TABLE auth_user ADD facebook CHAR(512);
+timestamp: 2011-11-08T22:02:02.513153
+ALTER TABLE auth_user ADD avatar CHAR(512);
+timestamp: 2011-11-08T22:02:02.613672
+ALTER TABLE auth_user ADD nickname CHAR(512) UNIQUE;
+timestamp: 2011-11-08T22:05:21.954823
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) NOT NULL,
+    email CHAR(512) NOT NULL UNIQUE,
+    password CHAR(512),
+    nickname CHAR(512) NOT NULL UNIQUE,
+    avatar CHAR(512),
+    thumbnail CHAR(512),
+    about TEXT,
+    photo_source CHAR(512),
+    twitter CHAR(512),
+    facebook CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512),
+    registration_type CHAR(512),
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-08T22:05:22.410389
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-08T22:05:22.635021
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-08T22:05:22.888686
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-11-08T22:05:23.177086
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-08T22:05:23.452728
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url CHAR(512),
+    uuid CHAR(512)
+);
+success!
+timestamp: 2011-11-08T22:05:23.769373
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    user INTEGER,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-08T22:41:52.930689
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) NOT NULL,
+    email CHAR(512) NOT NULL UNIQUE,
+    password CHAR(512),
+    nickname CHAR(512) NOT NULL UNIQUE,
+    avatar CHAR(512),
+    thumbnail CHAR(512),
+    about TEXT,
+    photo_source CHAR(512),
+    twitter CHAR(512),
+    facebook CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512),
+    registration_type CHAR(512)
+);
+success!
+timestamp: 2011-11-08T22:41:53.115911
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-08T22:41:53.260746
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-08T22:41:53.495986
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-11-08T22:41:53.615284
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-08T22:41:53.725178
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url CHAR(512),
+    uuid CHAR(512)
+);
+success!
+timestamp: 2011-11-08T22:41:53.836054
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    user INTEGER
+);
+success!
+timestamp: 2011-11-08T23:15:06.707924
+ALTER TABLE auth_user ADD first_name CHAR(128);
+timestamp: 2011-11-08T23:15:06.840931
+ALTER TABLE auth_user ADD last_name CHAR(128);
+timestamp: 2011-11-08T23:15:59.874009
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512)
+);
+success!
+timestamp: 2011-11-08T23:16:00.004638
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-08T23:16:00.120940
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-08T23:16:00.250734
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-11-08T23:16:00.408940
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-08T23:16:00.538004
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url CHAR(512),
+    uuid CHAR(512)
+);
+success!
+timestamp: 2011-11-08T23:17:32.963719
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    user INTEGER
+);
+success!
+timestamp: 2011-11-08T23:30:48.486902
+ALTER TABLE auth_user ADD teste CHAR(512);
+timestamp: 2011-11-09T01:01:27.982441
+ALTER TABLE auth_user ADD banana CHAR(512);
+timestamp: 2011-11-09T01:04:14.471114
+ALTER TABLE auth_user ADD title CHAR(512);
+timestamp: 2011-11-09T01:04:14.637783
+ALTER TABLE auth_user ADD user INTEGER;
+timestamp: 2011-11-09T01:15:53.471094
+ALTER TABLE category ADD modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+timestamp: 2011-11-09T01:15:53.580227
+ALTER TABLE category ADD is_active CHAR(1);
+timestamp: 2011-11-09T01:15:53.679356
+ALTER TABLE category ADD created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+timestamp: 2011-11-09T01:15:53.778811
+ALTER TABLE category ADD created_on TIMESTAMP;
+timestamp: 2011-11-09T01:15:53.878643
+ALTER TABLE category ADD modified_on TIMESTAMP;
+timestamp: 2011-11-09T03:11:41.071303
+ALTER TABLE auth_user ADD website CHAR(512);
+timestamp: 2011-11-09T03:11:41.175064
+ALTER TABLE auth_user ADD privacy INTEGER;
+timestamp: 2011-11-09T03:11:41.303817
+ALTER TABLE auth_user ADD photo_source CHAR(512);
+timestamp: 2011-11-09T03:11:41.414230
+ALTER TABLE auth_user ADD gender CHAR(512);
+timestamp: 2011-11-09T03:11:41.524793
+ALTER TABLE auth_user ADD twitter CHAR(512);
+timestamp: 2011-11-09T03:11:41.635661
+ALTER TABLE auth_user ADD birthdate TIMESTAMP;
+timestamp: 2011-11-09T03:11:41.746178
+ALTER TABLE auth_user ADD about TEXT;
+timestamp: 2011-11-09T03:11:41.856650
+ALTER TABLE auth_user ADD facebook CHAR(512);
+timestamp: 2011-11-09T03:11:41.966489
+ALTER TABLE auth_user ADD avatar CHAR(512);
+timestamp: 2011-11-09T03:11:42.076956
+ALTER TABLE auth_user ADD tagline CHAR(512);
+timestamp: 2011-11-09T03:11:42.177086
+ALTER TABLE auth_user ADD facebookid CHAR(512);
+timestamp: 2011-11-09T03:11:42.365024
+ALTER TABLE auth_user ADD nickname CHAR(512);
+timestamp: 2011-11-09T03:11:42.485547
+ALTER TABLE auth_user ADD thumbnail CHAR(512);
+timestamp: 2011-11-09T03:29:58.188811
+ALTER TABLE auth_user ADD groups INTEGER;
+timestamp: 2011-11-09T03:29:58.290249
+ALTER TABLE auth_user ADD rating_count INTEGER;
+timestamp: 2011-11-09T03:29:58.413226
+ALTER TABLE auth_user ADD sent_messages INTEGER;
+timestamp: 2011-11-09T03:29:58.512628
+ALTER TABLE auth_user ADD city CHAR(512);
+timestamp: 2011-11-09T03:29:58.657811
+ALTER TABLE auth_user ADD comments INTEGER;
+timestamp: 2011-11-09T03:29:58.765110
+ALTER TABLE auth_user ADD languages TEXT;
+timestamp: 2011-11-09T03:29:58.842379
+ALTER TABLE auth_user ADD unread_messages INTEGER;
+timestamp: 2011-11-09T03:29:58.963970
+ALTER TABLE auth_user ADD rating_total INTEGER;
+timestamp: 2011-11-09T03:29:59.063548
+ALTER TABLE auth_user ADD registration_type INTEGER;
+timestamp: 2011-11-09T03:29:59.141582
+ALTER TABLE auth_user ADD responses INTEGER;
+timestamp: 2011-11-09T03:29:59.372565
+ALTER TABLE auth_user ADD rating_average INTEGER;
+timestamp: 2011-11-09T03:29:59.509321
+ALTER TABLE auth_user ADD favorites INTEGER;
+timestamp: 2011-11-09T03:29:59.618042
+ALTER TABLE auth_user ADD pages INTEGER;
+timestamp: 2011-11-09T03:29:59.714936
+ALTER TABLE auth_user ADD draft_messages INTEGER;
+timestamp: 2011-11-09T03:29:59.803318
+ALTER TABLE auth_user ADD articles INTEGER;
+timestamp: 2011-11-09T03:29:59.892521
+ALTER TABLE auth_user ADD draft_articles INTEGER;
+timestamp: 2011-11-09T03:29:59.980915
+ALTER TABLE auth_user ADD contacts INTEGER;
+timestamp: 2011-11-09T03:30:00.068308
+ALTER TABLE auth_user ADD messages INTEGER;
+timestamp: 2011-11-09T03:30:00.159236
+ALTER TABLE auth_user ADD pictures INTEGER;
+timestamp: 2011-11-09T03:30:00.245065
+ALTER TABLE auth_user ADD threads INTEGER;
+timestamp: 2011-11-09T03:30:00.337589
+ALTER TABLE auth_user ADD country CHAR(512);
+timestamp: 2011-11-09T03:35:14.010013
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512),
+    nickname CHAR(512),
+    tagline CHAR(512),
+    twitter CHAR(512),
+    facebook CHAR(512),
+    website CHAR(512),
+    avatar CHAR(512),
+    thumbnail CHAR(512),
+    photo_source CHAR(512),
+    about TEXT,
+    gender CHAR(512),
+    birthdate TIMESTAMP,
+    privacy INTEGER NOT NULL DEFAULT 1,
+    facebookid CHAR(512),
+    registration_type INTEGER NOT NULL DEFAULT 1,
+    articles INTEGER NOT NULL DEFAULT 0,
+    draft_articles INTEGER NOT NULL DEFAULT 0,
+    messages INTEGER NOT NULL DEFAULT 0,
+    draft_messages INTEGER NOT NULL DEFAULT 0,
+    unread_messages INTEGER NOT NULL DEFAULT 0,
+    sent_messages INTEGER NOT NULL DEFAULT 0,
+    comments INTEGER NOT NULL DEFAULT 0,
+    rating_count INTEGER NOT NULL DEFAULT 0,
+    rating_total INTEGER NOT NULL DEFAULT 0,
+    rating_average INTEGER NOT NULL DEFAULT 0,
+    threads INTEGER NOT NULL DEFAULT 0,
+    responses INTEGER NOT NULL DEFAULT 0,
+    groups INTEGER NOT NULL DEFAULT 0,
+    contacts INTEGER NOT NULL DEFAULT 0,
+    pages INTEGER NOT NULL DEFAULT 0,
+    pictures INTEGER NOT NULL DEFAULT 0,
+    favorites INTEGER NOT NULL DEFAULT 0,
+    country CHAR(512),
+    city CHAR(512),
+    languages TEXT
+);
+success!
+timestamp: 2011-11-09T03:35:14.190583
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-09T03:35:14.391099
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-09T03:35:14.514188
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-11-09T03:35:14.646883
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-09T03:35:14.768198
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url CHAR(512),
+    uuid CHAR(512)
+);
+success!
+timestamp: 2011-11-09T03:35:14.871996
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    user INTEGER,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!

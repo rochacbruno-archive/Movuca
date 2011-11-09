@@ -6,9 +6,14 @@ from gluon.dal import DAL
 
 class DataBase(DAL):
     def __init__(self):
-        from config import Config
-        config = Config()
-        DAL.__init__(self, config.db_uri, migrate_enabled=config.db_migrate_enabled)
+        from gluon import current
+        if not current.request.env.web2py_runtime_gae:
+            from config import Config
+            config = Config()
+            DAL.__init__(self, config.db_uri, migrate_enabled=config.db_migrate_enabled)
+        else:
+            DAL.__init__(self, "google:datastore")
+            current.session.connect(current.request, current.response, db=self)
 
 
 class Access(Auth):
@@ -20,6 +25,8 @@ class Access(Auth):
         self.db = db
         self.hmac_key = Auth.get_or_create_key()
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
+        from datamodel.user import User
+        User(self)
 
 
 class Mailer(Mail):

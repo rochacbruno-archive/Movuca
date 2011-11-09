@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from gluon.dal import DAL
+from gluon.dal import DAL, Field
 from gluon.tools import Auth
 
 
@@ -37,7 +37,10 @@ class BaseModel(object):
             self.entity[field].requires = value
 
     def set_visibility(self):
-        self.entity.is_active.writable = self.entity.is_active.readable = False
+        try:
+            self.entity.is_active.writable = self.entity.is_active.readable = False
+        except:
+            pass
         visibility = self.visibility if hasattr(self, 'visibility') else {}
         for field, value in visibility.items():
             self.entity[field].writable, self.entity[field].readable = value
@@ -61,3 +64,47 @@ class BaseModel(object):
         comments = self.comments if hasattr(self, 'comments') else {}
         for field, value in comments.items():
             self.entity[field].comment = value
+
+
+class BaseAuth(BaseModel):
+    def __init__(self, auth, migrate=None):
+        self.auth = auth
+        self.db = auth.db
+        from config import Config
+        self.config = Config()
+        self.migrate = migrate or self.config.db_migrate
+        self.set_extra_fields()
+        self.auth.define_tables(migrate=self.migrate)
+        self.entity = self.auth.settings.table_user
+        self.set_validators()
+        self.hide_all()
+        self.set_visibility()
+        self.set_register_visibility()
+        self.set_profile_visibility()
+        self.set_representation()
+        self.set_widgets()
+        self.set_labels()
+        self.set_comments()
+
+    def set_extra_fields(self):
+        self.auth.settings.extra_fields['auth_user'] = self.properties
+
+    def hide_all(self):
+        alwaysvisible = ['first_name', 'last_name', 'password', 'email']
+        for field in self.entity.fields:
+            if not field in alwaysvisible:
+                self.entity[field].writable = self.entity[field].readable = False
+
+    def set_register_visibility(self):
+        from gluon import current
+        if 'register' in current.request.args:
+            register_visibility = self.register_visibility if hasattr(self, 'register_visibility') else {}
+            for field, value in register_visibility.items():
+                self.entity[field].writable, self.entity[field].readable = value
+
+    def set_profile_visibility(self):
+        from gluon import current
+        if 'profile' in current.request.args:
+            profile_visibility = self.profile_visibility if hasattr(self, 'profile_visibility') else {}
+            for field, value in profile_visibility.items():
+                self.entity[field].writable, self.entity[field].readable = value

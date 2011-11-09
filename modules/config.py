@@ -6,7 +6,7 @@ class Config(object):
         # database
         self.db_migrate = True
         self.db_pool_size = 10
-        self.db_uri = "sqlite://config.sqlite"
+        self.db_uri = "sqlite://config100.sqlite"
         self.db_migrate_enabled = True
         self.mail_server = 'logging'
         self.mail_sender = 'teste@teste.com'
