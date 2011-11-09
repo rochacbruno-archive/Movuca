@@ -10,7 +10,7 @@ class DataBase(DAL):
         if not current.request.env.web2py_runtime_gae:
             from config import Config
             config = Config()
-            DAL.__init__(self, config.db_uri, migrate_enabled=config.db_migrate_enabled)
+            DAL.__init__(self, config.db_uri, migrate_enabled=config.db_migrate_enabled, check_reserved=['all'])
         else:
             DAL.__init__(self, "google:datastore")
             current.session.connect(current.request, current.response, db=self)

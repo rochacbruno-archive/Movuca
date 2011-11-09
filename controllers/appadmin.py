@@ -7,10 +7,8 @@
 from movuca import Access, DataBase
 db = DataBase()
 auth = Access(db)
-
-#auth_user = User(auth=auth)
-#cat = Category(db)
-
+from datamodel.article import Article
+Article(db)
 
 import os
 import socket

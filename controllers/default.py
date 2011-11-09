@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 
 from movuca import Access, DataBase
-#from datamodel.user import User, Category
+from datamodel.article import Article
 db = DataBase()
 auth = Access(db)
-#auth_user = User(auth=auth)
-#cat = Category(db)
+article = Article(db)
 
 
 @auth.requires_login()
 def index():
     return dict(message="teste")
+
+
+def articles():
+    return SQLFORM(article.entity, formstyle='divs').process()
 
 
 def user():

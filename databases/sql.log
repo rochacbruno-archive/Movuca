@@ -602,3 +602,190 @@ CREATE TABLE category(
     modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
 );
 success!
+timestamp: 2011-11-09T05:33:38.122655
+ALTER TABLE auth_user ADD userpages INTEGER NOT NULL DEFAULT 0;
+timestamp: 2011-11-09T05:40:04.217077
+CREATE TABLE article(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-09T06:17:10.790719
+ALTER TABLE article ADD picture CHAR(512);
+timestamp: 2011-11-09T06:17:10.895444
+ALTER TABLE article ADD author_nickname CHAR(512);
+timestamp: 2011-11-09T06:17:10.986999
+ALTER TABLE article ADD responses INTEGER;
+timestamp: 2011-11-09T06:17:11.072350
+ALTER TABLE article ADD title CHAR(512);
+timestamp: 2011-11-09T06:17:11.171501
+ALTER TABLE article ADD tags TEXT;
+timestamp: 2011-11-09T06:17:11.260369
+ALTER TABLE article ADD rating_count INTEGER;
+timestamp: 2011-11-09T06:17:11.348280
+ALTER TABLE article ADD draft CHAR(1);
+timestamp: 2011-11-09T06:17:11.458679
+ALTER TABLE article ADD search_index TEXT;
+timestamp: 2011-11-09T06:17:11.535923
+ALTER TABLE article ADD rating_total INTEGER;
+timestamp: 2011-11-09T06:17:11.624329
+ALTER TABLE article ADD favorited INTEGER;
+timestamp: 2011-11-09T06:17:11.756819
+ALTER TABLE article ADD description TEXT;
+timestamp: 2011-11-09T06:17:11.856310
+ALTER TABLE article ADD views INTEGER;
+timestamp: 2011-11-09T06:17:11.955652
+ALTER TABLE article ADD rating_average INTEGER;
+timestamp: 2011-11-09T06:17:12.055636
+ALTER TABLE article ADD content_type CHAR(512);
+timestamp: 2011-11-09T06:17:12.154894
+ALTER TABLE article ADD slug CHAR(512);
+timestamp: 2011-11-09T06:17:12.253798
+ALTER TABLE article ADD content_type_id INTEGER;
+timestamp: 2011-11-09T06:17:12.353167
+ALTER TABLE article ADD license CHAR(512);
+timestamp: 2011-11-09T06:17:12.452644
+ALTER TABLE article ADD this CHAR(512);
+timestamp: 2011-11-09T06:17:12.541781
+ALTER TABLE article ADD privacy INTEGER;
+timestamp: 2011-11-09T06:25:04.732128
+ALTER TABLE article ADD dislikes INTEGER;
+timestamp: 2011-11-09T06:25:04.833047
+ALTER TABLE article ADD likes INTEGER;
+timestamp: 2011-11-09T06:25:04.928879
+ALTER TABLE article ADD subscribers TEXT;
+timestamp: 2011-11-09T06:25:05.067841
+ALTER TABLE article ADD publish_date TIMESTAMP;
+timestamp: 2011-11-09T06:25:05.151685
+ALTER TABLE article ADD publish_tz CHAR(512);
+timestamp: 2011-11-09T06:55:03.255373
+CREATE TABLE auth_user(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512),
+    nickname VARCHAR(512),
+    tagline VARCHAR(512),
+    twitter VARCHAR(512),
+    facebook VARCHAR(512),
+    website VARCHAR(512),
+    avatar VARCHAR(512),
+    thumbnail VARCHAR(512),
+    photo_source INTEGER,
+    about TEXT,
+    gender VARCHAR(512),
+    birthdate TIMESTAMP,
+    privacy INTEGER NOT NULL DEFAULT 1,
+    facebookid VARCHAR(512),
+    registration_type INTEGER NOT NULL DEFAULT 1,
+    articles INTEGER NOT NULL DEFAULT 0,
+    draft_articles INTEGER NOT NULL DEFAULT 0,
+    messages INTEGER NOT NULL DEFAULT 0,
+    draft_messages INTEGER NOT NULL DEFAULT 0,
+    unread_messages INTEGER NOT NULL DEFAULT 0,
+    sent_messages INTEGER NOT NULL DEFAULT 0,
+    comments INTEGER NOT NULL DEFAULT 0,
+    rating_count INTEGER NOT NULL DEFAULT 0,
+    rating_total INTEGER NOT NULL DEFAULT 0,
+    rating_average INTEGER NOT NULL DEFAULT 0,
+    threads INTEGER NOT NULL DEFAULT 0,
+    responses INTEGER NOT NULL DEFAULT 0,
+    groups INTEGER NOT NULL DEFAULT 0,
+    contacts INTEGER NOT NULL DEFAULT 0,
+    userpages INTEGER NOT NULL DEFAULT 0,
+    pictures INTEGER NOT NULL DEFAULT 0,
+    favorites INTEGER NOT NULL DEFAULT 0,
+    country VARCHAR(512),
+    city VARCHAR(512),
+    languages TEXT
+);
+success!
+timestamp: 2011-11-09T06:55:03.446784
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-09T06:55:03.590045
+CREATE TABLE auth_membership(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-09T06:55:03.646120
+CREATE TABLE auth_permission(
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name VARCHAR(512),
+    table_name VARCHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-11-09T06:55:03.789896
+CREATE TABLE auth_event(
+    id SERIAL PRIMARY KEY,
+    time_stamp TIMESTAMP,
+    client_ip VARCHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-11-09T06:55:03.944858
+CREATE TABLE auth_cas(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url VARCHAR(512),
+    uuid VARCHAR(512)
+);
+success!
+timestamp: 2011-11-09T06:55:04.090820
+CREATE TABLE article(
+    id SERIAL PRIMARY KEY,
+    author INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    author_nickname VARCHAR(512),
+    title VARCHAR(512),
+    description TEXT,
+    picture VARCHAR(512),
+    draft CHAR(1),
+    tags TEXT,
+    content_type_id INTEGER,
+    content_type VARCHAR(512),
+    slug VARCHAR(512),
+    search_index TEXT,
+    publish_date TIMESTAMP,
+    publish_tz VARCHAR(512),
+    privacy INTEGER,
+    license VARCHAR(512),
+    likes INTEGER,
+    dislikes INTEGER,
+    views INTEGER,
+    responses INTEGER,
+    favorited INTEGER,
+    subscribers TEXT,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-09T06:59:01.743856
+ALTER TABLE article ADD author__tmp INTEGER;
+UPDATE article SET author__tmp=author;
+ALTER TABLE article DROP COLUMN author;
+ALTER TABLE article ADD author INTEGER;
+UPDATE article SET author=author__tmp;
+ALTER TABLE article DROP COLUMN author__tmp;
