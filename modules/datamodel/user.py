@@ -81,6 +81,6 @@ class User(BaseAuth):
         self.entity.photo_source.requires = IS_IN_SET(config.auth_photo_source)
         self.entity.gender.requires = IS_IN_SET(config.auth_gender)
         self.entity.privacy.requires = IS_IN_SET(config.auth_privacy)
-        self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
+        #self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
 
         self.entity.website.requires = IS_EMPTY_OR(IS_URL())

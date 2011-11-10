@@ -29,8 +29,8 @@ class BaseModel(object):
         self.properties.extend([fakeauth.signature])
         self.entity = self.db.define_table(self.tablename,
                                            *self.properties,
-                                           migrate=self.migrate,
-                                           format=self.format)
+                                           **dict(migrate=self.migrate,
+                                           format=self.format))
 
     def set_validators(self):
         validators = self.validators if hasattr(self, 'validators') else {}
