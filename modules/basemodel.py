@@ -13,6 +13,7 @@ class BaseModel(object):
         self.migrate = migrate or self.config.db_migrate
         self.format = format
         self.set_properties()
+        self.define_table()
         self.set_validators()
         self.set_visibility()
         self.set_representation()
@@ -23,7 +24,7 @@ class BaseModel(object):
             self.auth.settings.table_user = self.entity
             self.auth.define_tables(migrate=self.migrate)
 
-    def set_properties(self):
+    def define_table(self):
         fakeauth = Auth(DAL(None))
         self.properties.extend([fakeauth.signature])
         self.entity = self.db.define_table(self.tablename,
@@ -73,6 +74,7 @@ class BaseAuth(BaseModel):
         from config import Config
         self.config = Config()
         self.migrate = migrate or self.config.db_migrate
+        self.set_properties()
         self.set_extra_fields()
         self.auth.define_tables(migrate=self.migrate)
         self.entity = self.auth.settings.table_user

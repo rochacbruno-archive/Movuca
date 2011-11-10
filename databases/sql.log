@@ -789,3 +789,10 @@ ALTER TABLE article DROP COLUMN author;
 ALTER TABLE article ADD author INTEGER;
 UPDATE article SET author=author__tmp;
 ALTER TABLE article DROP COLUMN author__tmp;
+timestamp: 2011-11-10T00:30:37.243113
+ALTER TABLE article ADD author__tmp INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+UPDATE article SET author__tmp=author;
+ALTER TABLE article DROP COLUMN author;
+ALTER TABLE article ADD author INTEGER REFERENCES auth_user(id) ON DELETE CASCADE;
+UPDATE article SET author=author__tmp;
+ALTER TABLE article DROP COLUMN author__tmp;
