@@ -7,12 +7,12 @@ from gluon.dal import DAL
 class DataBase(DAL):
     def __init__(self):
         from gluon import current
+        from config import Config
+        config = Config()
         if not current.request.env.web2py_runtime_gae:
-            from config import Config
-            config = Config()
             DAL.__init__(self, config.db_uri, migrate_enabled=config.db_migrate_enabled, check_reserved=['all'])
         else:
-            DAL.__init__(self, "google:datastore")
+            DAL.__init__(self, config.db_gaeuri)
             current.session.connect(current.request, current.response, db=self)
 
 
