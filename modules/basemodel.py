@@ -4,6 +4,20 @@ from gluon.tools import Auth
 
 
 class BaseModel(object):
+    """Base Model Class
+    all define_ methods will be called, then
+    all set_ methods (hooks) will be called."""
+
+    hooks = ['set_table',
+             'set_validators',
+             'set_visibility',
+             'set_representation',
+             'set_widgets',
+             'set_labels',
+             'set_comments',
+             'set_computations',
+             'set_updates']
+
     def __init__(self, db=None, migrate=None, format=None):
         self.db = db
         assert isinstance(self.db, DAL)
@@ -23,6 +37,8 @@ class BaseModel(object):
         self.define_widgets()
         self.define_labels()
         self.define_comments()
+        self.define_computations()
+        self.define_updates()
         self.pre_load()
 
     def define_table(self):
@@ -67,14 +83,18 @@ class BaseModel(object):
         for field, value in comments.items():
             self.entity[field].comment = value
 
+    def define_computations(self):
+        computations = self.computations if hasattr(self, 'computations') else {}
+        for field, value in computations.items():
+            self.entity[field].compute = value
+
+    def define_updates(self):
+        updates = self.updates if hasattr(self, 'updates') else {}
+        for field, value in updates.items():
+            self.entity[field].update = value
+
     def pre_load(self):
-        for method in ['set_table',
-                       'set_validators',
-                       'set_visibility',
-                       'set_representation',
-                       'set_widgets',
-                       'set_labels',
-                       'set_comments']:
+        for method in self.hooks:
             if hasattr(self, method):
                 self.__getattribute__(method)()
 
@@ -100,6 +120,8 @@ class BaseAuth(BaseModel):
         self.define_widgets()
         self.define_labels()
         self.define_comments()
+        self.define_computations()
+        self.define_updates()
         self.pre_load()
 
     def define_extra_fields(self):
