@@ -9,31 +9,36 @@ class BaseModel(object):
         assert isinstance(self.db, DAL)
         from config import Config
         self.config = Config()
-        self.migrate = migrate or self.config.db_migrate
-        self.format = format
+        if migrate != None:
+            self.migrate = migrate
+        elif not hasattr(self, 'migrate'):
+            self.migrate = self.config.db_migrate
+        if format != None or not hasattr(self, 'format'):
+            self.format = format
         self.set_properties()
         self.define_table()
-        self.set_validators()
-        self.set_visibility()
-        self.set_representation()
-        self.set_widgets()
-        self.set_labels()
-        self.set_comments()
+        self.define_validators()
+        self.define_visibility()
+        self.define_representation()
+        self.define_widgets()
+        self.define_labels()
+        self.define_comments()
+        self.pre_load()
 
     def define_table(self):
         fakeauth = Auth(DAL(None))
-        self.properties.extend([fakeauth.signature])
+        self.fields.extend([fakeauth.signature])
         self.entity = self.db.define_table(self.tablename,
-                                           *self.properties,
+                                           *self.fields,
                                            **dict(migrate=self.migrate,
                                            format=self.format))
 
-    def set_validators(self):
+    def define_validators(self):
         validators = self.validators if hasattr(self, 'validators') else {}
         for field, value in validators.items():
             self.entity[field].requires = value
 
-    def set_visibility(self):
+    def define_visibility(self):
         try:
             self.entity.is_active.writable = self.entity.is_active.readable = False
         except:
@@ -42,25 +47,36 @@ class BaseModel(object):
         for field, value in visibility.items():
             self.entity[field].writable, self.entity[field].readable = value
 
-    def set_representation(self):
+    def define_representation(self):
         representation = self.representation if hasattr(self, 'representation') else {}
         for field, value in representation.items():
             self.entity[field].represent = value
 
-    def set_widgets(self):
+    def define_widgets(self):
         widgets = self.widgets if hasattr(self, 'widgets') else {}
         for field, value in widgets.items():
             self.entity[field].widget = value
 
-    def set_labels(self):
+    def define_labels(self):
         labels = self.labels if hasattr(self, 'labels') else {}
         for field, value in labels.items():
             self.entity[field].label = value
 
-    def set_comments(self):
+    def define_comments(self):
         comments = self.comments if hasattr(self, 'comments') else {}
         for field, value in comments.items():
             self.entity[field].comment = value
+
+    def pre_load(self):
+        for method in ['set_table',
+                       'set_validators',
+                       'set_visibility',
+                       'set_representation',
+                       'set_widgets',
+                       'set_labels',
+                       'set_comments']:
+            if hasattr(self, method):
+                self.__getattribute__(method)()
 
 
 class BaseAuth(BaseModel):
@@ -72,21 +88,22 @@ class BaseAuth(BaseModel):
         self.config = Config()
         self.migrate = migrate or self.config.db_migrate
         self.set_properties()
-        self.set_extra_fields()
+        self.define_extra_fields()
         self.auth.define_tables(migrate=self.migrate)
         self.entity = self.auth.settings.table_user
-        self.set_validators()
+        self.define_validators()
         self.hide_all()
-        self.set_visibility()
-        self.set_register_visibility()
-        self.set_profile_visibility()
-        self.set_representation()
-        self.set_widgets()
-        self.set_labels()
-        self.set_comments()
+        self.define_visibility()
+        self.define_register_visibility()
+        self.define_profile_visibility()
+        self.define_representation()
+        self.define_widgets()
+        self.define_labels()
+        self.define_comments()
+        self.pre_load()
 
-    def set_extra_fields(self):
-        self.auth.settings.extra_fields['auth_user'] = self.properties
+    def define_extra_fields(self):
+        self.auth.settings.extra_fields['auth_user'] = self.fields
 
     def hide_all(self):
         alwaysvisible = ['first_name', 'last_name', 'password', 'email']
@@ -94,14 +111,14 @@ class BaseAuth(BaseModel):
             if not field in alwaysvisible:
                 self.entity[field].writable = self.entity[field].readable = False
 
-    def set_register_visibility(self):
+    def define_register_visibility(self):
         from gluon import current
         if 'register' in current.request.args:
             register_visibility = self.register_visibility if hasattr(self, 'register_visibility') else {}
             for field, value in register_visibility.items():
                 self.entity[field].writable, self.entity[field].readable = value
 
-    def set_profile_visibility(self):
+    def define_profile_visibility(self):
         from gluon import current
         if 'profile' in current.request.args:
             profile_visibility = self.profile_visibility if hasattr(self, 'profile_visibility') else {}

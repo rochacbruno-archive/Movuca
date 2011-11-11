@@ -6,7 +6,8 @@ class Config(object):
         # database
         self.db_migrate = True
         self.db_pool_size = 10
-        self.db_uri = "sqlite://config100.sqlite"  # 'postgres://tutor:302010@localhost/movuca1'#"sqlite://config100.sqlite"
+        self.db_uri = "sqlite://config101.sqlite"
+        #self.db_uri = 'postgres://tutor:302010@localhost/movuca1'
         self.db_gaeuri = "google:datastore"
         self.db_migrate_enabled = True
         self.mail_server = 'logging'

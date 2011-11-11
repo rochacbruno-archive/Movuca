@@ -7,7 +7,7 @@ from gluon.validators import *
 
 class User(BaseAuth):
     def set_properties(self):
-        self.properties = [
+        self.fields = [
                       # Person info
                       Field("nickname"),
                       Field("tagline"),

@@ -7,8 +7,10 @@
 from movuca import Access, DataBase
 db = DataBase()
 auth = Access(db)
-from datamodel.article import Article
+from datamodel.article import Article, ContentType
+ContentType(db)
 Article(db)
+
 
 import os
 import socket

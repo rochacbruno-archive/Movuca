@@ -9,7 +9,7 @@ class Article(BaseModel):
     tablename = "article"
 
     def set_properties(self):
-        self.properties = [
+        self.fields = [
                       # main
                       Field("author", "reference auth_user"),
                       Field("author_nickname", "string"),
@@ -19,7 +19,7 @@ class Article(BaseModel):
                       Field("draft", "boolean"),
                       Field("tags", "list:string"),
                       # control
-                      Field("content_type_id", "integer"),
+                      Field("content_type_id", "reference content_type"),
                       Field("content_type", "string"),
                       Field("slug", "string"),
                       Field("search_index", "text"),
@@ -57,3 +57,13 @@ class Article(BaseModel):
         session = current.session
         self.entity.author_nickname.compute = lambda row: self.db.auth_user[row.author].nickname
         self.entity.author.default = session.auth.user.id if session.auth else None
+
+
+class ContentType(BaseModel):
+    tablename = "content_type"
+    format = "%(identifier)s"
+
+    def set_properties(self):
+        self.fields = [
+            Field("identifier", "string"),
+        ]
