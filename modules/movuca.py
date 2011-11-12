@@ -26,6 +26,7 @@ class Access(Auth):
         self.hmac_key = Auth.get_or_create_key()
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: remove_session(user)
+        #self.settings.register_onaccept = lambda form: add_to_users_group(form)
         from datamodel.user import User
         User(self)
 
