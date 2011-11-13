@@ -10,9 +10,9 @@ class DataBase(DAL):
         from config import Config
         config = Config()
         if not current.request.env.web2py_runtime_gae:
-            DAL.__init__(self, config.db_uri, migrate_enabled=config.db_migrate_enabled, check_reserved=['all'])
+            DAL.__init__(self, config.db.uri, migrate_enabled=config.db.migrate_enabled, check_reserved=['all'])
         else:
-            DAL.__init__(self, config.db_gaeuri)
+            DAL.__init__(self, config.db.gaeuri)
             current.session.connect(current.request, current.response, db=self)
 
 
@@ -36,9 +36,9 @@ class Mailer(Mail):
         from config import Config
         config = Config()
         Mail.__init__()
-        self.settings.server = config.mail_server
-        self.settings.sender = config.mail_sender
-        self.settings.login = config.mail_login
+        self.settings.server = config.mail.server
+        self.settings.sender = config.mail.sender
+        self.settings.login = config.mail.login
 
 
 class FormCreator(Crud):

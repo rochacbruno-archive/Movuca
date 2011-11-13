@@ -26,7 +26,7 @@ class BaseModel(object):
         if migrate != None:
             self.migrate = migrate
         elif not hasattr(self, 'migrate'):
-            self.migrate = self.config.db_migrate
+            self.migrate = self.config.db.migrate
         if format != None or not hasattr(self, 'format'):
             self.format = format
         self.set_properties()
@@ -106,7 +106,7 @@ class BaseAuth(BaseModel):
         self.db = auth.db
         from config import Config
         self.config = Config()
-        self.migrate = migrate or self.config.db_migrate
+        self.migrate = migrate or self.config.db.migrate
         self.set_properties()
         self.define_extra_fields()
         self.auth.define_tables(migrate=self.migrate)

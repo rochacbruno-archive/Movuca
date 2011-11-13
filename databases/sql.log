@@ -1,4 +1,41 @@
-timestamp: 2011-11-11T03:24:16.363998
+timestamp: 2011-11-13T04:00:56.922498
+CREATE TABLE auth_options(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    formstyle CHAR(512) NOT NULL DEFAULT 'divs',
+    photo_source TEXT NOT NULL,
+    gender TEXT NOT NULL,
+    privacy TEXT NOT NULL,
+    setuptime TIMESTAMP NOT NULL
+);
+success!
+timestamp: 2011-11-13T04:00:57.100575
+CREATE TABLE crud_options(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    formstyle CHAR(512) NOT NULL DEFAULT 'divs',
+    setuptime TIMESTAMP NOT NULL
+);
+success!
+timestamp: 2011-11-13T04:00:57.216759
+CREATE TABLE db_options(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    uri CHAR(512) NOT NULL DEFAULT 'sqlite://movuca.sqlite',
+    migrate CHAR(1) NOT NULL DEFAULT 'T',
+    pool_size INTEGER NOT NULL DEFAULT 10,
+    gaeuri CHAR(512) NOT NULL DEFAULT 'google:datastore',
+    setuptime TIMESTAMP NOT NULL,
+    migrate_enabled CHAR(1) NOT NULL DEFAULT 'T'
+);
+success!
+timestamp: 2011-11-13T04:00:57.378817
+CREATE TABLE mail_options(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    server CHAR(512) NOT NULL DEFAULT 'logging',
+    sender CHAR(512) NOT NULL DEFAULT 'mail@domain.com',
+    login CHAR(512) NOT NULL DEFAULT 'teste:1234',
+    setuptime TIMESTAMP NOT NULL
+);
+success!
+timestamp: 2011-11-13T04:02:47.666177
 CREATE TABLE auth_user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name CHAR(128),
@@ -44,21 +81,21 @@ CREATE TABLE auth_user(
     languages TEXT
 );
 success!
-timestamp: 2011-11-11T03:24:16.508917
+timestamp: 2011-11-13T04:02:47.844994
 CREATE TABLE auth_group(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     role CHAR(512),
     description TEXT
 );
 success!
-timestamp: 2011-11-11T03:24:16.730406
+timestamp: 2011-11-13T04:02:47.989805
 CREATE TABLE auth_membership(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
     group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
 );
 success!
-timestamp: 2011-11-11T03:24:16.846673
+timestamp: 2011-11-13T04:02:48.108646
 CREATE TABLE auth_permission(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
@@ -67,7 +104,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2011-11-11T03:24:16.999304
+timestamp: 2011-11-13T04:02:48.270635
 CREATE TABLE auth_event(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     time_stamp TIMESTAMP,
@@ -77,7 +114,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2011-11-11T03:24:17.133737
+timestamp: 2011-11-13T04:02:48.384963
 CREATE TABLE auth_cas(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
@@ -86,7 +123,18 @@ CREATE TABLE auth_cas(
     uuid CHAR(512)
 );
 success!
-timestamp: 2011-11-11T03:24:17.279765
+timestamp: 2011-11-13T04:02:48.529083
+CREATE TABLE content_type(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    identifier CHAR(512),
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-11-13T04:02:48.672165
 CREATE TABLE article(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
@@ -110,17 +158,6 @@ CREATE TABLE article(
     responses INTEGER,
     favorited INTEGER,
     subscribers TEXT,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE
-);
-success!
-timestamp: 2011-11-11T03:24:17.459852
-CREATE TABLE content_type(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    identifier CHAR(512),
     is_active CHAR(1),
     created_on TIMESTAMP,
     created_by INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,

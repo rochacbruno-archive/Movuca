@@ -4,6 +4,20 @@
 def install():
     from config import Config
     config = Config()
-    config.write_to()
+    config.set_default_config()
     config.get_config()
-    return config.db_uri
+    return (str(type(config.db)),
+            config.db.uri,
+            str(type(config.db_options)))
+
+
+def getlist():
+    from config import Config
+    config = Config()
+    return str(config.get_list('auth', 'privacy'))
+
+
+def test():
+    from config import Config
+    config = Config()
+    return config.mail.sender
