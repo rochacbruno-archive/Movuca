@@ -15,7 +15,6 @@ def getlist():
     from config import Config
     config = Config()
     return str(config.get_list('auth', 'privacy'))
-    #return config.auth.privacy
 
 
 def test():
