@@ -40,7 +40,7 @@ class Config(object):
                              self._db(self._db[table]).select().last())
 
     def get_list(self, table, option):
-        options = self._db(self._db["%s_options" % table]).select().last()[option]
+        options = self.__getattribute__(table)[option]
         assert isinstance(options, list)
         return [(option.split(":")[0], str(self.T(option.split(":")[1]))) for option in options]
 
