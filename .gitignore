@@ -1,10 +1,12 @@
 *.py[co]
 *.table
 *.db
+*.bak
 *.sqlite
 # Packages
 *.egg
 *.egg-info
+*.log
 dist
 build
 eggs
