@@ -27,8 +27,10 @@ class Access(Auth):
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
+        self.settings.formstyle = 'divs'
         from datamodel.user import User
-        User(self)
+        user = User(self)
+        self.entity = user.entity
 
 
 class Mailer(Mail):

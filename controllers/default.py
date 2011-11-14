@@ -11,9 +11,11 @@ from gluon.tools import Auth
 auth = Auth(DAL(None))
 
 
-@auth.requires_login()
+#@auth.requires_login()
 def index():
-    return dict(message="teste")
+    from handlers.home import Home
+    home = Home()
+    return home.render()
 
 
 def articles():
