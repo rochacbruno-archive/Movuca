@@ -21,8 +21,7 @@ class BaseModel(object):
     def __init__(self, db=None, migrate=None, format=None):
         self.db = db
         assert isinstance(self.db, DAL)
-        from config import Config
-        self.config = Config()
+        self.config = db.config
         if migrate != None:
             self.migrate = migrate
         elif not hasattr(self, 'migrate'):
@@ -104,8 +103,9 @@ class BaseAuth(BaseModel):
         self.auth = auth
         assert isinstance(self.auth, Auth)
         self.db = auth.db
-        from config import Config
-        self.config = Config()
+        # from gluon import current
+        # self.request = current.request
+        self.config = self.db.config
         self.migrate = migrate or self.config.db.migrate
         self.set_properties()
         self.define_extra_fields()
@@ -134,15 +134,13 @@ class BaseAuth(BaseModel):
                 self.entity[field].writable = self.entity[field].readable = False
 
     def define_register_visibility(self):
-        from gluon import current
-        if 'register' in current.request.args:
+        if 'register' in self.db.request.args:
             register_visibility = self.register_visibility if hasattr(self, 'register_visibility') else {}
             for field, value in register_visibility.items():
                 self.entity[field].writable, self.entity[field].readable = value
 
     def define_profile_visibility(self):
-        from gluon import current
-        if 'profile' in current.request.args:
+        if 'profile' in self.db.request.args:
             profile_visibility = self.profile_visibility if hasattr(self, 'profile_visibility') else {}
             for field, value in profile_visibility.items():
                 self.entity[field].writable, self.entity[field].readable = value

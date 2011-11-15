@@ -70,10 +70,13 @@ class User(BaseAuth):
                              }
 
     def set_validators(self):
-        from config import Config
-        config = Config()
-        from gluon import current
-        T = current.T
+        #from config import Config
+        #config = Config()
+        #from gluon import current
+        #T = current.T
+        config = self.db.config
+        T = self.db.T
+        request = self.db.request
         self.entity.nickname.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.nickname))
         self.entity.twitter.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.twitter))
         self.entity.facebook.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.facebook))
@@ -82,7 +85,7 @@ class User(BaseAuth):
         self.entity.gender.requires = IS_IN_SET(config.get_list('auth', 'gender'))
         self.entity.privacy.requires = IS_IN_SET(config.get_list('auth', 'privacy'))
         #date format not allowed on gae
-        if not current.request.env.web2py_runtime_gae:
+        if not request.env.web2py_runtime_gae:
             self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
 
         self.entity.website.requires = IS_EMPTY_OR(IS_URL())

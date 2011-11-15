@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import UL, LI
+from gluon import UL, LI, SQLFORM
 
 
 class Home(Base):
@@ -12,11 +12,16 @@ class Home(Base):
 
     def build(self):
         self.user_list()
+        self.user_form()
 
     def pre_render(self):
-        self.context["pre"] = "ok"
+        # obrigatorio ter um self.response, que tenha um render self.response.render
+        self.response = self.db.response
 
     def user_list(self):
         table = self.access.entity
         records = self.db(table).select()
         self.context['users'] = UL(*[LI(user.first_name) for user in records])
+
+    def user_form(self):
+        self.context['userform'] = SQLFORM(self.access.entity).process()

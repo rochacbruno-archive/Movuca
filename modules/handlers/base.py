@@ -23,15 +23,10 @@ class Base(object):
         self.pre_render()
 
     def load(self):
-        from gluon import current
-        self.current = current
-        self.response = current.response
-        self.request = current.request
-        self.session = current.session
-        self.T = current.T
-        self.cache = current.cache
+        pass
 
     def render(self):
+        # lançar erro caso nao tenha response e render
         return self.response.render(self.view, self.context)
 
     def start(self):
@@ -41,4 +36,5 @@ class Base(object):
         pass
 
     def pre_render(self):
-        pass
+        from gluon import current
+        self.response = current.response

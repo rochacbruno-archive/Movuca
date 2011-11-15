@@ -53,8 +53,8 @@ class Article(BaseModel):
         # comments = {'email': "Seu E-mail"}
 
     def set_validators(self):
-        from gluon import current
-        session = current.session
+        #from gluon import current
+        session = self.db.session
         self.entity.author_nickname.compute = lambda row: self.db.auth_user[row.author].nickname
         self.entity.author.default = session.auth.user.id if session.auth else None
 

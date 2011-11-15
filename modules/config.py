@@ -8,6 +8,7 @@ class Config(object):
         self.request = current.request
         self.ongae = self.request.env.web2py_runtime_gae
         self.T = current.T
+        self.cache = current.cache
         from gluon import DAL
         if self.ongae:
             self._db = DAL("google:datastore")
@@ -37,7 +38,7 @@ class Config(object):
     def get_config(self):
         for table in self.tables:
             self.__setattr__(table.split("_")[0],
-                             self._db(self._db[table]).select().last())
+                             self._db(self._db[table]).select(cache=(self.cache.ram, 300)).last())
 
     def get_list(self, table, option):
         options = self.__getattribute__(table)[option]

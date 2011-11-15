@@ -7,12 +7,19 @@ from gluon.dal import DAL
 class DataBase(DAL):
     def __init__(self):
         from gluon import current
+        self.request = current.request
+        self.session = current.session
+        self.response = current.response
+        self.T = current.T
+        self.cache = current.cache
         from config import Config
-        config = Config()
+        self.config = self.cache.ram('config', Config, time_expire=300)
         if not current.request.env.web2py_runtime_gae:
-            DAL.__init__(self, config.db.uri, migrate_enabled=config.db.migrate_enabled, check_reserved=['all'])
+            DAL.__init__(self, self.config.db.uri,
+                         migrate_enabled=self.config.db.migrate_enabled,
+                         check_reserved=['all'])
         else:
-            DAL.__init__(self, config.db.gaeuri)
+            DAL.__init__(self, self.config.db.gaeuri)
             current.session.connect(current.request, current.response, db=self)
 
 
@@ -36,7 +43,9 @@ class Access(Auth):
 class Mailer(Mail):
     def __init__(self):
         from config import Config
-        config = Config()
+        from gluon import current
+        cache = current.cache
+        config = cache.ram('config', Config, time_expire=300)
         Mail.__init__()
         self.settings.server = config.mail.server
         self.settings.sender = config.mail.sender
