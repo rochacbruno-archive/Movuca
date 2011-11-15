@@ -36,15 +36,13 @@ def user():
 
 
 def download():
-    # this workaround is awful, but it works on GAE. I need a better solution.
+    flnm = request.args(0)
     if request.env.web2py_runtime_gae:
-        objs = {
-            "auth_user": "from movuca import DataBase, Access;db = DataBase();Access(db)"
-        }
-        tablename = request.args(0).split(".")[0]
-        if tablename in objs:
-            exec(objs[tablename])
-        return response.download(request, db)
+        tbl, fld = flnm.split('.')[:2]
+        from config import Config
+        config = Config()
+        config._db.define_table(tbl, Field(fld, "upload"), migrate=False)
+        return response.download(request, config._db)
     else:
         import os
-        response.stream(os.path.join(request.folder, 'uploads', request.args(0)))
+        response.stream(os.path.join(request.folder, 'uploads', flnm))
