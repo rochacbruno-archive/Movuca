@@ -36,9 +36,19 @@ class Config(object):
             self._db.commit()
 
     def get_config(self):
+        # from gluon.storage import Storage
+        # self.results = Storage()
         for table in self.tables:
+            result = self._db(self._db[table]).select(cache=(self.cache.ram, 300)).last()
             self.__setattr__(table.split("_")[0],
-                             self._db(self._db[table]).select(cache=(self.cache.ram, 300)).last())
+                             result)
+            # self.results[table.split("_")[0]] = Storage(result.as_dict())
+
+    # def get_dict(self):
+    #     #self.results.get_list = lambda table, option: ['1', '2']
+    #     self.results.get_list = lambda options: \
+    #         [(option.split(":")[0], str(self.T(option.split(":")[1]))) for option in options]
+    #     return self.results
 
     def get_list(self, table, option):
         options = self.__getattribute__(table)[option]

@@ -2,7 +2,7 @@
 
 from gluon.dal import Field
 from basemodel import BaseAuth
-from gluon.validators import *
+from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL
 
 
 class User(BaseAuth):

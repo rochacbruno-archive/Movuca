@@ -13,7 +13,7 @@ class DataBase(DAL):
         self.T = current.T
         self.cache = current.cache
         from config import Config
-        self.config = self.cache.ram('config', Config, time_expire=300)
+        self.config = Config()
         if not current.request.env.web2py_runtime_gae:
             DAL.__init__(self, self.config.db.uri,
                          migrate_enabled=self.config.db.migrate_enabled,
