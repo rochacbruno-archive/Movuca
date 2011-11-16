@@ -43,9 +43,7 @@ class Access(Auth):
 class Mailer(Mail):
     def __init__(self):
         from config import Config
-        from gluon import current
-        cache = current.cache
-        config = cache.ram('config', Config, time_expire=300)
+        config = Config()
         Mail.__init__()
         self.settings.server = config.mail.server
         self.settings.sender = config.mail.sender
