@@ -17,7 +17,7 @@ else:
 
 
 #@auth.requires_login()
-@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
+#@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
 def index():
     from handlers.home import Home
     home = Home()

@@ -3,12 +3,12 @@
 
 def install():
     from config import Config
-    config = Config()
+    config = Config(autogetconfig=False)
     config.set_default_config()
-    config.get_config()
-    return (str(type(config.db)),
-            config.db.uri,
-            str(type(config.db_options)))
+    config.get_config(expire=0)
+    #at = ['db', 'auth', 'mail', 'crud', 'theme']
+    #return dict(message=[config.__getattribute__(item) for item in at])
+    return config.theme.name
 
 
 def getlist():

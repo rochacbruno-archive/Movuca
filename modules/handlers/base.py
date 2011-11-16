@@ -6,28 +6,20 @@ from gluon.storage import Storage
 class Base(object):
     def __init__(
         self,
-        path="views/",
-        view="default/index.html",
+        theme="%(name)s/",
+        view="generic.html",
         meta=Storage(),
         context={},
         ):
         self.meta = meta
         self.context = context
-        self.path = path
+        self.theme = theme
         self.view = view
 
         # hooks call
-        self.load()
         self.start()
         self.build()
         self.pre_render()
-
-    def load(self):
-        pass
-
-    def render(self):
-        # lançar erro caso nao tenha response e render
-        return self.response.render(self.view, self.context)
 
     def start(self):
         pass
@@ -37,4 +29,12 @@ class Base(object):
 
     def pre_render(self):
         from gluon import current
+        from config import Config
+        self.config = Config()
         self.response = current.response
+
+    def render(self):
+        # lançar erro caso nao tenha config e response e render
+        theme = self.theme % self.config.theme
+        filename = theme + self.view
+        return self.response.render(filename, self.context)

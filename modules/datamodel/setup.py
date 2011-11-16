@@ -9,10 +9,10 @@ class Setup(object):
         self.db_options = [
             Field("uri", "string", notnull=True, default="sqlite://movuca.sqlite"),
             Field("migrate", "boolean", notnull=True, default=True),
+            Field("migrate_enabled", "boolean", notnull=True, default=True),
             Field("pool_size", "integer", notnull=True, default=10),
             Field("gaeuri", "string", notnull=True, default="google:datastore"),
             Field("setuptime", "datetime", notnull=True),
-            Field("migrate_enabled", "boolean", notnull=True, default=True),
         ]
 
         self.mail_options = [
@@ -32,5 +32,10 @@ class Setup(object):
 
         self.crud_options = [
             Field("formstyle", "string", notnull=True, default="divs"),
+            Field("setuptime", "datetime", notnull=True),
+        ]
+
+        self.theme_options = [
+            Field("name", "string", notnull=True, default="basic"),
             Field("setuptime", "datetime", notnull=True),
         ]
