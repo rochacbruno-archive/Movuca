@@ -15,10 +15,11 @@ class Home(Base):
         self.user_form()
 
     def pre_render(self):
-        # obrigatorio ter um config, um self.response, que tenha um render self.response.render
+        # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
         self.response = self.db.response
+        self.request = self.db.request
         self.config = self.db.config
-        self.view = "app/home.html"
+        #self.view = "app/home.html"
 
     def user_list(self):
         table = self.access.entity

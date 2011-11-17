@@ -1,3 +1,12 @@
 {{extend "basic/app/layout.html"}}
+          {{block left_sidebar}}
+          <h3>< Sidebar</h3>
+          <p></p>
+          {{end}}
 
 {{=userform}}
+
+          {{block right_sidebar}}
+          <h3>> Sidebar</h3>
+          <p>{{=LOAD('default', 'base.load', ajax=False)}}</p>
+          {{end}}

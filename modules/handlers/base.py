@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from gluon.storage import Storage
-
 
 class Base(object):
     def __init__(
         self,
         theme="%(name)s/",
-        view="generic.html",
-        meta=Storage(),
-        context={},
+        view="generic/generic",
+        meta=None,
+        context=None,
         ):
-        self.meta = meta
-        self.context = context
+        from gluon.storage import Storage
+        self.meta = meta or Storage()
+        self.context = context or Storage()
         self.theme = theme
         self.view = view
 
@@ -32,9 +31,15 @@ class Base(object):
         from config import Config
         self.config = Config()
         self.response = current.response
+        self.request = current.request
 
-    def render(self):
+    def render(self, view=None, theme=None):
+        if theme:
+            self.theme = theme
+        if view:
+            self.view = view
         # lançar erro caso nao tenha config e response e render
         theme = self.theme % self.config.theme
-        filename = theme + self.view
+        viewfile = "%s.%s" % (self.view, self.request.extension)
+        filename = theme + viewfile
         return self.response.render(filename, self.context)

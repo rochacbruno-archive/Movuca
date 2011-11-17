@@ -11,6 +11,7 @@ from datamodel.article import Article, ContentType
 ContentType(db)
 Article(db)
 
+response.view = '%(name)s/app/appadmin.html' % db.config.theme
 
 import os
 import socket
@@ -45,7 +46,7 @@ if (request.application=='admin' and not session.authorized) or \
                  vars=dict(send=URL(args=request.args,vars=request.vars))))
 
 ignore_rw = True
-response.view = 'appadmin.html'
+
 response.menu = [[T('design'), False, URL('admin', 'default', 'design',
                  args=[request.application])], [T('db'), False,
                  URL('index')], [T('state'), False,

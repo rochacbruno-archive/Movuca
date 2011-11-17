@@ -7,8 +7,8 @@
 # auth = Access(db)
 # content_type = ContentType(db)
 # article = Article(db)
-from gluon.tools import Auth
-auth = Auth(DAL(None))
+# from gluon.tools import Auth
+# auth = Auth(DAL(None))
 
 if session.auth and session.auth.user:
     time_expire = 0
@@ -21,7 +21,20 @@ else:
 def index():
     from handlers.home import Home
     home = Home()
-    return home.render()
+    home.context.left_sidebar_enabled = True
+    home.context.right_sidebar_enabled = True
+    print id(home.context)
+    return home.render("app/home")
+
+
+def base():
+    from handlers.base import Base
+    base = Base()
+    print base.context
+    base.context.teste = "TESTEEEE"
+    base.context.userform = FORM(INPUT())
+    print id(base.context)
+    return base.render("app/base")
 
 
 def articles():
@@ -38,7 +51,7 @@ def user():
     from movuca import Access, DataBase
     db = DataBase()
     access = Access(db)
-    return dict(form=access())
+    return dict(form=access(), auth=access)
 
 
 def download():
