@@ -3,7 +3,7 @@ body { margin: 0; padding:0; border: 0; }
 a { text-decoration:none}
 a:hover {text-decoration: underline}
 a.button {text-decoration: none}
-h1,h2,h3,h4,h5,h6 {margin: 0.5em 0 0.25em 0; display: block}
+h1,h2,h3,h4,h5,h6 {margin: 0.5em 0 0.25em 0; display: block; font-family: Helvetica}
         h1 { font-size: 4.00em;}
         h2 { font-size: 3.00em;}
         h3 { font-size: 2.00em;}
@@ -18,6 +18,7 @@ th, label { font-weight: bold; }
 th, td { text-align: left; vertical-align: top; }
 form table tr td label { text-align: right; }
 p, table, ol, ul { margin: 0.5em 0 0.5em 0 }
+p {text-align: justify }
 ol, ul { padding-left: 30px }
 li { margin-bottom: 0.5em; }
 span, input, select, textarea, button, label, a { display: inline }
@@ -26,6 +27,8 @@ blockquote, blockquote p, p blockquote { font-style: italic; margin: 0.5em 30px 
 em { font-style: italic; }
 strong { font-weight: bold; }
 small { font-size: 0.8em; }
+textarea { width: 600px; }
+input[type=text], input[type=password], select { width: 300px; }
 /** end **/
 
 /* Sticky footer begin */
@@ -38,6 +41,10 @@ html, body {
   height: auto !important;
   height: 100%;
   margin: 0 auto -8em; /* set last value to footer height plus footer vertical padding */
+}
+
+.main {
+  padding: 20px 0 50px 0;
 }
 
 .footer, .push {
@@ -156,12 +163,8 @@ div.error {
     -webkit-border-radius: 5px;
 }
 
-.breadcrumb {
-  font-size: 1.12em;
-}
-.breadcrumb .divider {
-  padding: 0 .4em;
-  color: #bfbfbf;
+.breadcrumbs {
+  font-size: 1.25em;
 }
 
 /* #MEDIA QUERIES SECTION */
@@ -176,10 +179,6 @@ div.error {
         #menu select {font-size: 1.2em; margin: 0; padding: 0;}
 
         div.flash {top: 110px; right: 10px;}
-        
-        .breadcrumb {
-            font-size: 1em;
-        }
 
     }
 

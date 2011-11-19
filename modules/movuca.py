@@ -5,7 +5,7 @@ from gluon.dal import DAL
 
 
 class DataBase(DAL):
-    def __init__(self):
+    def __init__(self, classes=[]):
         from gluon import current
         self.request = current.request
         self.session = current.session
@@ -21,6 +21,14 @@ class DataBase(DAL):
         else:
             DAL.__init__(self, self.config.db.gaeuri)
             current.session.connect(current.request, current.response, db=self)
+
+        if classes:
+            self.define_classes(classes)
+
+    def define_classes(self, classes):
+        for cls in classes:
+            obj = cls(self)
+            self.__setattr__(cls.__name__, obj.entity)
 
 
 class Access(Auth):
@@ -38,6 +46,8 @@ class Access(Auth):
         from datamodel.user import User
         user = User(self)
         self.entity = user.entity
+
+User = Access  # It is just for direct imports
 
 
 class Mailer(Mail):

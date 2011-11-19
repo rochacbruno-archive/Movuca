@@ -16,8 +16,10 @@ class Article(BaseModel):
                       Field("title", "string"),
                       Field("description", "text"),
                       Field("picture", "upload"),
+                      Field("thumbnail", "upload"),
                       Field("draft", "boolean"),
                       Field("tags", "list:string"),
+                      Field("keywords", "string"),
                       # control
                       Field("content_type_id", "reference content_type"),
                       Field("content_type", "string"),
@@ -42,11 +44,12 @@ class Article(BaseModel):
                      #'author': (False, True),
                      'author_nickname': (False, True),
                      "content_type": (False, False),
-                     "slug": (False, False),
+                     #"slug": (False, False),
                      "search_index": (False, False),
                      "publish_tz": (False, False),
                      "subscribers": (False, False)
                      }
+
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}
         # widgets = {'tele': None}
         # labels = {'email': "EMAIL"}
@@ -65,5 +68,11 @@ class ContentType(BaseModel):
 
     def set_properties(self):
         self.fields = [
-            Field("identifier", "string"),
+            Field("title", notnull=True),
+            Field("description"),
+            Field("identifier", unique=True, notnull=True),
+            Field("classname", unique=True, notnull=True),
+            Field("tablename", unique=True, notnull=True),
+            Field("viewname", "string"),
+            Field("childs", "integer", notnull=True, default=1),
         ]

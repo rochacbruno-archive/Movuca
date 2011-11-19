@@ -1,12 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# from movuca import Access, DataBase
-# from datamodel.article import Article, ContentType
-# db = DataBase()
-# auth = Access(db)
-# content_type = ContentType(db)
-# article = Article(db)
 # from gluon.tools import Auth
 # auth = Auth(DAL(None))
 
@@ -19,32 +13,7 @@ else:
 #@auth.requires_login()
 #@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
 def index():
-    from handlers.home import Home
-    home = Home()
-    home.context.left_sidebar_enabled = True
-    home.context.right_sidebar_enabled = True
-    print id(home.context)
-    return home.render("app/home")
-
-
-def base():
-    from handlers.base import Base
-    base = Base()
-    print base.context
-    base.context.teste = "TESTEEEE"
-    base.context.userform = FORM(INPUT())
-    print id(base.context)
-    return base.render("app/base")
-
-
-def articles():
-    from movuca import Access, DataBase
-    from datamodel.article import Article, ContentType
-    db = DataBase()
-    Access(db)
-    ContentType(db)
-    article = Article(db)
-    return SQLFORM(article.entity, formstyle='divs').process()
+    redirect(URL('home', 'index'))
 
 
 def user():
@@ -65,3 +34,30 @@ def download():
     else:
         import os
         response.stream(os.path.join(request.folder, 'uploads', flnm))
+
+
+def call():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return service()
+
+
+def data():
+    """
+    http://..../[app]/default/data/tables
+    http://..../[app]/default/data/create/[table]
+    http://..../[app]/default/data/read/[table]/[id]
+    http://..../[app]/default/data/update/[table]/[id]
+    http://..../[app]/default/data/delete/[table]/[id]
+    http://..../[app]/default/data/select/[table]
+    http://..../[app]/default/data/search/[table]
+    but URLs must be signed, i.e. linked with
+      A('table',_href=URL('data/tables',user_signature=True))
+    or with the signed load operator
+      LOAD('default','data.load',args='tables',ajax=True,user_signature=True)
+    """
+    return dict(form=crud())

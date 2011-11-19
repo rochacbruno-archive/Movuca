@@ -70,7 +70,7 @@
   <div class="wrapper"><!-- for sticky footer -->
   
     <div class="topbar">
-      <div class="container header">    
+      <div class="container">    
         <div class="sixteen columns">
           <div id="navbar">{{='auth' in globals() and auth.navbar(separators=(' ',' | ',''))}}</div>
           {{is_mobile=request.user_agent().is_mobile}}
@@ -82,7 +82,7 @@
     
     <div class="flash">{{=response.flash or ''}}</div>
     
-    <div class="main">
+    <div class="header">
       <div class="container">         
         <div class="sixteen columns">
           <h1 class="remove-bottom" style="margin-top: .5em;">
@@ -90,11 +90,10 @@
           </h1>
           <h5>{{=response.subtitle or ''}}</h5>
         </div>
-        
         <div class="sixteen columns">
           <div class="statusbar">
             {{block statusbar}}
-            <span class="breadcrumbs">{{=request.function}}</span>
+            <span class="breadcrumbs">{{=request.function.replace('_', ' ').title()}}</span>
             {{end}}
             <!-- AddToAny BEGIN -->
             <div style="float:right; padding-top: .25em;" class="a2a_kit a2a_default_style">
@@ -103,7 +102,11 @@
             <!-- AddToAny END -->
           </div>
         </div>
-        
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="container">                 
         {{if left_sidebar_enabled:}}
         <div class="four columns left-sidebar">
           {{block left_sidebar}}
@@ -135,14 +138,14 @@
   </div><!-- wrapper -->
 
   <div class="footer">
-    <div class="container header">    
+    <div class="container">    
       <div class="sixteen columns">
         {{block footer}} <!-- this is default footer -->
         <div class="footer-content" >
           {{=T('Copyright')}} &#169; 2011
           <div style="float: right;">
             <a href="http://www.web2py.com/">
-            <img style="padding-bottom: 0;" src="{{=URL('static','images/poweredby.png')}}"/>
+            <img style="padding-bottom: 0;" src="{{=URL('static','basic/images/poweredby.png')}}"/>
             </a>
           </div>
         </div>

@@ -4,10 +4,11 @@
 class Base(object):
     def __init__(
         self,
+        hooks=[],
         theme="%(name)s/",
         view="generic/generic",
         meta=None,
-        context=None,
+        context=None
         ):
         from gluon.storage import Storage
         self.meta = meta or Storage()
@@ -19,6 +20,13 @@ class Base(object):
         self.start()
         self.build()
         self.pre_render()
+
+        # aditional hooks
+        if not isinstance(hooks, list):
+            hooks = [hooks]
+
+        for hook in hooks:
+            self.__getattribute__(hook)()
 
     def start(self):
         pass
