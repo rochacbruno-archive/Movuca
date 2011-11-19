@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from gluon.dal import Field
-from basemodel import BaseModel
+from basemodel import ContentModel
 from gluon.validators import IS_NOT_EMPTY, IS_IN_SET
 from gluon import current
 
 
-class Article(BaseModel):
+class Article(ContentModel):
     tablename = "article_data"
 
     def set_properties(self):
         self.fields = [
-            Field("article_id", "reference article", notnull=True),  # required field
-            Field("content_type_id", "reference content_type", notnull=True),  # required field
             Field("markup"),
             Field("body", "text", notnull=True),
         ]
@@ -23,21 +21,18 @@ class Article(BaseModel):
         }
 
 
-class CookRecipe(BaseModel):
+class CookRecipe(ContentModel):
     tablename = "cookrecipe_data"
 
     def set_properties(self):
         T = current.T
         self.fields = [
-            Field("article_id", "reference article", notnull=True),  # required field
-            Field("content_type_id", "reference content_type", notnull=True),  # required field
             Field("prep_time", "string"),
             Field("cook_time", "string"),
             Field("difficulty", "string"),
             Field("servings", "double"),
             Field("ingredients", "list:string"),
             Field("instructions", "text"),
-            Field("picture", "upload"),
             Field("credits", "text"),
         ]
 
@@ -48,13 +43,10 @@ class CookRecipe(BaseModel):
         }
 
 
-class CodeRecipe(BaseModel):
+class CodeRecipe(ContentModel):
     tablename = "coderecipe_data"
 
     def set_properties(self):
-        T = current.T
         self.fields = [
-            Field("article_id", "reference article", notnull=True),  # required field
-            Field("content_type_id", "reference content_type", notnull=True),  # required field
             Field("code", "text"),
         ]

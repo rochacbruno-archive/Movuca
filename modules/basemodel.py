@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from gluon.dal import DAL
+from gluon.dal import DAL, Field
 from gluon.tools import Auth
 
 
@@ -29,6 +29,7 @@ class BaseModel(object):
         if format != None or not hasattr(self, 'format'):
             self.format = format
         self.set_properties()
+        self.check_properties()
         self.define_table()
         self.define_validators()
         self.define_visibility()
@@ -39,6 +40,9 @@ class BaseModel(object):
         self.define_computations()
         self.define_updates()
         self.pre_load()
+
+    def check_properties(self):
+        pass
 
     def define_table(self):
         fakeauth = Auth(DAL(None))
@@ -144,3 +148,49 @@ class BaseAuth(BaseModel):
             profile_visibility = self.profile_visibility if hasattr(self, 'profile_visibility') else {}
             for field, value in profile_visibility.items():
                 self.entity[field].writable, self.entity[field].readable = value
+
+
+class ContentModel(BaseModel):
+    def check_properties(self):
+        f = ['author',
+             'author_nickname',
+             'title',
+             'description',
+             'picture',
+             'thumbnail',
+             'draft',
+             'tags',
+             'keywords',
+             'content_type_id',
+             'content_type',
+             'slug',
+             'search_index',
+             'publish_date',
+             'publish_tz',
+             'privacy',
+             'license',
+             'likes',
+             'dislikes',
+             'views',
+             'responses',
+             'favorited',
+             'subscribers',
+             'is_active',
+             'created_on',
+             'created_by',
+             'modified_on',
+             'modified_by']
+        for name in f:
+            if name in [field.name for field in self.fields]:
+                raise NameError("You cant use '%s' as field name for content" % name)
+
+        for field in self.fields:
+            if field.type == "upload":
+                raise TypeError("You can define field type upload in content table")
+
+        extra = [
+            Field("article_id", "reference article", notnull=True, writable=False, readable=False),  # required field
+            Field("type_id", "reference content_type", notnull=True, writable=False, readable=False),  # required field
+        ]
+
+        self.fields.extend(extra)

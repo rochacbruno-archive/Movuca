@@ -41,13 +41,14 @@ class Article(BaseModel):
                      ]
 
         self.visibility = {
-                     #'author': (False, True),
+                     'author': (False, True),
                      'author_nickname': (False, True),
                      "content_type": (False, False),
                      #"slug": (False, False),
                      "search_index": (False, False),
                      "publish_tz": (False, False),
-                     "subscribers": (False, False)
+                     "subscribers": (False, False),
+                     "content_type_id": (False, True)
                      }
 
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}
