@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, URL
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT
 from helpers.images import THUMB2
 import os
 
@@ -9,8 +9,8 @@ import os
 class Article(Base):
     def start(self):
         from movuca import DataBase, User
-        from datamodel.article import Article, ContentType
-        self.db = DataBase([User, ContentType, Article])
+        from datamodel.article import Article, ContentType, Favoriters, Subscribers, Likers, Dislikers
+        self.db = DataBase([User, ContentType, Article, Favoriters, Subscribers, Likers, Dislikers])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -19,13 +19,14 @@ class Article(Base):
         self.config = self.db.config
         self.session = self.db.session
         self.T = self.db.T
+        self.CURL = self.db.CURL
         #self.view = "app/home.html"
 
     def lastest_articles(self):
         from helpers.article import latest_articles
         self.context.latest_articles = latest_articles(self.db)
 
-    def show(self):
+    def get(self, redir=True):
         article_id = self.request.args(0)
         article_slug = self.request.args(1)
         queries = [self.db.article.id == article_id]
@@ -33,22 +34,41 @@ class Article(Base):
             queries.append(self.db.article.slug == article_slug)
         query = reduce(lambda a, b: (a & b), queries)
         self.context.article = self.db(query).select().first()
+        if not self.context.article and redir:
+            redirect(self.CURL('home', 'index'))
+
+    def show(self):
+        self.get()
+        content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
+        self.response.meta.title = "%s | %s | %s" % (self.db.config.meta.title,
+                                                     self.T(self.context.article.content_type_id.title),
+                                                     self.context.article.title)
+        self.response.meta.description = self.context.article.description
+        self.response.meta.keywords = ",".join(self.context.article.tags)
+        self.context.action_links = self.action_links()
+        self.context.article.update_record(views=self.context.article.views + 1)
+        self.db.commit()
 
     def edit(self):
-        self.show()
-        self.context.form = SQLFORM(self.db.article, self.context.article).process()
-        content_type = self.db.content_type(self.context.article.content_type_id)
+        self.get()
+        self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
+        self.context.article_form = SQLFORM(self.db.article, self.context.article).process()
+        content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
+        self.context.content_form = SQLFORM(content.entity, article_data).process()
+
+    def define_content_type(self, classname):
         from datamodel import contenttypes
-        content = getattr(contenttypes, content_type.classname)(self.db)
-        article_data = self.db(content.entity.article_id == self.context.article.id).select().first()
-        self.context.form2 = SQLFORM(content.entity, article_data).process()
+        return getattr(contenttypes, classname)(self.db)
+
+    def get_content(self, classname, article_id):
+        content = self.define_content_type(classname)
+        return (content, self.db(content.entity.article_id == article_id).select().first())
 
     def new(self):
         arg = self.request.args(0)
         query = self.db.content_type.identifier == arg
-        content_type = self.db(query).select().first() or redirect(URL('home', 'index'))
-        from datamodel import contenttypes
-        content = getattr(contenttypes, content_type.classname)(self.db)
+        content_type = self.db(query).select().first() or redirect(self.CURL('home', 'index'))
+        content = self.define_content_type(content_type.classname)
         path = os.path.join(self.request.folder, 'uploads/')
         if not self.request.env.web2py_runtime_gae:
             self.db.article.picture.uploadfolder = path
@@ -72,3 +92,231 @@ class Article(Base):
             else:
                 self.db.commit()
                 self.response.flash = self.T("%s included." % content_type.title)
+
+    def list(self):
+        from helpers.article import latest_articles
+        try:
+            self.context.latest_articles = latest_articles(self.db, **self.request.vars)
+        except:
+            self.context.latest_articles = latest_articles(self.db)
+
+    def favorite(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                self.context.favorited = self.db.Favoriters.update_or_insert(article_id=self.context.article.id, user_id=user.id)
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Favoriters.article_id == self.context.article.id).count()
+                    self.context.article.update_record(favorited=count)
+
+                    count = self.db(self.db.Favoriters.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(favorites=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def like(self):
+        self.undislike()
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                self.context.liked = self.db.Likers.update_or_insert(article_id=self.context.article.id, user_id=user.id)
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Likers.article_id == self.context.article.id).count()
+                    self.context.article.update_record(likes=count)
+
+                    count = self.db(self.db.Likers.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(likes=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def dislike(self):
+        self.unlike()
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                self.context.disliked = self.db.Dislikers.update_or_insert(article_id=self.context.article.id, user_id=user.id)
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Dislikers.article_id == self.context.article.id).count()
+                    self.context.article.update_record(dislikes=count)
+
+                    count = self.db(self.db.Dislikers.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(dislikes=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def subscribe(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                self.context.subscribed = self.db.Subscribers.update_or_insert(article_id=self.context.article.id, user_id=user.id)
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Subscribers.article_id == self.context.article.id).count()
+                    self.context.article.update_record(subscriptions=count)
+
+                    count = self.db(self.db.Subscribers.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(subscriptions=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def unfavorite(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                query = (self.db.Favoriters.article_id == self.context.article.id) & (self.db.Favoriters.user_id == user.id)
+                self.context.unfavorited = self.db(query).delete()
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Favoriters.article_id == self.context.article.id).count()
+                    self.context.article.update_record(favorited=count)
+
+                    count = self.db(self.db.Favoriters.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(favorites=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def unlike(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                query = (self.db.Likers.article_id == self.context.article.id) & (self.db.Likers.user_id == user.id)
+                self.context.unliked = self.db(query).delete()
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Likers.article_id == self.context.article.id).count()
+                    self.context.article.update_record(likes=count)
+
+                    count = self.db(self.db.Likers.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(likes=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def unsubscribe(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                query = (self.db.Subscribers.article_id == self.context.article.id) & (self.db.Subscribers.user_id == user.id)
+                self.context.unsubscribed = self.db(query).delete()
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Subscribers.article_id == self.context.article.id).count()
+                    self.context.article.update_record(subscriptions=count)
+
+                    count = self.db(self.db.Subscribers.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(subscriptions=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def undislike(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.get()  # get article object
+            try:
+                query = (self.db.Dislikers.article_id == self.context.article.id) & (self.db.Dislikers.user_id == user.id)
+                self.context.undisliked = self.db(query).delete()
+            except Exception, e:
+                self.context.error = str(e)
+            else:
+                try:
+                    count = self.db(self.db.Dislikers.article_id == self.context.article.id).count()
+                    self.context.article.update_record(dislikes=count)
+
+                    count = self.db(self.db.Dislikers.user_id == user.id).count()
+                    self.db.auth_user[user.id] = dict(dislikes=count)
+                except Exception:
+                    self.db.rollback()
+                else:
+                    self.db.commit()
+
+    def action_links(self):
+        CURL = self.CURL
+        article = self.context.article
+        request = self.request
+        T = self.T
+        userid = self.session.auth.user.id if self.session.auth else 0
+        icons = {
+            "views": ICONLINK(userid, "views", T("Views (%s)" % article.views or 0)),
+            "favorite": ICONLINK(userid, "favorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('favorite', args=request.args)),
+            "unfavorite": ICONLINK(userid, "unfavorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('unfavorite', args=request.args)),
+            "like": ICONLINK(userid, "like", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('like', args=request.args)),
+            "unlike": ICONLINK(userid, "unlike", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('unlike', args=request.args)),
+            "dislike": ICONLINK(userid, "dislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('dislike', args=request.args)),
+            "undislike": ICONLINK(userid, "undislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('undislike', args=request.args)),
+            "subscribe": ICONLINK(userid, "subscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('subscribe', args=request.args)),
+            "unsubscribe": ICONLINK(userid, "unsubscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args)),
+            "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args))
+        }
+
+        links = ['views']
+
+        favorited = self.db.Favoriters(article_id=self.context.article.id, user_id=userid) if userid else None
+        liked = self.db.Likers(article_id=self.context.article.id, user_id=userid) if userid else None
+        disliked = self.db.Dislikers(article_id=self.context.article.id, user_id=userid) if userid else None
+        subscribed = self.db.Subscribers(article_id=self.context.article.id, user_id=userid) if userid else None
+
+        links.append('unfavorite' if favorited else 'favorite')
+        links.append('unlike' if liked else 'like')
+        links.append('undislike' if disliked else 'dislike')
+        links.append('unsubscribe' if subscribed else 'subscribe')
+
+        if has_permission_to_edit(self.session, self.context.article):
+            links.append('edit')
+
+        return CAT(*[icons[link] for link in links])
+
+
+def ICONLINK(user, icon, text, action=None):
+    from gluon import current
+    request = current.request
+    bt = A(_class="icon-link",
+              _onclick=action if user else "window.location = '%s'" % URL('default', 'user', args='login', vars=dict(_next=URL('article', 'show', args=request.args))),
+              _style="cursor:pointer;")
+    bt.append(CAT(
+        IMG(_src=URL('static', 'basic/images/icons', args="%s.png" % icon), _width=16),
+        SPAN(text, _style="line-height:16px;")
+    ))
+
+    return bt
+
+
+def has_permission_to_edit(session, record):
+    userid = session.auth.user.id if session.auth else 0
+    return record.author == userid

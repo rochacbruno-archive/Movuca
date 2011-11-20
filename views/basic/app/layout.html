@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <![endif]-->
   
-  <title>{{=response.title or request.application}}</title>
+  <title>{{=response.meta.title or request.application}}</title>
   
   <!-- http://dev.w3.org/html5/markup/meta.name.html -->
   <meta name="application-name" content="{{=request.application}}" />
@@ -44,6 +44,7 @@
   response.files.append(URL('static','basic/css/skeleton.css'))
   response.files.append(URL('static','basic/css/web2py.css'))
   response.files.append(URL('static','basic/css/superfish.css'))
+    response.files.append(URL('static','basic/css/basic.css'))
   response.files.append(URL('static','basic/js/superfish.js'))
   }}
 
@@ -61,10 +62,10 @@
      (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
   }}
 
-  <!-- uncomment here to load jquery-ui
+  <!-- uncomment here to load jquery-ui 
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
-  uncomment to load jquery-ui //-->
+   uncomment to load jquery-ui //-->
 </head>
 <body>
   <div class="wrapper"><!-- for sticky footer -->
@@ -86,9 +87,9 @@
       <div class="container">         
         <div class="sixteen columns">
           <h1 class="remove-bottom" style="margin-top: .5em;">
-          {{=response.title or request.application}}
+          {{=request.application}}
           </h1>
-          <h5>{{=response.subtitle or ''}}</h5>
+          <h5>{{=response.meta.subtitle or ''}}</h5>
         </div>
         <div class="sixteen columns">
           <div class="statusbar">

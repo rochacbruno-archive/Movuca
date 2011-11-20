@@ -1,0 +1,45 @@
+{{response.files.append(URL('static','basic/js/article_show.js'))}}
+{{extend "basic/app/layout.html"}}
+          {{block left_sidebar}}
+          <h3>< Sidebar</h3>
+          <p></p>
+          {{end}}
+
+
+<div class="twelve columns center  show-article-wrapper">
+    <div class="row show-article-meta">
+      <div class="two columns alpha">
+         {{=A(IMG(_src=get_image(article.author.thumbnail, 'user'), _width=100, _height=100), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+      </div>
+      <div class="ten columns omega">
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} {{=ftime(article.publish_date)}} </em>
+          {{if article.tags:}}
+              <em>{{=T('in')}} {{=tagfy(article.tags)}}</em> 
+          {{pass}}
+          <p class="show-article-information" id="links">
+              {{=action_links}}
+          </p>
+          <p class="show-article-description">
+              {{=article.description}}
+          </p>
+      </div>
+    </div>
+    <div class="row show-article-content">
+      {{RENDER = dict(html=XML, markmin=MARKMIN)}}
+      {{=RENDER[article_data.markup](article_data.body)}}
+    </div>
+    <div class="row show-article-related">
+    
+    </div>
+    <div class="row show-article-comments">
+    
+    </div>
+
+</div>
+
+<hr />
+
+{{=article.keys()}}
+<br />
+{{=article_data.keys()}}

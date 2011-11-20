@@ -39,3 +39,14 @@ class Setup(object):
             Field("name", "string", notnull=True, default="basic"),
             Field("setuptime", "datetime", notnull=True),
         ]
+
+        self.meta_options = [
+            Field("title", "string", notnull=True, default="Movuca"),
+            Field("subtitle", "string", notnull=True, default="Free Social CMS Engine"),
+            Field("author", "string", notnull=True, default="Bruno Cezar Rocha at blouweb.com"),
+            Field("keywords", "string", notnull=True, default="web2py, python, cms, social network, CMS"),
+            Field("description", "string", notnull=True, default="Free Social CMS Engine built with web2py and Python by blouweb.com"),
+            Field("generator", "string", notnull=True, default="web2py, Python, Movuca CMS"),
+            Field("copyright", "string", notnull=True, default="Free"),
+            Field("setuptime", "datetime", notnull=True),
+        ]

@@ -3,10 +3,12 @@
 from gluon.dal import Field
 from basemodel import BaseAuth
 from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL
+from helpers.images import THUMB2
 
 
 class User(BaseAuth):
     def set_properties(self):
+        request = self.db.request
         self.fields = [
                       # Person info
                       Field("nickname"),
@@ -42,6 +44,9 @@ class User(BaseAuth):
                       Field("userpages", "integer", notnull=True, default=0),
                       Field("pictures", "integer", notnull=True, default=0),
                       Field("favorites", "integer", notnull=True, default=0),
+                      Field("likes", "integer", notnull=True, default=0),
+                      Field("dislikes", "integer", notnull=True, default=0),
+                      Field("subscriptions", "integer", notnull=True, default=0),
                       # location
                       Field("country", "string"),
                       Field("city", "string"),
@@ -60,6 +65,7 @@ class User(BaseAuth):
                               "facebook": (True, True),
                               "website": (True, True),
                               "avatar": (True, True),
+                              "thumbnail": (True, True),
                               "photo_source": (True, True),
                               "about": (True, True),
                               "gender": (True, True),
@@ -68,6 +74,10 @@ class User(BaseAuth):
                               "city": (True, True),
                               "languages": (True, True),
                              }
+
+        self.computations = {
+          "thumbnail": lambda r: THUMB2(r['avatar'], gae=request.env.web2py_runtime_gae)
+        }
 
     def set_validators(self):
         #from config import Config

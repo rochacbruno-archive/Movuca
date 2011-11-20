@@ -11,6 +11,7 @@ class DataBase(DAL):
         self.session = current.session
         self.response = current.response
         self.T = current.T
+        self.CURL = current.CURL
         self.cache = current.cache
         from config import Config
         self.config = Config()
