@@ -45,8 +45,8 @@ class Article(Base):
                                                      self.context.article.title)
         self.response.meta.description = self.context.article.description
         self.response.meta.keywords = ",".join(self.context.article.tags)
-        self.context.action_links = self.action_links()
         self.context.article.update_record(views=self.context.article.views + 1)
+        self.context.action_links = self.action_links()
         self.db.commit()
 
     def edit(self):
@@ -273,16 +273,16 @@ class Article(Base):
         T = self.T
         userid = self.session.auth.user.id if self.session.auth else 0
         icons = {
-            "views": ICONLINK(userid, "views", T("Views (%s)" % article.views or 0)),
-            "favorite": ICONLINK(userid, "favorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('favorite', args=request.args)),
-            "unfavorite": ICONLINK(userid, "unfavorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('unfavorite', args=request.args)),
-            "like": ICONLINK(userid, "like", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('like', args=request.args)),
-            "unlike": ICONLINK(userid, "unlike", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('unlike', args=request.args)),
-            "dislike": ICONLINK(userid, "dislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('dislike', args=request.args)),
-            "undislike": ICONLINK(userid, "undislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('undislike', args=request.args)),
-            "subscribe": ICONLINK(userid, "subscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('subscribe', args=request.args)),
-            "unsubscribe": ICONLINK(userid, "unsubscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args)),
-            "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args))
+            "views": ICONLINK(userid, "views", T("Views (%s)" % article.views or 0), title=T("The number of times this page has been displayed")),
+            "favorite": ICONLINK(userid, "favorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('favorite', args=request.args), T("Click to add to your favorites")),
+            "unfavorite": ICONLINK(userid, "unfavorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('unfavorite', args=request.args), T("Click to remove from your favorites")),
+            "like": ICONLINK(userid, "like", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('like', args=request.args), T("Click to like")),
+            "unlike": ICONLINK(userid, "unlike", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('unlike', args=request.args), T("Click to remove the like")),
+            "dislike": ICONLINK(userid, "dislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('dislike', args=request.args), T("Click to dislike")),
+            "undislike": ICONLINK(userid, "undislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('undislike', args=request.args), T("Click to remove the dislike")),
+            "subscribe": ICONLINK(userid, "subscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('subscribe', args=request.args), T("Click to subscribe to this article updates")),
+            "unsubscribe": ICONLINK(userid, "unsubscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args), T("Click to unsubscribe from this article updates")),
+            "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args), T("Click to edit"))
         }
 
         links = ['views']
@@ -303,12 +303,13 @@ class Article(Base):
         return CAT(*[icons[link] for link in links])
 
 
-def ICONLINK(user, icon, text, action=None):
+def ICONLINK(user, icon, text, action=None, title="Click"):
     from gluon import current
     request = current.request
     bt = A(_class="icon-link",
               _onclick=action if user else "window.location = '%s'" % URL('default', 'user', args='login', vars=dict(_next=URL('article', 'show', args=request.args))),
-              _style="cursor:pointer;")
+              _style="cursor:pointer;",
+              _title=title)
     bt.append(CAT(
         IMG(_src=URL('static', 'basic/images/icons', args="%s.png" % icon), _width=16),
         SPAN(text, _style="line-height:16px;")
