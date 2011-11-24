@@ -6,11 +6,14 @@ def tagfy(tags):
     return CAT(*links)
 
 
-TIMEFORMAT = T("%Y-%m-%d")
+DATEFORMAT = T("%Y-%m-%d")
+TIMEFORMAT = T("%H:%M:%S")
+current.TIMEFORMAT = TIMEFORMAT
+current.DATEFORMAT = DATEFORMAT
 
 
 def ftime(value):
-    return value.strftime(str(TIMEFORMAT))
+    return value.strftime(str(DATEFORMAT))
 
 
 def ICONBUTTON(icon, text, action):

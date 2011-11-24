@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, MARKMIN
 from helpers.images import THUMB2
 import os
 
@@ -9,8 +9,8 @@ import os
 class Article(Base):
     def start(self):
         from movuca import DataBase, User
-        from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers
-        self.db = DataBase([User, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers])
+        from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers, Comments
+        self.db = DataBase([User, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -29,7 +29,8 @@ class Article(Base):
     def related_articles(self):
         from helpers.article import related_articles
         related_articles = related_articles(self.db, self.context.article.tags, self.context.article.id)
-        self.context.related_articles = UL(*[LI(
+        if related_articles:
+            self.context.related_articles = UL(*[LI(
                                               DIV(
                                                 IMG(_src=URL('default', 'download', args=related.thumbnail))
                                               ),
@@ -37,6 +38,8 @@ class Article(Base):
                                               **{'_data-url': self.CURL('article', 'show', args=[related.id, related.slug])}
                                               ) for related in related_articles],
                                               _class="related-articles")
+        else:
+            self.context.related_articles = False
 
     def comments(self):
         comment_system = {
@@ -49,7 +52,41 @@ class Article(Base):
         self.context.comments = comment_system[self.config.comment.system]()
 
     def comment_internal(self):
-        pass
+        if self.session.auth and self.session.auth.user:
+            self.db.Comments.article_id.default = self.context.article.id
+            self.db.Comments.user_id.default = self.session.auth.user.id
+            self.db.Comments.commenttime.default = self.request.now
+            self.db.Comments.comment_text.label = self.T("Post your comment")
+            form = SQLFORM(self.db.Comments, formstyle='divs').process()
+        else:
+            form = A(self.T("Login to post comments"),
+                     _class="button",
+                     _href=self.CURL('default', 'user',
+                                  args='login',
+                                  vars=dict(_next=self.CURL('article', 'show',
+                                       args=[self.context.article.id,
+                                             self.context.article.slug]))))
+
+        comments = self.db(self.db.Comments.article_id == self.context.article.id).select()
+        return DIV(
+                  H4(self.T("Comments")),
+                  UL(
+                      *[LI(
+                           H5(
+                              A(
+                                 self.T("%s on %s" % (comment.user_id.nickname or comment.user_id.first_name,
+                                                   comment.commenttime.strftime("%s %s" % (self.db.DATEFORMAT, self.db.TIMEFORMAT)))),
+                               _href=self.CURL('person', 'show', args=comment.user_id.nickname or comment.user_id))
+                             ),
+                            P(
+                               MARKMIN(comment.comment_text)
+                             ),
+                            _class="comment_li"
+                          ) for comment in comments],
+                  _class="comment_ul"),
+                  form,
+                  _class="internal-comments"
+                  )
 
     def comment_disqus(self):
         js = """
@@ -78,10 +115,47 @@ class Article(Base):
         return XML(js)
 
     def comment_intense(self):
-        pass
+        counterjs = """
+       <script>
+       var idcomments_acct = 'fe83a2e2af975dd1095a8e4e9ebe1902';
+       var idcomments_post_id;
+       var idcomments_post_url;
+       </script>
+       <script type="text/javascript" src="http://www.intensedebate.com/js/genericLinkWrapperV2.js"></script>
+       """
+
+        js = """
+        <script>
+        var idcomments_acct = '%(intense_acct)s';
+        var idcomments_post_id;
+        var idcomments_post_url;
+        </script>
+        <span id="IDCommentsPostTitle" style="display:none"></span>
+        <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+        """ % dict(
+                   intense_acct=self.config.comment.intense_acct,
+                   idcomments_post_id="%s/%s" % (self.context.article.id, self.context.article.slug),
+                   idcomments_post_url=self.request.url
+                  )
+        return XML(js)
 
     def comment_facebook(self):
-        pass
+        js = """
+        <div id="fb-root"></div>
+            <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=%(facebook_appid)s";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-comments" data-href="%(url)s" data-num-posts="%(facebook_numposts)s" data-width="700"></div>
+        """ % dict(
+                   facebook_appid=self.config.comment.facebook_appid,
+                   facebook_numposts=self.config.comment.facebook_numposts,
+                   url=self.request.url
+                  )
+        return XML(js)
 
     def get(self, redir=True):
         article_id = self.request.args(0)
@@ -126,6 +200,8 @@ class Article(Base):
         return (content, self.db(content.entity.article_id == article_id).select().first())
 
     def new(self):
+        if not self.session.auth:
+            redirect(self.CURL('default', 'user', args='login', vars=dict(_next=self.CURL('article', 'new', args=self.request.args))))
         arg = self.request.args(0)
         query = self.db.content_type.identifier == arg
         content_type = self.db(query).select().first() or redirect(self.CURL('home', 'index'))

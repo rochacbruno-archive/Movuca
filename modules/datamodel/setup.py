@@ -66,5 +66,8 @@ class Setup(object):
            Field("anonymous", "boolean", notnull=True, default=False),
            Field("disqus_shortname", "string", notnull=True, default="movuca"),
            Field("disqus_developer", "integer", notnull=True, default=1),
+           Field("intense_acct", "string", notnull=True, default="fe83a2e2af975dd1095a8e4e9ebe1902"),
+           Field("facebook_appid", "string", notnull=True, default="257838757587678"),
+           Field("facebook_numposts", "integer", notnull=True, default=10),
            Field("setuptime", "datetime", notnull=True),
         ]

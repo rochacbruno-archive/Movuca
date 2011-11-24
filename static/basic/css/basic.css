@@ -62,3 +62,27 @@ a.icon-link:hover {
         background-color:#F5F5F5;
         border: 1px solid #DDDDDD;
     }
+
+.show-article-comments{
+    
+}
+
+    .internal-comments ul.comment_ul{
+       padding-left:0;    
+    }
+
+    .internal-comments li.comment_li{
+    border: 1px solid #fff;
+    list-style: none; 
+    padding: 10px;
+    }
+
+    .internal-comments li.comment_li:hover {
+        background-color:#F5F5F5;
+        border: 1px solid #DDDDDD;
+    }
+
+    .internal-comments form textarea {
+        width:100%;
+        height:100px;
+    }

@@ -6,8 +6,8 @@ from handlers.base import Base
 class Home(Base):
     def start(self):
         from movuca import DataBase, User
-        from datamodel.article import Article, ContentType
-        self.db = DataBase([User, ContentType, Article])
+        from datamodel.article import Article, ContentType, Category
+        self.db = DataBase([User, ContentType, Category, Article])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render

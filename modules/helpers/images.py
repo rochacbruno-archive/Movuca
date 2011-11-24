@@ -52,18 +52,19 @@ def THUMB(image, nx=120, ny=120):
 
 
 def THUMB2(image, nx=120, ny=120, gae=False):
-    if not gae:
-        request = current.request
-        from PIL import Image
-        import os
-        img = Image.open(request.folder + 'uploads/' + image)
-        img.thumbnail((nx, ny), Image.ANTIALIAS)
-        root, ext = os.path.splitext(image)
-        thumb = '%s_thumb%s' % (root, ext)
-        img.save(request.folder + 'uploads/' + thumb)
-        return thumb
-    else:
-        return image
+    if image:
+        if not gae:
+            request = current.request
+            from PIL import Image
+            import os
+            img = Image.open(request.folder + 'uploads/' + image)
+            img.thumbnail((nx, ny), Image.ANTIALIAS)
+            root, ext = os.path.splitext(image)
+            thumb = '%s_thumb%s' % (root, ext)
+            img.save(request.folder + 'uploads/' + thumb)
+            return thumb
+        else:
+            return image
 
 
 class GetImages(object):

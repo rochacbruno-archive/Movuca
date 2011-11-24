@@ -49,10 +49,14 @@
         <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
         <!-- Lockerz Share END -->
     </div>
+
     <div class="row show-article-related">
+    {{if related_articles:}}
          <h4>{{=T("Related articles")}}</h4>
         {{=related_articles}}
+    {{pass}}
     </div>
+    
     <div class="row show-article-comments">
         {{=comments}}
     </div>

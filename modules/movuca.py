@@ -13,6 +13,8 @@ class DataBase(DAL):
         self.T = current.T
         self.CURL = current.CURL
         self.cache = current.cache
+        self.TIMEFORMAT = current.TIMEFORMAT
+        self.DATEFORMAT = current.DATEFORMAT
         from config import Config
         self.config = Config()
         if not current.request.env.web2py_runtime_gae:

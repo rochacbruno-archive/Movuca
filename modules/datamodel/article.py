@@ -174,3 +174,25 @@ class Dislikers(BaseModel):
             Field("article_id", "reference article", notnull=True),
             Field("user_id", "reference auth_user", notnull=True),
         ]
+
+
+class Comments(BaseModel):
+    tablename = "article_comments"
+
+    def set_properties(self):
+        self.fields = [
+            Field("article_id", "reference article", notnull=True),
+            Field("user_id", "reference auth_user", notnull=True),
+            Field("parent", "reference article_comments"),
+            Field("replies", "integer", notnull=True, default=0),
+            Field("comment_text", "text", notnull=True),
+            Field("commenttime", "datetime"),
+        ]
+
+        self.visibility = {
+            "article_id": (False, False),
+            "user_id": (False, False),
+            "parent": (False, False),
+            "commenttime": (False, False),
+            "replies": (False, False),
+        }

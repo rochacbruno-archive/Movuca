@@ -7,6 +7,8 @@ def latest_articles(db, query="article.id greater than 0", orderfield='created_o
 
 
 def related_articles(db, tags, exclude):
+    if not tags:
+        tags = ['default']
     query = (db.article.tags.contains(tags)) & (db.article.id != exclude)
     rows = db(query).select(orderby="<random>", limitby=(0, 5))
     return rows
