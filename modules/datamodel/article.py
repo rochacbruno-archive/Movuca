@@ -122,7 +122,7 @@ class Category(BaseModel):
             Field("description", "text"),
             Field("picture", "upload"),
             Field("thumbnail", "upload"),
-            Field("parent", "reference article_category"),
+            Field("parent_id", "reference article_category"),
             Field("content_type", "reference content_type"),
         ]
 
@@ -183,7 +183,7 @@ class Comments(BaseModel):
         self.fields = [
             Field("article_id", "reference article", notnull=True),
             Field("user_id", "reference auth_user", notnull=True),
-            Field("parent", "reference article_comments"),
+            Field("parent_id", "reference article_comments"),
             Field("replies", "integer", notnull=True, default=0),
             Field("comment_text", "text", notnull=True),
             Field("commenttime", "datetime"),
@@ -192,7 +192,7 @@ class Comments(BaseModel):
         self.visibility = {
             "article_id": (False, False),
             "user_id": (False, False),
-            "parent": (False, False),
+            "parent_id": (False, False),
             "commenttime": (False, False),
             "replies": (False, False),
         }

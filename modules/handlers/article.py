@@ -28,18 +28,24 @@ class Article(Base):
 
     def related_articles(self):
         from helpers.article import related_articles
-        related_articles = related_articles(self.db, self.context.article.tags, self.context.article.id)
+        related_articles = related_articles(self.db, self.context.article.tags, self.context.article.category_id, self.context.article.id)
         if related_articles:
             self.context.related_articles = UL(*[LI(
                                               DIV(
-                                                IMG(_src=URL('default', 'download', args=related.thumbnail))
+                                                IMG(_src=self.get_image(related.thumbnail, related.content_type_id.identifier), _width=120)
                                               ),
                                               A(related.title, _href=self.CURL('article', 'show', args=[related.id, related.slug])),
                                               **{'_data-url': self.CURL('article', 'show', args=[related.id, related.slug])}
                                               ) for related in related_articles],
-                                              _class="related-articles")
+                                              **dict(_class="related-articles"))
         else:
             self.context.related_articles = False
+
+    def get_image(self, image, placeholder="image"):
+        if image:
+            return URL('default', 'download', args=image)
+        else:
+            return URL('static', 'basic/images', args='%s.png' % placeholder)
 
     def comments(self):
         comment_system = {
@@ -83,7 +89,7 @@ class Article(Base):
                              ),
                             _class="comment_li"
                           ) for comment in comments],
-                  _class="comment_ul"),
+                  **dict(_class="comment_ul")),
                   form,
                   _class="internal-comments"
                   )
@@ -432,7 +438,8 @@ class Article(Base):
         links.append('unfavorite' if favorited else 'favorite')
         links.append('unlike' if liked else 'like')
         links.append('undislike' if disliked else 'dislike')
-        links.append('unsubscribe' if subscribed else 'subscribe')
+        if self.config.comment.system == "internal":
+            links.append('unsubscribe' if subscribed else 'subscribe')
 
         if has_permission_to_edit(self.session, self.context.article):
             links.append('edit')
