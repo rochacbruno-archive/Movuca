@@ -17,10 +17,6 @@
           {{if article.category_id:}}
               <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'category', args=article.category_id.name))}}</em> 
           {{pass}}
-          <br />
-          {{if article.tags:}}
-            <em>{{=T('tags')}} {{=tagfy(article.tags)}} </em>
-          {{pass}}
           <p class="show-article-information" id="links">
               {{=action_links}}
           </p>
@@ -33,12 +29,32 @@
       {{RENDER = dict(html=XML, markmin=MARKMIN)}}
       {{=RENDER[article_data.markup](article_data.body)}}
     </div>
+    <div class="row show-article-tags">
+       {{if article.tags:}}
+           <em>{{=T('Tags')}} {{=tagfy(article.tags)}} </em>
+       {{pass}}
+    </div>
+    <div class="row show-article-share">
+        <!-- Lockerz Share BEGIN -->
+        <div class="a2a_kit a2a_default_style">
+        <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
+        <span class="a2a_divider"></span>
+        <a class="a2a_button_facebook"></a>
+        <a class="a2a_button_twitter"></a>
+        <a class="a2a_button_email"></a>
+        <a class="a2a_button_google_gmail"></a>
+        <a class="a2a_button_google_plus"></a>
+        <a class="a2a_button_tumblr"></a>
+        </div>
+        <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+        <!-- Lockerz Share END -->
+    </div>
     <div class="row show-article-related">
          <h4>{{=T("Related articles")}}</h4>
         {{=related_articles}}
     </div>
     <div class="row show-article-comments">
-    
+        {{=comments}}
     </div>
 
 </div>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML
 from helpers.images import THUMB2
 import os
 
@@ -38,6 +38,51 @@ class Article(Base):
                                               ) for related in related_articles],
                                               _class="related-articles")
 
+    def comments(self):
+        comment_system = {
+            "internal": self.comment_internal,
+            "disqus": self.comment_disqus,
+            "intense": self.comment_intense,
+            "facebook": self.comment_facebook
+        }
+
+        self.context.comments = comment_system[self.config.comment.system]()
+
+    def comment_internal(self):
+        pass
+
+    def comment_disqus(self):
+        js = """
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = '%(disqus_shortname)s'; // required: replace example with your forum shortname
+        var disqus_identifier = '%(disqus_identifier)s';
+        //var disqus_url = '%(disqus_url)s';
+        var disqus_developer = %(disqus_developer)s; // developer mode is on
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+        """ % dict(
+                   disqus_shortname=self.config.comment.disqus_shortname,
+                   disqus_developer=self.config.comment.disqus_developer,
+                   disqus_identifier="%s/%s" % (self.context.article.id, self.context.article.slug),
+                   disqus_url=self.request.url
+                  )
+        return XML(js)
+
+    def comment_intense(self):
+        pass
+
+    def comment_facebook(self):
+        pass
+
     def get(self, redir=True):
         article_id = self.request.args(0)
         article_slug = self.request.args(1)
@@ -52,10 +97,13 @@ class Article(Base):
     def show(self):
         self.get()
         self.related_articles()
+        self.comments()
         content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
-        self.response.meta.title = "%s | %s | %s" % (self.db.config.meta.title,
+        self.response.meta.title = "%s | %s | %s" % (
+                                                     self.context.article.title,
                                                      self.T(self.context.article.content_type_id.title),
-                                                     self.context.article.title)
+                                                     self.db.config.meta.title,
+                                                    )
         self.response.meta.description = self.context.article.description
         self.response.meta.keywords = ",".join(self.context.article.tags)
         self.context.article.update_record(views=self.context.article.views + 1)

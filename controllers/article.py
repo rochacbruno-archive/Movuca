@@ -6,6 +6,7 @@ from handlers.article import Article
 def show():
     article = Article('show')
     article.context.left_sidebar_enabled = True
+    print response.keys()
     return article.render("app/article/show/%s" % article.context.article.content_type_id.viewname)
 
 
