@@ -5,6 +5,13 @@ def latest_articles(db, query="article.id greater than 0", orderfield='created_o
     orderby = ~db.article[orderfield] if order == 'desc' else db.article[orderfield]
     return db.smart_query([db.article[field] for field in db.article.fields], query).select(orderby=orderby, limitby=limit)
 
+
+def related_articles(db, tags, exclude):
+    query = (db.article.tags.contains(tags)) & (db.article.id != exclude)
+    rows = db(query).select(orderby="<random>", limitby=(0, 5))
+    return rows
+
+
 therms = [('&', 'and'),
         ('|', 'or'),
         ('~', 'not'),

@@ -16,7 +16,8 @@ class BaseModel(object):
              'set_labels',
              'set_comments',
              'set_computations',
-             'set_updates']
+             'set_updates',
+             'set_fixtures']
 
     def __init__(self, db=None, migrate=None, format=None):
         self.db = db

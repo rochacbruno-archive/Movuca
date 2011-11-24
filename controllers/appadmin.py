@@ -7,8 +7,9 @@
 from movuca import Access, DataBase
 db = DataBase()
 auth = Access(db)
-from datamodel.article import Article, ContentType
+from datamodel.article import Article, ContentType, Category
 ContentType(db)
+Category(db)
 Article(db)
 
 response.view = '%(name)s/app/appadmin.html' % db.config.theme

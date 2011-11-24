@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV
 from helpers.images import THUMB2
 import os
 
@@ -9,8 +9,8 @@ import os
 class Article(Base):
     def start(self):
         from movuca import DataBase, User
-        from datamodel.article import Article, ContentType, Favoriters, Subscribers, Likers, Dislikers
-        self.db = DataBase([User, ContentType, Article, Favoriters, Subscribers, Likers, Dislikers])
+        from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers
+        self.db = DataBase([User, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -26,6 +26,18 @@ class Article(Base):
         from helpers.article import latest_articles
         self.context.latest_articles = latest_articles(self.db)
 
+    def related_articles(self):
+        from helpers.article import related_articles
+        related_articles = related_articles(self.db, self.context.article.tags, self.context.article.id)
+        self.context.related_articles = UL(*[LI(
+                                              DIV(
+                                                IMG(_src=URL('default', 'download', args=related.thumbnail))
+                                              ),
+                                              A(related.title, _href=self.CURL('article', 'show', args=[related.id, related.slug])),
+                                              **{'_data-url': self.CURL('article', 'show', args=[related.id, related.slug])}
+                                              ) for related in related_articles],
+                                              _class="related-articles")
+
     def get(self, redir=True):
         article_id = self.request.args(0)
         article_slug = self.request.args(1)
@@ -39,6 +51,7 @@ class Article(Base):
 
     def show(self):
         self.get()
+        self.related_articles()
         content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
         self.response.meta.title = "%s | %s | %s" % (self.db.config.meta.title,
                                                      self.T(self.context.article.content_type_id.title),

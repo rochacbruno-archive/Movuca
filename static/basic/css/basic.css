@@ -41,3 +41,24 @@
 a.icon-link:hover {
     text-decoration:none;
 }
+
+
+.related-articles {
+    padding-left:0px;
+}
+
+    .related-articles li {
+    cursor: pointer;
+    border: 1px solid #fff;
+    list-style: none; 
+    float:left;
+    padding: 10px;
+    display: inline;
+    min-height:160px;
+    width:120px;
+    }
+
+    .related-articles li:hover {
+        background-color:#F5F5F5;
+        border: 1px solid #DDDDDD;
+    }

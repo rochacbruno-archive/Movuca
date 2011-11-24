@@ -19,6 +19,7 @@ class Article(BaseModel):
                       Field("picture", "upload"),
                       Field("thumbnail", "upload"),
                       Field("draft", "boolean", default=False),
+                      Field("category_id", "reference article_category"),
                       Field("tags", "list:string"),
                       Field("keywords", "string"),
                       # control
@@ -97,6 +98,42 @@ class ContentType(BaseModel):
             Field("viewname", "string"),
             Field("childs", "integer", notnull=True, default=1),
         ]
+
+    def set_fixtures(self):
+        if not self.db(self.entity).count():
+            self.entity.insert(
+               title="Article",
+               description="User Article",
+               identifier="Article",
+               classname="Article",
+               tablename="article_data",
+               viewname="article",
+               )
+            self.db.commit()
+
+
+class Category(BaseModel):
+    tablename = "article_category"
+    format = "%(name)s"
+
+    def set_properties(self):
+        self.fields = [
+            Field("name", "string"),
+            Field("description", "text"),
+            Field("picture", "upload"),
+            Field("thumbnail", "upload"),
+            Field("parent", "reference article_category"),
+            Field("content_type", "reference content_type"),
+        ]
+
+    def set_fixtures(self):
+        if not self.db(self.entity).count():
+            self.entity.insert(
+               name="Article",
+               description="General article",
+               content_type=self.db(self.db.content_type.identifier == 'Article').select().first().id
+               )
+            self.db.commit()
 
 
 class Favoriters(BaseModel):

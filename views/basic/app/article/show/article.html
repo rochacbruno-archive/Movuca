@@ -14,8 +14,12 @@
       <div class="ten columns omega">
           {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
           <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} {{=ftime(article.publish_date)}} </em>
+          {{if article.category_id:}}
+              <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'category', args=article.category_id.name))}}</em> 
+          {{pass}}
+          <br />
           {{if article.tags:}}
-              <em>{{=T('in')}} {{=tagfy(article.tags)}}</em> 
+            <em>{{=T('tags')}} {{=tagfy(article.tags)}} </em>
           {{pass}}
           <p class="show-article-information" id="links">
               {{=action_links}}
@@ -30,7 +34,8 @@
       {{=RENDER[article_data.markup](article_data.body)}}
     </div>
     <div class="row show-article-related">
-    
+         <h4>{{=T("Related articles")}}</h4>
+        {{=related_articles}}
     </div>
     <div class="row show-article-comments">
     

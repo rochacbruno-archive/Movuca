@@ -2,7 +2,7 @@
 
 
 def tagfy(tags):
-    links = [A("%s " % tag, _href=CURL('article', 'tag', args=tag)) for tag in tags[:5]]
+    links = [A(" %s " % tag.strip(), _href=CURL('article', 'tag', args=tag)) for tag in tags[:5]]
     return CAT(*links)
 
 
