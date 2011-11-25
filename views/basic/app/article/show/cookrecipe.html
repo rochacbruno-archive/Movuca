@@ -1,0 +1,100 @@
+{{response.files.append(URL('static','basic/js/article_show.js'))}}
+{{extend "basic/app/layout.html"}}
+<div class="twelve columns center  show-article-wrapper">
+    <div class="row show-article-meta">
+      <div class="two columns alpha">
+         {{=A(IMG(_src=get_image(article.author.thumbnail, 'user'), _width=100, _height=100), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+      </div>
+      <div class="ten columns omega">
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} {{=ftime(article.publish_date)}} </em>
+          {{if article.category_id:}}
+              <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'category', args=article.category_id.name))}}</em> 
+          {{pass}}
+          <p class="show-article-information" id="links">
+              {{=action_links}}
+          </p>
+       
+      </div>
+    </div>
+    <div class="row show-article-content">
+       <div class="eight columns alpha">
+          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier), _width=460)}}
+       </div>
+       <div class="four columns omega cook-recipe-information">
+
+        <!-- Lockerz Share BEGIN -->
+          <ul>
+            <li>
+              <div class="a2a_kit a2a_default_style cook-recipe-share">
+                <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
+                <span class="a2a_divider"></span>
+                <a class="a2a_button_facebook"></a>
+                <a class="a2a_button_twitter"></a>
+                <a class="a2a_button_email"></a>
+                <a class="a2a_button_google_gmail"></a>
+                <a class="a2a_button_google_plus"></a>
+                <a class="a2a_button_tumblr"></a>
+              </div>
+            </li>
+          </ul>
+          <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+          <!-- Lockerz Share END -->
+         {{difficulty = dict([("1", T("Easy")), ("2", T("Medium")), ("3", T("Hard"))])}}
+         {{article_data.fdifficulty = difficulty[article_data.difficulty]}}
+         {{article_data.fservings = "%g" % article_data.servings}}
+         {{fields=[(T("Prep Time"),'prep_time'), (T("Cook Time"),'cook_time'), (T("Difficulty"),'fdifficulty'), (T("Servings"),'fservings')]}}
+         {{=UL(*[LI(SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields])}}
+         <ul>
+            <li>
+               <button>{{=T("Add to my book")}}</button>
+            </li>
+            <li>
+               <button>{{=T("Print Recipe")}}</button>
+            </li>
+        </ul>
+       
+       </div>
+       <div class="twelve columns alpha">
+          <p class="show-article-description">
+              {{=H5(T("Recipe Description"))}}
+              {{=article.description}}
+          </p>
+       </div>
+
+       <div class="five columns alpha cook-recipe-ingredients">
+          
+              {{=H5(T("Ingredients"))}}
+              {{=UL(*[LI(item) for item in article_data.ingredients])}}
+          
+       </div>
+
+       <div class="seven columns omega">
+          <p class="cook-recipe-instructions">
+              {{=H5(T("Preparation Instructions"))}}
+              {{=XML(article_data.instructions)}}
+          </p>
+       </div>
+       
+       <div class="twelve columns alpha"> 
+          {{=H5(T("References"))}}
+          {{=article_data.credits}}
+       </div>
+    </div>
+    <div class="row show-article-tags">
+       {{if article.tags:}}
+           <em>{{=T('Tags')}} {{=tagfy(article.tags)}} </em>
+       {{pass}}
+    </div>
+    <div class="row show-article-related">
+    {{if related_articles:}}
+         <h4>{{=T("Related articles")}}</h4>
+        {{=related_articles}}
+    {{pass}}
+    </div>
+    
+    <div class="row show-article-comments">
+        {{=comments}}
+    </div>
+
+</div>
