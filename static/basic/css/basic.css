@@ -86,3 +86,29 @@ a.icon-link:hover {
         width:100%;
         height:100px;
     }
+
+.show-article-content{
+    
+}
+    .cook-recipe-information ul{
+        padding-left:5px;
+    }
+
+    .cook-recipe-information li {
+        border: 1px solid #fff;
+        list-style: none; 
+        padding: 5px;
+        background-color:#F5F5F5;
+    }
+
+    .cook-recipe-information button {
+        width:100%;
+    }
+
+    .cook-recipe-ingredients ul {
+        padding-left:15px;
+    }
+
+    .cook-recipe-label {
+        color:blue;
+    }
