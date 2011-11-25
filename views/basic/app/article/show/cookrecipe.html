@@ -19,7 +19,7 @@
     </div>
     <div class="row show-article-content">
        <div class="eight columns alpha">
-          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier), _width=460)}}
+          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_class="eight columns alpha")}}
        </div>
        <div class="four columns omega cook-recipe-information">
 
@@ -46,8 +46,8 @@
          {{fields=[(T("Prep Time"),'prep_time'), (T("Cook Time"),'cook_time'), (T("Difficulty"),'fdifficulty'), (T("Servings"),'fservings')]}}
          {{=UL(*[LI(SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields])}}
          <ul>
-            <li>
-               <button>{{=T("Add to my book")}}</button>
+            <li id="addtobookbutton">
+               {{=LOAD('cookrecipe','addtobookbutton',args=15,ajax=True)}}
             </li>
             <li>
                <button>{{=T("Print Recipe")}}</button>

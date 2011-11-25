@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from gluon.dal import Field
-from basemodel import ContentModel
+from basemodel import BaseModel, ContentModel
 from gluon.validators import IS_NOT_EMPTY, IS_IN_SET
 from gluon import current
 
@@ -41,6 +41,16 @@ class CookRecipe(ContentModel):
             "instructions": IS_NOT_EMPTY(),
             "difficulty": IS_IN_SET([("1", T("Easy")), ("2", T("Medium")), ("3", T("Hard"))], zero=None)
         }
+
+
+class CookRecipeBook(BaseModel):
+    tablename = "cookrecipe_book"
+
+    def set_properties(self):
+        self.fields = [
+            Field("article_id", "reference article", notnull=True),
+            Field("user_id", "reference auth_user", notnull=True),
+        ]
 
 
 class CodeRecipe(ContentModel):
