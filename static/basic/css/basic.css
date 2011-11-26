@@ -135,6 +135,14 @@ a.icon-link:hover {
         height:50px;
     }
 
+    .edit-article-wrapper #article_body {
+        height:700px;
+    }
+
     .edit-article-wrapper .fieldrow {
         margin-bottom:10px;
+    }
+
+    .cke_contents {
+        height:600px !important;
     }

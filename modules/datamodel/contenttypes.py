@@ -4,12 +4,14 @@ from gluon.dal import Field
 from basemodel import BaseModel, ContentModel
 from gluon.validators import IS_NOT_EMPTY, IS_IN_SET
 from gluon import current
+from plugin_ckeditor import CKEditor
 
 
 class Article(ContentModel):
     tablename = "article_data"
 
     def set_properties(self):
+        ckeditor = CKEditor(self.db)
         T = self.db.T
         self.fields = [
             Field("markup", default="html"),
@@ -27,6 +29,10 @@ class Article(ContentModel):
 
         self.visibility = {
             "markup": (False, False)
+        }
+
+        self.widgets = {
+            "body": ckeditor.widget
         }
 
 

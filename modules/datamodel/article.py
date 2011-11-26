@@ -88,8 +88,8 @@ class Article(BaseModel):
         self.validators = {
           "title": IS_NOT_EMPTY(),
           "description": IS_LENGTH(255, 10),
-          "picture": IS_IMAGE(),
-          "license": IS_IN_SET(self.db.config.get_list('article', 'license'))
+          "picture": IS_EMPTY_OR(IS_IMAGE()),
+          "license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None)
         }
 
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}
