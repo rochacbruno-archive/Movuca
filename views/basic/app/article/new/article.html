@@ -1,0 +1,65 @@
+{{response.files.append(URL('static','basic/js/article_edit.js'))}}
+{{extend "basic/app/layout.html"}}
+{{=form.custom.begin}}
+
+<div class="row edit-article-wrapper">
+    <div class="twelve columns alpha">
+       
+       <fieldset>
+            <legend>{{=T("The Basics")}}</legend>
+            {{=customfield(form, 'title')}}
+            {{=customfield(form, 'description')}}
+            {{=customfield(form, 'picture')}}
+       </fieldset>
+
+       <fieldset>
+            <legend>{{=T("Content")}}</legend>
+            {{#=customfield(form, 'markup')}}
+            {{=customfield(form, 'body')}}
+       </fieldset>
+
+
+
+    </div>
+
+
+    <div class="four columns omega">
+        
+
+        <fieldset>
+            <legend>{{=T("Category & Tags")}}</legend>
+            {{=customfield(form, 'category_id')}}
+            {{=customfield(form, 'tags')}}
+        </fieldset>
+
+        <fieldset>
+            <legend>{{=T("options")}}</legend>
+            {{=customfield(form, 'privacy')}}
+            {{=customfield(form, 'license')}}
+
+            
+        </fieldset>
+
+        <fieldset>
+            <legend>{{=T("Save")}}</legend>
+            {{=customfield(form, 'draft')}}
+            <br />
+            <button class="full-width" id="publish">{{=T("Publish")}}</button>
+            <button class="full-width" id="draft">{{=T("Save as a draft")}}</button>
+
+            
+        </fieldset>
+
+
+
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="sixteen columns omega edit-article-wrapper">
+     {{=form.errors}}
+    </div>
+</div>
+
+{{=form.custom.end}}

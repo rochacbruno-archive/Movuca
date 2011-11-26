@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, MARKMIN
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, MARKMIN, LABEL
 from helpers.images import THUMB2
 import os
 
@@ -121,14 +121,14 @@ class Article(Base):
         return XML(js)
 
     def comment_intense(self):
-        counterjs = """
-       <script>
-       var idcomments_acct = 'fe83a2e2af975dd1095a8e4e9ebe1902';
-       var idcomments_post_id;
-       var idcomments_post_url;
-       </script>
-       <script type="text/javascript" src="http://www.intensedebate.com/js/genericLinkWrapperV2.js"></script>
-       """
+       #  counterjs = """
+       # <script>
+       # var idcomments_acct = 'fe83a2e2af975dd1095a8e4e9ebe1902';
+       # var idcomments_post_id;
+       # var idcomments_post_url;
+       # </script>
+       # <script type="text/javascript" src="http://www.intensedebate.com/js/genericLinkWrapperV2.js"></script>
+       # """
 
         js = """
         <script>
@@ -211,6 +211,7 @@ class Article(Base):
         arg = self.request.args(0)
         query = self.db.content_type.identifier == arg
         content_type = self.db(query).select().first() or redirect(self.CURL('home', 'index'))
+        self.context.viewname = content_type.viewname
         content = self.define_content_type(content_type.classname)
         path = os.path.join(self.request.folder, 'uploads/')
         if not self.request.env.web2py_runtime_gae:
@@ -222,7 +223,8 @@ class Article(Base):
         self.db.article.author.default = self.session.auth.user.id
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
         self.db.article.content_type_id.default = content_type.id
-        self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article")
+        self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='')
+        self.context.customfield = customfield
         if self.context.form.process().accepted:
             try:
                 id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
@@ -465,3 +467,25 @@ def ICONLINK(user, icon, text, action=None, title="Click"):
 def has_permission_to_edit(session, record):
     userid = session.auth.user.id if session.auth else 0
     return record.author == userid
+
+
+def customfield(form, field):
+    tablefield = (form.table, field)
+    maindiv = DIV(_id="%s_%s__row" % tablefield, _class="row")
+    labeldiv = DIV(_class="w2p_fl")
+    commentdiv = DIV(_class="w2p_fc")
+    widgetdiv = DIV(_class="w2p_fw")
+
+    label = LABEL(form.custom.label[field], _for="%s_%s" % tablefield, _id="%s_%s__label" % tablefield)
+    comment = form.custom.comment[field]
+    widget = form.custom.widget[field]
+
+    labeldiv.append(label)
+    commentdiv.append(comment)
+    widgetdiv.append(widget)
+
+    maindiv.append(labeldiv)
+    maindiv.append(commentdiv)
+    maindiv.append(widgetdiv)
+
+    return maindiv

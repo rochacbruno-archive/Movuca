@@ -70,7 +70,7 @@ class CookRecipe(Base):
                             _class="button button not-on-book",
                             _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'addtobook', args=self.request.args(0)))
         else:
-            bt = bt = BUTTON(self.T("Add to my book"),
+            bt = BUTTON(self.T("Add to my book"),
                             _class="button button not-on-book",
                             _onclick="window.location = '%s';" % URL('default', 'user',
                                  args='login', vars=dict(_next=self.CURL('article', 'show', args=self.request.args(0)))))

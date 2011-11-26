@@ -10,14 +10,23 @@ class Article(ContentModel):
     tablename = "article_data"
 
     def set_properties(self):
+        T = self.db.T
         self.fields = [
-            Field("markup"),
+            Field("markup", default="html"),
             Field("body", "text", notnull=True),
         ]
 
         self.validators = {
             "body": IS_NOT_EMPTY(),
-            "markup": IS_IN_SET(["html", "markmin"]),
+            #"markup": IS_IN_SET(["html", "markmin"], zero=None),
+        }
+
+        self.labels = {
+            "body": T("Article Text")
+        }
+
+        self.visibility = {
+            "markup": (False, False)
         }
 
 

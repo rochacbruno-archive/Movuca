@@ -16,7 +16,8 @@ def edit():
 
 def new():
     article = Article('new')
-    return article.render()
+    #article.context.right_sidebar_enabled = True
+    return article.render("app/article/new/%s" % article.context.viewname)
 
 
 def delete():

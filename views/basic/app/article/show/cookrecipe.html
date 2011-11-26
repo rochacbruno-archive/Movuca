@@ -1,4 +1,6 @@
-{{response.files.append(URL('static','basic/js/article_show.js'))}}
+{{response.files.append(URL('static','basic/css/jqModal.css'))}}
+{{response.files.append(URL('static','basic/js/jqModal.js'))}}
+{{response.files.append(URL('static','basic/js/cookrecipe_show.js'))}}
 {{extend "basic/app/layout.html"}}
 <div class="twelve columns center  show-article-wrapper">
     <div class="row show-article-meta">
@@ -19,7 +21,10 @@
     </div>
     <div class="row show-article-content">
        <div class="eight columns alpha">
-          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_class="eight columns alpha")}}
+          <div class="jqmWindow" id="photomodal">
+              <img class="photo jqmClose" src="">
+          </div>
+          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="eight columns alpha recipephoto")}}
        </div>
        <div class="four columns omega cook-recipe-information">
 

@@ -43,6 +43,11 @@ class Setup(object):
             Field("setuptime", "datetime", notnull=True),
         ]
 
+        self.article_options = [
+            Field("license", "list:string", notnull=True, default=["1:All rights reserved", "2:Public domain", "3:Creative Commons"]),
+            Field("setuptime", "datetime", notnull=True),
+        ]
+
         self.meta_options = [
             Field("title", "string", notnull=True, default="Movuca"),
             Field("subtitle", "string", notnull=True, default="Free Social CMS Engine"),

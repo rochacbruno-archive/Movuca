@@ -10,6 +10,7 @@ class Article(BaseModel):
     tablename = "article"
 
     def set_properties(self):
+        T = self.db.T
         self.fields = [
                       # main
                       Field("author", "reference auth_user"),
@@ -47,6 +48,7 @@ class Article(BaseModel):
                      'author_nickname': (False, True),
                      "content_type": (False, False),
                      "search_index": (False, False),
+                     "publish_date": (False, False),
                      "publish_tz": (False, False),
                      "content_type_id": (False, True),
                      "likes": (False, True),
@@ -55,7 +57,7 @@ class Article(BaseModel):
                      "responses": (False, True),
                      "favorited": (False, True),
                      "subscriptions": (False, True),
-                     "draft": (False, False),
+                     #"draft": (False, False),
                      "keywords": (False, False),
                      }
 
@@ -64,13 +66,39 @@ class Article(BaseModel):
           "author_nickname": lambda r: r.author.nickname
         }
 
+        self.labels = {
+          "title": T("Article Title"),
+          "description": T("Short Description"),
+          "picture": T("Article Picture"),
+          "category_id": T("Category"),
+          "tags": T("Tags"),
+          "privacy": T("Privacy"),
+          "license": T("License"),
+          "draft": T("Draft")
+        }
+
+        self.comments = {
+          "description": T("Text to be shown at home page, email and RSS"),
+          "picture": T("Optional picture to be shown at home page, email and RSS (a thumbnail will be created)"),
+          "tags": T("A tag is used for search and to find related articles. Include one tag per line (press enter to wrap)"),
+          "privacy": T("Who can read this article?"),
+          "draft": T("Check to save as a draft")
+        }
+
+        self.validators = {
+          "title": IS_NOT_EMPTY(),
+          "description": IS_LENGTH(255, 10),
+          "picture": IS_IMAGE(),
+          "license": IS_IN_SET(self.db.config.get_list('article', 'license'))
+        }
+
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}
         # widgets = {'tele': None}
         # labels = {'email': "EMAIL"}
         # comments = {'email': "Seu E-mail"}
 
     def set_validators(self):
-        T = current.T
+        T = self.db.T
         session = self.db.session
         self.entity.publish_date.default = current.request.now
         self.entity.author_nickname.compute = lambda row: self.db.auth_user[row.author].nickname

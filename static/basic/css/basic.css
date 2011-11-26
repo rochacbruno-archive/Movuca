@@ -112,3 +112,29 @@ a.icon-link:hover {
     .cook-recipe-label {
         color:blue;
     }
+
+.edit-article-wrapper{
+    
+}
+
+    .edit-article-wrapper ul {
+        padding-left:0px;
+    }
+    .edit-article-wrapper li{
+       list-style: none; 
+        
+    }
+
+    .edit-article-wrapper textarea,
+    .edit-article-wrapper select,
+    .edit-article-wrapper input[type='text'] {
+        width:100%;
+    }
+
+    .edit-article-wrapper #article_description {
+        height:50px;
+    }
+
+    .edit-article-wrapper .fieldrow {
+        margin-bottom:10px;
+    }

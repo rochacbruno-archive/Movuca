@@ -27,8 +27,10 @@ blockquote, blockquote p, p blockquote { font-style: italic; margin: 0.5em 30px 
 em { font-style: italic; }
 strong { font-weight: bold; }
 small { font-size: 0.8em; }
+/*
 textarea { width: 600px; }
 input[type=text], input[type=password], select { width: 300px; }
+*/
 /** end **/
 
 /* Sticky footer begin */
