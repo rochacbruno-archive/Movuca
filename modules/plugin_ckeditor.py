@@ -8,11 +8,11 @@ class CKEditor(object):
     """
     Integrates CKEditor nicely into web2py.
     """
-    def __init__(self, db):
+    def __init__(self, db=None):
         """
         Initializes the CKEditor module. Requires a DAL instance.
         """
-        self.db = db
+        #self.db = db
         self.settings = Storage()
         self.settings.table_upload = None
         self.settings.table_upload_name = 'plugin_ckeditor_upload'
@@ -24,15 +24,18 @@ class CKEditor(object):
         self.settings.file_length_min = 0           # no minimum
         self.settings.spellcheck_while_typing = True
 
-        current.plugin_ckeditor = self
+        #current.plugin_ckeditor = self
 
-        self.define_tables()
+        #self.define_tables()
 
     def define_tables(self, migrate=True, fake_migrate=False):
         """
         Called after settings are set to create the required tables for dealing
         with file uploads from CKEditor.
         """
+        from movuca import DataBase
+        self.db = DataBase()
+
         upload_name = self.settings.table_upload_name
 
         self.settings.table_upload = self.db.define_table(upload_name,
@@ -44,9 +47,9 @@ class CKEditor(object):
             Field('user_id', 'integer', default=self.db.session.auth.user.id if self.db.session.auth else 0),
             Field("created_on", "datetime", default=self.db.request.now),
             *self.settings.extra_fields.get(upload_name, []),
-            migrate=migrate,
+            **dict(migrate=migrate,
             fake_migrate=fake_migrate,
-            format='%(title)s'
+            format='%(title)s')
         )
         self.settings.table_upload.upload.requires = [
             IS_NOT_EMPTY(),
@@ -92,7 +95,7 @@ class CKEditor(object):
         To be used with db.table.field.widget to set CKEditor as the desired widget for the field.
         Simply set db.table.field.widget = ckeditor.widget to use the CKEditor widget.
         """
-
+        self.define_tables()
         javascript = self.load('.plugin_ckeditor')
 
         return CAT(
@@ -197,16 +200,19 @@ class CKEditor(object):
                         filebrowserUploadUrl: '%(upload_url)s',
                         filebrowserBrowseUrl: '%(browse_url)s',
                         toolbar: [
-                            {name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
-                            {name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt']},
-                            {name: 'links', items: ['Link', 'Unlink', 'Anchor']},
-                            {name: 'insert', items: ['Image', 'Flash', 'Table', 'SpecialChar']},
-                            {name: 'tools', items: ['Maximize', 'ShowBlocks', '-', 'Source']},
-                            '/',
-                            {name: 'styles', items: ['Format', 'Font', 'FontSize']},
-                            {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
-                            {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-                        ],
+    { name: 'document', items : [ 'Source','-','DocProps','Preview','Print','-','Templates' ] },
+    { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+    { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ] },
+    '/',
+    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+    { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+    { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+    { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+    '/',
+    { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+    { name: 'colors', items : [ 'TextColor','BGColor' ] },
+    { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+],
                         scayt_autoStartup: %(scayt)s,
                     }
                 }
@@ -254,3 +260,17 @@ class CKEditor(object):
                 return 'pdf'
             else:
                 return 'other'
+
+
+
+                       # [
+                       #      {name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+                       #      {name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt']},
+                       #      {name: 'links', items: ['Link', 'Unlink', 'Anchor']},
+                       #      {name: 'insert', items: ['Image', 'Flash', 'Table', 'SpecialChar']},
+                       #      {name: 'tools', items: ['Maximize', 'ShowBlocks', '-', 'Source']},
+                       #      '/',
+                       #      {name: 'styles', items: ['Format', 'Font', 'FontSize']},
+                       #      {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
+                       #      {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+                       #  ]

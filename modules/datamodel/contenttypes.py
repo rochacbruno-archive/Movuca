@@ -11,7 +11,7 @@ class Article(ContentModel):
     tablename = "article_data"
 
     def set_properties(self):
-        ckeditor = CKEditor(self.db)
+        ckeditor = CKEditor()
         T = self.db.T
         self.fields = [
             Field("markup", default="html"),
@@ -40,6 +40,7 @@ class CookRecipe(ContentModel):
     tablename = "cookrecipe_data"
 
     def set_properties(self):
+        ckeditor = CKEditor()
         T = current.T
         self.fields = [
             Field("prep_time", "string"),
@@ -56,6 +57,11 @@ class CookRecipe(ContentModel):
             "instructions": IS_NOT_EMPTY(),
             "difficulty": IS_IN_SET([("1", T("Easy")), ("2", T("Medium")), ("3", T("Hard"))], zero=None)
         }
+
+        self.widgets = {
+            "instructions": ckeditor.widget
+        }
+
 
 
 class CookRecipeBook(BaseModel):

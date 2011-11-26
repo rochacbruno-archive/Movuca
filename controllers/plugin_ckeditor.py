@@ -3,9 +3,9 @@
 import os
 from gluon import *
 from plugin_ckeditor import CKEditor
-from movuca import DataBase
-db = DataBase()
-current.plugin_ckeditor = CKEditor(db)
+current.plugin_ckeditor = CKEditor()
+current.plugin_ckeditor.define_tables()
+db = current.plugin_ckeditor.db
 
 
 def upload():
