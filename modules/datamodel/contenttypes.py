@@ -2,7 +2,7 @@
 
 from gluon.dal import Field
 from basemodel import BaseModel, ContentModel
-from gluon.validators import IS_NOT_EMPTY, IS_IN_SET
+from gluon.validators import IS_NOT_EMPTY, IS_IN_SET, IS_LENGTH
 from gluon import current
 from plugin_ckeditor import CKEditor
 
@@ -43,25 +43,47 @@ class CookRecipe(ContentModel):
         ckeditor = CKEditor()
         T = current.T
         self.fields = [
-            Field("prep_time", "string"),
-            Field("cook_time", "string"),
-            Field("difficulty", "string"),
-            Field("servings", "double"),
-            Field("ingredients", "list:string"),
-            Field("instructions", "text"),
+            Field("prep_time", "string", notnull=True),
+            Field("cook_time", "string", notnull=True),
+            Field("difficulty", "string", notnull=True),
+            Field("servings", "double", notnull=True),
+            Field("ingredients", "list:string", notnull=True),
+            Field("instructions", "text", notnull=True),
             Field("credits", "text"),
         ]
 
         self.validators = {
             "ingredients": IS_NOT_EMPTY(),
             "instructions": IS_NOT_EMPTY(),
-            "difficulty": IS_IN_SET([("1", T("Easy")), ("2", T("Medium")), ("3", T("Hard"))], zero=None)
+            "difficulty": IS_IN_SET([("1", T("Easy")), ("2", T("Medium")), ("3", T("Hard"))], zero=None),
+            "prep_time": IS_NOT_EMPTY(),
+            "cook_time": IS_NOT_EMPTY(),
+            "servings": IS_NOT_EMPTY(),
         }
 
         self.widgets = {
             "instructions": ckeditor.widget
         }
 
+        self.labels = {
+            "instructions": T("Preparation instructions"),
+            "ingredients": T("Ingredients"),
+            "prep_time": T("Preparation time"),
+            "cook_time": T("Cooking time"),
+            "difficulty": T("Difficulty"),
+            "servings": T("Servings"),
+            "credits": T("credits"),
+        }
+
+        self.comments = {
+            "ingredients": T("One item per line. Press enter to wrap. e.g: 3 cups of water<enter>"),
+            "instructions": T("You can include pictures."),
+            "prep_time": T("The whole time considering ingredients preparation."),
+            "cook_time": T("The time needed after all ingredients are ready."),
+            "servings": T("How many portions, plates, cups etc?"),
+            "credits": T("Include links, names, books etc."),
+            "difficulty": T("Easy, Medium or hard to cook?"),
+        }
 
 
 class CookRecipeBook(BaseModel):

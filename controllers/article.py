@@ -11,7 +11,7 @@ def show():
 
 def edit():
     article = Article('edit')
-    return article.render()
+    return article.render("app/article/edit/%s" % article.context.article.content_type_id.viewname)
 
 
 def new():

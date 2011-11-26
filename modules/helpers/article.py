@@ -21,11 +21,11 @@ def related_articles(db, tags, category, exclude):
 
 def related_gae(db, query):
     import random
-    return db(query).select().sort(lambda row: random.random())[:5]
+    return db(query).select().sort(lambda row: random.random())[:4]
 
 
 def related(db, query):
-    return db(query).select(orderby="<random>", limitby=(0, 5))
+    return db(query).select(orderby="<random>", limitby=(0, 4))
 
 therms = [('&', 'and'),
         ('|', 'or'),

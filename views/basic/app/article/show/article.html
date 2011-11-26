@@ -25,8 +25,7 @@
       </div>
     </div>
     <div class="row show-article-content">
-      {{RENDER = dict(html=XML, markmin=MARKMIN)}}
-      {{=RENDER[article_data.markup](article_data.body)}}
+      {{=XML(article_data.body)}}
     </div>
     <div class="row show-article-tags">
        {{if article.tags:}}

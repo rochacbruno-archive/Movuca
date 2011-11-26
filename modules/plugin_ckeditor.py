@@ -104,7 +104,7 @@ class CKEditor(object):
                 _id=str(field).replace('.', '_'),
                 _name=field.name,
                 _class='text plugin_ckeditor',
-                _value=value,
+                #_value=value,
                 _cols=80,
                 _rows=10,
             ),

@@ -2,6 +2,7 @@
 
 from handlers.base import Base
 from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, MARKMIN, LABEL
+from gluon.validators import IS_SLUG
 from helpers.images import THUMB2
 import os
 
@@ -191,11 +192,15 @@ class Article(Base):
         self.db.commit()
 
     def edit(self):
+        self.context.customfield = customfield
         self.get()
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
-        self.context.article_form = SQLFORM(self.db.article, self.context.article).process()
+        self.context.article_form = SQLFORM(self.db.article, self.context.article)
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
-        self.context.content_form = SQLFORM(content.entity, article_data).process()
+        if self.context.article_form.process().accepted:
+            article_data.update_record(**content.entity._filter_fields(self.request.vars))
+            redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
+        self.context.content_form = SQLFORM(content.entity, article_data)
 
     def define_content_type(self, classname):
         from datamodel import contenttypes
@@ -227,16 +232,19 @@ class Article(Base):
         self.context.customfield = customfield
         if self.context.form.process().accepted:
             try:
-                id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
-                self.context.form.vars.article_id = id
+                article_id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
+                self.context.form.vars.article_id = article_id
                 self.context.form.vars.type_id = content_type.id
-                id = content.entity.insert(**content.entity._filter_fields(self.context.form.vars))
+                content_id = content.entity.insert(**content.entity._filter_fields(self.context.form.vars))
+                if not content_id:
+                    raise Exception("Content not added")
             except Exception:
                 self.db.rollback()
                 self.response.flash = self.T("error including %s." % content_type.title)
             else:
                 self.db.commit()
                 self.response.flash = self.T("%s included." % content_type.title)
+                redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
 
     def list(self):
         from helpers.article import latest_articles
