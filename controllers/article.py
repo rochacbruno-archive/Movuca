@@ -97,6 +97,11 @@ def comment():
     pass
 
 
+def editcomment():
+    article = Article('editcomment')
+    return ''
+
+
 def vote():
     pass
 

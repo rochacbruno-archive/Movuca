@@ -21,6 +21,6 @@ $(document).ready(function () {
                             
                          }; 
   $('#photomodal').jqm({modal: false, 
-                        trigger: '.show-article-content img',
+                        trigger: '.show-article-content img, .commentitem img',
                         onShow:loadPhoto});
 });

@@ -45,7 +45,7 @@ def browse():
             set = set(table_upload[key] == value)
 
     rows = set.select(orderby=table_upload.title)
-
+    
     return dict(rows=rows, cknum=request.vars.CKEditorFuncNum)
 
 

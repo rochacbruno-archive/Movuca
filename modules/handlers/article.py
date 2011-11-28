@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, MARKMIN, LABEL
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, LABEL
 from gluon.validators import IS_SLUG
 from helpers.images import THUMB2
 import os
@@ -59,11 +59,16 @@ class Article(Base):
         self.context.comments = comment_system[self.config.comment.system]()
 
     def comment_internal(self):
+        is_author = False
         if self.session.auth and self.session.auth.user:
+            is_author = True if self.session.auth.user.id == self.context.article.author else False
             self.db.Comments.article_id.default = self.context.article.id
             self.db.Comments.user_id.default = self.session.auth.user.id
             self.db.Comments.commenttime.default = self.request.now
             self.db.Comments.comment_text.label = self.T("Post your comment")
+            from plugin_ckeditor import CKEditor
+            ckeditor = CKEditor()
+            self.db.Comments.comment_text.widget = ckeditor.basicwidget
             form = SQLFORM(self.db.Comments, formstyle='divs').process()
         else:
             form = A(self.T("Login to post comments"),
@@ -75,6 +80,22 @@ class Article(Base):
                                              self.context.article.slug]))))
 
         comments = self.db(self.db.Comments.article_id == self.context.article.id).select()
+
+        if comments and is_author:
+            #from plugin_ckeditor import CKEditor
+            #ckeditor = CKEditor()
+            edit_in_place = ckeditor.bulk_edit_in_place(["#comment_%(id)s" % comment for comment in comments], URL('editcomment'))
+        elif comments and self.session.auth and self.session.auth.user:
+            usercomments = comments.find(lambda row: row.user_id == self.session.auth.user.id)
+            if usercomments:
+                #from plugin_ckeditor import CKEditor
+                #ckeditor = CKEditor()
+                edit_in_place = ckeditor.bulk_edit_in_place(["#comment_%(id)s" % comment for comment in usercomments], URL('editcomment'))
+            else:
+                edit_in_place = ('', '')
+        else:
+            edit_in_place = ('', '')
+
         return DIV(
                   H4(self.T("Comments")),
                   UL(
@@ -85,15 +106,30 @@ class Article(Base):
                                                    comment.commenttime.strftime("%s %s" % (self.db.DATEFORMAT, self.db.TIMEFORMAT)))),
                                _href=self.CURL('person', 'show', args=comment.user_id.nickname or comment.user_id))
                              ),
-                            P(
-                               MARKMIN(comment.comment_text)
+                            DIV(
+                               XML(comment.comment_text),
+                               **{'_class': 'editable commentitem',
+                                  '_data-object': 'comment',
+                                  '_data-id': comment.id,
+                                  '_id': "comment_%s" % comment.id}
                              ),
                             _class="comment_li"
                           ) for comment in comments],
                   **dict(_class="comment_ul")),
+                  #edit_in_place[0],
+                  edit_in_place[1],
                   form,
                   _class="internal-comments"
                   )
+
+    def editcomment(self):
+        user = self.session.auth.user if self.session.auth else None
+        data_id = self.request.vars['data[id]']
+        content = self.request.vars['content']
+        comment = self.db.Comments[data_id]
+        if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author):
+            comment.update_record(comment_text=content)
+            self.db.commit()
 
     def comment_disqus(self):
         js = """

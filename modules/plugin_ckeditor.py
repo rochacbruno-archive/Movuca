@@ -77,6 +77,8 @@ class CKEditor(object):
                 jQuery(function() {
                     jQuery('%(selector)s').ckeip({
                         e_url: '%(url)s',
+                        data: {'object': jQuery('%(selector)s').attr('data-object'),
+                               'id': jQuery('%(selector)s').attr('data-id')},
                         ckeditor_config: ckeditor_config(),
                     });
                 });
@@ -88,7 +90,40 @@ class CKEditor(object):
             )
         )
 
-        return javascript
+    def bulk_edit_in_place(self, selectorlist, url):
+        """
+        Creates an instance of CKEditor that will edit selected HTML elements
+        in place and provide AJAX saving capabilities. To start editing, the
+        user will need to double click on one of the matched selectors.
+
+        Requires a URL to return saved data to. The data will be stored in
+        request.vars.content.
+
+        NOTE: This should not be used for multi-tenant applications or where
+        there is a possibility a malicious user could tamper with the variables.
+        """
+        basic = self.load(toolbar='basic')
+        javascript = []
+
+        [javascript.append(XML(
+            """
+            <script type="text/javascript">
+                jQuery(function() {
+                    jQuery('%(selector)s').ckeip({
+                        e_url: '%(url)s',
+                        data: {'object': jQuery('%(selector)s').attr('data-object'),
+                               'id': jQuery('%(selector)s').attr('data-id')},
+                        ckeditor_config: ckeditor_config(),
+                    });
+                });
+            </script>
+            """ % dict(
+                selector=selector,
+                url=url,
+            )
+        )) for selector in selectorlist]
+
+        return (basic, CAT(*javascript))
 
     def widget(self, field, value):
         """
@@ -97,6 +132,27 @@ class CKEditor(object):
         """
         self.define_tables()
         javascript = self.load('.plugin_ckeditor')
+
+        return CAT(
+            TEXTAREA(
+                value if value not in ['None', None] else '',
+                _id=str(field).replace('.', '_'),
+                _name=field.name,
+                _class='text plugin_ckeditor',
+                #_value=value,
+                _cols=80,
+                _rows=10,
+            ),
+            javascript
+        )
+
+    def basicwidget(self, field, value):
+        """
+        To be used with db.table.field.widget to set CKEditor as the desired widget for the field.
+        Simply set db.table.field.widget = ckeditor.widget to use the CKEditor widget.
+        """
+        self.define_tables()
+        javascript = self.load('.plugin_ckeditor', toolbar='basic')
 
         return CAT(
             TEXTAREA(
@@ -136,7 +192,7 @@ class CKEditor(object):
         else:
             raise HTTP(401, 'Missing required upload.')
 
-    def load(self, selector=None):
+    def load(self, selector=None, toolbar='full'):
         """
         Generates the required JavaScript for CKEditor. If selector is set,
         then immediately turns the selected HTML element(s) into CKEditor
@@ -147,6 +203,28 @@ class CKEditor(object):
         #    return ''
         #else:
         #    self.settings.loaded = True
+
+        tools = {
+            'full': """[
+                        { name: 'document', items : [ 'Source','-','DocProps','Preview','Print','-','Templates' ] },
+                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                        { name: 'editing', items : [ 'Find','Replace','-','SpellChecker', 'Scayt' ] },
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'insert', items : [ 'Image','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+                        { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+                        { name: 'colors', items : [ 'TextColor','BGColor' ] },
+                        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                     ]""",
+            'basic': """[
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','-','Blockquote','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'insert', items : [ 'Image','Table','Smiley','SpecialChar'] },
+                        { name: 'colors', items : [ 'TextColor' ] },
+                     ]""",
+        }
 
         upload_url = self.settings.url_upload
         browse_url = self.settings.url_browse
@@ -199,20 +277,7 @@ class CKEditor(object):
                         contentsCss: %(contents_css)s,
                         filebrowserUploadUrl: '%(upload_url)s',
                         filebrowserBrowseUrl: '%(browse_url)s',
-                        toolbar: [
-    { name: 'document', items : [ 'Source','-','DocProps','Preview','Print','-','Templates' ] },
-    { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-    { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ] },
-    '/',
-    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
-    { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
-    { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-    { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
-    '/',
-    { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
-    { name: 'colors', items : [ 'TextColor','BGColor' ] },
-    { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
-],
+                        toolbar: %(toolbar)s,
                         scayt_autoStartup: %(scayt)s,
                     }
                 }
@@ -227,6 +292,7 @@ class CKEditor(object):
                 browse_url=browse_url,
                 scayt=scayt,
                 immediate=immediate,
+                toolbar=tools[toolbar],
             )
         )
 

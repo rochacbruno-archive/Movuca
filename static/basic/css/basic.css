@@ -143,6 +143,24 @@ a.icon-link:hover {
         margin-bottom:10px;
     }
 
-    .cke_contents {
+    .edit-article-wrapper .cke_contents {
         height:600px !important;
     }
+
+
+a.jqmClose {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    color:red;
+    font-weight:bold;
+}
+
+img.jqmClose {
+    margin-top: -20px;
+}
+
+.commentitem img{
+    max-width: 100px;
+    max-height: 100px;
+}

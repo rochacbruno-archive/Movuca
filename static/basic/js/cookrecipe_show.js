@@ -9,7 +9,7 @@ $(document).ready(function () {
   var loadPhoto=function(hash){ 
                            var w = $(window).width()
                            var h = $(window).height()
-                           hash.w.children("img").attr('src', $('img.recipephoto').attr('src')).css({'max-width':w - 100, 'max-height': h - 100})
+                           hash.w.children("img").attr('src', hash.t.src).css({'max-width':w - 100, 'max-height': h - 100})
                            hash.w.css(
                                      {
                                      'width':'auto',
@@ -23,6 +23,6 @@ $(document).ready(function () {
                             
                          }; 
   $('#photomodal').jqm({modal: false, 
-                        trigger: 'img.recipephoto',
+                        trigger: 'img.recipephoto, .commentitem img, .cook-recipe-instructions img',
                         onShow:loadPhoto});
 });
