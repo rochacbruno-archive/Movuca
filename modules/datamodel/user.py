@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from gluon.dal import Field
-from basemodel import BaseAuth
+from basemodel import BaseAuth, BaseModel
 from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL
 from helpers.images import THUMB2
+from gluon import CAT, A, IMG
 
 
 class User(BaseAuth):
@@ -99,3 +100,64 @@ class User(BaseAuth):
             self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
 
         self.entity.website.requires = IS_EMPTY_OR(IS_URL())
+
+
+class UserTimeLine(BaseModel):
+    tablename = "user_timeline"
+
+    def set_properties(self):
+        self.fields = [
+            Field("user_id", "reference auth_user"),
+            Field("nickname", "string"),
+            Field("event_type", "string"),
+            Field("event_to", "string"),
+            Field("event_reference", "integer"),
+            Field("event_text", "text"),
+            Field("event_image", "string"),
+            Field("event_link", "string"),
+        ]
+
+    def set_fixtures(self):
+        T = self.db.T
+        self.entity._event_types = {
+            "new_article": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
+                               A(T("Added new %(event_to)s: %(event_text)s"), _href="%(event_link)s")),
+            "update_article": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
+                               A(T("Updated an %(event_to)s: %(event_text)s"), _href="%(event_link)s")),
+            "new_contact": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
+                               A(T("Added %(event_to)s as a new contact"), _href="%(event_link)s")),
+            "new_article_comment": CAT(A(T("Commented on %(event_to)s:"), _href="%(event_link)s"), "%(event_text)s"),
+            "liked": CAT(A(T("Liked the %(event_to)s: %(event_text)s"), _href="%(event_link)s")),
+            "subscribed": CAT(A(T("Subscribed to %(event_to)s updates: %(event_text)s"), _href="%(event_link)s")),
+            "favorited": CAT(A(T("Favorited the %(event_to)s: %(event_text)s"), _href="%(event_link)s")),
+            "disliked": CAT(A(T("Disliked the %(event_to)s: %(event_text)s"), _href="%(event_link)s")),
+            "new_picture": CAT(A(T("Added new picture"), _href="%(event_link)s"),
+                               A(IMG(_src="%(event_image)s"), _href="%(event_link)s")),
+            "new_picture_comment": CAT(A(T("Commented on %(event_to)s picture"), _href="%(event_link)s"),
+                               A(IMG(_src="%(event_image)s"), _href="%(event_link)s")),
+            "wrote_on_wall": CAT(A(T("Commented on %(event_to)s wall: %(event_text)s"), _href="%(event_link)s")),
+        }
+        self.entity._new_event = self.new_event
+
+    def new_event(self, form=None, v=None):
+        if not v:
+            v = self.db.request.vars
+        elif v == 'form':
+            v = form.vars
+        else:
+            from gluon.storage import Storage
+            v = Storage(v)
+
+        event_text = v.event_text or v.comment_text or ' '
+        data = dict(
+            user_id=int(v.user_id),
+            nickname=v.nickname,
+            event_type=v.event_type,
+            event_image=v.event_image,
+            event_to=v.event_to,
+            event_reference=int(v.event_reference),
+            event_text=event_text[:50],
+            event_link=v.event_link
+        )
+        self.entity.insert(**data)
+        self.db.commit()

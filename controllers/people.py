@@ -1,27 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# from gluon.tools import Auth
-# auth = Auth(DAL(None))
-
-if session.auth and session.auth.user:
-    time_expire = 0
-else:
-    time_expire = 300
+from movuca import DataBase, User, UserTimeLine
+db = DataBase()
+auth = User(db)
+timeline = UserTimeLine(db)
 
 
-#@auth.requires_login()
-#@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
-def index():
-    from handlers.home import Home
-    home = Home()
-    home.context.left_sidebar_enabled = True
-    home.context.right_sidebar_enabled = True
-    return home.render("app/home")
-
-
-def base():
-    from handlers.base import Base
-    base = Base()
-    base.context.teste = "TESTEEEE"
-    return base.render("app/base")
+def usertimeline():
+    user = request.args(0)
+    events = db(timeline.entity.user_id == user).select()
+    event_types = timeline.entity._event_types
+    ret = DIV(
+       UL(
+          *[LI(XML(str(event_types[event.event_type]) % event)) for event in events]
+       )
+    )
+    return dict(ret=ret)

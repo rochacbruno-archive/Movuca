@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, P, LABEL
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL
 from gluon.validators import IS_SLUG
 from helpers.images import THUMB2
 import os
@@ -9,9 +9,9 @@ import os
 
 class Article(Base):
     def start(self):
-        from movuca import DataBase, User
+        from movuca import DataBase, User, UserTimeLine
         from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers, Comments
-        self.db = DataBase([User, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments])
+        self.db = DataBase([User, UserTimeLine, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -69,7 +69,11 @@ class Article(Base):
             from plugin_ckeditor import CKEditor
             ckeditor = CKEditor()
             self.db.Comments.comment_text.widget = ckeditor.basicwidget
-            form = SQLFORM(self.db.Comments, formstyle='divs').process()
+            form = SQLFORM(self.db.Comments,
+                           formstyle='divs')
+
+            if form.accepts(self.request, self.session):
+                self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text})
         else:
             form = A(self.T("Login to post comments"),
                      _class="button",
@@ -82,14 +86,10 @@ class Article(Base):
         comments = self.db(self.db.Comments.article_id == self.context.article.id).select()
 
         if comments and is_author:
-            #from plugin_ckeditor import CKEditor
-            #ckeditor = CKEditor()
             edit_in_place = ckeditor.bulk_edit_in_place(["#comment_%(id)s" % comment for comment in comments], URL('editcomment'))
         elif comments and self.session.auth and self.session.auth.user:
             usercomments = comments.find(lambda row: row.user_id == self.session.auth.user.id)
             if usercomments:
-                #from plugin_ckeditor import CKEditor
-                #ckeditor = CKEditor()
                 edit_in_place = ckeditor.bulk_edit_in_place(["#comment_%(id)s" % comment for comment in usercomments], URL('editcomment'))
             else:
                 edit_in_place = ('', '')
@@ -116,7 +116,6 @@ class Article(Base):
                             _class="comment_li"
                           ) for comment in comments],
                   **dict(_class="comment_ul")),
-                  #edit_in_place[0],
                   edit_in_place[1],
                   form,
                   _class="internal-comments"
@@ -289,6 +288,18 @@ class Article(Base):
         except:
             self.context.latest_articles = latest_articles(self.db)
 
+    def new_article_event(self, event_type, user, data={}):
+        self.db.UserTimeLine._new_event(v=dict(
+                                                user_id=user.id,
+                                                nickname=user.nickname,
+                                                event_type=event_type,
+                                                event_image=self.context.article.thumbnail,
+                                                event_to=self.context.article.title,
+                                                event_reference=self.context.article.id,
+                                                event_text=data.get('event_text', self.context.article.description),
+                                                event_link=data.get('event_link', self.context.article.slug)
+                                            ))
+
     def favorite(self):
         user = self.session.auth.user if self.session.auth else None
         if user:
@@ -304,7 +315,9 @@ class Article(Base):
 
                     count = self.db(self.db.Favoriters.user_id == user.id).count()
                     self.db.auth_user[user.id] = dict(favorites=count)
-                except Exception:
+                    self.new_article_event('favorited', user)
+                except Exception, e:
+                    print str(e)
                     self.db.rollback()
                 else:
                     self.db.commit()
@@ -325,6 +338,7 @@ class Article(Base):
 
                     count = self.db(self.db.Likers.user_id == user.id).count()
                     self.db.auth_user[user.id] = dict(likes=count)
+                    self.new_article_event('liked', user)
                 except Exception:
                     self.db.rollback()
                 else:
@@ -346,6 +360,7 @@ class Article(Base):
 
                     count = self.db(self.db.Dislikers.user_id == user.id).count()
                     self.db.auth_user[user.id] = dict(dislikes=count)
+                    self.new_article_event('disliked', user)
                 except Exception:
                     self.db.rollback()
                 else:
@@ -366,6 +381,7 @@ class Article(Base):
 
                     count = self.db(self.db.Subscribers.user_id == user.id).count()
                     self.db.auth_user[user.id] = dict(subscriptions=count)
+                    self.new_article_event('subscribed', user)
                 except Exception:
                     self.db.rollback()
                 else:
