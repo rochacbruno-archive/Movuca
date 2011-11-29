@@ -12,6 +12,7 @@ build
 eggs
 errors
 sessions
+uploads
 cache
 parts
 bin
