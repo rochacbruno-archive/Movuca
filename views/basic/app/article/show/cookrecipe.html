@@ -13,9 +13,9 @@
           {{if article.category_id:}}
               <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'category', args=article.category_id.name))}}</em> 
           {{pass}}
-          <p class="show-article-information" id="links">
+          <div class="show-article-information" id="links">
               {{=action_links}}
-          </p>
+          </div>
        
       </div>
     </div>
@@ -24,7 +24,7 @@
           <div class="jqmWindow" id="photomodal">
               <a href='#' class="jqmClose">{{=T("Close")}}</a>
               <br />
-              <img class="photo jqmClose" src="">
+              <img class="photo jqmClose" src="empty" />
           </div>
           {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="eight columns alpha recipephoto")}}
        </div>
@@ -63,10 +63,10 @@
        
        </div>
        <div class="twelve columns alpha">
-          <p class="show-article-description">
+          <div class="show-article-description">
               {{=H5(T("Recipe Description"))}}
               {{=article.description}}
-          </p>
+          </div>
        </div>
 
        <div class="five columns alpha cook-recipe-ingredients">

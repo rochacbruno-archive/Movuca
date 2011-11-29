@@ -72,7 +72,8 @@ class Article(Base):
             form = SQLFORM(self.db.Comments,
                            formstyle='divs')
 
-            if form.accepts(self.request, self.session):
+            #if form.accepts(self.request, self.session):
+            if form.process().accepted:
                 self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text})
         else:
             form = A(self.T("Login to post comments"),

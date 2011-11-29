@@ -5,7 +5,7 @@
 <div class="jqmWindow" id="photomodal">
     <a href='#' class="jqmClose">{{=T("Close")}}</a>
     <br />
-    <img class="photo jqmClose" src="">     
+    <img class="photo jqmClose" src="empty">     
 </div>
 <div class="twelve columns center  show-article-wrapper">
     <div class="row show-article-meta">
@@ -18,12 +18,12 @@
           {{if article.category_id:}}
               <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'category', args=article.category_id.name))}}</em> 
           {{pass}}
-          <p class="show-article-information" id="links">
+          <div class="show-article-information" id="links">
               {{=action_links}}
-          </p>
-          <p class="show-article-description">
+          </div>
+          <div class="show-article-description">
               {{=article.description}}
-          </p>
+          </div>
       </div>
     </div>
     <div class="row show-article-content">
