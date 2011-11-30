@@ -311,7 +311,7 @@ class Article(Base):
         if user:
             self.db.UserTimeLine._new_event(v=dict(
                                                 user_id=user.id,
-                                                nickname=user.nickname,
+                                                nickname=user.nickname or "%(first_name)s %(last_name)s" % user,
                                                 event_type=event_type,
                                                 event_image=data.get('event_image', self.context.article.thumbnail),
                                                 event_to=data.get('event_to', self.context.article.title),
