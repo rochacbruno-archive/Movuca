@@ -82,7 +82,7 @@ class Article(Base):
                                        args=[self.context.article.id,
                                              self.context.article.slug]))))
 
-        comments = self.db(self.db.Comments.article_id == self.context.article.id).select()
+        comments = self.db(self.db.Comments.article_id == self.context.article.id).select(orderby=self.db.Comments.created_on)
 
         if comments and is_author:
             edit_in_place = ckeditor.bulk_edit_in_place(["comment_%(id)s" % comment for comment in comments], URL('editcomment'))
