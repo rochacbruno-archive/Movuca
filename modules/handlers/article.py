@@ -69,11 +69,8 @@ class Article(Base):
             from plugin_ckeditor import CKEditor
             ckeditor = CKEditor()
             self.db.Comments.comment_text.widget = ckeditor.basicwidget
-            form = SQLFORM(self.db.Comments,
-                           formstyle='divs')
-
-            #if form.accepts(self.request, self.session):
-            if form.process().accepted:
+            form = SQLFORM(self.db.Comments, formstyle='divs')
+            if form.process(message_onsuccess=self.T('Comment included')).accepted:
                 self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text,
                                                                                             'event_link': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
         else:
