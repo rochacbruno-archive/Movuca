@@ -74,7 +74,8 @@ class Article(Base):
 
             #if form.accepts(self.request, self.session):
             if form.process().accepted:
-                self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text})
+                self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text,
+                                                                                            'event_link': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
         else:
             form = A(self.T("Login to post comments"),
                      _class="button",
@@ -248,6 +249,9 @@ class Article(Base):
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
         if self.context.article_form.process().accepted:
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
+            self.new_article_event('update_article', data={'event_link': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
+                                                           'event_text': self.context.article_form.vars.description})
+            self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
         self.context.content_form = SQLFORM(content.entity, article_data)
 
@@ -292,7 +296,9 @@ class Article(Base):
                 self.response.flash = self.T("error including %s." % content_type.title)
             else:
                 self.db.commit()
-                self.response.flash = self.T("%s included." % content_type.title)
+                self.session.flash = self.T("%s included." % content_type.title)
+                self.context.article = self.db.article[article_id]
+                self.new_article_event('new_article')
                 redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
 
     def list(self):
@@ -302,16 +308,19 @@ class Article(Base):
         except:
             self.context.latest_articles = latest_articles(self.db)
 
-    def new_article_event(self, event_type, user, data={}):
-        self.db.UserTimeLine._new_event(v=dict(
+    def new_article_event(self, event_type, user=None, data={}):
+        if not user:
+            user = self.session.auth.user if self.session.auth else None
+        if user:
+            self.db.UserTimeLine._new_event(v=dict(
                                                 user_id=user.id,
                                                 nickname=user.nickname,
                                                 event_type=event_type,
-                                                event_image=self.context.article.thumbnail,
-                                                event_to=self.context.article.title,
-                                                event_reference=self.context.article.id,
+                                                event_image=data.get('event_image', self.context.article.thumbnail),
+                                                event_to=data.get('event_to', self.context.article.title),
+                                                event_reference=data.get('event_reference', self.context.article.id),
                                                 event_text=data.get('event_text', self.context.article.description),
-                                                event_link=data.get('event_link', self.context.article.slug)
+                                                event_link=data.get('event_link', "%s/%s" % (self.context.article.id, self.context.article.slug))
                                             ))
 
     def favorite(self):

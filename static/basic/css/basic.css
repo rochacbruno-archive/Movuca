@@ -168,3 +168,29 @@ img.jqmClose {
 .double_message {
     color:#ccc;
 }
+
+
+.timeline-wrapper{
+     padding-left:0px;
+}
+
+    .timeline-item {
+    border: 1px solid #fff;
+    border-bottom: 1px solid #ccc;
+    list-style: none; 
+    padding: 10px;
+    cursor:pointer;
+    }
+
+    .timeline-item a {
+        text-decoration:none;
+    }
+
+    .timeline-item:hover {
+        background-color:#F5F5F5;
+        border: 1px solid #DDDDDD;
+    }
+
+    .timeline-item > em{
+        color:#ccc;
+    }
