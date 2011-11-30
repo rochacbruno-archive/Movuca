@@ -18,7 +18,7 @@ class Person(Base):
         self.T = self.db.T
         self.CURL = self.db.CURL
 
-    def get(self, query, orderby=None):
+    def get_timeline(self, query, orderby=None):
         timeline = self.db.UserTimeLine
         events = self.db(query).select(orderby=orderby or ~timeline.created_on)
         event_types = timeline._event_types
@@ -35,7 +35,7 @@ class Person(Base):
     def usertimeline(self):
         user = self.request.args(0)
         query = self.db.UserTimeLine.user_id == user
-        self.get(query)
+        self.get_timeline(query)
 
     def publictimeline(self):
-        self.get(self.db.UserTimeLine)
+        self.get_timeline(self.db.UserTimeLine)
