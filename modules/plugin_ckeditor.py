@@ -23,6 +23,7 @@ class CKEditor(object):
         self.settings.file_length_max = 10485760    # 10 MB
         self.settings.file_length_min = 0           # no minimum
         self.settings.spellcheck_while_typing = True
+        self.T = current.T
 
         #current.plugin_ckeditor = self
 
@@ -103,23 +104,39 @@ class CKEditor(object):
         there is a possibility a malicious user could tamper with the variables.
         """
         basic = self.load(toolbar='basic')
-        javascript = []
+        javascript = [XML("""
+        <script type="text/javascript">
+        function removecomment(selector) {
+            if (confirm("%s")) {
+                ajax('%s/'+selector,[1],'');
+                jQuery('#'+selector).parent().hide();
+                return false;
+                }
+        }
+        </script>
+        """ % (self.T("Are you sure you want to delete this comment?"),
+               URL('article', 'removecomment'))
+               )
+        ]
 
         [javascript.append(XML(
             """
             <script type="text/javascript">
                 jQuery(function() {
-                    jQuery('%(selector)s').ckeip({
+                    jQuery('#%(selector)s').ckeip({
                         e_url: '%(url)s',
-                        data: {'object': jQuery('%(selector)s').attr('data-object'),
-                               'id': jQuery('%(selector)s').attr('data-id')},
+                        data: {'object': jQuery('#%(selector)s').attr('data-object'),
+                               'id': jQuery('#%(selector)s').attr('data-id')},
                         ckeditor_config: ckeditor_config(),
                     });
+                    jQuery("[ <em class='double_message'> %(double_message)s</em> | <a href='#removecomment' onclick=removecomment('%(selector)s') >%(delete_message)s</a> ]").appendTo(jQuery('#%(selector)s').parent());
                 });
             </script>
             """ % dict(
                 selector=selector,
                 url=url,
+                double_message=self.T("Double click the text above to edit"),
+                delete_message=self.T("Delete this comment")
             )
         )) for selector in selectorlist]
 

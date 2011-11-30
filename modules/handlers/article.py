@@ -87,11 +87,11 @@ class Article(Base):
         comments = self.db(self.db.Comments.article_id == self.context.article.id).select()
 
         if comments and is_author:
-            edit_in_place = ckeditor.bulk_edit_in_place(["#comment_%(id)s" % comment for comment in comments], URL('editcomment'))
+            edit_in_place = ckeditor.bulk_edit_in_place(["comment_%(id)s" % comment for comment in comments], URL('editcomment'))
         elif comments and self.session.auth and self.session.auth.user:
             usercomments = comments.find(lambda row: row.user_id == self.session.auth.user.id)
             if usercomments:
-                edit_in_place = ckeditor.bulk_edit_in_place(["#comment_%(id)s" % comment for comment in usercomments], URL('editcomment'))
+                edit_in_place = ckeditor.bulk_edit_in_place(["comment_%(id)s" % comment for comment in usercomments], URL('editcomment'))
             else:
                 edit_in_place = ('', '')
         else:
@@ -124,12 +124,25 @@ class Article(Base):
 
     def editcomment(self):
         user = self.session.auth.user if self.session.auth else None
-        data_id = self.request.vars['data[id]']
-        content = self.request.vars['content']
-        comment = self.db.Comments[data_id]
-        if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author):
-            comment.update_record(comment_text=content)
-            self.db.commit()
+        if user:
+            data_id = self.request.vars['data[id]']
+            content = self.request.vars['content']
+            comment = self.db.Comments[data_id]
+            if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author):
+                comment.update_record(comment_text=content)
+                self.db.commit()
+
+    def removecomment(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            comment_id = self.request.args(0).split('_')[1]
+            try:
+                comment = self.db.Comments[int(comment_id)]
+                if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author):
+                    comment.delete_record()
+                    self.db.commit()
+            except:
+                pass
 
     def comment_disqus(self):
         js = """

@@ -102,6 +102,10 @@ def editcomment():
     return ''
 
 
+def removecomment():
+    article = Article('removecomment')
+    return ''
+
 def vote():
     pass
 
