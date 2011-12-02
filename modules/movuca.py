@@ -15,6 +15,8 @@ class DataBase(DAL):
         self.cache = current.cache
         self.TIMEFORMAT = current.TIMEFORMAT
         self.DATEFORMAT = current.DATEFORMAT
+        self.pdate = current.pdate
+        self.ftime = current.ftime
         from config import Config
         self.config = Config()
         if not current.request.env.web2py_runtime_gae:

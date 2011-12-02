@@ -16,6 +16,18 @@ def ftime(value):
     return value.strftime(str(DATEFORMAT))
 
 
+from gluon.tools import prettydate
+from datetime import datetime
+
+
+def pdate(value):
+    if isinstance(value, str):
+        value = datetime.strptime(value, "%s %s" % (DATEFORMAT, TIMEFORMAT))
+    return T(prettydate(value))
+
+current.pdate = pdate
+current.ftime = ftime
+
 def ICONBUTTON(icon, text, action):
     bt = BUTTON(_class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
                 _role="button",

@@ -101,8 +101,8 @@ class Article(Base):
                       *[LI(
                            H5(
                               A(
-                                 self.T("%s on %s" % (comment.user_id.nickname or comment.user_id.first_name,
-                                                   comment.commenttime.strftime("%s %s" % (self.db.DATEFORMAT, self.db.TIMEFORMAT)))),
+                                 self.T("%s %s" % (comment.user_id.nickname or comment.user_id.first_name,
+                                                   self.db.pdate(comment.commenttime))),
                                _href=self.CURL('person', 'show', args=comment.user_id.nickname or comment.user_id))
                              ),
                             DIV(

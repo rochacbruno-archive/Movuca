@@ -117,6 +117,10 @@ class UserTimeLine(BaseModel):
             Field("event_link", "string"),
         ]
 
+        self.representation = {
+          "created_on": lambda v: self.db.pdate(v)
+        }
+
     def set_fixtures(self):
         T = self.db.T
         CURL = self.db.CURL
@@ -127,7 +131,7 @@ class UserTimeLine(BaseModel):
                                A(T("%(nickname)s updated an %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
             "new_contact": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
                                A(T("%(nickname)s added %(event_to)s as a new contact"), _href="%(event_link)s")),
-            "new_article_comment": CAT(A(T("%(nickname)s commented on %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s"), EM("%(created_on)s")),
+            "new_article_comment": CAT(A(T("%(nickname)s commented on %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
             "liked": CAT(A(XML(T("%(nickname)s liked the %(event_to)s: <p>%(event_text)s</p>")), _href=CURL('article', 'show') + "/%(event_link)s")),
             "subscribed": CAT(A(T("%(nickname)s subscribed to %(event_to)s updates: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
             "favorited": CAT(A(T("%(nickname)s favorited the %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),

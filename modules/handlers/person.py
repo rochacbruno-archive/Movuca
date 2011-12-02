@@ -26,6 +26,7 @@ class Person(Base):
              DIV(
                 UL(
                     *[LI(XML(str(event_types[event.event_type]) % event),
+                        EM(self.db.pdate(event.created_on)),
                         _class="timeline-item")
                         for event in events],
                      **dict(_class="timeline-wrapper")
