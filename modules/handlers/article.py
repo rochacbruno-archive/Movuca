@@ -101,9 +101,9 @@ class Article(Base):
                       *[LI(
                            H5(
                               A(
-                                 self.T("%s %s" % (comment.user_id.nickname or comment.user_id.first_name,
+                                 self.T("%s %s" % (comment.nickname or comment.user_id,
                                                    self.db.pdate(comment.commenttime))),
-                               _href=self.CURL('person', 'show', args=comment.user_id.nickname or comment.user_id))
+                               _href=self.CURL('person', 'show', args=comment.nickname or comment.user_id))
                              ),
                             DIV(
                                XML(comment.comment_text),

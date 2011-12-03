@@ -2,17 +2,18 @@
 
 from gluon.dal import Field
 from basemodel import BaseAuth, BaseModel
-from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL
+from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL, IS_SLUG
 from helpers.images import THUMB2
-from gluon import CAT, A, IMG, XML, BR, EM
+from gluon import CAT, A, IMG, XML
 
 
 class User(BaseAuth):
     def set_properties(self):
         request = self.db.request
+        T = self.db.T
         self.fields = [
                       # Person info
-                      Field("nickname"),
+                      Field("nickname", notnull=True),
                       Field("tagline"),
                       Field("twitter", "string"),
                       Field("facebook", "string"),
@@ -55,7 +56,7 @@ class User(BaseAuth):
                      ]
 
         self.register_visibility = {
-                              "birthdate": (True, True)
+                              "nickname": (True, True)
                               }
 
         self.profile_visibility = {
@@ -77,7 +78,45 @@ class User(BaseAuth):
                              }
 
         self.computations = {
-          "thumbnail": lambda r: THUMB2(r['avatar'], gae=request.env.web2py_runtime_gae)
+          "thumbnail": lambda r: THUMB2(r['avatar'], gae=request.env.web2py_runtime_gae),
+        }
+
+        self.labels = {
+          "first_name": T("First Name"),
+          "last_name": T("Last Name"),
+          "email": T("E-mail"),
+          "password": T("Password"),
+          "nickname": T("Username"),
+          "privacy": T("Privacy"),
+          "tagline": T("Tagline"),
+          "twitter": T("twitter"),
+          "facebook": T("Facebook"),
+          "website": T("website"),
+          "avatar": T("avatar"),
+          "photo_source": T("Photo source"),
+          "about": T("about"),
+          "gender": T("Gender"),
+          "birthdate": T("Birth Date"),
+          "country": T("Country"),
+          "city": T("City"),
+          "languages": T("Languages")
+        }
+
+        self.comments = {
+          "nickname": T("Your desired username"),
+          "privacy": T("Your profile privacy"),
+          "tagline": T("A short sentence about you"),
+          "twitter": T("twitter account"),
+          "facebook": T("Facebook username or ID"),
+          "website": T("website or blog"),
+          "avatar": T("your profile picture"),
+          "photo_source": T("Which photo to use in your profile"),
+          "about": T("about you"),
+          "gender": T("Gender"),
+          "birthdate": T("Birth Date"),
+          "country": T("Country"),
+          "city": T("City"),
+          "languages": T("Languages you speak")
         }
 
     def set_validators(self):
@@ -88,7 +127,7 @@ class User(BaseAuth):
         config = self.db.config
         T = self.db.T
         request = self.db.request
-        self.entity.nickname.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.nickname))
+        self.entity.nickname.requires = [IS_SLUG(), IS_NOT_IN_DB(self.db, self.entity.nickname)]
         self.entity.twitter.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.twitter))
         self.entity.facebook.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.facebook))
 
@@ -100,6 +139,16 @@ class User(BaseAuth):
             self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
 
         self.entity.website.requires = IS_EMPTY_OR(IS_URL())
+
+
+class UserContact(BaseModel):
+    tablename = "user_contact"
+
+    def set_properties(self):
+        self.fields = [
+            Field("follower", "reference auth_user"),
+            Field("followed", "reference auth_user"),
+        ]
 
 
 class UserTimeLine(BaseModel):

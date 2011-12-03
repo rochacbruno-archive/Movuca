@@ -63,7 +63,7 @@ class Article(BaseModel):
 
         self.computations = {
           "slug": lambda r: IS_SLUG()(r.title)[0],
-          "author_nickname": lambda r: r.author.nickname
+          "author_nickname": lambda r: self.db.auth_user[r.author].nickname
         }
 
         self.labels = {
@@ -211,6 +211,7 @@ class Comments(BaseModel):
         self.fields = [
             Field("article_id", "reference article", notnull=True),
             Field("user_id", "reference auth_user", notnull=True),
+            Field("nickname", notnull=True),
             Field("parent_id", "reference article_comments"),
             Field("replies", "integer", notnull=True, default=0),
             Field("comment_text", "text", notnull=True),
@@ -223,4 +224,8 @@ class Comments(BaseModel):
             "parent_id": (False, False),
             "commenttime": (False, False),
             "replies": (False, False),
+        }
+
+        self.computations = {
+          "nickname": lambda r: self.db.auth_user[r.user_id].nickname
         }

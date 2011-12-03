@@ -53,7 +53,7 @@ class Access(Auth):
         self.entity = user.entity
 
 User = Access  # It is just for direct imports
-from datamodel.user import UserTimeLine
+from datamodel.user import UserTimeLine, UserContact
 
 
 class Mailer(Mail):

@@ -1,7 +1,7 @@
 {{response.files.append(URL('static','basic/js/home_index.js'))}}
 {{extend "basic/app/layout.html"}}
           {{block left_sidebar}}
-              {{if session.auth.user:}}
+              {{if session.auth and session.auth.user:}}
               <h3>Your links</h3>
               <ul>
                  <li>{{=A(T("New Article"), _href=CURL('article', 'new', args='Article'))}}</li>
