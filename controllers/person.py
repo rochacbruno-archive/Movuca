@@ -29,12 +29,13 @@ def following():
 def contacts():
     person = Person()
     person.contacts(request.args(0))
-    return person.render()
+    person.context.left_sidebar_enabled = True
+    return person.render('app/person/contacts')
 
 
 def follow():
-    person = Person('follow')
-    return person.render()
+    person = Person()
+    return person.follow()
 
 
 def unfollow():

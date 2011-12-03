@@ -60,3 +60,20 @@ def get_image(image, placeholder="image"):
 def has_permission_to_edit(record):
     userid = session.auth.user.id if session.auth else 0
     return record.author == userid
+
+
+c = 1
+
+
+def getclass(columns=2):
+    global c
+    if c % columns == 0:
+        c += 1
+        return 'omega'
+    else:
+        c += 1
+        return 'alpha'
+
+
+def get_name_of(user):
+    return "%(first_name)s %(last_name)s (%(nickname)s)" % user

@@ -1,0 +1,53 @@
+{{extend "basic/app/layout.html"}}
+{{block left_sidebar}}
+    {{super}}
+{{end}}
+<div class="twelve columns contacts-wrapper">
+    {{for contact in contacts:}}
+    <div class="six columns contact-item {{=getclass(2)}}">
+        <img class="two columns alpha" src="{{=get_image(contact.thumbnail,'user')}}" />
+        <div class="four columns omega">
+            {{=get_name_of(contact)}}
+            {{=contact.tagline or contact.website or ''}}
+            <button onclick="ajax('{{=URL('person', 'unfollow', args=contact.id)}}',[],'')">{{=T('unfollow')}}</button>
+        </div>
+    </div>
+    {{pass}}
+
+</div>
+<hr />
+<div class="twelve columns following-wrapper">
+    {{for followed in [person for person in following if person.followed not in contacts_list]:}}
+    <div class="six columns contact-item {{=getclass(2)}}">
+        <img class="two columns alpha" src="{{=get_image(followed.followed.thumbnail,'user')}}" />
+        <div class="four columns omega">
+            {{=followed.followed.nickname or followed.followed.first_name}}
+            {{=followed.followed.tagline or followed.followed.website or ''}}
+            <button onclick="ajax('{{=URL('person', 'unfollow', args=followed.followed.id)}}',[],'')">{{=T('unfollow')}}</button>
+        </div>
+    </div>
+    {{pass}}
+
+</div>
+<hr />
+<div class="twelve columns followers-wrapper">
+    {{for follower in [person for person in followers if person.follower not in contacts_list]:}}
+    <div class="six columns contact-item {{=getclass(2)}}">
+        <img class="two columns alpha" src="{{=get_image(follower.follower.thumbnail,'user')}}" />
+        <div class="four columns omega">
+            {{=follower.follower.nickname or followed.followed.first_name}}
+            {{=follower.follower.tagline or follower.follower.website or ''}}
+            <button onclick="ajax('{{=URL('person', 'follow', args=follower.follower.id)}}',[],'')">{{=T('follow')}}</button>
+        </div>
+    </div>
+    {{pass}}
+
+</div>
+<hr />
+{{=followers}}
+{{=following}}
+{{=contacts}}
+
+{{=followers_list}}
+{{=following_list}}
+{{=contacts_list}}

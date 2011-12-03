@@ -112,8 +112,27 @@
         {{if left_sidebar_enabled:}}
         <div class="four columns left-sidebar">
           {{block left_sidebar}}
-          <h3>Left Sidebar</h3>
-          <p></p>
+              {{if session.auth and session.auth.user:}}
+              <h3>Your links</h3>
+              <ul>
+                 <li>{{=A(T("New Article"), _href=CURL('article', 'new', args='Article'))}}</li>
+                 <li>{{=A(T("New Cook Recipe"), _href=CURL('article', 'new', args='CookRecipe'))}}</li>
+                 <li>{{=A(T("New Group"), _href=CURL('group', 'new'))}}</li>
+                 <li>{{=A(T("New Page"), _href=CURL('page', 'new'))}}</li>
+                 <li>{{=A(T("My Profile"), _href=CURL('person', 'show', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("Messages"), _href=CURL('person', 'show', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("Notifications"), _href=CURL('person', 'show', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("My Wall"), _href=CURL('person', 'wall', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("My Pictures"), _href=CURL('person', 'pictures', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("My Contacts"), _href=CURL('person', 'contacts', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("My Favorites"), _href=CURL('person', 'favorites', args=[session.auth.user.nickname or session.auth.user_id]))}}</li>
+                 <li>{{=A(T("My Recipe Book"), _href=CURL('person', 'articles', args='CookRecipe'))}}</li>
+                 <li>{{=A(T("My Articles"), _href=CURL('article', 'list', vars={'u': session.auth.user.nickname or session.auth.user_id}))}}</li>
+                 <li>{{=A(T("My Drafts"), _href=CURL('article', 'list', vars={'u': session.auth.user.nickname or session.auth.user_id,'q': 'is_draft'}))}}</li>
+                 <li>{{=A(T("My timeline"), _href=CURL('person', 'usertimeline', args=session.auth.user_id))}}</li>
+                 <li>{{=A(T("Public Timeline"), _href=CURL('person', 'publictimeline'))}}</li>
+              </ul>
+              {{pass}}
           {{end}}
         </div>
         {{pass}}

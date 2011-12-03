@@ -43,25 +43,49 @@ class Person(Base):
 
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
-        followed = self.request.args(0)
+        try:
+            followed = int(self.request.args(0))
+        except:
+            followed = self.db(self.db.auth_user.nickname == self.request.args(0)).select(0).first()['id']
+
+        yourself = followed == follower.id
+
         if follower and followed:
-            self.db.UserContact.update_or_insert(follower=follower.id, followed=followed)
-            self.db.commit()
+            if not yourself:
+                self.db.UserContact.update_or_insert(follower=follower.id, followed=followed)
+                self.db.commit()
+                return self.T("Added to your following list")
+            else:
+                return self.T('You cannot follow yourself')
+        else:
+            return self.T('Error following')
 
     def unfollow(self):
         follower = self.session.auth.user if self.session.auth else None
-        followed = self.request.args(0)
+        try:
+            followed = int(self.request.args(0))
+        except:
+            followed = self.db(self.db.auth_user.nickname == self.request.args(0)).select(0).first()['id']
+
+        yourself = followed == follower.id
+
         if follower and followed:
-            query = (self.db.UserContact.follower == follower.id) & (self.db.UserContact.followed == followed)
-            self.db(query).delete()
-            self.db.commit()
+            if not yourself:
+                query = (self.db.UserContact.follower == follower.id) & (self.db.UserContact.followed == followed)
+                self.db(query).delete()
+                self.db.commit()
+                return self.T("Removed from your following list")
+            else:
+                return self.T('You cannot unfollow yourself')
+        else:
+            return self.T('Error unfollowing')
 
     def followers(self, arg=None):
         if arg:
             try:
                 query = self.db.auth_user.id == int(self.request.args(0))
             except:
-                query = self.db.auth_user.slug == self.request.args(0)
+                query = self.db.auth_user.nickname == self.request.args(0)
 
             followed = self.db(query).select().first()
         else:
@@ -74,7 +98,7 @@ class Person(Base):
             try:
                 query = self.db.auth_user.id == int(self.request.args(0))
             except:
-                query = self.db.auth_user.slug == self.request.args(0)
+                query = self.db.auth_user.nickname == self.request.args(0)
 
             follower = self.db(query).select().first()
         else:
@@ -82,12 +106,27 @@ class Person(Base):
 
         self.context.following = self.db(self.db.UserContact.follower == follower.id).select()
 
-    def contacts(self, args=None):
-        self.followers()
-        self.following()
+    def contacts(self, arg=None):
+        self.followers(arg)
+        self.following(arg)
+
         followers = [follower.follower for follower in self.context.followers]
         following = [followed.followed for followed in self.context.following]
+
         friends = set()
+
         [friends.add(friend) for friend in followers if friend in following]
         [friends.add(friend) for friend in following if friend in followers]
-        self.context.contacts = self.db(self.db.auth_user.id.belongs(friends)).select()
+
+        self.context.contacts_list = friends
+        self.context.followers_list = followers
+        self.context.following_list = following
+
+        if self.request.env.web2py_runtime_gae:
+            queries = []
+            for friend in friends:
+                queries.append(self.db.auth_user.id == friend)
+            query = reduce(lambda a, b: (a | b), queries)
+            self.context.contacts = self.db(query).select()
+        else:
+            self.context.contacts = self.db(self.db.auth_user.id.belongs(friends)).select()
