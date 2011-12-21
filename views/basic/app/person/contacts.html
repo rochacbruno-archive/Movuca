@@ -2,52 +2,35 @@
 {{block left_sidebar}}
     {{super}}
 {{end}}
-<div class="twelve columns contacts-wrapper">
+
+
+<div class="twelve columns" id="contact-wrapper">
+    <h4>{{=T("Your contacts")}}</h4>
     {{for contact in contacts:}}
-    <div class="six columns contact-item {{=getclass(2)}}">
-        <img class="two columns alpha" src="{{=get_image(contact.thumbnail,'user')}}" />
-        <div class="four columns omega">
-            {{=get_name_of(contact)}}
-            {{=contact.tagline or contact.website or ''}}
-            <button onclick="ajax('{{=URL('person', 'unfollow', args=contact.id)}}',[],'')">{{=T('unfollow')}}</button>
-        </div>
-    </div>
+        {{=contact_box(contact, 'contact')}}
     {{pass}}
 
 </div>
 <hr />
-<div class="twelve columns following-wrapper">
+<div class="twelve columns" id="following-wrapper">
+    <h4>{{=T("You are following")}}</h4>
     {{for followed in [person for person in following if person.followed not in contacts_list]:}}
-    <div class="six columns contact-item {{=getclass(2)}}">
-        <img class="two columns alpha" src="{{=get_image(followed.followed.thumbnail,'user')}}" />
-        <div class="four columns omega">
-            {{=followed.followed.nickname or followed.followed.first_name}}
-            {{=followed.followed.tagline or followed.followed.website or ''}}
-            <button onclick="ajax('{{=URL('person', 'unfollow', args=followed.followed.id)}}',[],'')">{{=T('unfollow')}}</button>
-        </div>
-    </div>
+        {{=contact_box(followed, 'followed', where=" ")}}
     {{pass}}
-
 </div>
 <hr />
-<div class="twelve columns followers-wrapper">
+<div class="twelve columns" id="follower-wrapper">
+ <h4>{{=T("Your followers")}}</h4>
     {{for follower in [person for person in followers if person.follower not in contacts_list]:}}
-    <div class="six columns contact-item {{=getclass(2)}}">
-        <img class="two columns alpha" src="{{=get_image(follower.follower.thumbnail,'user')}}" />
-        <div class="four columns omega">
-            {{=follower.follower.nickname or followed.followed.first_name}}
-            {{=follower.follower.tagline or follower.follower.website or ''}}
-            <button onclick="ajax('{{=URL('person', 'follow', args=follower.follower.id)}}',[],'')">{{=T('follow')}}</button>
-        </div>
-    </div>
+        {{=contact_box(follower, 'follower', where='contact')}}
     {{pass}}
 
 </div>
 <hr />
-{{=followers}}
-{{=following}}
-{{=contacts}}
+{{#=followers}}
+{{#=following}}
+{{#=contacts}}
 
-{{=followers_list}}
-{{=following_list}}
-{{=contacts_list}}
+{{#=followers_list}}
+{{#=following_list}}
+{{#=contacts_list}}

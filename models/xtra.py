@@ -28,6 +28,7 @@ def pdate(value):
 current.pdate = pdate
 current.ftime = ftime
 
+
 def ICONBUTTON(icon, text, action):
     bt = BUTTON(_class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
                 _role="button",
@@ -56,6 +57,8 @@ def get_image(image, placeholder="image"):
     else:
         return URL('static', 'basic/images', args='%s.png' % placeholder)
 
+current.get_image = get_image
+
 
 def has_permission_to_edit(record):
     userid = session.auth.user.id if session.auth else 0
@@ -73,6 +76,9 @@ def getclass(columns=2):
     else:
         c += 1
         return 'alpha'
+
+
+current.getclass = getclass
 
 
 def get_name_of(user):

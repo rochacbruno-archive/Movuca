@@ -2,6 +2,7 @@
 
 from handlers.base import Base
 from gluon import *
+from helpers.person import contact_box
 
 
 class Person(Base):
@@ -44,17 +45,17 @@ class Person(Base):
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
         try:
-            followed = int(self.request.args(0))
+            followed = self.db.auth_user[int(self.request.args(0))]
         except:
-            followed = self.db(self.db.auth_user.nickname == self.request.args(0)).select(0).first()['id']
+            followed = self.db(self.db.auth_user.nickname == self.request.args(0)).select(0).first()
 
-        yourself = followed == follower.id
+        yourself = followed.id == follower.id
 
         if follower and followed:
             if not yourself:
-                self.db.UserContact.update_or_insert(follower=follower.id, followed=followed)
+                self.db.UserContact.update_or_insert(follower=follower.id, followed=followed.id)
                 self.db.commit()
-                return self.T("Added to your following list")
+                return contact_box(followed, 'contact', ajax=True)
             else:
                 return self.T('You cannot follow yourself')
         else:
@@ -63,18 +64,18 @@ class Person(Base):
     def unfollow(self):
         follower = self.session.auth.user if self.session.auth else None
         try:
-            followed = int(self.request.args(0))
+            followed = self.db.auth_user[int(self.request.args(0))]
         except:
-            followed = self.db(self.db.auth_user.nickname == self.request.args(0)).select(0).first()['id']
+            followed = self.db(self.db.auth_user.nickname == self.request.args(0)).select(0).first()
 
-        yourself = followed == follower.id
+        yourself = followed.id == follower.id
 
         if follower and followed:
             if not yourself:
-                query = (self.db.UserContact.follower == follower.id) & (self.db.UserContact.followed == followed)
+                query = (self.db.UserContact.follower == follower.id) & (self.db.UserContact.followed == followed.id)
                 self.db(query).delete()
                 self.db.commit()
-                return self.T("Removed from your following list")
+                return contact_box(followed, 'follower', ajax=True)
             else:
                 return self.T('You cannot unfollow yourself')
         else:
@@ -130,3 +131,6 @@ class Person(Base):
             self.context.contacts = self.db(query).select()
         else:
             self.context.contacts = self.db(self.db.auth_user.id.belongs(friends)).select()
+
+        from helpers.person import contact_box
+        self.context.contact_box = contact_box

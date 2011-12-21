@@ -39,5 +39,5 @@ def follow():
 
 
 def unfollow():
-    person = Person('unfollow')
-    return person.render()
+    person = Person()
+    return person.unfollow()
