@@ -53,4 +53,4 @@ def unfollow():
 def show():
     person = Person()
     person.show(request.args(0) or session.auth.user.id)
-    return person.render()
+    return person.render('app/person/show')

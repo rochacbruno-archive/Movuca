@@ -176,7 +176,25 @@ class Person(Base):
         self.context.form = SQLFORM.factory(Field('q', default=q or ''), _method="GET")
 
     def show(self, uid):
+        T = self.T
         try:
-            self.context.user = self.db.auth_user[int(uid)]
+            user = self.db.auth_user[int(uid)]
         except Exception:
-            self.context.user = self.db.auth_user(nickname=uid)
+            user = self.db.auth_user(nickname=uid)
+        self.context.user = user
+
+        if self.session.auth and self.session.auth.user:
+            self.context.buttons = CAT(
+                                       TAG.BUTTON(T("Follow"), _class="alpha three columns"),
+                                       TAG.BUTTON(T("Message"), _class="three columns"),
+                                       TAG.BUTTON(T("Report/Block"), _class="omega three columns"),
+                                       )
+
+        self.context.resume = UL(
+                                 LI(T("Wrote %s articles", user.articles)),
+                                 LI(T("Has %s favorites", user.favorites)),
+                                 LI(T("Has %s contacts", user.contacts)),
+                                 LI(T("Liked %s articles", user.likes)),
+                                 LI(T("Joined %s groups", user.groups)),
+                                 _class="person-resume"
+                                )

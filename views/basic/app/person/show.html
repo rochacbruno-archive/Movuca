@@ -1,0 +1,26 @@
+{{extend "basic/app/layout.html"}}
+
+<div class="sixteen columns" id="contact-wrapper">
+
+    <div class="row person-main-info">
+        <div class="eleven columns alpha">
+            <img class="two columns alpha" src="{{=get_image(user.thumbnail, 'user')}}">
+
+            <div class="nine columns omega">
+                <h3>{{=get_name_of(user)}}</h3>
+                <p>{{=user.tagline}}</p>
+            </div>
+
+            <div class="nine columns omega">
+                {{=buttons}}
+            </div>
+        </div>
+
+        <div class="five columns omega">
+            {{=resume}}
+        </div>
+    </div>
+   
+</div>
+
+ {{=user.keys()}}

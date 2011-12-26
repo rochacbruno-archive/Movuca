@@ -209,3 +209,26 @@ img.jqmClose {
 img.thumbnail {
     max-height:100px;
 }
+
+.person-main-info {
+    background-color:#F5F5F5;
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+.person-resume {
+    padding-left: 40px;
+}
+
+    .person-resume>li {
+        border: 1px solid #F5F5F5;
+        line-height:25px;
+        list-style: none; 
+        cursor:pointer;
+    }
+
+    .person-resume>li:hover {
+        background-color:#fff;
+        border: 1px solid #DDDDDD;
+        padding-left: 20px;
+    }
