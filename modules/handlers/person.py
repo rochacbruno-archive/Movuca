@@ -35,9 +35,17 @@ class Person(Base):
                 )
 
     def usertimeline(self):
-        user = self.request.args(0)
-        query = self.db.UserTimeLine.user_id == user
-        self.get_timeline(query)
+        if self.request.args(0):
+            try:
+                user = self.db.auth_user[int(self.request.args(0))]
+            except Exception:
+                user = self.db.auth_user(nickname=self.request.args(0))
+        else:
+            user = self.db.auth_user[self.session.auth.user.id]
+
+        if user:
+            query = self.db.UserTimeLine.user_id == user.id
+            self.get_timeline(query)
 
     def publictimeline(self):
         self.get_timeline(self.db.UserTimeLine)
@@ -55,6 +63,14 @@ class Person(Base):
             if not yourself:
                 self.db.UserContact.update_or_insert(follower=follower.id, followed=followed.id)
                 self.db.commit()
+                self.db.UserTimeLine._new_event(v={"user_id": follower.id,
+                                                  "nickname": follower.nickname,
+                                                  "event_type": "new_contact",
+                                                  "event_image": followed.thumbnail,
+                                                  "event_to": followed.nickname or followed.first_name,
+                                                  "event_reference": followed.id,
+                                                  "event_text": "",
+                                                  "event_link": followed.nickname or followed.id})
                 return contact_box(followed, 'contact', ajax=True)
             else:
                 return self.T('You cannot follow yourself')
@@ -134,3 +150,33 @@ class Person(Base):
 
         from helpers.person import contact_box
         self.context.contact_box = contact_box
+
+    def search(self, q):
+        self.contacts()
+        self.context.results = []
+
+        if q:
+            words = q.split()
+            queries = []
+
+            for word in words:
+                queries.append(self.db.auth_user.first_name.like("%" + word + "%"))
+                queries.append(self.db.auth_user.last_name.like("%" + word + "%"))
+                queries.append(self.db.auth_user.email.like("%" + word + "%"))
+                queries.append(self.db.auth_user.nickname.like("%" + word + "%"))
+                queries.append(self.db.auth_user.about.like("%" + word + "%"))
+                queries.append(self.db.auth_user.tagline.like("%" + word + "%"))
+
+            query = reduce(lambda a, b: (a | b), queries)
+            self.context.results = self.db(query & (self.db.auth_user.id != self.session.auth.user.id)).select()
+
+            from helpers.person import contact_box
+            self.context.contact_box = contact_box
+
+        self.context.form = SQLFORM.factory(Field('q', default=q or ''), _method="GET")
+
+    def show(self, uid):
+        try:
+            self.context.user = self.db.auth_user[int(uid)]
+        except Exception:
+            self.context.user = self.db.auth_user(nickname=uid)

@@ -33,6 +33,13 @@ def contacts():
     return person.render('app/person/contacts')
 
 
+def search():
+    person = Person()
+    person.context.left_sidebar_enabled = True
+    person.search(request.vars.get('q'))
+    return person.render('app/person/search')
+
+
 def follow():
     person = Person()
     return person.follow()
@@ -41,3 +48,9 @@ def follow():
 def unfollow():
     person = Person()
     return person.unfollow()
+
+
+def show():
+    person = Person()
+    person.show(request.args(0) or session.auth.user.id)
+    return person.render()

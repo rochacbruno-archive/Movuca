@@ -1,0 +1,19 @@
+{{extend "basic/app/layout.html"}}
+{{block left_sidebar}}
+    {{super}}
+{{end}}
+
+{{=T("Find a Contact")}}
+{{=form}}
+
+{{if results:}}
+<div class="twelve columns" id="search-wrapper">
+    <h4>{{=T("Results")}}</h4>
+    <hr />
+    {{for contact in results:}}
+        {{action  = 'unfollow' if contact.id in list(contacts_list)+list(following_list) else 'follow'}}
+        {{follows_you = contact.id in followers_list}}
+        {{=contact_box(contact, 'search', action=action, follows_you=follows_you)}}
+    {{pass}}
+</div>
+{{pass}}

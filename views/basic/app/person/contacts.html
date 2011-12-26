@@ -4,33 +4,31 @@
 {{end}}
 
 
+
 <div class="twelve columns" id="contact-wrapper">
     <h4>{{=T("Your contacts")}}</h4>
+    <h6>{{=T("Following each other")}}</h6>
+    <hr />
     {{for contact in contacts:}}
         {{=contact_box(contact, 'contact')}}
     {{pass}}
 
 </div>
-<hr />
+
+{{following_set = [person for person in following if person.followed not in contacts_list]}}
 <div class="twelve columns" id="following-wrapper">
     <h4>{{=T("You are following")}}</h4>
-    {{for followed in [person for person in following if person.followed not in contacts_list]:}}
+     <hr />
+    {{for followed in following_set:}}
         {{=contact_box(followed, 'followed', where=" ")}}
     {{pass}}
 </div>
-<hr />
+
+{{followers_set = [person for person in followers if person.follower not in contacts_list]}}
 <div class="twelve columns" id="follower-wrapper">
  <h4>{{=T("Your followers")}}</h4>
-    {{for follower in [person for person in followers if person.follower not in contacts_list]:}}
+  <hr />
+    {{for follower in followers_set:}}
         {{=contact_box(follower, 'follower', where='contact')}}
     {{pass}}
-
 </div>
-<hr />
-{{#=followers}}
-{{#=following}}
-{{#=contacts}}
-
-{{#=followers_list}}
-{{#=following_list}}
-{{#=contacts_list}}

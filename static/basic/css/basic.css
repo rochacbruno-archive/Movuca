@@ -194,3 +194,18 @@ img.jqmClose {
     .timeline-item > em{
         color:#ccc;
     }
+
+
+
+.contact-item {
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+.contact-item:hover {
+     background-color:#F5F5F5;
+}
+
+img.thumbnail {
+    max-height:100px;
+}
