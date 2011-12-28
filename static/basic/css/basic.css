@@ -232,3 +232,35 @@ img.thumbnail {
         border: 1px solid #DDDDDD;
         padding-left: 20px;
     }
+
+.board-messages {
+        padding-left: 5px;
+}
+
+    .board-messages>li{
+    border: 1px solid #fff;
+    list-style: none; 
+    cursor:pointer;
+    }
+
+    .board-messages>li:hover {
+        background-color:#F5F5F5;
+        border: 1px solid #DDDDDD;
+    }
+
+.board-form{
+    margin-bottom:40px;
+}
+    .board-form input[type='text'] {
+        width:100%;
+        line-height:20px;
+        font-size:20px;
+        padding-right:0;
+        padding-left:0;
+    }
+
+    .board-form input[type='submit'] {
+        width:100%;
+        margin-top:5px;
+        float:right;
+    }

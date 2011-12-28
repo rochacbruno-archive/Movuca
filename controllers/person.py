@@ -54,3 +54,9 @@ def show():
     person = Person()
     person.show(request.args(0) or session.auth.user.id)
     return person.render('app/person/show')
+
+
+def board():
+    person = Person()
+    person.board(request.args(0) or session.auth.user.id)
+    return person.render('app/person/board')

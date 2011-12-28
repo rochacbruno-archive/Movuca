@@ -299,11 +299,18 @@ class Article(Base):
                 redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
 
     def list(self):
-        from helpers.article import latest_articles
-        try:
-            self.context.latest_articles = latest_articles(self.db, **self.request.vars)
-        except:
-            self.context.latest_articles = latest_articles(self.db)
+        queries = []
+        for field, value in self.request.vars.items():
+            if field not in ['limitby', 'orderby']:
+                queries.append(self.db.Article[field] == value)
+        queries.append(self.db.Article.draft == False)
+        query = reduce(lambda a, b: (a & b), queries)
+
+        if self.request.vars.limitby:
+            limitby = [int(item) for item in self.request.vars.limitby.split(',')]
+        else:
+            limitby = (0, 10)
+        self.context.articles = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
 
     def new_article_event(self, event_type, user=None, data={}):
         if not user:

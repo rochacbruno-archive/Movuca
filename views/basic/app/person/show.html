@@ -1,3 +1,4 @@
+{{response.files.append(URL('static','basic/js/person_show.js'))}}
 {{extend "basic/app/layout.html"}}
 
 <div class="sixteen columns" id="contact-wrapper">
@@ -8,9 +9,9 @@
 
             <div class="nine columns omega">
                 <h3>{{=get_name_of(user)}}</h3>
-                <p>{{=user.tagline}}</p>
+                <p>{{=user.tagline or ''}}</p>
+                <em  id="relation-text">{{=relation_text}}</em>
             </div>
-
             <div class="nine columns omega">
                 {{=buttons}}
             </div>
@@ -18,6 +19,38 @@
 
         <div class="five columns omega">
             {{=resume}}
+        </div>
+    </div>
+
+    <div class="row person-data">
+        <div class="eight columns alpha">
+            <div class="person-about">
+                <h4>{{=T("About")}}</h4>
+                {{=XML(user.about[:300] if user.about else '')}}
+            </div>
+            <div class="person-articles">
+                <h4>{{=T("Articles")}}</h4>
+                {{if relation == 'yourself':}}
+                    {{=A(T("Write a new article"), _href=CURL('article', 'new', args='Article'))}}
+                {{pass}}
+                {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,5'), ajax=True)}}
+                {{if user.articles:}}
+                    <a href="{{=CURL('article','list',vars=dict(author=user.id,limitby='0,25'))}}">{{=T("View all %s's articles", user.nickname)}}</a>
+                {{pass}}
+            </div>
+            <div class="person-timeline">
+                <h4>{{=T("Activities")}}</h4>
+               
+            </div>           
+        </div>
+        <div class="eight columns omega">
+            <div class="person-board">
+                <h4>{{=T("Board")}}</h4>
+                 {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,5'), ajax=True)}}
+                {{if user.articles:}}
+                    <a href="{{=CURL('article','list',vars=dict(author=user.id,limitby='0,25'))}}">{{=T("View all %s's articles", user.nickname)}}</a>
+                {{pass}}
+            </div>
         </div>
     </div>
    

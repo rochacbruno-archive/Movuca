@@ -1,0 +1,34 @@
+ <script>
+
+ $(document).ready(function () {
+  $(".list-article-wrapper").click(function(){
+     window.location = $(this).attr("data-url");
+  });
+});
+
+</script>
+
+ {{for article in articles:}}
+
+<div class="eight columns center list-article-wrapper" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension='html')}}">
+    
+    <div class="row list-article-row">
+      <div class="two columns alpha">
+         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension='html'))}}<br />
+         <span class="list-article-like">{{=T("%s likes" % article.likes or 0)}}</span>
+      </div>
+      <div class="five columns omega">
+          {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension='html'))}}
+          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension='html'))}} {{=pdate(article.created_on)}}</em> <br />
+          {{if article.tags:}}
+              <em>{{=T('in')}} {{=tagfy(article.tags, extension='html')}}</em> 
+          {{pass}}
+          <p class="list-article-description">
+              {{=A("%s ..." % article.description[:150], _href=CURL('article', 'show', args=[article.id, article.slug], extension='html'))}}
+          </p>
+
+      </div>
+    </div>
+</div>
+
+{{pass}}

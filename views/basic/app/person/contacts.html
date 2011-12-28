@@ -6,7 +6,7 @@
 
 
 <div class="twelve columns" id="contact-wrapper">
-    <h4>{{=T("Your contacts")}}</h4>
+    <h4>{{=T("Contacts")}}</h4>
     <h6>{{=T("Following each other")}}</h6>
     <hr />
     {{for contact in contacts:}}
@@ -17,7 +17,7 @@
 
 {{following_set = [person for person in following if person.followed not in contacts_list]}}
 <div class="twelve columns" id="following-wrapper">
-    <h4>{{=T("You are following")}}</h4>
+    <h4>{{=T("Following")}}</h4>
      <hr />
     {{for followed in following_set:}}
         {{=contact_box(followed, 'followed', where=" ")}}
@@ -26,7 +26,7 @@
 
 {{followers_set = [person for person in followers if person.follower not in contacts_list]}}
 <div class="twelve columns" id="follower-wrapper">
- <h4>{{=T("Your followers")}}</h4>
+ <h4>{{=T("Followers")}}</h4>
   <hr />
     {{for follower in followers_set:}}
         {{=contact_box(follower, 'follower', where='contact')}}

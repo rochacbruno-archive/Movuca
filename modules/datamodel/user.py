@@ -141,6 +141,29 @@ class User(BaseAuth):
         self.entity.website.requires = IS_EMPTY_OR(IS_URL())
 
 
+class UserBoard(BaseModel):
+    tablename = "user_board"
+
+    def set_properties(self):
+        self.fields = [
+            Field("user_id", "reference auth_user"),
+            Field("writer", "reference auth_user"),
+            Field("board_text", "string"),
+        ]
+
+        self.visibility = {
+            "user_id": (False, False),
+            "writer": (False, False)
+        }
+
+    def set_fixtures(self):
+        self.entity._write_on_board = self.write_on_board
+
+    def write_on_board(self, user_id, writer, text):
+        self.entity.insert(user_id=user_id, writer=writer, board_text=text)
+        self.db.commit()
+
+
 class UserContact(BaseModel):
     tablename = "user_contact"
 
@@ -149,6 +172,23 @@ class UserContact(BaseModel):
             Field("follower", "reference auth_user"),
             Field("followed", "reference auth_user"),
         ]
+
+    def set_fixtures(self):
+        self.entity._relation = self.relation
+
+    def relation(self, a, b):
+        if a == b:
+            return 'yourself'
+        a_follows_b = self.db((self.entity.follower == a) & ((self.entity.followed == b))).count()
+        b_follows_a = self.db((self.entity.follower == b) & ((self.entity.followed == a))).count()
+        if all([a_follows_b, b_follows_a]):
+            return 'contacts'
+        elif a_follows_b:
+            return 'following'
+        elif b_follows_a:
+            return 'follower'
+        else:
+            return 'unknown'
 
 
 class UserTimeLine(BaseModel):
@@ -189,7 +229,7 @@ class UserTimeLine(BaseModel):
                                A(IMG(_src="%(event_image)s"), _href="%(event_link)s")),
             "new_picture_comment": CAT(A(T("%(nickname)s commented on %(event_to)s picture"), _href="%(event_link)s"),
                                A(IMG(_src="%(event_image)s"), _href="%(event_link)s")),
-            "wrote_on_wall": CAT(A(T("%(nickname)s wrote on %(event_to)s wall: %(event_text)s"), _href="%(event_link)s")),
+            "wrote_on_wall": CAT(A(T("%(nickname)s wrote on %(event_to)s's board: %(event_text)s"), _href=CURL('person', 'show') + "/%(event_link)s")),
         }
         self.entity._new_event = self.new_event
 

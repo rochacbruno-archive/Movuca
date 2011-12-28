@@ -7,8 +7,8 @@ from helpers.person import contact_box
 
 class Person(Base):
     def start(self):
-        from movuca import DataBase, User, UserTimeLine, UserContact
-        self.db = DataBase([User, UserTimeLine, UserContact])
+        from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
+        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -52,6 +52,8 @@ class Person(Base):
 
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
+        if not follower and self.request.args(2) in ['profile']:
+            return "window.location = '%s'" % self.CURL('default', 'user', args='login', vars={'_next': self.CURL('person', 'show', args=self.request.args(0))})
         try:
             followed = self.db.auth_user[int(self.request.args(0))]
         except:
@@ -175,21 +177,91 @@ class Person(Base):
 
         self.context.form = SQLFORM.factory(Field('q', default=q or ''), _method="GET")
 
-    def show(self, uid):
+    def new_board_event(self, form=None, writer=None, user=None, relation=None):
+        writer_user = self.db.auth_user[writer]
+
+        self.db.UserTimeLine._new_event(v={"user_id": writer_user.id,
+                                  "nickname": writer_user.nickname,
+                                  "event_type": "wrote_on_wall",
+                                  "event_image": writer_user.thumbnail,
+                                  "event_to": self.T("own") if relation == 'yourself' else user.nickname or user.first_name,
+                                  "event_reference": user.id,
+                                  "event_text": form.vars.board_text,
+                                  "event_link": user.nickname or user.id})
+
+    def board(self, uid):
         T = self.T
         try:
             user = self.db.auth_user[int(uid)]
         except Exception:
             user = self.db.auth_user(nickname=uid)
         self.context.user = user
+        self.db.UserBoard.user_id.default = user.id
+        self.db.UserBoard.writer.default = self.session.auth.user.id
 
+        relation = self.db.UserContact._relation(self.session.auth.user.id, user.id)
+
+        if relation == "yourself":
+            board_text_label = T("Whats up?")
+        elif relation in ["contacts", "follower"]:
+            board_text_label = T("Write something on %s's board", user.nickname)
+
+        if relation in ['contacts', 'yourself', 'follower']:
+            self.db.UserBoard.board_text.label = board_text_label
+            self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
+        else:
+            self.context.form = ''
+        limitby = (0, 12)
+        self.context.board = self.db(self.db.UserBoard.user_id == user.id).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
+
+    def show(self, uid):
+        T = self.T
+        CURL = self.CURL
+        try:
+            user = self.db.auth_user[int(uid)]
+        except Exception:
+            user = self.db.auth_user(nickname=uid)
+        self.context.user = user
+
+        buttons = CAT()
         if self.session.auth and self.session.auth.user:
-            self.context.buttons = CAT(
-                                       TAG.BUTTON(T("Follow"), _class="alpha three columns"),
-                                       TAG.BUTTON(T("Message"), _class="three columns"),
-                                       TAG.BUTTON(T("Report/Block"), _class="omega three columns"),
-                                       )
+            relation = self.db.UserContact._relation(self.session.auth.user.id, user.id)
+        else:
+            relation = 'unknown'
 
+        relation_text = {'unknown': T('Your are mutually oblivious'),
+                'contacts': T('This person is in your contact list (following each other)'),
+                'following': T('You follow this person'),
+                'follower': T('This person follows you'),
+                'yourself': T('This is you')}
+
+        self.context.relation = relation
+        self.context.relation_text = relation_text[relation]
+
+        if relation != 'yourself':
+            text = {'unknown': T('follow'),
+                    'contacts': T('unfollow'),
+                    'following': T('unfollow'),
+                    'follower': T('follow')}
+
+            post_text = {'unknown': T('Followed!'),
+                    'contacts': T('Contact removed!'),
+                    'following': T('Unfollowed!'),
+                    'follower': T('Contact added!')}
+
+            url = {'unknown': CURL('person', 'follow', args=[user.id, 'profile']),
+                    'contacts': CURL('person', 'unfollow', args=[user.id, 'profile']),
+                    'following': CURL('person', 'unfollow', args=[user.id, 'profile']),
+                    'follower': CURL('person', 'follow', args=[user.id, 'profile'])}
+
+            buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class="alpha three columns"))
+            buttons.append(TAG.BUTTON(T("Message"), _class="three columns"))
+            buttons.append(TAG.BUTTON(T("Report/Block"), _class="omega three columns"))
+        else:
+            buttons.append(TAG.BUTTON(T("Edit Profile"), _class="three columns"))
+            buttons.append(TAG.BUTTON(T("My Messages"), _class="three columns"))
+
+        self.context.buttons = buttons
         self.context.resume = UL(
                                  LI(T("Wrote %s articles", user.articles)),
                                  LI(T("Has %s favorites", user.favorites)),

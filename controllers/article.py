@@ -26,7 +26,7 @@ def delete():
 
 def list():
     article = Article('list')
-    return article.render()
+    return article.render("app/article/list")
 
 
 def favorite():

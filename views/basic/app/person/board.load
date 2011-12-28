@@ -1,0 +1,15 @@
+<div class="board-form">
+    {{=form}}
+</div>
+<ul class="board-messages">
+	{{for msg in board:}}
+	<li class="row board-item">
+	   {{=IMG(_src=get_image(msg.writer.thumbnail, 'user'), _width=50, _height=50, _class="one columns alpha")}}
+       <div class="six columns omega">
+	       {{=MARKMIN(msg.board_text)}}
+	       {{=A(get_name_of(msg.writer), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
+	       {{=pdate(msg.created_on)}}
+	   </div>
+	</li>
+	{{pass}}
+</ul>
