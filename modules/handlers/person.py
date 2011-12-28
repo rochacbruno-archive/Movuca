@@ -197,7 +197,7 @@ class Person(Base):
             user = self.db.auth_user(nickname=uid)
         self.context.user = user
         self.db.UserBoard.user_id.default = user.id
-        self.db.UserBoard.writer.default = self.session.auth.user.id
+        self.db.UserBoard.writer.default = self.session.auth.user.id if self.session.auth else 0
 
         relation = self.db.UserContact._relation(self.session.auth.user.id, user.id)
 
