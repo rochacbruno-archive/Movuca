@@ -199,7 +199,7 @@ class Person(Base):
         self.db.UserBoard.user_id.default = user.id
         self.db.UserBoard.writer.default = self.session.auth.user.id if self.session.auth else 0
 
-        relation = self.db.UserContact._relation(self.session.auth.user.id, user.id)
+        relation = self.db.UserContact._relation(self.session.auth.user.id if self.session.auth else 0, user.id)
 
         if relation == "yourself":
             board_text_label = T("Whats up?")
