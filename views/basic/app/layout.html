@@ -88,7 +88,7 @@
       <div class="container">         
         <div class="sixteen columns">
           <h2 class="remove-bottom" style="margin-top: .5em;">
-          <img src="{{=URL('static', 'images', args='minilogo.png')}}"</img>
+           <a href="{{=CURL('home', 'index')}}"><img src="{{=URL('static', 'images', args='minilogo.png')}}"</img></a>
           </h2>
           <h5>{{=response.meta.subtitle or ''}}</h5>
         </div>
@@ -112,8 +112,8 @@
         {{if left_sidebar_enabled:}}
         <div class="four columns left-sidebar">
           {{block left_sidebar}}
-              {{if session.auth and session.auth.user:}}
               <h3>Your links</h3>
+              {{if session.auth and session.auth.user:}}
               <ul>
                  <li>{{=A(T("New Article"), _href=CURL('article', 'new', args='Article'))}}</li>
                  <li>{{=A(T("New Cook Recipe"), _href=CURL('article', 'new', args='CookRecipe'))}}</li>
@@ -131,7 +131,13 @@
                  <li>{{=A(T("My Drafts"), _href=CURL('article', 'list', vars={'u': session.auth.user.nickname or session.auth.user_id,'q': 'is_draft'}))}}</li>
                  <li>{{=A(T("My timeline"), _href=CURL('person', 'usertimeline', args=session.auth.user_id))}}</li>
                  <li>{{=A(T("Public Timeline"), _href=CURL('person', 'publictimeline'))}}</li>
+                 <li>{{=A(T("Logout"), _href=CURL('default', 'user', args='logout'))}}</li>
               </ul>
+              {{else:}}
+                <ul>
+                 <li>{{=A(T("Login"), _href=CURL('default', 'user', args='login'))}}</li>
+                 <li>{{=A(T("Register"), _href=CURL('default', 'user', args='register'))}}</li>
+                </ul>
               {{pass}}
           {{end}}
         </div>
