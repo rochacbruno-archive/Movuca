@@ -42,7 +42,7 @@
 
         <fieldset>
             <legend>{{=T("Save")}}</legend>
-            {{=customfield(article_form, 'draft')}}
+            {{#=customfield(article_form, 'draft')}}
             <br />
             <button class="full-width" id="publish">{{=T("Publish")}}</button>
             <button class="full-width" id="draft">{{=T("Save as a draft")}}</button>

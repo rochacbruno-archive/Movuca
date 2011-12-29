@@ -80,6 +80,14 @@ class Person(Base):
                                                   "event_reference": followed.id,
                                                   "event_text": "",
                                                   "event_link": followed.nickname or followed.id})
+                relation = self.db.UserContact._relation(follower.id, followed.id)
+                if relation == 'contacts':
+                    acount = followed.contacts + 1
+                    followed.update_record(contacts=acount)
+                    follower_user = self.db.auth_user[int(follower.id)]
+                    bcount = follower_user.contacts + 1
+                    follower_user.update_record(contacts=bcount)
+
                 return contact_box(followed, 'contact', ajax=True)
             else:
                 return self.T('You cannot follow yourself')
@@ -97,9 +105,16 @@ class Person(Base):
 
         if follower and followed:
             if not yourself:
+                relation = self.db.UserContact._relation(follower.id, followed.id)
                 query = (self.db.UserContact.follower == follower.id) & (self.db.UserContact.followed == followed.id)
                 self.db(query).delete()
                 self.db.commit()
+                if relation == 'contacts':
+                    acount = followed.contacts - 1
+                    followed.update_record(contacts=acount)
+                    follower_user = self.db.auth_user[int(follower.id)]
+                    bcount = follower_user.contacts - 1
+                    follower_user.update_record(contacts=bcount)
                 return contact_box(followed, 'follower', ajax=True)
             else:
                 return self.T('You cannot unfollow yourself')

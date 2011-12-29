@@ -43,11 +43,11 @@ class Article(Base):
         else:
             self.context.related_articles = False
 
-    def get_image(self, image, placeholder="image"):
-        if image:
-            return URL('default', 'download', args=image)
-        else:
-            return URL('static', 'basic/images', args='%s.png' % placeholder)
+    # def get_image(self, image, placeholder="image"):
+    #     if image:
+    #         return URL('default', 'download', args=image)
+    #     else:
+    #         return URL('static', 'basic/images', args='%s.png' % placeholder)
 
     def comments(self):
         comment_system = {
@@ -249,7 +249,7 @@ class Article(Base):
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
             self.new_article_event('update_article', data={'event_link': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
                                                            'event_text': self.context.article_form.vars.description,
-                                                           'event_to': self.context.article.content_type_id.title,
+                                                           'event_to': "%s (%s)" % (self.context.article.content_type_id.title, self.context.article.title),
                                                            'event_image': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
@@ -298,7 +298,15 @@ class Article(Base):
                 self.db.commit()
                 self.session.flash = self.T("%s included." % content_type.title)
                 self.context.article = self.db.article[article_id]
-                self.new_article_event('new_article')
+
+                if not self.context.article.draft:
+                    self.new_article_event('new_article')
+                    count = int(self.context.article.author.articles) + 1
+                    self.context.article.author.update_record(articles=count)
+                else:
+                    count = int(self.context.article.author.draft_articles) + 1
+                    self.context.article.author.update_record(draft_articles=count)
+
                 redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
 
     def list(self):
@@ -324,7 +332,7 @@ class Article(Base):
                                                 nickname=user.nickname or "%(first_name)s %(last_name)s" % user,
                                                 event_type=event_type,
                                                 event_image=data.get('event_image', self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)),
-                                                event_to=data.get('event_to', self.context.article.content_type_id.identifier),
+                                                event_to=data.get('event_to', "%s (%s)" % (self.context.article.content_type_id.title, self.context.article.title)),
                                                 event_reference=data.get('event_reference', self.context.article.id),
                                                 event_text=data.get('event_text', self.context.article.description),
                                                 event_link=data.get('event_link', "%s/%s" % (self.context.article.id, self.context.article.slug))

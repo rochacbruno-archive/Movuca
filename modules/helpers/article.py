@@ -11,10 +11,10 @@ def related_articles(db, tags, category, exclude):
         tags = ['default']
     from gluon import current
     if not current.request.env.web2py_runtime_gae:
-        query = (db.article.tags.contains(tags)) & (db.article.id != exclude)
+        query = (db.article.tags.contains(tags)) & (db.article.id != exclude) & (db.article.draft == False)
         rows = related(db, query)
     else:
-        query = (db.article.category_id == category) & (db.article.id != exclude)
+        query = (db.article.category_id == category) & (db.article.id != exclude) & (db.article.draft == False)
         rows = related_gae(db, query)
     return rows
 
