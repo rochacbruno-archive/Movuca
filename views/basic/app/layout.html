@@ -87,9 +87,9 @@
     <div class="header">
       <div class="container">         
         <div class="sixteen columns">
-          <h1 class="remove-bottom" style="margin-top: .5em;">
-          LOGO
-          </h1>
+          <h2 class="remove-bottom" style="margin-top: .5em;">
+          <img src="{{=URL('static', 'images', args='minilogo.png')}}"</img>
+          </h2>
           <h5>{{=response.meta.subtitle or ''}}</h5>
         </div>
         <div class="sixteen columns">
@@ -181,6 +181,6 @@
 	<![endif]-->
   {{if response.google_analytics_id:}}<script>/* http://mathiasbynens.be/notes/async-analytics-snippet */ var _gaq=[['_setAccount','{{=response.google_analytics_id}}'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script')) </script>{{pass}}
   <hr />
-  {{=response.toolbar()}}
+  {{#=response.toolbar()}}
 </body>
 </html>

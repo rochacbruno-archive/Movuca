@@ -6,7 +6,7 @@ from handlers.person import Person
 
 def usertimeline():
     person = Person('usertimeline')
-    return person.render()
+    return person.render("app/person/usertimeline")
 
 
 def publictimeline():

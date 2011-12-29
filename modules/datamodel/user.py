@@ -2,9 +2,9 @@
 
 from gluon.dal import Field
 from basemodel import BaseAuth, BaseModel
-from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL, IS_SLUG
+from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL, IS_SLUG, IS_NOT_EMPTY
 from helpers.images import THUMB2
-from gluon import CAT, A, IMG, XML
+from gluon import CAT, A, IMG, XML, DIV, P
 
 
 class User(BaseAuth):
@@ -156,6 +156,10 @@ class UserBoard(BaseModel):
             "writer": (False, False)
         }
 
+        self.validators = {
+            "board_text": IS_NOT_EMPTY()
+        }
+
     def set_fixtures(self):
         self.entity._write_on_board = self.write_on_board
 
@@ -214,22 +218,128 @@ class UserTimeLine(BaseModel):
         T = self.db.T
         CURL = self.db.CURL
         self.entity._event_types = {
-            "new_article": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
-                               A(T("%(nickname)s added new %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
-            "update_article": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
-                               A(T("%(nickname)s updated an %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
-            "new_contact": CAT(A(IMG(_src="%(event_image)s"), _href="%(event_link)s"),
-                               A(T("%(nickname)s added %(event_to)s as a new contact"), _href=CURL('person', 'show') + "/%(event_link)s")),
-            "new_article_comment": CAT(A(T("%(nickname)s commented on %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
-            "liked": CAT(A(XML(T("%(nickname)s liked the %(event_to)s: <p>%(event_text)s</p>")), _href=CURL('article', 'show') + "/%(event_link)s")),
-            "subscribed": CAT(A(T("%(nickname)s subscribed to %(event_to)s updates: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
-            "favorited": CAT(A(T("%(nickname)s favorited the %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
-            "disliked": CAT(A(T("%(nickname)s disliked the %(event_to)s: %(event_text)s"), _href=CURL('article', 'show') + "/%(event_link)s")),
+            "new_article": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s added a new %(event_to)s:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+
+            "update_article": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s updated an %(event_to)s:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+
+            "new_contact":  DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s followed %(event_to)s"),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('person', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+            "new_article_comment": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s commented on %(event_to)s:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+            "liked": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s liked the %(event_to)s:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+            "subscribed": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s subscribed to %(event_to)s updates:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+            "favorited": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s favorited the %(event_to)s:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
+            "disliked": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s disliked the %(event_to)s:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('article', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
             "new_picture": CAT(A(T("%(nickname)s added new picture"), _href="%(event_link)s"),
                                A(IMG(_src="%(event_image)s"), _href="%(event_link)s")),
             "new_picture_comment": CAT(A(T("%(nickname)s commented on %(event_to)s picture"), _href="%(event_link)s"),
                                A(IMG(_src="%(event_image)s"), _href="%(event_link)s")),
-            "wrote_on_wall": CAT(A(T("%(nickname)s wrote on %(event_to)s's board: %(event_text)s"), _href=CURL('person', 'show') + "/%(event_link)s")),
+            "wrote_on_wall": DIV(
+                                  DIV(
+                                     IMG(_src="%(event_image)s", _width=50, _height=50),
+                                     _class="one columns alpha",
+                                  ),
+                                  DIV(
+                                      T("%(nickname)s wrote on %(event_to)s's board:"),
+                                      P(T("%(event_text)s")),
+                                      _class="six columns omega timeline-text"
+                                  ),
+                                  _class="row eight columns",
+                                  _onclick="window.location='%s'" % (CURL('person', 'show', extension=False) + "/%(event_link)s"),
+                                 ),
         }
         self.entity._new_event = self.new_event
 

@@ -53,9 +53,9 @@ def ICONLINK(icon, text, action=None):
 
 def get_image(image, placeholder="image"):
     if image:
-        return URL('default', 'download', args=image)
+        return URL('default', 'download', args=image, extension=False)
     else:
-        return URL('static', 'basic/images', args='%s.png' % placeholder)
+        return URL('static', 'basic/images', args='%s.png' % placeholder, extension=False)
 
 current.get_image = get_image
 

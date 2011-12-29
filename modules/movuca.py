@@ -17,6 +17,7 @@ class DataBase(DAL):
         self.DATEFORMAT = current.DATEFORMAT
         self.pdate = current.pdate
         self.ftime = current.ftime
+        self.get_image = current.get_image
         from config import Config
         self.config = Config()
         if not current.request.env.web2py_runtime_gae:

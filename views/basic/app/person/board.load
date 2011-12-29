@@ -1,15 +1,26 @@
 <div class="board-form">
     {{=form}}
 </div>
-<ul class="board-messages">
-	{{for msg in board:}}
-	<li class="row board-item">
-	   {{=IMG(_src=get_image(msg.writer.thumbnail, 'user'), _width=50, _height=50, _class="one columns alpha")}}
-       <div class="six columns omega">
-	       {{=MARKMIN(msg.board_text)}}
-	       {{=A(get_name_of(msg.writer), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
-	       {{=pdate(msg.created_on)}}
-	   </div>
-	</li>
-	{{pass}}
-</ul>
+
+
+{{if board:}}
+	<ul class="board-messages">
+		{{for msg in board:}}
+		<li class="row board-item">
+		   {{=IMG(_src=get_image(msg.writer.thumbnail, 'user'), _width=50, _height=50, _class="one columns alpha")}}
+	       <div class="six columns omega">
+		       {{=MARKMIN(msg.board_text)}}
+		       {{=A(get_name_of(msg.writer), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
+		       {{=pdate(msg.created_on)}}
+		   </div>
+		</li>
+		{{pass}}
+	</ul>
+  <a href="{{=CURL('person','board', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,25'))}}">{{=T("View all board posts")}}</a>
+{{else:}}
+   {{if relation in ['contacts', 'follower']:}}
+       {{=T("No posts on this board, write first!")}}
+   {{else:}}
+      {{=T("No posts on this board!")}}
+   {{pass}}
+{{pass}}

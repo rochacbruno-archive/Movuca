@@ -18,16 +18,19 @@ class Person(Base):
         self.session = self.db.session
         self.T = self.db.T
         self.CURL = self.db.CURL
+        self.get_image = self.db.get_image
 
-    def get_timeline(self, query, orderby=None):
+    def get_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
-        events = self.db(query).select(orderby=orderby or ~timeline.created_on)
+        events = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
         event_types = timeline._event_types
+        self.context.event_types = event_types
+        self.context.events = events
         self.context.timeline = \
              DIV(
                 UL(
-                    *[LI(XML(str(event_types[event.event_type]) % event),
-                        EM(self.db.pdate(event.created_on)),
+                    *[LI(XML(str(event_types[event.event_type]) % event, sanitize=False),
+                        DIV(self.db.pdate(event.created_on), _style="width:100%;text-align:right;"),
                         _class="timeline-item")
                         for event in events],
                      **dict(_class="timeline-wrapper")
@@ -42,17 +45,21 @@ class Person(Base):
                 user = self.db.auth_user(nickname=self.request.args(0))
         else:
             user = self.db.auth_user[self.session.auth.user.id]
-
+        self.context.user = user
         if user:
             query = self.db.UserTimeLine.user_id == user.id
-            self.get_timeline(query)
+            if 'limitby' in self.request.vars:
+                limitby = [int(item) for item in self.request.vars.limitby.split(',')]
+            else:
+                limitby = None
+            self.get_timeline(query, limitby=limitby)
 
     def publictimeline(self):
         self.get_timeline(self.db.UserTimeLine)
 
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
-        if not follower and self.request.args(2) in ['profile']:
+        if not follower and 'profile' in self.request.args:
             return "window.location = '%s'" % self.CURL('default', 'user', args='login', vars={'_next': self.CURL('person', 'show', args=self.request.args(0))})
         try:
             followed = self.db.auth_user[int(self.request.args(0))]
@@ -68,7 +75,7 @@ class Person(Base):
                 self.db.UserTimeLine._new_event(v={"user_id": follower.id,
                                                   "nickname": follower.nickname,
                                                   "event_type": "new_contact",
-                                                  "event_image": followed.thumbnail,
+                                                  "event_image": self.get_image(followed.thumbnail, 'user'),
                                                   "event_to": followed.nickname or followed.first_name,
                                                   "event_reference": followed.id,
                                                   "event_text": "",
@@ -183,7 +190,7 @@ class Person(Base):
         self.db.UserTimeLine._new_event(v={"user_id": writer_user.id,
                                   "nickname": writer_user.nickname,
                                   "event_type": "wrote_on_wall",
-                                  "event_image": writer_user.thumbnail,
+                                  "event_image": self.get_image(user.thumbnail, 'user'),
                                   "event_to": self.T("own") if relation == 'yourself' else user.nickname or user.first_name,
                                   "event_reference": user.id,
                                   "event_text": form.vars.board_text,
@@ -200,7 +207,7 @@ class Person(Base):
         self.db.UserBoard.writer.default = self.session.auth.user.id if self.session.auth else 0
 
         relation = self.db.UserContact._relation(self.session.auth.user.id if self.session.auth else 0, user.id)
-
+        self.context.relation = relation
         if relation == "yourself":
             board_text_label = T("Whats up?")
         elif relation in ["contacts", "follower"]:
@@ -211,7 +218,10 @@ class Person(Base):
             self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
         else:
             self.context.form = ''
-        limitby = (0, 12)
+        if 'limitby' in self.request.vars:
+            limitby = [int(item) for item in self.request.vars.limitby.split(',')]
+        else:
+            limitby = (0, 12)
         self.context.board = self.db(self.db.UserBoard.user_id == user.id).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
 
     def show(self, uid):
@@ -225,7 +235,7 @@ class Person(Base):
 
         buttons = CAT()
         if self.session.auth and self.session.auth.user:
-            relation = self.db.UserContact._relation(self.session.auth.user.id, user.id)
+            relation = self.db.UserContact._relation(self.session.auth.user.id if self.session.auth else 0, user.id)
         else:
             relation = 'unknown'
 
@@ -258,8 +268,8 @@ class Person(Base):
             buttons.append(TAG.BUTTON(T("Message"), _class="three columns"))
             buttons.append(TAG.BUTTON(T("Report/Block"), _class="omega three columns"))
         else:
-            buttons.append(TAG.BUTTON(T("Edit Profile"), _class="three columns"))
-            buttons.append(TAG.BUTTON(T("My Messages"), _class="three columns"))
+            buttons.append(A(T("Edit Profile"), _class="three columns button", _href=CURL('default', 'user', args='profile')))
+            buttons.append(A(T("My Messages"), _class="three columns button", _href=CURL('person', 'messages', args=user.nickname or user.id)))
 
         self.context.buttons = buttons
         self.context.resume = UL(

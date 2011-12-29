@@ -156,6 +156,10 @@ a.jqmClose {
     font-weight:bold;
 }
 
+a.button{
+    text-align:center;
+}
+
 img.jqmClose {
     margin-top: -20px;
 }
@@ -178,12 +182,12 @@ img.jqmClose {
     border: 1px solid #fff;
     border-bottom: 1px solid #ccc;
     list-style: none; 
-    padding: 10px;
+    padding-top:10px;
     cursor:pointer;
     }
 
-    .timeline-item a {
-        text-decoration:none;
+    .timeline-text {
+        color:blue;
     }
 
     .timeline-item:hover {

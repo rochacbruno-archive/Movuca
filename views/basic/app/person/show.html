@@ -5,10 +5,12 @@
 
     <div class="row person-main-info">
         <div class="eleven columns alpha">
-            <img class="two columns alpha" src="{{=get_image(user.thumbnail, 'user')}}">
-
+            <div class="two columns alpha">
+                <img class="two columns" src="{{=get_image(user.thumbnail, 'user')}}">
+            </div>
             <div class="nine columns omega">
                 <h3>{{=get_name_of(user)}}</h3>
+                <em>{{=user.city or ''}} {{=user.country or ''}}</em>  <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
                 <p>{{=user.tagline or ''}}</p>
                 <em  id="relation-text">{{=relation_text}}</em>
             </div>
@@ -24,36 +26,36 @@
 
     <div class="row person-data">
         <div class="eight columns alpha">
+            {{if user.about:}}
             <div class="person-about">
                 <h4>{{=T("About")}}</h4>
                 {{=XML(user.about[:300] if user.about else '')}}
             </div>
+            {{pass}}
             <div class="person-articles">
                 <h4>{{=T("Articles")}}</h4>
                 {{if relation == 'yourself':}}
                     {{=A(T("Write a new article"), _href=CURL('article', 'new', args='Article'))}}
                 {{pass}}
-                {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,5'), ajax=True)}}
-                {{if user.articles:}}
-                    <a href="{{=CURL('article','list',vars=dict(author=user.id,limitby='0,25'))}}">{{=T("View all %s's articles", user.nickname)}}</a>
-                {{pass}}
+                {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,3'), ajax=True)}}
             </div>
             <div class="person-timeline">
                 <h4>{{=T("Activities")}}</h4>
-               
+                {{=LOAD('person','usertimeline.load',args=user.id ,vars=dict(limitby='0,5'), ajax=True)}}
             </div>           
         </div>
         <div class="eight columns omega">
             <div class="person-board">
                 <h4>{{=T("Board")}}</h4>
-                 {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,5'), ajax=True)}}
-                {{if user.articles:}}
-                    <a href="{{=CURL('article','list',vars=dict(author=user.id,limitby='0,25'))}}">{{=T("View all %s's articles", user.nickname)}}</a>
-                {{pass}}
+                 {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,7'), ajax=True)}}
+            </div>
+        </div>
+        <div class="eight columns omega">
+            <div class="person-pictures">
+                <h4>{{=T("Pictures")}}</h4>
+                 
             </div>
         </div>
     </div>
    
 </div>
-
- {{=user.keys()}}

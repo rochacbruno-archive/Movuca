@@ -21,6 +21,7 @@ class Article(Base):
         self.session = self.db.session
         self.T = self.db.T
         self.CURL = self.db.CURL
+        self.get_image = self.db.get_image
         #self.view = "app/home.html"
 
     def lastest_articles(self):
@@ -247,7 +248,9 @@ class Article(Base):
         if self.context.article_form.process().accepted:
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
             self.new_article_event('update_article', data={'event_link': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
-                                                           'event_text': self.context.article_form.vars.description})
+                                                           'event_text': self.context.article_form.vars.description,
+                                                           'event_to': self.context.article.content_type_id.title,
+                                                           'event_image': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
         self.context.content_form = SQLFORM(content.entity, article_data)
@@ -320,8 +323,8 @@ class Article(Base):
                                                 user_id=user.id,
                                                 nickname=user.nickname or "%(first_name)s %(last_name)s" % user,
                                                 event_type=event_type,
-                                                event_image=data.get('event_image', self.context.article.thumbnail),
-                                                event_to=data.get('event_to', self.context.article.title),
+                                                event_image=data.get('event_image', self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)),
+                                                event_to=data.get('event_to', self.context.article.content_type_id.identifier),
                                                 event_reference=data.get('event_reference', self.context.article.id),
                                                 event_text=data.get('event_text', self.context.article.description),
                                                 event_link=data.get('event_link', "%s/%s" % (self.context.article.id, self.context.article.slug))
