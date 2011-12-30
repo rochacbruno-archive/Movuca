@@ -226,9 +226,14 @@ img.thumbnail {
 
     .person-resume>li {
         border: 1px solid #F5F5F5;
-        line-height:25px;
+        line-height:18px;
+        font-size:18px;
         list-style: none; 
         cursor:pointer;
+        vertical-align: middle;
+    }
+    .person-resume>li>img{
+        margin-right:15px;
     }
 
     .person-resume>li:hover {

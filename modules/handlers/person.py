@@ -19,6 +19,7 @@ class Person(Base):
         self.T = self.db.T
         self.CURL = self.db.CURL
         self.get_image = self.db.get_image
+        self.context.theme_name = self.config.theme.name
 
     def get_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
@@ -279,19 +280,19 @@ class Person(Base):
                     'following': CURL('person', 'unfollow', args=[user.id, 'profile']),
                     'follower': CURL('person', 'follow', args=[user.id, 'profile'])}
 
-            buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class="alpha three columns"))
-            buttons.append(TAG.BUTTON(T("Message"), _class="three columns"))
-            buttons.append(TAG.BUTTON(T("Report/Block"), _class="omega three columns"))
+            buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class=""))
+            buttons.append(TAG.BUTTON(T("Message"), _class=""))
+            buttons.append(TAG.BUTTON(T("Report/Block"), _class=""))
         else:
-            buttons.append(A(T("Edit Profile"), _class="three columns button", _href=CURL('default', 'user', args='profile')))
-            buttons.append(A(T("My Messages"), _class="three columns button", _href=CURL('person', 'messages', args=user.nickname or user.id)))
+            buttons.append(A(T("Edit Profile"), _class="button", _href=CURL('default', 'user', args='profile')))
+            buttons.append(A(T("My Messages"), _class="button", _href=CURL('person', 'messages', args=user.nickname or user.id)))
 
         self.context.buttons = buttons
         self.context.resume = UL(
-                                 LI(T("Wrote %s articles", user.articles)),
-                                 LI(T("Has %s favorites", user.favorites)),
-                                 LI(T("Has %s contacts", user.contacts)),
-                                 LI(T("Liked %s articles", user.likes)),
-                                 LI(T("Joined %s groups", user.groups)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='attach_round.24.png')), T("Wrote %s articles", user.articles)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='favorite_rounded.24.png')), T("Has %s favorites", user.favorites)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), T("Liked %s articles", user.likes)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='face.24.png')), T("Has %s contacts", user.contacts)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='movuca.24.png')), T("Joined %s groups", user.groups)),
                                  _class="person-resume"
                                 )

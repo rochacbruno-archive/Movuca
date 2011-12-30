@@ -31,7 +31,7 @@
     </div>
     <div class="row show-article-tags">
        {{if article.tags:}}
-           <em>{{=T('Tags')}} {{=tagfy(article.tags)}} </em>
+           <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
        {{pass}}
     </div>
     <div class="row show-article-share">
@@ -52,7 +52,7 @@
 
     <div class="row show-article-related">
     {{if related_articles:}}
-         <h4>{{=T("Related articles")}}</h4>
+         <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Related articles')}}" title="{{=T('Related articles')}}">{{=T("Related articles")}}</h4>
         {{=related_articles}}
     {{pass}}
     </div>

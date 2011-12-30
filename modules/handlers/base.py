@@ -40,10 +40,12 @@ class Base(object):
         self.config = Config()
         self.response = current.response
         self.request = current.request
+        self.context.theme_name = self.config.theme.name
 
     def render(self, view=None, theme=None):
         if theme:
             self.theme = theme
+            self.context.theme_name = theme
         if view:
             self.view = view
         # lançar erro caso nao tenha config e response e render

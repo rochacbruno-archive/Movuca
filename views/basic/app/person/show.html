@@ -28,31 +28,31 @@
         <div class="eight columns alpha">
             {{if user.about:}}
             <div class="person-about">
-                <h4>{{=T("About")}}</h4>
+                <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='help.24.png')}}" alt="{{=T('About')}}" title="{{=T('About')}}">{{=T("About")}}</h4>
                 {{=XML(user.about[:300] if user.about else '')}}
             </div>
             {{pass}}
             <div class="person-articles">
-                <h4>{{=T("Articles")}}</h4>
+                <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Articles')}}" title="{{=T('Articles')}}">{{=T("Articles")}}</h4>
                 {{if relation == 'yourself':}}
                     {{=A(T("Write a new article"), _href=CURL('article', 'new', args='Article'))}}
                 {{pass}}
                 {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,3'), ajax=True)}}
             </div>
             <div class="person-timeline">
-                <h4>{{=T("Activities")}}</h4>
+                <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">{{=T("Activities")}}</h4>
                 {{=LOAD('person','usertimeline.load',args=user.id ,vars=dict(limitby='0,5'), ajax=True)}}
             </div>           
         </div>
         <div class="eight columns omega">
             <div class="person-board">
-                <h4>{{=T("Board")}}</h4>
+                <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='board.24.png')}}" alt="{{=T('Board')}}" title="{{=T('Board')}}">{{=T("Board")}}</h4>
                  {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,7'), ajax=True)}}
             </div>
         </div>
         <div class="eight columns omega">
             <div class="person-pictures">
-                <h4>{{=T("Pictures")}}</h4>
+                <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='pictures.24.png')}}" alt="{{=T('Pictures')}}" title="{{=T('Pictures')}}">{{=T("Pictures")}}</h4>
                  
             </div>
         </div>
