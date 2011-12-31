@@ -90,6 +90,11 @@ a.icon-link:hover {
 .show-article-content{
     
 }
+
+.show-article-meta {
+    background: url("../images/news_bg.png") repeat-x scroll center top transparent;
+    padding-top:4px;
+}
     .cook-recipe-information ul{
         padding-left:5px;
     }
@@ -215,16 +220,30 @@ img.thumbnail {
 }
 
 .person-main-info {
-    background-color:#F5F5F5;
+    /*background-color:#181818;*/
     padding-top:15px;
     padding-bottom:15px;
+    /*color: #F5F5F5;*/
+
+   background: url("../images/news_bg.png") repeat-x scroll center top transparent;
 }
+
+.person-box {
+    margin-bottom:25px;   
+}
+    .person-box>h4 {
+        border-bottom:2px solid #181818;
+        margin-bottom:10px;
+    }
+/*.person-main-info h3 {color:#F5F5F5;}*/
 
 .person-resume {
     padding-left: 40px;
 }
 
     .person-resume>li {
+        background-color:#fff;
+        color:#181818;
         border: 1px solid #F5F5F5;
         line-height:18px;
         font-size:18px;
@@ -237,8 +256,6 @@ img.thumbnail {
     }
 
     .person-resume>li:hover {
-        background-color:#fff;
-        border: 1px solid #DDDDDD;
         padding-left: 20px;
     }
 
