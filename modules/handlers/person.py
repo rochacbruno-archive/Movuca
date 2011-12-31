@@ -296,3 +296,11 @@ class Person(Base):
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='movuca.24.png')), T("Joined %s groups", user.groups)),
                                  _class="person-resume"
                                 )
+
+        self.response.meta.title = "%s | %s | %s" % (
+                                                     user.nickname or user.first_name,
+                                                     self.T("Profile"),
+                                                     self.db.config.meta.title,
+                                                    )
+        self.response.meta.description = str(user.tagline or user.about) + ' ' + str(user.city or '') + ' ' + str(user.country or '')
+        self.response.meta.keywords = [user.first_name, user.last_name, user.nickname]
