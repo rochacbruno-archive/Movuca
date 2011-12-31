@@ -62,6 +62,11 @@
         </ul>
        
        </div>
+       <div class="row show-article-tags">
+       {{if article.tags:}}
+           <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
+       {{pass}}
+       </div>
        <div class="twelve columns alpha">
           <div class="show-article-description article-box">
               {{=H5(T("Recipe Description"))}}
@@ -85,11 +90,6 @@
           {{=H5(T("References"))}}
           {{=MARKMIN(article_data.credits)}}
        </div>
-    </div>
-    <div class="row show-article-tags">
-       {{if article.tags:}}
-           <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
-       {{pass}}
     </div>
     <div class="row show-article-related article-box">
     {{if related_articles:}}
