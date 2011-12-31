@@ -38,11 +38,15 @@ html, body {
   height: 100%;
 }
 
+/*body {
+    background: url("../images/body_top.jpg") repeat-x scroll 0 0 #FFFFFF;
+}*/
 .wrapper {
   min-height: 100%;
   height: auto !important;
   height: 100%;
   margin: 0 auto -8em; /* set last value to footer height plus footer vertical padding */
+  background: url("../images/bottom.png") repeat-x scroll center bottom transparent;
 }
 
 .main {
@@ -67,11 +71,13 @@ body {
     background-color: #FFFFFF;      
 }
 .footer {
-    background-color: #ECECEC;      
+    /*background-color: #ECECEC;*/
+    background:none repeat scroll 0 0 #181818;      
 }
 
 .header {
-	// background: <fill here for header image>;
+	background: url('../images/header_bg.jpg');
+    border-bottom:3px solid #549dc0;
 }
 
 
