@@ -119,7 +119,7 @@ class Article(Base):
                   **dict(_class="comment_ul")),
                   edit_in_place[1],
                   form,
-                  _class="internal-comments"
+                  _class="internal-comments article-box"
                   )
 
     def editcomment(self):

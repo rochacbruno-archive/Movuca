@@ -91,9 +91,21 @@ a.icon-link:hover {
     
 }
 
+.article-box {
+    margin-bottom:25px;   
+}
+    .article-box>h4 {
+        border-bottom:2px solid #181818;
+        margin-bottom:10px;
+    }
+
+.article-author-picture {
+    text-align:center;
+}
+
 .show-article-meta {
     background: url("../images/news_bg.png") repeat-x scroll center top transparent;
-    padding-top:4px;
+    padding-top:10px;
 }
     .cook-recipe-information ul{
         padding-left:5px;
