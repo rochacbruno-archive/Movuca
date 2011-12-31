@@ -27,7 +27,15 @@
               <img class="photo jqmClose" src="{{=URL('static','images',args='blank.gif')}}" />
           </div>
           {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="eight columns alpha recipephoto")}}
+       
+
+              <div class="row show-article-tags">
+       {{if article.tags:}}
+           <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
+       {{pass}}
        </div>
+       </div>
+
        <div class="four columns omega cook-recipe-information">
 
         <!-- Lockerz Share BEGIN -->
@@ -62,11 +70,7 @@
         </ul>
        
        </div>
-       <div class="row show-article-tags">
-       {{if article.tags:}}
-           <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
-       {{pass}}
-       </div>
+
        <div class="twelve columns alpha">
           <div class="show-article-description article-box">
               {{=H5(T("Recipe Description"))}}
