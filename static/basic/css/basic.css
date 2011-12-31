@@ -94,7 +94,7 @@ a.icon-link:hover {
 .article-box {
     margin-bottom:25px;   
 }
-    .article-box>h4 {
+    .article-box>h4, .article-box>h5 {
         border-bottom:2px solid #181818;
         margin-bottom:10px;
     }

@@ -4,8 +4,8 @@
 {{extend "basic/app/layout.html"}}
 <div class="twelve columns center  show-article-wrapper">
     <div class="row show-article-meta">
-      <div class="two columns alpha">
-         {{=A(IMG(_src=get_image(article.author.thumbnail, 'user'), _width=100, _height=100), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+      <div class="two columns alpha article-author-picture">
+         {{=A(IMG(_src=get_image(article.author.thumbnail, 'user'), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
       </div>
       <div class="ten columns omega">
           {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
@@ -63,25 +63,25 @@
        
        </div>
        <div class="twelve columns alpha">
-          <div class="show-article-description">
+          <div class="show-article-description article-box">
               {{=H5(T("Recipe Description"))}}
               {{=article.description}}
           </div>
        </div>
 
-       <div class="five columns alpha cook-recipe-ingredients">
+       <div class="five columns alpha cook-recipe-ingredients article-box">
           
               {{=H5(T("Ingredients"))}}
               {{=UL(*[LI(item) for item in article_data.ingredients])}}
           
        </div>
 
-       <div class="seven columns omega cook-recipe-instructions">
+       <div class="seven columns omega cook-recipe-instructions article-box">
               {{=H5(T("Preparation Instructions"))}}
               {{=XML(article_data.instructions)}}
        </div>
        
-       <div class="twelve columns alpha"> 
+       <div class="twelve columns alpha article-box"> 
           {{=H5(T("References"))}}
           {{=MARKMIN(article_data.credits)}}
        </div>
@@ -91,14 +91,14 @@
            <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
        {{pass}}
     </div>
-    <div class="row show-article-related">
+    <div class="row show-article-related article-box">
     {{if related_articles:}}
          <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Related articles')}}" title="{{=T('Related articles')}}">{{=T("Related articles")}}</h4>
         {{=related_articles}}
     {{pass}}
     </div>
     
-    <div class="row show-article-comments">
+    <div class="row show-article-comments article-box">
         {{=comments}}
     </div>
 
