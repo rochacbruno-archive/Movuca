@@ -23,20 +23,7 @@ class Person(Base):
 
     def get_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
-        events = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
-        event_types = timeline._event_types
-        self.context.event_types = event_types
-        self.context.events = events
-        self.context.timeline = \
-             DIV(
-                UL(
-                    *[LI(XML(str(event_types[event.event_type]) % event, sanitize=False),
-                        DIV(self.db.pdate(event.created_on), _style="width:100%;text-align:right;"),
-                        _class="timeline-item")
-                        for event in events],
-                     **dict(_class="timeline-wrapper")
-                  )
-                )
+        self.context.events = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
 
     def usertimeline(self):
         if self.request.args(0):
@@ -54,6 +41,8 @@ class Person(Base):
             else:
                 limitby = None
             self.get_timeline(query, limitby=limitby)
+
+        self.context.TIMELINEFUNCTIONS = '%s/app/person/usertimeline_events.html' % self.context.theme_name
 
     def publictimeline(self):
         self.get_timeline(self.db.UserTimeLine)
