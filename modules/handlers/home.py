@@ -16,6 +16,9 @@ class Home(Base):
         self.request = self.db.request
         self.config = self.db.config
         #self.view = "app/home.html"
+        self.response.meta.title = self.db.config.meta.title
+        self.response.meta.description = self.db.config.meta.description
+        self.response.meta.keywords = self.db.config.meta.keywords
 
     def last_articles(self):
         from helpers.article import latest_articles
