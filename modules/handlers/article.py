@@ -315,7 +315,7 @@ class Article(Base):
         try:
             category = self.db.Category[int(self.request.args(0))]
         except:
-            category = self.db(self.db.Category.name == self.request.args(0)).select()
+            category = self.db(self.db.Category.name == self.request.args(0).replace('_', ' ')).select()
             if category:
                 category = category[0]
         self.context.category = category
