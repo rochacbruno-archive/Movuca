@@ -1,0 +1,8 @@
+
+{{extend "basic/app/layout.html"}}
+
+{{if category:}}
+    {{=LOAD('article', 'list.load', vars={'category_id': category.id},ajax=True )}}
+{{else:}}
+    {{=T("Not found")}}
+{{pass}}
