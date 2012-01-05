@@ -342,7 +342,7 @@ class Article(Base):
                     cat_id = self.db(self.db.Category.name == value.replace('_', ' ')).select().first().id
                     cat_qry = self.db.Article.category_id == cat_id
                 queries.append(cat_qry)
-                self.context.title += str(self.db.T("in %s category ", value))
+                self.context.title += str(self.db.T("in %s category ", value.replace('_', ' ')))
         queries.append(self.db.Article.draft == False)
         query = reduce(lambda a, b: (a & b), queries)
 
