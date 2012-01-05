@@ -8,14 +8,12 @@
     {{block header}}
     <div class="header">
       <div class="container">  
-        <div class="five columns omega">
-         {{if not session.auth:}}
-           {{include "basic/app/cycle_ads.html"}}
-         {{pass}}
-        </div>       
-        <div class="eleven columns alpha">
+              <div class="eleven columns alpha">
         {{include "basic/app/featured_slider.html"}}
         </div>
+        <div class="five columns omega">
+           {{include "basic/app/cycle_ads.html"}}
+        </div>       
 
       </div>
     </div>
