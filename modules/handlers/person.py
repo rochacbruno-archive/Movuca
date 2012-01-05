@@ -45,7 +45,15 @@ class Person(Base):
         self.context.TIMELINEFUNCTIONS = '%s/app/person/usertimeline_events.html' % self.context.theme_name
 
     def publictimeline(self):
-        self.get_timeline(self.db.UserTimeLine)
+        if 'limitby' in self.request.vars:
+            limitby = [int(item) for item in self.request.vars.limitby.split(',')]
+        else:
+            limitby = None
+        self.get_timeline(self.db.UserTimeLine, limitby=limitby)
+        if self.db.request.args(0) == "sidebar":
+            self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_publictimeline_events.html' % self.context.theme_name
+        else:
+            self.context.TIMELINEFUNCTIONS = '%s/app/person/publictimeline_events.html' % self.context.theme_name
 
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None

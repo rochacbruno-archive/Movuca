@@ -11,7 +11,7 @@ def usertimeline():
 
 def publictimeline():
     person = Person('publictimeline')
-    return person.render()
+    return person.render("app/person/publictimeline")
 
 
 def followers():
