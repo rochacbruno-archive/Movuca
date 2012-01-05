@@ -9,7 +9,7 @@
     {{for article in featured:}}
 	<!-- First Content -->
 	<div id="fragment-{{=article.id}}" class="ui-tabs-panel ui-tabs-hide" style="">
-		<img src="{{=get_image(article.picture, article.content_type_id.identifier)}}" alt="" width="400" height="220" />
+		<a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}"><img src="{{=get_image(article.picture, article.content_type_id.identifier)}}" alt="" width="400" height="220" /></a>
 		<div class="info" >
 		<h2><a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}" >{{=article.title}}</a></h2>
 		{{desc = article.description or ''}}

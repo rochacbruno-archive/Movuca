@@ -1,13 +1,17 @@
 {{response.files.append(URL('static','basic/js/home_index.js'))}}
 {{response.files.append(URL('static','basic/featured_slider/style.css'))}}
 {{response.files.append(URL('static','basic/featured_slider/featured.js'))}}
+{{response.files.append(URL('static','basic/cycle/cycle.js'))}}
+{{response.files.append(URL('static','basic/cycle/cycle.css'))}}
 {{extend "basic/app/layout.html"}}
 
     {{block header}}
     <div class="header">
       <div class="container">  
         <div class="five columns omega">
-         a
+         {{if not session.auth:}}
+           {{include "basic/app/cycle_ads.html"}}
+         {{pass}}
         </div>       
         <div class="eleven columns alpha">
         {{include "basic/app/featured_slider.html"}}
