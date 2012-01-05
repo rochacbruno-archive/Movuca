@@ -310,6 +310,16 @@ class Article(Base):
 
                 redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
 
+    def category(self):
+        category = None
+        try:
+            category = self.db.Category[int(self.request.args(0))]
+        except:
+            category = self.db(self.db.Category.name == self.request.args(0)).select()
+            if category:
+                category = category[0]
+        self.context.category = category
+
     def list(self):
         queries = []
         for field, value in self.request.vars.items():

@@ -34,4 +34,4 @@ class Home(Base):
     def featured(self):
         self.context.featured = self.db(self.db.Article.featured == True).select(limitby=(0, 4), orderby="<random>")
         if not self.context.featured:
-            self.context.featured = self.db(self.db.Article).select(limitby=(0, 4), orderby="<random>")
+            self.context.featured = self.db(self.db.Article).select(limitby=(0, 4), orderby=~self.db.Article.likes)

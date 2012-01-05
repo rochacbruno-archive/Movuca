@@ -120,3 +120,8 @@ def book():
 
 def tag():
     pass
+
+
+def category():
+    article = Article('category')
+    return article.render("app/article/category")
