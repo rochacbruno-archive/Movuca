@@ -29,6 +29,10 @@ def list():
     return article.render("app/article/list")
 
 
+def search():
+    return 'search'
+
+
 def favorite():
     article = Article('favorite')
     if not article.context.error:

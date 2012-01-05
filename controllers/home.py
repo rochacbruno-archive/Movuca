@@ -14,9 +14,10 @@ else:
 #@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
 def index():
     from handlers.home import Home
-    home = Home('last_articles')
+    home = Home('featured')
     home.context.left_sidebar_enabled = True
     home.context.right_sidebar_enabled = True
+    home.context.header_enabled = True
     return home.render("app/home")
 
 
@@ -25,3 +26,13 @@ def base():
     base = Base()
     base.context.teste = "TESTEEEE"
     return base.render("app/base")
+
+
+def search():
+    q = request.vars.q
+    kind = request.vars.kind
+    if kind == "user":
+        redirect(CURL("person", "search", vars={"q": q}))
+    elif kind == "article":
+        redirect(CURL("article", "search", vars={"q": q}))
+    return "search"

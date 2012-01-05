@@ -30,6 +30,7 @@ class Article(BaseModel):
                       Field("search_index", "text"),
                       Field("publish_date", "datetime"),
                       Field("publish_tz", "string"),
+                      Field("featured", "boolean", default=False),
                       # privacy
                       Field("privacy", "integer"),
                       Field("license", "string"),

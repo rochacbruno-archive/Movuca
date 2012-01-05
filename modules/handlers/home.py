@@ -19,3 +19,6 @@ class Home(Base):
     def last_articles(self):
         from helpers.article import latest_articles
         self.context.latest_articles = latest_articles(self.db)
+
+    def featured(self):
+        self.context.featured = self.db(self.db.Article.featured == True).select(limitby=(0, 4), orderby="<random>")

@@ -83,3 +83,22 @@ current.getclass = getclass
 
 def get_name_of(user):
     return "%(first_name)s %(last_name)s (%(nickname)s)" % user
+
+search_form = FORM(
+    DIV(
+        SELECT(*[OPTION(option, _value=value) for value, option in [("article", T("Articles")), ("user", T("Users"))]], _name="kind", _id="kind"),
+       _class="two columns alpha search-select"),
+    DIV(
+        INPUT(_type="search", _placeholder=T("Type word or name to find"), _name="q", _id="q"),
+        BUTTON(IMG(_src=URL('static', 'images', args='search_button.png'))),
+        _class="four columns omega search-input"
+    ),
+    _class="search-form",
+    _method="GET",
+    _action=CURL("home", "search")
+)
+
+
+response.menu = [
+    (T('Home'), False, URL('default','index'), [(T('Home'), False, URL('default','index'), [])])
+    ]

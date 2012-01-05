@@ -304,3 +304,33 @@ img.thumbnail {
         margin-top:5px;
         float:right;
     }
+
+.search-form {
+    display:inline;
+}
+
+.search-form div {
+    
+}
+
+.search-input {
+    margin-top:-3px;
+}
+.search-form select {
+
+    width:100px;
+    font-size:14px;
+}
+
+.search-form input {
+
+    width:180px;
+    font-size:14px;
+}
+
+.search-form button {
+    margin:0;
+    padding:0px;
+    background:none;
+    border:none;
+}
