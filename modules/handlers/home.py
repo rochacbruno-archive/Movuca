@@ -25,7 +25,11 @@ class Home(Base):
         self.context.ads = self.db(self.db.Ads.place == "top_slider").select(limitby=(0, 5), orderby="<random>")
         if not self.context.ads:
             from gluon.storage import Storage
-            self.context.ads = [Storage(id=1, thumbnail='', link=self.db.CURL('contact', 'ads'))]
+            self.context.ads = [Storage(id=1, thumbnail='', link=self.db.CURL('contact', 'ads')),
+                                Storage(id=2, thumbnail="http://placehold.it/250x220&text=%s" % self.db.T("Your add here!"), link=self.db.CURL('contact', 'ads')),
+                                Storage(id=3, thumbnail="http://placekitten.com/250/220", link=self.db.CURL('contact', 'ads')),
+                                Storage(id=3, thumbnail="http://placehold.it/250x220&text=%s" % self.db.T("Your Logo"), link=self.db.CURL('contact', 'ads'))
+                                ]
 
     def featured(self):
         self.context.featured = self.db(self.db.Article.featured == True).select(limitby=(0, 4), orderby="<random>")

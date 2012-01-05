@@ -52,6 +52,8 @@ def ICONLINK(icon, text, action=None):
 
 
 def get_image(image, placeholder="image"):
+    if image and image.startswith("http://"):
+        return image
     if image:
         return URL('default', 'download', args=image, extension=False)
     else:
