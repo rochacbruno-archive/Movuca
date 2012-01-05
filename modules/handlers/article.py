@@ -310,6 +310,9 @@ class Article(Base):
 
                 redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
 
+    def tag(self):
+        pass
+
     def category(self):
         category = None
         try:
@@ -323,8 +326,17 @@ class Article(Base):
     def list(self):
         queries = []
         for field, value in self.request.vars.items():
-            if field not in ['limitby', 'orderby']:
+            if field not in ['limitby', 'orderby', 'tag', 'category']:
                 queries.append(self.db.Article[field] == value)
+            if field == 'tag':
+                queries.append(self.db.Article.tags.contains(value))
+            if field == 'category':
+                try:
+                    cat_qry = self.db.Article.category_id == int(value)
+                except:
+                    cat_id = self.db(self.db.Category.name == value.replace('_', ' ')).select().first().id
+                    cat_qry = self.db.Article.category_id == cat_id
+                queries.append(cat_qry)
         queries.append(self.db.Article.draft == False)
         query = reduce(lambda a, b: (a & b), queries)
 

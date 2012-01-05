@@ -3,21 +3,21 @@
 
  {{for article in articles:}}
 
-<div class="eight columns center list-article-wrapper" data-url="{{=CURL('article', 'show', args=[article.id, article.slug])}}">
+<div class="eight columns center list-article-wrapper" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}">
     
     <div class="row list-article-row">
       <div class="two columns alpha">
-         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug]))}}<br />
-         <span class="list-article-like">{{=T("%s likes" % article.likes or 0)}}</span>
+         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
+         <span class="list-article-like"><img src="{{=URL('static','%s/images/icons' % theme_name, args='like_rounded.24.png', extension=False)}}" alt="{{=T('likes')}}" title="{{=T('likes')}}">{{=T("%s likes" % article.likes or 0)}}</span>
       </div>
       <div class="five columns omega">
-          {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
-          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=pdate(article.created_on)}}</em> <br />
+          {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}} {{=pdate(article.created_on)}}</em> <br />
           {{if article.tags:}}
-              <em>{{=T('in')}} {{=tagfy(article.tags)}}</em> 
+              <em><img src="{{=URL('static','%s/images/icons' % theme_name, args='tag.24.png', extension=False)}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"> {{=tagfy(article.tags, extension=False)}}</em> 
           {{pass}}
           <p class="list-article-description">
-              {{=A("%s ..." % article.description[:150], _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+              {{=A("%s ..." % article.description[:150], _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
           </p>
 
       </div>
