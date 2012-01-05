@@ -1,6 +1,8 @@
 {{response.files.append(URL('static','basic/js/article_list.js'))}}
 {{extend "basic/app/layout.html"}}
 
+<h3>{{=title}}</h3>
+
  {{for article in articles:}}
 
 <div class="eight columns center list-article-wrapper" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}">

@@ -327,12 +327,14 @@ class Article(Base):
         self.context.category = category
 
     def list(self):
+        self.context.title = str(self.db.T("Articles "))
         queries = []
         for field, value in self.request.vars.items():
             if field not in ['limitby', 'orderby', 'tag', 'category']:
                 queries.append(self.db.Article[field] == value)
             if field == 'tag':
                 queries.append(self.db.Article.tags.contains(value))
+                self.context.title += str(self.db.T("tagged with %s ", value))
             if field == 'category':
                 try:
                     cat_qry = self.db.Article.category_id == int(value)
@@ -340,6 +342,7 @@ class Article(Base):
                     cat_id = self.db(self.db.Category.name == value.replace('_', ' ')).select().first().id
                     cat_qry = self.db.Article.category_id == cat_id
                 queries.append(cat_qry)
+                self.context.title += str(self.db.T("in %s category ", value))
         queries.append(self.db.Article.draft == False)
         query = reduce(lambda a, b: (a & b), queries)
 
