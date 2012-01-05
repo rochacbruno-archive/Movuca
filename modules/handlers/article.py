@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT
 from gluon.validators import IS_SLUG
 from helpers.images import THUMB2
 import os
@@ -254,6 +254,7 @@ class Article(Base):
                                                            'event_to': "%s (%s)" % (self.context.article.content_type_id.title, self.context.article.title),
                                                            'event_image': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
+            self.context.article.update_record(search_index="|".join(str(value) for value in self.request.vars.values()))
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
         self.context.content_form = SQLFORM(content.entity, article_data)
 
@@ -302,6 +303,7 @@ class Article(Base):
                 self.db.commit()
                 self.session.flash = self.T("%s included." % content_type.title)
                 self.context.article = self.db.article[article_id]
+                self.context.article.update_record(search_index="|".join(str(value) for value in self.context.form.vars.values()))
 
                 if not self.context.article.draft:
                     self.new_article_event('new_article')
@@ -326,11 +328,17 @@ class Article(Base):
                 category = category[0]
         self.context.category = category
 
+    def search(self):
+        q = self.request.vars.q
+        self.context.form = FORM(INPUT(_type="text", _name="q", _id="q", _value=q or ''), _method="GET")
+        query = (self.db.Article.search_index.like("%" + q + "%")) | (self.db.Article.tags.contains(q))
+        self.context.results = self.db(query).select()
+
     def list(self):
         self.context.title = str(self.db.T("Articles "))
         queries = []
         for field, value in self.request.vars.items():
-            if field not in ['limitby', 'orderby', 'tag', 'category']:
+            if field not in ['limitby', 'orderby', 'tag', 'category', 'or']:
                 queries.append(self.db.Article[field] == value)
             if field == 'tag':
                 queries.append(self.db.Article.tags.contains(value))

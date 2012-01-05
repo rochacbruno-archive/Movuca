@@ -30,7 +30,8 @@ def list():
 
 
 def search():
-    return 'search'
+    article = Article('search')
+    return article.render("app/article/search")
 
 
 def favorite():
