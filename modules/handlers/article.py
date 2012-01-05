@@ -244,6 +244,7 @@ class Article(Base):
         self.context.customfield = customfield
         self.get()
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
+        self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
         self.context.article_form = SQLFORM(self.db.article, self.context.article)
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
         if self.context.article_form.process().accepted:
@@ -281,6 +282,8 @@ class Article(Base):
             self.db.article.thumbnail.uploadfield = "thumbnail_blob"
         self.db.article.author.default = self.session.auth.user.id
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
+        self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
+
         self.db.article.content_type_id.default = content_type.id
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='')
         self.context.customfield = customfield

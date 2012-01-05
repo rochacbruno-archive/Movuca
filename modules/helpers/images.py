@@ -51,7 +51,7 @@ def THUMB(image, nx=120, ny=120):
         return thumb
 
 
-def THUMB2(image, nx=120, ny=120, gae=False):
+def THUMB2(image, nx=120, ny=120, gae=False, name='thumb'):
     if image:
         if not gae:
             request = current.request
@@ -60,7 +60,7 @@ def THUMB2(image, nx=120, ny=120, gae=False):
             img = Image.open(request.folder + 'uploads/' + image)
             img.thumbnail((nx, ny), Image.ANTIALIAS)
             root, ext = os.path.splitext(image)
-            thumb = '%s_thumb%s' % (root, ext)
+            thumb = '%s_%s%s' % (root, name, ext)
             img.save(request.folder + 'uploads/' + thumb)
             return thumb
         else:

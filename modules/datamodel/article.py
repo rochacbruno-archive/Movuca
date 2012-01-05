@@ -18,6 +18,7 @@ class Article(BaseModel):
                       Field("title", "string"),
                       Field("description", "text"),
                       Field("picture", "upload"),
+                      Field("medium_thumbnail", "upload"),
                       Field("thumbnail", "upload"),
                       Field("draft", "boolean", default=False),
                       Field("category_id", "reference article_category"),
