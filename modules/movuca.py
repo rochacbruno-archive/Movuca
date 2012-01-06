@@ -61,7 +61,7 @@ class Mailer(Mail):
     def __init__(self):
         from config import Config
         config = Config()
-        Mail.__init__()
+        Mail.__init__(self)
         self.settings.server = config.mail.server
         self.settings.sender = config.mail.sender
         self.settings.login = config.mail.login
