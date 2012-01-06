@@ -329,10 +329,13 @@ class Article(Base):
         self.context.category = category
 
     def search(self):
-        q = self.request.vars.q
+        q = self.request.vars.q or None
         self.context.form = FORM(INPUT(_type="text", _name="q", _id="q", _value=q or ''), _method="GET")
-        query = (self.db.Article.search_index.like("%" + q + "%")) | (self.db.Article.tags.contains(q))
-        self.context.results = self.db(query).select()
+        if q:
+            query = (self.db.Article.search_index.like("%" + q + "%")) | (self.db.Article.tags.contains(q))
+            self.context.results = self.db(query).select()
+        else:
+            self.context.results = []
 
     def list(self):
         self.context.title = str(self.db.T("Articles "))

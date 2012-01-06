@@ -124,8 +124,9 @@ if session.auth:
 
     response.menu.append(
          (T('Explore'), False, False, [
+                                          (T('Find articles'), False, CURL('article', 'search'), []),
                                           (T('All articles'), False, CURL('article', 'list'), []),
-                                          (T('Find a contact'), False, CURL('person', 'search'), []),
+                                          (T('Find members'), False, CURL('person', 'search'), []),
                                           (T('All members'), False, CURL('person', 'search', vars=dict(q='@')), []),
                                   ])
     )
