@@ -37,10 +37,10 @@ def contact_box(row,
         if not where:
             where = 'contact' if kind == 'follower' else 'following'
 
-    ret = DIV(_class="five columns contact-item %s" % current.getclass(2),
+    ret = DIV(_class="six columns contact-item %s" % current.getclass(2),
               _id="item_%s" % uid)
     ret.append(IMG(_class="two columns alpha thumbnail", _src=current.get_image(thumbnail, 'user')))
-    infodiv = DIV(_class="three columns omega")
+    infodiv = DIV(_class="four columns omega")
     infodiv.append(TAG.STRONG(name))
     if follows_you:
         infodiv.append(BR())
