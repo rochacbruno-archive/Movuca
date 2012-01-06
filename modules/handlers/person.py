@@ -195,7 +195,7 @@ class Person(Base):
             from helpers.person import contact_box
             self.context.contact_box = contact_box
 
-        self.context.form = SQLFORM.factory(Field('q', default=q or ''), _method="GET")
+        self.context.form = SQLFORM.factory(Field('q', default=q or '', label=self.T("Search Term"), comment=self.T("In name, email, nickname, about")), formstyle='divs', _method="GET")
 
     def new_board_event(self, form=None, writer=None, user=None, relation=None):
         writer_user = self.db.auth_user[writer]
