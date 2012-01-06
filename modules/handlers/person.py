@@ -190,7 +190,7 @@ class Person(Base):
                 queries.append(self.db.auth_user.tagline.like("%" + word + "%"))
 
             query = reduce(lambda a, b: (a | b), queries)
-            self.context.results = self.db(query & (self.db.auth_user.id != self.session.auth.user.id)).select()
+            self.context.results = self.db(query & (self.db.auth_user.id != self.session.auth.user.id)).select(orderby=~self.db.auth_user.id)
 
             from helpers.person import contact_box
             self.context.contact_box = contact_box
