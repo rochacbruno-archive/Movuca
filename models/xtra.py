@@ -111,12 +111,10 @@ if session.auth:
                                           (T('Cook Recipe'), False, CURL('article', 'new', args='CookRecipe'), []),
                                   ]),
                                   (T('Group'), False, False, [
-                                          (T('Article'), False, CURL('article', 'new', args='Article'), []),
-                                          (T('Cook Recipe'), False, CURL('article', 'new', args='CookRecipe'), []),
+                                
                                   ]),
                                   (T('Page'), False, False, [
-                                          (T('Article'), False, CURL('article', 'new', args='Article'), []),
-                                          (T('Cook Recipe'), False, CURL('article', 'new', args='CookRecipe'), []),
+                                          
                                   ])
                                   ]
                             )
