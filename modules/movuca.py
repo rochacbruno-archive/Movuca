@@ -35,6 +35,8 @@ class DataBase(DAL):
         for cls in classes:
             obj = cls(self)
             self.__setattr__(cls.__name__, obj.entity)
+            if obj.__class__.__name__ == "Access":
+                self.__setattr__("auth", obj)
 
 
 class Access(Auth):
@@ -48,7 +50,13 @@ class Access(Auth):
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
+        self.settings.controller = 'person'
+        self.settings.on_failed_authorization = self.url('account', args='not_authorized')
         self.settings.formstyle = 'divs'
+        self.settings.label_separator = ''
+        self.settings.register_next = self.url('index')
+        self.settings.registration_requires_verification = False
+        self.settings.registration_requires_approval = False
         from datamodel.user import User
         user = User(self)
         self.entity = user.entity

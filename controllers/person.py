@@ -60,3 +60,8 @@ def board():
     person = Person()
     person.board(request.args(0) or session.auth.user.id)
     return person.render('app/person/board')
+
+
+def account():
+    person = Person("account")
+    return person.render('app/person/account')

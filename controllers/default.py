@@ -17,10 +17,7 @@ def index():
 
 
 def user():
-    from movuca import Access, DataBase
-    db = DataBase()
-    access = Access(db)
-    return dict(form=access(), auth=access)
+    redirect(CURL('person', 'account', args=request.args, vars=request.vars))
 
 
 def download():

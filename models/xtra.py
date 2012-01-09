@@ -133,7 +133,7 @@ if session.auth:
     response.menu.append(
          (T('Me'), False, False, [
                                           (T('My profile'), False, CURL('person', 'show'), []),
-                                          (T('My Settings'), False, CURL('default', 'user', args='profile'), []),
+                                          (T('My Settings'), False, CURL('person', 'account', args='profile'), []),
                                           (T('My content'), False, False,[
                                                  (T('My articles'), False, CURL('article', 'list', vars={'author': session.auth.user.id, 'limitby': '0,50'}), []),
                                                  (T('My drafts'), False, CURL('article', 'list', vars={'author': session.auth.user.id, 'limitby': '0,50'}), []),
@@ -156,5 +156,5 @@ if session.auth:
     )
     response.menu.append((IMG(_src=URL('static', 'images', args='alert.18.png'), alt=T("Alert"), title=T("Notifications")), False, URL('person', 'notifications'), []))
 else:
-    response.menu.append((T('Login'), False, CURL('default', 'user', args='login'), []))
-    response.menu.append((T('Join'), False, CURL('default', 'user', args='register'), []))
+    response.menu.append((T('Login'), False, CURL('person', 'account', args='login'), []))
+    response.menu.append((T('Join'), False, CURL('person', 'account', args='register'), []))

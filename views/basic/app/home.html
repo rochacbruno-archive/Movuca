@@ -4,29 +4,49 @@
 {{response.files.append(URL('static','basic/cycle/cycle.js'))}}
 {{extend "basic/app/layout.html"}}
 
-    {{block header}}
-    <div class="header">
-      <div class="container">  
-              <div class="eleven columns alpha">
-        {{include "basic/app/featured_slider.html"}}
-        </div>
-        <div class="five columns omega">
-           {{include "basic/app/cycle_ads.html"}}
-        </div>       
-
-      </div>
+{{block header}}
+<div class="header">
+  <div class="container">  
+          <div class="eleven columns alpha">
+    {{include "basic/app/featured_slider.html"}}
     </div>
-    {{end}}
+    <div class="five columns omega">
+       {{include "basic/app/cycle_ads.html"}}
+    </div>       
 
-    {{block left_sidebar}}
-       {{super}}
-    {{end}}
+  </div>
+</div>
+{{end}}
+
+{{block left_sidebar}}
+   {{super}}
+{{end}}
+
+
+{{if session.auth:}}
+  <h4>
+      <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+      {{=T("Your Feed")}}
+  </h4>
+  {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
+{{pass}}
+
 <h4><img src="{{=URL('static','basic/images/icons', args='attach_round.24.png')}}" alt="{{=T('Articles')}}" title="{{=T('Articles')}}">{{=T("Articles")}}</h4>
  {{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
 
 
 
-          {{block right_sidebar}}
-          <h4><img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">{{=T("Latest Activities")}}</h4>
-          {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
-          {{end}}
+{{block right_sidebar}}
+    {{if not session.auth:}}
+    <h4>
+        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+        <a href="{{=CURL('default', 'user', args='login')}}">{{=T("Sign up")}}</a> {{=T("or login")}}
+    </h4>
+
+    {{pass}}
+    <h4>
+        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+        {{=T("Public Activities")}}
+    </h4>
+    {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
+{{end}}
