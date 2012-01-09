@@ -302,10 +302,10 @@ class Person(Base):
 
         self.context.buttons = buttons
         self.context.resume = UL(
-                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='attach_round.24.png')), T("Wrote %s articles", user.articles)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='attach_round.24.png')), A(T("Wrote %s articles", user.articles), _href=self.CURL('article', 'list', vars={'author': user.id, 'limitby': '0,25'}))),
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='favorite_rounded.24.png')), T("Has %s favorites", user.favorites)),
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), T("Liked %s articles", user.likes)),
-                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='face.24.png')), T("Has %s contacts", user.contacts)),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='face.24.png')), A(T("Has %s contacts", user.contacts), _href=self.CURL('person', 'contacts', args=user.nickname or user.id))),
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='movuca.24.png')), T("Joined %s groups", user.groups)),
                                  _class="person-resume"
                                 )
