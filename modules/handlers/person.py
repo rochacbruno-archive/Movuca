@@ -329,4 +329,4 @@ class Person(Base):
         if user:
             redirect(self.CURL('home', 'index'))
         else:
-            redirect(self.CURL('home', 'index', args=[username, 'error']))
+            redirect(self.CURL('home', 'index', args=[username, 'loginerror']))

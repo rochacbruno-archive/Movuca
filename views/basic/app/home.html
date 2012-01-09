@@ -47,10 +47,10 @@
     </h4>
     <div>
        <form action="{{=URL('person', 'loginbare')}}" method="post">
-           {{if request.args(1) == 'error':}}
+           {{if 'loginerror' in request.args:}}
               <label style="color:red;">{{=T("Username or password incorrect")}}</label>
            {{pass}}
-           <input type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'error' else '')}} />
+           <input type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'loginerror' else '')}} />
            <input type="password" name="password" id="password" placeholder="{{=T('your password')}}"/>
            <button>{{=T("Go")}}</button> <a href="{{=CURL('person', 'account', args='request_reset_password')}}">{{=T("Lost password")}}</a>
        </form>
