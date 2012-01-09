@@ -1,0 +1,14 @@
+{{include TIMELINEFUNCTIONS}}
+<ul class="timeline-wrapper">
+ <li class="timeline-item row eight columns" style="padding-top:5px;margin:0px;">
+    {{=form}}
+ </li>
+ {{for event in events:}}
+    {{eventbox(event)}}
+ {{pass}}
+</ul>
+{{if events:}}
+  <a href="{{=CURL('person','privatetimeline', extension=False,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a>
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

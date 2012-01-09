@@ -24,27 +24,39 @@
 
 
 {{if session.auth:}}
-  <h4>
+  <h4 class="bottom-line">
       <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
       {{=T("Your Feed")}}
   </h4>
-  {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
+  {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,8'), ajax=True)}}
 {{pass}}
 
-<h4><img src="{{=URL('static','basic/images/icons', args='attach_round.24.png')}}" alt="{{=T('Articles')}}" title="{{=T('Articles')}}">{{=T("Articles")}}</h4>
- {{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
+<h4 class="bottom-line">
+  <img src="{{=URL('static','basic/images/icons', args='attach_round.24.png')}}" alt="{{=T('Articles')}}" title="{{=T('Articles')}}">
+  {{=T("Articles")}}
+</h4>
+{{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
 
 
 
 {{block right_sidebar}}
     {{if not session.auth:}}
-    <h4>
-        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
-        <a href="{{=CURL('default', 'user', args='login')}}">{{=T("Sign up")}}</a> {{=T("or login")}}
+    <h4 class="bottom-line">
+        <img src="{{=URL('static','basic/images/icons', args='edge_arrow_right.24.png')}}" alt="{{=T('Login')}}" title="{{=T('Login')}}">
+        <a href="{{=CURL('person', 'account', args='register')}}">{{=T("Sign up")}}</a> {{=T("or login")}}
     </h4>
-
+    <div>
+       <form action="{{=URL('person', 'loginbare')}}" method="post">
+           {{if request.args(1) == 'error':}}
+              <label style="color:red;">{{=T("Username or password incorrect")}}</label>
+           {{pass}}
+           <input type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'error' else '')}} />
+           <input type="password" name="password" id="password" placeholder="{{=T('your password')}}"/>
+           <button>{{=T("Go")}}</button> <a href="{{=CURL('person', 'account', args='request_reset_password')}}">{{=T("Lost password")}}</a>
+       </form>
+    </div>
     {{pass}}
-    <h4>
+    <h4 class="bottom-line">
         <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
         {{=T("Public Activities")}}
     </h4>

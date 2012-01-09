@@ -55,6 +55,22 @@ class Person(Base):
         else:
             self.context.TIMELINEFUNCTIONS = '%s/app/person/publictimeline_events.html' % self.context.theme_name
 
+    def privatetimeline(self):
+        self.board(self.session.auth.user.id)
+        self.contacts()
+        allowed = list(self.context.following_list) + list(self.context.contacts_list)
+        allowed.append(self.session.auth.user.id)
+        query = self.db.UserTimeLine.created_by.belongs(allowed)
+        if 'limitby' in self.request.vars:
+            limitby = [int(item) for item in self.request.vars.limitby.split(',')]
+        else:
+            limitby = None
+        self.get_timeline(query, limitby=limitby)
+        if self.db.request.args(0) == "sidebar":
+            self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_privatetimeline_events.html' % self.context.theme_name
+        else:
+            self.context.TIMELINEFUNCTIONS = '%s/app/person/privatetimeline_events.html' % self.context.theme_name
+
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
         if not follower and 'profile' in self.request.args:
@@ -227,7 +243,7 @@ class Person(Base):
             board_text_label = T("Write something on %s's board", user.nickname)
 
         if relation in ['contacts', 'yourself', 'follower']:
-            self.db.UserBoard.board_text.label = board_text_label
+            self.db.UserBoard.board_text.label = CAT(board_text_label, A(T(" add photo ")))
             self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
         else:
             self.context.form = ''
@@ -305,3 +321,12 @@ class Person(Base):
     def account(self):
         self.context.auth = self.db.auth
         self.context.form = self.db.auth()
+
+    def loginbare(self):
+        username = self.request.vars.email
+        password = self.request.vars.password
+        user = self.db.auth.login_bare(username, password)
+        if user:
+            redirect(self.CURL('home', 'index'))
+        else:
+            redirect(self.CURL('home', 'index', args=[username, 'error']))

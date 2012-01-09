@@ -14,6 +14,11 @@ def publictimeline():
     return person.render("app/person/publictimeline")
 
 
+def privatetimeline():
+    person = Person('privatetimeline')
+    return person.render("app/person/privatetimeline")
+
+
 def followers():
     person = Person()
     person.followers(request.args(0))
@@ -65,3 +70,8 @@ def board():
 def account():
     person = Person("account")
     return person.render('app/person/account')
+
+
+def loginbare():
+    person = Person("loginbare")
+    return person.render('app/person/loginbare')
