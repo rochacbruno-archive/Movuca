@@ -54,7 +54,7 @@ class Access(Auth):
         self.settings.on_failed_authorization = self.url('account', args='not_authorized')
         self.settings.formstyle = 'divs'
         self.settings.label_separator = ''
-        self.settings.register_next = self.url('index')
+        self.settings.register_next = self.url('show')
         self.settings.registration_requires_verification = False
         self.settings.registration_requires_approval = False
         from datamodel.user import User

@@ -2,7 +2,7 @@
 
 from gluon.dal import Field
 from basemodel import BaseModel, ContentModel
-from gluon.validators import IS_NOT_EMPTY, IS_IN_SET, IS_LENGTH
+from gluon.validators import IS_NOT_EMPTY, IS_IN_SET, IS_LENGTH, IS_EMPTY_OR
 from gluon import current
 from plugin_ckeditor import CKEditor
 
@@ -103,3 +103,36 @@ class CodeRecipe(ContentModel):
         self.fields = [
             Field("code", "text"),
         ]
+
+
+class Product(ContentModel):
+    tablename = "product_data"
+
+    def set_properties(self):
+        ckeditor = CKEditor()
+        T = current.T
+        self.fields = [
+            Field("price", "double", notnull=True, default=0),
+            Field("manufacturer", "string", notnull=True),
+            Field("in_stock", "boolean", notnull=True, default=True),
+            Field("info", "text", notnull=True),
+            Field("size", "string"),
+        ]
+
+        self.validators = {
+            "info": IS_NOT_EMPTY(),
+            "manufacturer": IS_NOT_EMPTY(),
+            "size": IS_EMPTY_OR(IS_IN_SET([("L", T("Large")), ("M", T("Medium")), ("S", T("Small"))], zero=None)),
+        }
+
+        self.widgets = {
+            "info": ckeditor.widget
+        }
+
+        self.labels = {
+            "price": T("Product Price"),
+            "manufacturer": T("Manufacturer name or brand"),
+            "in_stock": T("Available?"),
+            "info": T("Product specs"),
+            "size": T("Product size"),
+        }
