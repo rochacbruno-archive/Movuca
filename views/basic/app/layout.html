@@ -113,7 +113,11 @@
         {{if left_sidebar_enabled:}}
         <div class="four columns left-sidebar">
           {{block left_sidebar}}
-              <h4>Welcome</h4>
+              <h4 class="bottom-line">
+        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+        {{=T("Public Activities")}}
+    </h4>
+    {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
               
           {{end}}
         </div>
