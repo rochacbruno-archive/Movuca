@@ -154,7 +154,7 @@ if session.auth:
                                           (T('Logout'), False, CURL('default', 'user', args='logout'), []),
                                   ])
     )
-    response.menu.append((IMG(_src=URL('static', 'images', args='alert.18.png'), alt=T("Alert"), title=T("Notifications")), False, URL('person', 'notifications'), []))
+    response.menu.append((DIV(IMG(_src=URL('static', 'images', args='alert.18.png'), alt=T("Alert"), title=T("Notifications")), " (1)", _onclick="alert('Sorry, notifications page is under construction!')"), False, False, []))
 else:
     response.menu.append((T('Login'), False, CURL('person', 'account', args='login'), []))
     response.menu.append((T('Join'), False, CURL('person', 'account', args='register'), []))
