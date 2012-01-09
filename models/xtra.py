@@ -158,3 +158,5 @@ if session.auth:
 else:
     response.menu.append((T('Login'), False, CURL('person', 'account', args='login'), []))
     response.menu.append((T('Join'), False, CURL('person', 'account', args='register'), []))
+
+response.menu.append((T('GitHub'), False, "http://github.com/rochacbruno/Movuca", []))
