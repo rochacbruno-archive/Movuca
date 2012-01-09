@@ -1,0 +1,48 @@
+{{response.files.append(URL('static','basic/js/article_edit.js'))}}
+{{extend "basic/app/layout.html"}}
+{{=article_form.custom.begin}}
+<div class="row edit-article-wrapper">
+    <div class="twelve columns alpha">
+       <fieldset>
+            <legend>{{=T("The Basics")}}</legend>
+            {{=customfield(article_form, 'title')}}
+            {{=customfield(article_form, 'description')}}
+            {{=customfield(article_form, 'picture')}}
+       </fieldset>
+       <fieldset>
+            <legend>{{=T("Properties")}}</legend>
+            <div class="five columns alpha">
+                {{=customfield(content_form, 'price')}}
+                {{=customfield(content_form, 'in_stock')}}
+            </div>
+            <div class="five columns omega">
+                {{=customfield(content_form, 'manufacturer')}}
+                {{=customfield(content_form, 'product_size')}}
+            </div>
+       </fieldset>
+       <fieldset>
+            <legend>{{=T("Specifications")}}</legend>
+            {{=customfield(content_form, 'info')}}
+       </fieldset>
+   </div>
+    <div class="four columns omega">
+        <fieldset>
+            <legend>{{=T("Category & Tags")}}</legend>
+            {{=customfield(article_form, 'category_id')}}
+            {{=customfield(article_form, 'tags')}}
+        </fieldset>
+        <fieldset>
+            <legend>{{=T("options")}}</legend>
+            {{=customfield(article_form, 'privacy')}}
+            {{=customfield(article_form, 'license')}}
+        </fieldset>
+        <fieldset>
+            <legend>{{=T("Save")}}</legend>
+            {{=customfield(article_form, 'draft')}}
+            <br />
+            <button class="full-width" id="publish">{{=T("Publish")}}</button>
+            <button class="full-width" id="draft">{{=T("Save as a draft")}}</button>
+        </fieldset>
+    </div>
+</div>
+{{=article_form.custom.end}}

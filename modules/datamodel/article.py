@@ -69,9 +69,9 @@ class Article(BaseModel):
         }
 
         self.labels = {
-          "title": T("Article Title"),
+          "title": T("Title"),
           "description": T("Short Description"),
-          "picture": T("Article Picture"),
+          "picture": T("Picture"),
           "category_id": T("Category"),
           "tags": T("Tags"),
           "privacy": T("Privacy"),

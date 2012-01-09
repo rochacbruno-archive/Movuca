@@ -109,6 +109,7 @@ if session.auth:
                                   (T('Content'), False, False, [
                                           (T('Article'), False, CURL('article', 'new', args='Article'), []),
                                           (T('Cook Recipe'), False, CURL('article', 'new', args='CookRecipe'), []),
+                                          (T('Product'), False, CURL('article', 'new', args='Product'), []),
                                   ]),
                                   (T('Group'), False, False, [
                                 
