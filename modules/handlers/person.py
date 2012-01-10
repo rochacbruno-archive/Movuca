@@ -330,3 +330,12 @@ class Person(Base):
             redirect(self.CURL('home', 'index'))
         else:
             redirect(self.CURL('home', 'index', args=[username, 'loginerror']))
+
+    def facebook(self):
+        self.context.auth = self.db.auth
+        self.context.auth.login_url = self.CURL('person', 'facebook', args='login')
+        self.context.auth.login_next = self.CURL('home', 'index')
+        self.context.auth.register_next = self.CURL('person', 'account', args='profile')
+        from helpers.facebook import FaceBookAccount
+        self.context.auth.settings.login_form = FaceBookAccount()
+        self.context.form = self.context.auth()

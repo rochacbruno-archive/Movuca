@@ -72,6 +72,11 @@ def account():
     return person.render('app/person/account')
 
 
+def facebook():
+    person = Person("facebook")
+    return person.render()
+
+
 def loginbare():
     person = Person("loginbare")
     return person.render('app/person/loginbare')
