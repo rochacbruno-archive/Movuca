@@ -19,7 +19,6 @@
        
       </div>
     </div>
-
     <div class="row show-article-content">
         <div class="twelve columns alpha">
           <div class="show-article-description article-box">
@@ -101,7 +100,8 @@
         {{=related_articles}}
     {{pass}}
     </div>
-    
+    {{include 'basic/app/share_buttons.html'}}
+    {{share()}}
     <div class="row show-article-comments article-box">
         {{=comments}}
     </div>
