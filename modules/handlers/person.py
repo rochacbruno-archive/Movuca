@@ -243,7 +243,7 @@ class Person(Base):
             board_text_label = T("Write something on %s's board", user.nickname)
 
         if relation in ['contacts', 'yourself', 'follower']:
-            self.db.UserBoard.board_text.label = CAT(board_text_label, A(T(" add photo ")))
+            self.db.UserBoard.board_text.label = CAT(board_text_label, A(T(" add photo "), _onclick="alert('Sorry, Photo upload is under development!');"))
             self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
         else:
             self.context.form = ''

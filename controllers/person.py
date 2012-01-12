@@ -80,3 +80,7 @@ def facebook():
 def loginbare():
     person = Person("loginbare")
     return person.render('app/person/loginbare')
+
+
+def messages():
+    return 'This page is under construction, feel free to contribute <-- go back and click on GitHub link'

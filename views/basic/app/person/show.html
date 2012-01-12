@@ -17,16 +17,26 @@
             <div class="nine columns omega">
                 {{=buttons}}
             </div>
+            {{if user.nickname == 'rochacbruno':}}
+            <div class="nine columns omega">
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href=user.facebook)}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='twitter.png'), _alt="twitter"), _target="_blank", _title="twitter",_href=user.twitter)}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='gplus.png'), _alt="Google+"), _target="_blank", _title="Google +", _href="https://plus.google.com/u/0/116110204708544946953")}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='github.png'), _alt="github"), _target="_blank", _title="Github", _href="http://github.com/rochacbruno")}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='arroba.png'), _alt="Email"), _target="_blank", _title="Email me", _href="mailto:rochacbruno@gmail.com")}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='globe.png'), _alt="blouweb.com"), _target="_blank", _title="Blouweb.com", _href="http://blouweb.com")}}
+            </div>
+            {{pass}}
         </div>
 
         <div class="five columns omega">
             {{=resume}}
             {{include 'basic/app/share_buttons.html'}}
             <ul class="person-resume">
-            <li>
-            <img style="margin:4px;" src="http://static.addtoany.com/buttons/favicon.png" width="16" height="16" border="0" alt="Share"/>
-            {{share(classes="columns omega", like=False, tweet=False, onlyshare=True, text="Share this profile")}}
-            </li>
+                <li>
+                    <img style="margin:4px;margin-right:15px;" src="http://static.addtoany.com/buttons/favicon.png" width="16" height="16" border="0" alt="Share"/>
+                    {{share(classes="columns omega", like=False, tweet=False, onlyshare=True, text="Share this profile")}}
+                </li>
             </ul>
         </div>   
     </div>
