@@ -2,6 +2,9 @@
 {{response.files.append(URL('static','basic/js/jqModal.js'))}}
 {{response.files.append(URL('static','basic/js/article_show.js'))}}
 {{extend "basic/app/layout.html"}}
+{{block left_sidebar}}
+   {{super}}
+{{end}}
 <div class="jqmWindow" id="photomodal">
     <a href='#' class="jqmClose">{{=T("Close")}}</a>
     <br />
@@ -26,6 +29,8 @@
           </div>
       </div>
     </div>
+    {{include 'basic/app/share_with_like.html'}}
+    {{share()}}
     <div class="row show-article-content">
       {{=XML(article_data.body)}}
     </div>
@@ -34,31 +39,14 @@
            <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
        {{pass}}
     </div>
-    <div class="row show-article-share">
-        <!-- Lockerz Share BEGIN -->
-        <div class="a2a_kit a2a_default_style">
-        <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
-        <span class="a2a_divider"></span>
-        <a class="a2a_button_facebook"></a>
-        <a class="a2a_button_twitter"></a>
-        <a class="a2a_button_email"></a>
-        <a class="a2a_button_google_gmail"></a>
-        <a class="a2a_button_google_plus"></a>
-        <a class="a2a_button_tumblr"></a>
-        </div>
-        <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
-        <!-- Lockerz Share END -->
-    </div>
-
+    {{share() if len(article_data.body) > 1000 else ''}}
     <div class="row show-article-related article-box">
     {{if related_articles:}}
          <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Related articles')}}" title="{{=T('Related articles')}}">{{=T("Related articles")}}</h4>
         {{=related_articles}}
     {{pass}}
     </div>
-    
     <div class="row show-article-comments article-box">
         {{=comments}}
     </div>
-
 </div>
