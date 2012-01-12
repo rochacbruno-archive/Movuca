@@ -18,8 +18,8 @@
                 {{=buttons}}
             </div>
             <div class="nine columns omega">
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href=user.facebook) if user.facebook else ''}}
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='twitter.png'), _alt="twitter"), _target="_blank", _title="twitter",_href=user.twitter) if user.twitter else ''}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href="http://facebook.com/%s" % user.facebook.split('/')[-1].strip()) if user.facebook else ''}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='twitter.png'), _alt="twitter"), _target="_blank", _title="twitter",_href="http://twitter.com/%s" % user.twitter.split('/')[-1].strip()) if user.twitter else ''}}
 
             {{if user.nickname == 'rochacbruno':}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='gplus.png'), _alt="Google+"), _target="_blank", _title="Google +", _href="https://plus.google.com/u/0/116110204708544946953")}}
