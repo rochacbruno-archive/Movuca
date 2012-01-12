@@ -47,9 +47,44 @@
         <div class="eight columns omega">
             <div class="person-board person-box">
                 <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='board.24.png')}}" alt="{{=T('Board')}}" title="{{=T('Board')}}">{{=T("Board")}}</h4>
-                 {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,7'), ajax=True)}}
+                 {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True)}}
             </div>
         </div>
+        {{if twittername:}}
+        <div class="eight columns omega">
+            <div class="person-twitter person-box">
+                <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='sound.24.png')}}" alt="{{=T('Board')}}" title="{{=T('Board')}}">{{=T("Twitter")}}</h4>
+                 <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                <script>
+                new TWTR.Widget({
+                  version: 2,
+                  type: 'profile',
+                  rpp: 10,
+                  interval: 15000,
+                  width: 'auto',
+                  height: 100,
+                  theme: {
+                    shell: {
+                      background: '#ffffff',
+                      color: '#000000'
+                    },
+                    tweets: {
+                      background: '#ffffff',
+                      color: '#000000',
+                      links: '#1137f2'
+                    }
+                  },
+                  features: {
+                    scrollbar: false,
+                    loop: false,
+                    live: true,
+                    behavior: 'default'
+                  }
+                }).render().setUser('{{=twittername}}').start();
+                </script>
+            </div>
+        </div>
+        {{pass}}
         <div class="eight columns omega">
             <div class="person-pictures person-box">
                 <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='pictures.24.png')}}" alt="{{=T('Pictures')}}" title="{{=T('Pictures')}}">{{=T("Pictures")}}</h4>
