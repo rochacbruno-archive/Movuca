@@ -47,16 +47,8 @@
         <!-- Lockerz Share BEGIN -->
           <ul>
             <li>
-              <div class="a2a_kit a2a_default_style cook-recipe-share">
-                <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
-                <span class="a2a_divider"></span>
-                <a class="a2a_button_facebook"></a>
-                <a class="a2a_button_twitter"></a>
-                <a class="a2a_button_email"></a>
-                <a class="a2a_button_google_gmail"></a>
-                <a class="a2a_button_google_plus"></a>
-                <a class="a2a_button_tumblr"></a>
-              </div>
+            {{include 'basic/app/share_buttons.html'}}
+            {{share(classes="cook-recipe-share", columns="", like=False, tweet=False)}}
             </li>
           </ul>
           <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
@@ -100,7 +92,6 @@
         {{=related_articles}}
     {{pass}}
     </div>
-    {{include 'basic/app/share_buttons.html'}}
     {{share()}}
     <div class="row show-article-comments article-box">
         {{=comments}}
