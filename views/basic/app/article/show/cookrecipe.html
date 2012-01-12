@@ -86,13 +86,13 @@
           {{=MARKMIN(article_data.credits)}}
        </div>
     </div>
+    {{share()}}
     <div class="row show-article-related article-box">
     {{if related_articles:}}
          <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Related articles')}}" title="{{=T('Related articles')}}">{{=T("Related articles")}}</h4>
         {{=related_articles}}
     {{pass}}
     </div>
-    {{share()}}
     <div class="row show-article-comments article-box">
         {{=comments}}
     </div>

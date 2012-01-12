@@ -318,7 +318,7 @@ class Person(Base):
         self.response.meta.description = str(user.tagline or user.about) + ' ' + str(user.city or '') + ' ' + str(user.country or '')
         self.response.meta.keywords = [user.first_name, user.last_name, user.nickname]
 
-        self.context.twittername = self.context.user.twitter.split('/')[-1] if self.context.user.twitter else None
+        self.context.twittername = self.context.user.twitter.split('/')[-1] if self.context.user.twitter else ""
 
     def account(self):
         self.context.auth = self.db.auth
