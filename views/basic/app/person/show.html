@@ -17,16 +17,17 @@
             <div class="nine columns omega">
                 {{=buttons}}
             </div>
-            {{if user.nickname == 'rochacbruno':}}
             <div class="nine columns omega">
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href=user.facebook)}}
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='twitter.png'), _alt="twitter"), _target="_blank", _title="twitter",_href=user.twitter)}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href=user.facebook) if user.facebook else ''}}
+            {{=A(IMG(_src=URL('static','basic/images/icons', args='twitter.png'), _alt="twitter"), _target="_blank", _title="twitter",_href=user.twitter) if user.twitter else ''}}
+
+            {{if user.nickname == 'rochacbruno':}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='gplus.png'), _alt="Google+"), _target="_blank", _title="Google +", _href="https://plus.google.com/u/0/116110204708544946953")}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='github.png'), _alt="github"), _target="_blank", _title="Github", _href="http://github.com/rochacbruno")}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='arroba.png'), _alt="Email"), _target="_blank", _title="Email me", _href="mailto:rochacbruno@gmail.com")}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='globe.png'), _alt="blouweb.com"), _target="_blank", _title="Blouweb.com", _href="http://blouweb.com")}}
-            </div>
             {{pass}}
+            </div>
         </div>
 
         <div class="five columns omega">
