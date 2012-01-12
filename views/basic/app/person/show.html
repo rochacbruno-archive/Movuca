@@ -21,7 +21,14 @@
 
         <div class="five columns omega">
             {{=resume}}
-        </div>
+            {{include 'basic/app/share_buttons.html'}}
+            <ul class="person-resume">
+            <li>
+            <img style="margin:4px;" src="http://static.addtoany.com/buttons/favicon.png" width="16" height="16" border="0" alt="Share"/>
+            {{share(classes="columns omega", like=False, tweet=False, onlyshare=True, text="Share this profile")}}
+            </li>
+            </ul>
+        </div>   
     </div>
 
     <div class="row person-data">
