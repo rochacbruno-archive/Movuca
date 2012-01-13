@@ -84,3 +84,17 @@ def loginbare():
 
 def messages():
     return 'This page is under construction, feel free to contribute <-- go back and click on GitHub link'
+
+
+def check_availability():
+    person = Person()
+    items = dict(field=request.args(0),
+                  value=request.args(1))
+    error = person.check_availability(items)
+    if error:
+        items['error'] = error[items['field']]
+        items['img'] = str(IMG(_title=items['error'], _class="%(field)s_availability_img" % items, _src=URL('static', person.context.theme_name, args=['images', 'icons', 'notright.24.png'])))
+        return "jQuery('.%(field)s_availability_img').hide();jQuery('#auth_user_%(field)s').css({'border': '1px solid red'});jQuery('#auth_user_%(field)s').parent().append('%(img)s');" % items
+    else:
+        items['img'] = str(IMG(_title=T("Available"), _class="%(field)s_availability_img" % items, _src=URL('static', person.context.theme_name, args=['images', 'icons', 'right.24.png'])))
+        return "jQuery('.%(field)s_availability_img').hide();jQuery('#auth_user_%(field)s').css({'border': '1px solid green'});jQuery('#auth_user_%(field)s').parent().append('%(img)s');" % items

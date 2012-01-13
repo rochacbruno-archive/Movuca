@@ -57,6 +57,9 @@ class Access(Auth):
         self.settings.register_next = self.url('show')
         self.settings.registration_requires_verification = False
         self.settings.registration_requires_approval = False
+        from gluon.tools import Recaptcha
+        self.settings.captcha = Recaptcha(self.db.request, '6Ld9QswSAAAAAN1DlVBEOxFkMGsFytzSZ54v1nur', '6Ld9QswSAAAAAIzXZXJQmxKKaDS5AMrCA1Cnq5ut', options="theme:'clean', lang:'en'")
+        # TODO: GET RECAPTCHA KEYS FROM CONFIG
         from datamodel.user import User
         user = User(self)
         self.entity = user.entity

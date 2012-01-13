@@ -341,3 +341,10 @@ class Person(Base):
         from helpers.facebook import FaceBookAccount
         self.context.auth.settings.login_form = FaceBookAccount()
         self.context.form = self.context.auth()
+
+    def check_availability(self, items):
+        #returns True when error, False when ok
+        if not all(items.values()):
+            return {items['field']: "empty"}
+        items_to_check = {items['field']: items['value']}
+        return self.db.auth_user._validate(**items_to_check)

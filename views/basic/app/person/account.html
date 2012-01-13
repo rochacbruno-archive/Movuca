@@ -1,15 +1,29 @@
 {{extend 'basic/app/layout.html'}}
+{{if 'register' in request.args:}}
+    <script>
+     jQuery(function(){
+        jQuery('#auth_user_nickname').keyup(function(){
+        	ajax('{{=URL('person','check_availability')}}/nickname/'+jQuery(this).val(),[],':eval')
+        });
+        jQuery('#auth_user_email').blur(function(){
+        	ajax('{{=URL('person','check_availability')}}/email/'+jQuery(this).val(),[],':eval')
+        });
+     });
+    </script>
+{{pass}}
 <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+<hr />
 <div id="web2py_user_form">
-{{=form}}
-{{if request.args(0)=='login':}}
-{{if not 'register' in auth.settings.actions_disabled:}}
-<br/><a href="{{=URL(r=request,args='register')}}">register</a>
-{{pass}}
-{{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-<br/><a href="{{=URL(r=request,args='request_reset_password')}}">lost password</a>
-{{pass}}
-{{pass}}
+	{{=form}}
+	<hr />
+	{{if request.args(0)=='login':}}
+		{{if not 'register' in auth.settings.actions_disabled:}}
+			<br/><a href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>
+		{{pass}}
+		{{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+			<a href="{{=URL(r=request, args='request_reset_password')}}" class="button">{{=T("lost password")}}</a>
+		{{pass}}
+	{{pass}}
 </div>
 
 <script language="javascript">
