@@ -25,7 +25,7 @@
             {{else:}}
                {{if relation in ['contacts', 'following', 'yourself']:}}
                   {{=A(IMG(_src=URL('static','basic/images/icons', args='arroba.png'), _alt="Email"), _target="_blank", _title="Email me",
-                  _href="mailto:%(email)s" % user.email)}}
+                  _href="mailto:%(email)s" % user)}}
                {{pass}}
             {{pass}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href="http://facebook.com/%s" % user.facebook.split('/')[-1].strip()) if user.facebook else ''}}
