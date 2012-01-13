@@ -328,7 +328,6 @@ class Person(Base):
 
         #facebook issue
         if self.db.session["%s_setpassword" % self.context.user.id]:
-            print self.db.session["%s_setpassword" % self.context.user.id]
             self.context.user.update_record(password=self.db.session["%s_setpassword" % self.context.user.id])
             self.db.session["%s_setpassword" % self.context.user.id] = None
 
@@ -349,7 +348,6 @@ class Person(Base):
         if not self.db.config.auth.use_facebook:
             redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
         self.context.auth = self.db.auth
-        self.context.auth.settings.controller = 'person'
         self.context.auth.settings.controller = 'person'
         self.context.auth.settings.login_url = self.CURL('person', 'facebook', args='login')
         self.context.auth.settings.login_next = self.CURL('person', 'show')
