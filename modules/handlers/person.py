@@ -324,7 +324,7 @@ class Person(Base):
             from helpers.mailhide import asurl
             self.context.hiddenmail = asurl('rochacbruno@gmail.com', key['public'], key['private'])
         else:
-            self.context.hiddenmail = None
+            self.context.hiddenmail = ''
 
         #facebook issue
         if self.db.session["%s_setpassword" % self.context.user.id]:
