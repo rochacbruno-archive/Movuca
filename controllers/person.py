@@ -77,6 +77,10 @@ def facebook():
     return person.render()
 
 
+def user():
+    redirect(CURL('person', 'facebook', args=request.args, vars=request.vars))
+
+
 def loginbare():
     person = Person("loginbare")
     return person.render('app/person/loginbare')
