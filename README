@@ -2,3 +2,20 @@
 - [Demo Page](http://movu.ca/demo)
 - Inpired by Vikuit.com
 - Powered by web2py Python web framework
+
+- needs Python 2.7+
+- needs pycripto
+- needs PIL
+- needs web2py trunk
+
+- git clone git://github.com/mdipierro/web2py.git web2py
+- cd web2py/applications
+- git clone git://github.com/rochacbruno/Movuca.git demo
+- cd ..
+- python web2py.py -a "yourdesiredpassword"
+
+- Go to brower and:
+- http://localhost:8000/demo/setup/install
+- then
+- http://localhost:8000/demo
+
