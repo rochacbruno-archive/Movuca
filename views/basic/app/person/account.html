@@ -16,6 +16,9 @@
 <div id="web2py_user_form">
 	{{=form}}
 	<hr />
+	{{if request.args(0) in ['login', 'register'] and use_facebook:}}
+         <a href="{{=URL('person', 'facebook', args='login')}}" class="button">{{=T("Login with facebook")}}</a>       
+	{{pass}}
 	{{if request.args(0)=='login':}}
 		{{if not 'register' in auth.settings.actions_disabled:}}
 			<br/><a href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>

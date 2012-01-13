@@ -19,6 +19,7 @@ class Home(Base):
         self.response.meta.title = self.db.config.meta.title
         self.response.meta.description = self.db.config.meta.description
         self.response.meta.keywords = self.db.config.meta.keywords
+        self.context.use_facebook = self.db.config.auth.use_facebook
 
     def last_articles(self):
         from helpers.article import latest_articles

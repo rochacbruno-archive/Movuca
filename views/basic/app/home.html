@@ -50,13 +50,17 @@
         <a href="{{=CURL('person', 'account', args='register')}}">{{=T("Sign up")}}</a> {{=T("or login")}}
     </h4>
     <div>
+          {{if use_facebook:}}
+                 <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'facebook-connect.png']))}}</a>     
+           {{pass}}
        <form action="{{=URL('person', 'loginbare')}}" method="post">
            {{if 'loginerror' in request.args:}}
               <label style="color:red;">{{=T("Username or password incorrect")}}</label>
            {{pass}}
            <input type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'loginerror' else '')}} />
            <input type="password" name="password" id="password" placeholder="{{=T('your password')}}"/>
-           <button>{{=T("Go")}}</button> <a href="{{=CURL('person', 'account', args='request_reset_password')}}">{{=T("Lost password")}}</a>
+           <button>{{=T("Go")}}</button> 
+           <a href="{{=CURL('person', 'account', args='request_reset_password')}}">{{=T("Lost password")}}</a>
        </form>
     </div>
     {{pass}}

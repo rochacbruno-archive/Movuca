@@ -20,6 +20,7 @@ class Person(Base):
         self.CURL = self.db.CURL
         self.get_image = self.db.get_image
         self.context.theme_name = self.config.theme.name
+        self.context.use_facebook = self.db.config.auth.use_facebook
 
     def get_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
