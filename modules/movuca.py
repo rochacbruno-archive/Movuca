@@ -55,23 +55,36 @@ class Access(Auth):
         self.settings.formstyle = 'divs'
         self.settings.label_separator = ''
         self.settings.register_next = self.url('show')
-        self.settings.registration_requires_verification = False
-        self.settings.registration_requires_approval = False
-        from gluon.tools import Recaptcha
-        self.settings.captcha = Recaptcha(self.db.request, '6Ld9QswSAAAAAN1DlVBEOxFkMGsFytzSZ54v1nur', '6Ld9QswSAAAAAIzXZXJQmxKKaDS5AMrCA1Cnq5ut', options="theme:'clean', lang:'en'")
-        # TODO: GET RECAPTCHA KEYS FROM CONFIG
+        self.settings.registration_requires_verification = self.db.config.auth.registration_requires_verification
+        self.settings.registration_requires_approval = self.db.config.auth.registration_requires_approval
+        if 'register' in self.db.request.args and self.db.config.auth.use_recaptcha:
+            from gluon.tools import Recaptcha
+            recaptcha_options = dict(self.db.config.get_list('auth', 'recaptcha'))
+            self.settings.captcha = Recaptcha(self.db.request,
+                                    recaptcha_options['public'],
+                                    recaptcha_options['private'],
+                                    options="theme:'%(theme)s', lang:'%(lang)s'" % recaptcha_options)
         from datamodel.user import User
         user = User(self)
         self.entity = user.entity
+        if self.db.config.auth.server == 'default':
+            self.settings.mailer = Mailer(self.db)
+        else:
+            self.settings.mailer.server = self.db.config.auth.server
+            self.settings.mailer.sender = self.db.config.auth.sender
+            self.settings.mailer.login = self.db.config.auth.login
 
 User = Access  # It is just for direct imports
 from datamodel.user import UserTimeLine, UserContact, UserBoard
 
 
 class Mailer(Mail):
-    def __init__(self):
-        from config import Config
-        config = Config()
+    def __init__(self, db=None):
+        if not db:
+            from config import Config
+            config = Config()
+        else:
+            config = db.config
         Mail.__init__(self)
         self.settings.server = config.mail.server
         self.settings.sender = config.mail.sender

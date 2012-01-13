@@ -21,3 +21,10 @@ def test():
     from config import Config
     config = Config()
     return config.mail.sender
+
+
+def reload():
+    from config import Config
+    config = Config(autogetconfig=False)
+    config.get_config(expire=0)
+    return config.auth

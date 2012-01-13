@@ -18,14 +18,23 @@
                 {{=buttons}}
             </div>
             <div class="nine columns omega">
+
+            {{if hiddenmail:}}
+                {{=A(IMG(_src=URL('static','basic/images/icons', args='arroba.png'), _alt="Email"), _target="_blank", _title="Email me",
+                _href=hiddenmail, _onclick="window.open('%s', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" % hiddenmail)}}
+            {{else:}}
+               {{if relation in ['contacts', 'following', 'yourself']:}}
+                  {{=A(IMG(_src=URL('static','basic/images/icons', args='arroba.png'), _alt="Email"), _target="_blank", _title="Email me",
+                  _href="mailto:%(email)s" % user.email)}}
+               {{pass}}
+            {{pass}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='facebook.png'), _alt="facebook"), _target="_blank", _title="facebook", _href="http://facebook.com/%s" % user.facebook.split('/')[-1].strip()) if user.facebook else ''}}
             {{=A(IMG(_src=URL('static','basic/images/icons', args='twitter.png'), _alt="twitter"), _target="_blank", _title="twitter",_href="http://twitter.com/%s" % twittername) if twittername else ''}}
 
             {{if user.nickname == 'rochacbruno':}}
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='gplus.png'), _alt="Google+"), _target="_blank", _title="Google +", _href="https://plus.google.com/u/0/116110204708544946953")}}
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='github.png'), _alt="github"), _target="_blank", _title="Github", _href="http://github.com/rochacbruno")}}
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='arroba.png'), _alt="Email"), _target="_blank", _title="Email me", _href="mailto:rochacbruno@gmail.com")}}
-            {{=A(IMG(_src=URL('static','basic/images/icons', args='globe.png'), _alt="blouweb.com"), _target="_blank", _title="Blouweb.com", _href="http://blouweb.com")}}
+                {{=A(IMG(_src=URL('static','basic/images/icons', args='gplus.png'), _alt="Google+"), _target="_blank", _title="Google +", _href="https://plus.google.com/u/0/116110204708544946953")}}
+                {{=A(IMG(_src=URL('static','basic/images/icons', args='github.png'), _alt="github"), _target="_blank", _title="Github", _href="http://github.com/rochacbruno")}}
+                {{=A(IMG(_src=URL('static','basic/images/icons', args='globe.png'), _alt="blouweb.com"), _target="_blank", _title="Blouweb.com", _href="http://blouweb.com")}}
             {{pass}}
             </div>
         </div>

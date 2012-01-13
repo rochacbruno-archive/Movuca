@@ -30,6 +30,17 @@ class Setup(object):
             Field("photo_source", "list:string", notnull=True, default=["1:upload", "2:gravatar", "3:facebook", "4:twitter", "5:no photo"]),
             Field("gender", "list:string", notnull=True, default=["Male:Male", "Female:Female", "Not specified:Not specified"]),
             Field("privacy", "list:string", notnull=True, default=["1:Public", "2:Visible only for contacts", "3:Private"]),
+            Field("use_facebook", "boolean", notnull=True, default=False),
+            Field("facebook", "list:string", notnull=True, default=["id:133622423420992", "secret:6b0880726a21a89dfcb07c19c7807817", "admins:1766038844"]),
+            Field("use_recaptcha", "boolean", notnull=True, default=False),
+            Field("recaptcha", "list:string", notnull=True, default=["public:6Ld9QswSAAAAAN1DlVBEOxFkMGsFytzSZ54v1nur", "private:6Ld9QswSAAAAAIzXZXJQmxKKaDS5AMrCA1Cnq5ut", "theme:clean", "lang:en"]),
+            Field("use_mailhide", "boolean", notnull=True, default=False),
+            Field("mailhide", "list:string", notnull=True, default=["public:01_qmBPgGX5nvV1rYv_bxK4A==", "private:37565e87d8f80bd680afbc31e0d4e3df"]),
+            Field("registration_requires_verification", "boolean", notnull=True, default=False),
+            Field("registration_requires_approval", "boolean", notnull=True, default=False),
+            Field("server", "string", notnull=True, default="default"),
+            Field("sender", "string", notnull=True, default="mail@domain.com"),
+            Field("login", "string", notnull=True, default="teste:1234"),
             Field("setuptime", "datetime", notnull=True),
         ]
 

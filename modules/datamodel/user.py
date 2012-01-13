@@ -23,7 +23,7 @@ class User(BaseAuth):
                       Field("photo_source", "integer", default=1),
                       Field("about", "text"),
                       Field("gender", "string"),
-                      Field("birthdate", "datetime"),
+                      Field("birthdate", "date"),
                       # Preferences
                       Field("privacy", "integer", notnull=True, default=1),  # 1 = public, 2 = contacts, 3 = private
                       Field("facebookid", "string"),
@@ -120,10 +120,6 @@ class User(BaseAuth):
         }
 
     def set_validators(self):
-        #from config import Config
-        #config = Config()
-        #from gluon import current
-        #T = current.T
         config = self.db.config
         T = self.db.T
         request = self.db.request
@@ -136,7 +132,7 @@ class User(BaseAuth):
         self.entity.privacy.requires = IS_IN_SET(config.get_list('auth', 'privacy'))
         #date format not allowed on gae
         if not request.env.web2py_runtime_gae:
-            self.entity.birthdate.requires = IS_DATE(format=str(T('%Y-%m-%d')))
+            self.entity.birthdate.requires = IS_EMPTY_OR(IS_DATE(format=str(T('%Y-%m-%d'))))
 
         self.entity.website.requires = IS_EMPTY_OR(IS_URL())
 

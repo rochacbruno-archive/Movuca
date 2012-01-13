@@ -319,6 +319,18 @@ class Person(Base):
         self.response.meta.keywords = [user.first_name, user.last_name, user.nickname]
 
         self.context.twittername = self.context.user.twitter.split('/')[-1].strip() if self.context.user.twitter else ""
+        if self.db.config.auth.use_mailhide:
+            key = dict(self.db.config.get_list('auth', 'mailhide'))
+            from helpers.mailhide import asurl
+            self.context.hiddenmail = asurl('rochacbruno@gmail.com', key['public'], key['private'])
+        else:
+            self.context.hiddenmail = None
+
+        #facebook issue
+        if self.db.session["%s_setpassword" % self.context.user.id]:
+            print self.db.session["%s_setpassword" % self.context.user.id]
+            self.context.user.update_record(password=self.db.session["%s_setpassword" % self.context.user.id])
+            self.db.session["%s_setpassword" % self.context.user.id] = None
 
     def account(self):
         self.context.auth = self.db.auth
@@ -334,12 +346,16 @@ class Person(Base):
             redirect(self.CURL('home', 'index', args=[username, 'loginerror']))
 
     def facebook(self):
+        if not self.db.config.auth.use_facebook:
+            redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
         self.context.auth = self.db.auth
-        self.context.auth.login_url = self.CURL('person', 'facebook', args='login')
-        self.context.auth.login_next = self.CURL('home', 'index')
-        self.context.auth.register_next = self.CURL('person', 'account', args='profile')
+        self.context.auth.settings.controller = 'person'
+        self.context.auth.settings.controller = 'person'
+        self.context.auth.settings.login_url = self.CURL('person', 'facebook', args='login')
+        self.context.auth.settings.login_next = self.CURL('person', 'show')
+        self.context.auth.settings.register_next = self.CURL('person', 'account', args='profile')
         from helpers.facebook import FaceBookAccount
-        self.context.auth.settings.login_form = FaceBookAccount()
+        self.context.auth.settings.login_form = FaceBookAccount(self.db)
         self.context.form = self.context.auth()
 
     def check_availability(self, items):
