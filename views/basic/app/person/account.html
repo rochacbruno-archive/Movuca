@@ -17,11 +17,11 @@
 	{{=form}}
 	<hr />
 	{{if request.args(0) in ['login', 'register'] and use_facebook:}}
-         <a href="{{=URL('person', 'facebook', args='login')}}" class="button">{{=T("Login with facebook")}}</a>       
+         <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'facebook-connect.png']))}}</a>     
 	{{pass}}
 	{{if request.args(0)=='login':}}
 		{{if not 'register' in auth.settings.actions_disabled:}}
-			<br/><a href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>
+			<hr/><a href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>
 		{{pass}}
 		{{if not 'request_reset_password' in auth.settings.actions_disabled:}}
 			<a href="{{=URL(r=request, args='request_reset_password')}}" class="button">{{=T("lost password")}}</a>

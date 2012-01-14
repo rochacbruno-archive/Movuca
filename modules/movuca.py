@@ -41,10 +41,6 @@ class DataBase(DAL):
 
 class Access(Auth):
     def __init__(self, db):
-        #from gluon import current
-        #T = current.T
-        #request = current.request
-        #session = current.session
         self.db = db
         self.hmac_key = Auth.get_or_create_key()
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)

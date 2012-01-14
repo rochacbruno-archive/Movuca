@@ -56,8 +56,8 @@ class FaceBookAccount(OAuthAccount):
                             password=existent.password
                             )
             else:
-                b = user["birthday"]
-                birthday = "%s-%s-%s" % (b[-4:], b[0:2], b[-7:-5])
+                # b = user["birthday"]
+                # birthday = "%s-%s-%s" % (b[-4:], b[0:2], b[-7:-5])
                 # if 'location' in user:
                 #     session.flocation = user['location']
                 return dict(first_name=user.get('first_name', ""),
@@ -66,10 +66,10 @@ class FaceBookAccount(OAuthAccount):
                             facebook=user.get('username', user['id']),
                             nickname=str(user.get('username', '')) + str(user['id']),
                             email=user['email'],
-                            birthdate=birthday,
+                            # birthdate=birthday,
                             about=user.get("bio", ""),
                             website=user.get("website", ""),
-                            gender=user.get("gender", "Not specified").title(),
+                            # gender=user.get("gender", "Not specified").title(),
                             photo_source=3,
                             tagline=user.get("link", ""),
                             )
