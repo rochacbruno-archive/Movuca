@@ -14,24 +14,27 @@ def contact_box(row,
     CURL = current.CURL
     if kind in ['contact', 'search']:
         uid = row.id
-        thumbnail = row.thumbnail
+        # thumbnail = row.thumbnail
         name = row.nickname or row.first_name
         text = row.tagline or row.website or ''
         if not action:
             action = 'unfollow'
         if not where:
             where = 'follower'
+        user_record = row
     else:
         if not ajax:
             uid = row[kind].id
-            thumbnail = row[kind].thumbnail
+            # thumbnail = row[kind].thumbnail
             name = row[kind].nickname or row[kind].first_name
             text = row[kind].tagline or row[kind].website or ''
+            user_record = row[kind]
         else:
             uid = row.id
-            thumbnail = row.thumbnail
+            # thumbnail = row.thumbnail
             name = row.nickname or row.first_name
             text = row.tagline or row.website or ''
+            user_record = row
         if not action:
             action = 'unfollow' if kind == 'followed' else 'follow'
         if not where:
@@ -39,7 +42,7 @@ def contact_box(row,
 
     ret = DIV(_class="six columns contact-item %s" % current.getclass(2),
               _id="item_%s" % uid)
-    ret.append(IMG(_class="two columns alpha thumbnail", _src=current.get_image(thumbnail, 'user')))
+    ret.append(IMG(_class="two columns alpha thumbnail", _src=current.get_image(None, 'user', themename='basic', user=user_record)))
     infodiv = DIV(_class="four columns omega")
     infodiv.append(TAG.STRONG(name))
     if follows_you:

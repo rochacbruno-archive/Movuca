@@ -54,10 +54,13 @@ def ICONLINK(icon, text, action=None):
 def get_image(image, placeholder="image", themename='basic', user=None):
     if user:
         if user.photo_source == 1:
-            return URL('default', 'download', args=user.thumbnail, extension=False)
+            if user.thumbnail:
+                return URL('default', 'download', args=user.thumbnail, extension=False)
+            # pass and let go to return default placeholder
         elif user.photo_source == 5:
-            return URL('static', '%s/images' % themename, args='%s.png' % placeholder, extension=False)
+            pass  # pass and let go to return default placeholder
         else:
+            # try to get the image from the source
             from helpers.images import GetImages
             return GetImages.getphoto(user=user)
 

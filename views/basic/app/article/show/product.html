@@ -29,7 +29,7 @@
 <div class="twelve columns center  show-article-wrapper">
     <div class="row show-article-meta">
       <div class="two columns alpha article-author-picture">
-         {{=A(IMG(_src=get_image(article.author.thumbnail, 'user'), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+         {{=A(IMG(_src=get_image(None, 'user', themename='basic', user=article.author), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
       </div>
       <div class="ten columns omega">
           {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
