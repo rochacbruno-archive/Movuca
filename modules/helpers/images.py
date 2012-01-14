@@ -73,7 +73,7 @@ class GetImages(object):
 ########################################################################
     @staticmethod
     def get_twitter_image(username):
-        api = "http://api.twitter.com/1/users/profile_image?screen_name=%s&size=reasonably_small" % username  # bigger
+        api = "http://api.twitter.com/1/users/profile_image?screen_name=%s&size=reasonably_small" % username.split('/')[-1].strip()  # bigger
         return api
 
     @staticmethod
@@ -110,7 +110,7 @@ class GetImages(object):
 
     @staticmethod
     def get_facebook_image(user):
-        return "http://graph.facebook.com/%s/picture?type=large" % user
+        return "http://graph.facebook.com/%s/picture?type=large" % user.split('/')[-1].strip()
 
     @staticmethod
     def getphoto(user=None, img=False):
@@ -121,16 +121,16 @@ class GetImages(object):
         action = {
         '1': GetImages.get_upload_image,
         '2': GetImages.get_gravatar_image,
-        '3': GetImages.get_twitter_image,
-        '4': GetImages.get_facebook_image,
+        '3': GetImages.get_facebook_image,
+        '4': GetImages.get_twitter_image,
         '5': GetImages.get_no_image,
         }
 
         value = {
-        '1': 'photo',
+        '1': 'thumbnail',
         '2': 'email',
-        '3': 'twitter',
-        '4': 'facebook',
+        '3': 'facebook',
+        '4': 'twitter',
         '5': 'id',
         }
 

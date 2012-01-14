@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from fbappauth import CLIENT_ID, CLIENT_SECRET
+#from fbappauth import CLIENT_ID, CLIENT_SECRET
 from pyfacebook import GraphAPI, GraphAPIError
 from gluon.contrib.login_methods.oauth20_account import OAuthAccount
 from gluon import HTTP

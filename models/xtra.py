@@ -51,13 +51,22 @@ def ICONLINK(icon, text, action=None):
     return bt
 
 
-def get_image(image, placeholder="image"):
+def get_image(image, placeholder="image", themename='basic', user=None):
+    if user:
+        if user.photo_source == 1:
+            return URL('default', 'download', args=user.thumbnail, extension=False)
+        elif user.photo_source == 5:
+            return URL('static', '%s/images' % themename, args='%s.png' % placeholder, extension=False)
+        else:
+            from helpers.images import GetImages
+            return GetImages.getphoto(user=user)
+
     if image and image.startswith("http://"):
         return image
     if image:
         return URL('default', 'download', args=image, extension=False)
     else:
-        return URL('static', 'basic/images', args='%s.png' % placeholder, extension=False)
+        return URL('static', '%s/images' % themename, args='%s.png' % placeholder, extension=False)
 
 current.get_image = get_image
 

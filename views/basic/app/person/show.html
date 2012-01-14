@@ -6,7 +6,7 @@
     <div class="row person-main-info">
         <div class="eleven columns alpha">
             <div class="two columns alpha">
-                <img class="two columns" src="{{=get_image(user.thumbnail, 'user')}}">
+                <img class="two columns" src="{{=get_image(None, 'user', themename='basic', user=user)}}">
             </div>
             <div class="nine columns omega">
                 <h3>{{=get_name_of(user)}}</h3>
