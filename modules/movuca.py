@@ -50,6 +50,7 @@ class Access(Auth):
         #self.settings.profile_onvalidation = []
         self.settings.profile_onaccept = [lambda form: self.remove_facebook_alert(form)]  # remove facebook alert session
         #self.settings.change_password_onaccept = [] # send alert email
+        self.settings.controller = 'person'
         self.settings.allow_basic_login = True
         self.settings.register_verify_password = True
         self.settings.login_url = self.url('account', args='login')
@@ -74,7 +75,6 @@ class Access(Auth):
             self.db.CURL('person', 'account', args=['reset_password']) + \
             '/%(key)s to reset your password'
 
-        self.settings.controller = 'person'
         self.settings.on_failed_authorization = self.url('account', args='not_authorized')
         self.settings.formstyle = 'divs'
         self.settings.label_separator = ''
