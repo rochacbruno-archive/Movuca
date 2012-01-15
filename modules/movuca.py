@@ -46,7 +46,7 @@ class Access(Auth):
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
-        #self.settings.register_onaccept = # email
+        self.settings.register_onaccept = [lambda form: self.send_welcome_email(form)]
         #self.settings.profile_onvalidation = []
         self.settings.profile_onaccept = [lambda form: self.remove_facebook_alert(form)]  # remove facebook alert session
         #self.settings.change_password_onaccept = [] # send alert email
@@ -101,6 +101,10 @@ class Access(Auth):
     def remove_facebook_alert(self, form):
         if self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]:
             del self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]
+
+    def send_welcome_email(self, form):
+        # TODO RENDER EMAIL TEMPLATES
+        self.settings.mailer.send(to=form.vars.email, subject="Hi %(first_name)s %(last_name)s Welcome to Movuca CMS" % form.vars, message=[None, "<h1>WELCOME TO MOVUCA CMS</h1>"])
 
 
 User = Access  # It is just for direct imports

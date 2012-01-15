@@ -21,6 +21,7 @@ class Person(Base):
         self.get_image = self.db.get_image
         self.context.theme_name = self.config.theme.name
         self.context.use_facebook = self.db.config.auth.use_facebook
+        self.mail = self.db.auth.settings.mailer
 
     def get_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
@@ -95,6 +96,11 @@ class Person(Base):
                                                   "event_reference": followed.id,
                                                   "event_text": "",
                                                   "event_link": followed.nickname or followed.id})
+
+                self.mail.send(to=followed.email,
+                       subject=self.T("Hi, %(nickname)s followed you on Movuca", follower),
+                       message=[None, """<h1>You got a new follower!</h1><p>%(nickname)s is now following you, follow back!</p>Note: this is a beta test of Movuca CMS, thank you for the help with tests""" % follower])
+                       # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
                 relation = self.db.UserContact._relation(follower.id, followed.id)
                 if relation == 'contacts':
                     acount = followed.contacts + 1
@@ -225,6 +231,11 @@ class Person(Base):
                                   "event_reference": user.id,
                                   "event_text": form.vars.board_text,
                                   "event_link": user.nickname or user.id})
+
+        self.mail.send(to=user.email,
+                       subject=self.T("Hi, %(nickname)s posted on your Movuca board", writer_user),
+                       message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of Movuca CMS, thank you for the help with tests""" % form.vars])
+        # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
 
     def board(self, uid):
         T = self.T
@@ -360,6 +371,10 @@ class Person(Base):
     def check_availability(self, items):
         #returns True when error, False when ok
         if not all(items.values()):
-            return {items['field']: "empty"}
+            return {items['field']: self.db.T("Empty")}
         items_to_check = {items['field']: items['value']}
+        if self.db.session.auth:
+            if items_to_check[items['field']] == self.db.session.auth.user[items['field']]:
+                return {}
+
         return self.db.auth_user._validate(**items_to_check)

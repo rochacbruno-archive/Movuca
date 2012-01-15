@@ -1,12 +1,12 @@
 {{extend 'basic/app/layout.html'}}
-{{if 'register' in request.args:}}
+{{if request.args(0) in ['register', 'profile']:}}
     <script>
      jQuery(function(){
         jQuery('#auth_user_nickname').keyup(function(){
-        	ajax('{{=URL('person','check_availability')}}/nickname/'+jQuery(this).val(),[],':eval')
+        	ajax('{{=URL('person','check_availability')}}/nickname/'+jQuery(this).val()+'/{{=request.args(0)}}',[],':eval')
         });
         jQuery('#auth_user_email').blur(function(){
-        	ajax('{{=URL('person','check_availability')}}/email/'+jQuery(this).val(),[],':eval')
+        	ajax('{{=URL('person','check_availability')}}/email/'+jQuery(this).val()+'/{{=request.args(0)}}',[],':eval')
         });
      });
     </script>
