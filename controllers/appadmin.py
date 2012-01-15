@@ -14,6 +14,10 @@ Article(db)
 
 response.view = '%(name)s/app/appadmin.html' % db.config.theme
 
+
+config = db.config._db
+
+
 import os
 import socket
 import datetime

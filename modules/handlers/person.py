@@ -341,7 +341,7 @@ class Person(Base):
         password = self.request.vars.password
         user = self.db.auth.login_bare(username, password)
         if user:
-            redirect(self.CURL('home', 'index'))
+            redirect(self.CURL('person', 'show'))
         else:
             redirect(self.CURL('home', 'index', args=[username, 'loginerror']))
 
@@ -352,7 +352,7 @@ class Person(Base):
         self.context.auth.settings.controller = 'person'
         self.context.auth.settings.login_url = self.CURL('person', 'facebook', args='login')
         self.context.auth.settings.login_next = self.CURL('person', 'show')
-        self.context.auth.settings.register_next = self.CURL('person', 'account', args='profile')
+        self.context.auth.settings.register_next = self.CURL('person', 'show')
         from helpers.facebook import FaceBookAccount
         self.context.auth.settings.login_form = FaceBookAccount(self.db)
         self.context.form = self.context.auth()

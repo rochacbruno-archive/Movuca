@@ -54,16 +54,30 @@ def unfollow():
     person = Person()
     return person.unfollow()
 
+login_url = CURL('person', 'account', args='login')
+
 
 def show():
+    auth = session.get("auth", {})
+    user = auth.get("user", None)
+    if user:
+        user_id = user.id
+    else:
+        user_id = None
     person = Person()
-    person.show(request.args(0) or session.auth.user.id)
+    person.show(request.args(0) or user_id or redirect(login_url))
     return person.render('app/person/show')
 
 
 def board():
+    auth = session.get("auth", {})
+    user = auth.get("user", None)
+    if user:
+        user_id = user.id
+    else:
+        user_id = None
     person = Person()
-    person.board(request.args(0) or session.auth.user.id)
+    person.board(request.args(0) or user_id or redirect(login_url))
     return person.render('app/person/board')
 
 

@@ -45,6 +45,7 @@ class FaceBookAccount(OAuthAccount):
             self.graph = None
 
         if user:
+            current.session.facebooklogin = True
             existent = self.db(self.db.auth_user.email == user["email"]).select().first()
             if existent:
                 current.session["%s_setpassword" % existent.id] = existent.password
@@ -60,6 +61,7 @@ class FaceBookAccount(OAuthAccount):
                 # birthday = "%s-%s-%s" % (b[-4:], b[0:2], b[-7:-5])
                 # if 'location' in user:
                 #     session.flocation = user['location']
+                current.session["%s_is_new_from_facebook" % user['id']] = True
                 return dict(first_name=user.get('first_name', ""),
                             last_name=user.get('last_name', ""),
                             facebookid=user['id'],
@@ -72,6 +74,7 @@ class FaceBookAccount(OAuthAccount):
                             # gender=user.get("gender", "Not specified").title(),
                             photo_source=3,
                             tagline=user.get("link", ""),
+                            registration_type=2,
                             )
 
 

@@ -46,6 +46,34 @@ class Access(Auth):
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
+        #self.settings.register_onaccept = # email
+        #self.settings.profile_onvalidation = []
+        self.settings.profile_onaccept = [lambda form: self.remove_facebook_alert(form)]  # remove facebook alert session
+        #self.settings.change_password_onaccept = [] # send alert email
+        self.settings.allow_basic_login = True
+        self.settings.register_verify_password = True
+        self.settings.login_url = self.url('account', args='login')
+        self.settings.verify_email_next = self.url('account', args='login')
+        self.settings.logged_url = self.url('account', args='profile')
+        self.settings.login_next = self.db.CURL('person', 'show')
+        self.settings.register_next = self.db.CURL('person', 'show')
+        self.settings.profile_next = self.db.CURL('person', 'show')
+        self.settings.retrieve_username_next = self.url('account', args='login')
+        self.settings.retrieve_password_next = self.url('account', args='login')
+        self.settings.request_reset_password_next = self.url('account', args='login')
+        self.settings.reset_password_next = self.url('account', args='login')
+        self.settings.change_password_next = self.db.CURL('person', 'show')
+
+        self.messages.verify_email = \
+            'Click on the link http://' + self.db.request.env.http_host + \
+            self.db.CURL('person', 'account', args=['verify_email']) + \
+            '/%(key)s to verify your email'
+
+        self.messages.reset_password = \
+            'Click on the link http://' + self.db.request.env.http_host + \
+            self.db.CURL('person', 'account', args=['reset_password']) + \
+            '/%(key)s to reset your password'
+
         self.settings.controller = 'person'
         self.settings.on_failed_authorization = self.url('account', args='not_authorized')
         self.settings.formstyle = 'divs'
@@ -69,6 +97,11 @@ class Access(Auth):
             self.settings.mailer.server = self.db.config.auth.server
             self.settings.mailer.sender = self.db.config.auth.sender
             self.settings.mailer.login = self.db.config.auth.login
+
+    def remove_facebook_alert(self, form):
+        if self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]:
+            del self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]
+
 
 User = Access  # It is just for direct imports
 from datamodel.user import UserTimeLine, UserContact, UserBoard

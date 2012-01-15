@@ -343,3 +343,13 @@ img.thumbnail {
     background:none;
     border:none;
 }
+
+
+.alert {
+    background: none repeat scroll 0 0 #FFFFA0;
+    border: 1px solid #E5E597;
+}
+
+.alert p {
+    margin:10px;
+}
