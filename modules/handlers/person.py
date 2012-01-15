@@ -232,7 +232,8 @@ class Person(Base):
                                   "event_text": form.vars.board_text,
                                   "event_link": user.nickname or user.id})
 
-        self.mail.send(to=user.email,
+        if writer_user.id != user.id:
+            self.mail.send(to=user.email,
                        subject=self.T("Hi, %(nickname)s posted on your Movuca board", writer_user),
                        message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % form.vars])
         # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
