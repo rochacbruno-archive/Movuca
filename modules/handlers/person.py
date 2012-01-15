@@ -99,7 +99,7 @@ class Person(Base):
 
                 self.mail.send(to=followed.email,
                        subject=self.T("Hi, %(nickname)s followed you on Movuca", follower),
-                       message=[None, """<h1>You got a new follower!</h1><p>%(nickname)s is now following you, follow back!</p>Note: this is a beta test of Movuca CMS, thank you for the help with tests""" % follower])
+                       message=[None, """<h1>You got a new follower!</h1><p>%(nickname)s is now following you, follow back!</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % follower])
                        # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
                 relation = self.db.UserContact._relation(follower.id, followed.id)
                 if relation == 'contacts':
@@ -234,7 +234,7 @@ class Person(Base):
 
         self.mail.send(to=user.email,
                        subject=self.T("Hi, %(nickname)s posted on your Movuca board", writer_user),
-                       message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of Movuca CMS, thank you for the help with tests""" % form.vars])
+                       message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % form.vars])
         # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
 
     def board(self, uid):

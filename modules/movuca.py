@@ -104,7 +104,7 @@ class Access(Auth):
 
     def send_welcome_email(self, form):
         # TODO RENDER EMAIL TEMPLATES
-        self.settings.mailer.send(to=form.vars.email, subject="Hi %(first_name)s %(last_name)s Welcome to Movuca CMS" % form.vars, message=[None, "<h1>WELCOME TO MOVUCA CMS</h1>"])
+        self.settings.mailer.send(to=form.vars.email, subject="Hi %(first_name)s %(last_name)s Welcome to Movuca CMS" % form.vars, message=[None, "<h1>WELCOME TO MOVU.CA CMS</h1><p>It is just a beta test of http://movu.ca CMS, thank you for helping with tests!</p>"])
 
 
 User = Access  # It is just for direct imports
