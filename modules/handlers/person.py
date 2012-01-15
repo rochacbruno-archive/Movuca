@@ -335,7 +335,7 @@ class Person(Base):
         if self.db.config.auth.use_mailhide:
             key = dict(self.db.config.get_list('auth', 'mailhide'))
             from helpers.mailhide import asurl
-            self.context.hiddenmail = asurl('rochacbruno@gmail.com', key['public'], key['private'])
+            self.context.hiddenmail = asurl(self.context.user.email, key['public'], key['private'])
         else:
             self.context.hiddenmail = ''
 
