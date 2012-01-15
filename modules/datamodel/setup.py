@@ -78,7 +78,7 @@ class Setup(object):
         ]
 
         self.comment_options = [
-           Field("system", "string", requires=IS_IN_SET([comment_systems]), notnull=True, default="internal"),
+           Field("system", "string", requires=IS_IN_SET(comment_systems), notnull=True, default="internal"),
            Field("anonymous", "boolean", notnull=True, default=False),
            Field("disqus_shortname", "string", notnull=True, default="movuca"),
            Field("disqus_developer", "integer", notnull=True, default=1),
