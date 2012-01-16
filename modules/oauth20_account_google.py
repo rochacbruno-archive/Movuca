@@ -100,7 +100,7 @@ class OAuthAccount(object):
         if self.session.code:
             data = dict(client_id=self.client_id,
                         client_secret=self.client_secret,
-                        redirect_uri="http://localhost:8000/demo/person/google/login",
+                        redirect_uri="%(redirect_scheme)s://%(redirect_uri)s" % self.client,
                         code=self.session.code,
                         grant_type='authorization_code',
                         scope='https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile')
@@ -129,10 +129,11 @@ class OAuthAccount(object):
         self.session.token = None
         return None
 
-    def __init__(self, g, client_id, client_secret, auth_url, token_url, **args):
+    def __init__(self, g, client, auth_url, token_url, **args):
         self.globals = g
-        self.client_id = client_id
-        self.client_secret = client_secret
+        self.client = client
+        self.client_id = client['id']
+        self.client_secret = client['secret']
         self.request = g['request']
         self.session = g['session']
         self.auth_url = auth_url

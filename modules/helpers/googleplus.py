@@ -23,7 +23,7 @@ class GooglePlusAccount(OAuthAccount):
         client = dict(db.config.get_list('auth', 'google'))
         # kid = '908928538602.apps.googleusercontent.com'
         # secret = 'HH6ITKRWOkhS-prHliD21weA'
-        OAuthAccount.__init__(self, g, client['id'], client['secret'],
+        OAuthAccount.__init__(self, g, client,
                               self.AUTH_URL, self.TOKEN_URL,
                               scope='https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
                               user_agent='google-api-client-python-plus-cmdline/1.0',
