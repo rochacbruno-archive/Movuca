@@ -44,7 +44,7 @@ class Access(Auth):
         self.db = db
         self.hmac_key = Auth.get_or_create_key()
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
-        self.settings.logout_onlogout = lambda user: self.remove_session(user)
+        #self.settings.logout_onlogout = lambda user: self.remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
         self.settings.register_onaccept = [lambda form: self.send_welcome_email(form)]
         #self.settings.profile_onvalidation = []
