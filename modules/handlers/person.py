@@ -309,8 +309,8 @@ class Person(Base):
                     'follower': CURL('person', 'follow', args=[user.id, 'profile'])}
 
             buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class=""))
-            buttons.append(TAG.BUTTON(T("Message"), _class=""))
-            buttons.append(TAG.BUTTON(T("Report/Block"), _class=""))
+            buttons.append(TAG.BUTTON(T("Message"), _class="", _onclick="alert('Sorry, it is not implemented yet')"))
+            buttons.append(TAG.BUTTON(T("Report/Block"), _class="", _onclick="alert('Sorry, it is not implemented yet')"))
         else:
             buttons.append(A(T("Edit Profile"), _class="button", _href=CURL('default', 'user', args='profile')))
             buttons.append(A(T("My Messages"), _class="button", _href=CURL('person', 'messages', args=user.nickname or user.id)))
@@ -341,10 +341,31 @@ class Person(Base):
         else:
             self.context.hiddenmail = ''
 
-        #facebook issue
+        #facebook/google issue
         if self.db.session["%s_setpassword" % self.context.user.id]:
             self.context.user.update_record(password=self.db.session["%s_setpassword" % self.context.user.id])
             self.db.session["%s_setpassword" % self.context.user.id] = None
+
+        #user extra links image
+        # TODO: limit the number of links?
+        self.context.extra_links = []
+        if user.extra_links:
+            image_map = {"github.com": 'github.png',
+                         "plus.google.com": 'gplus.png',
+                         'twitter.com': 'twitter.png',
+                         'facebook.com': 'facebook.png'}
+            titles = {"github.com": 'Github',
+                         "plus.google.com": 'Google +',
+                         'twitter.com': 'Twitter',
+                         'facebook.com': 'Facebook'}
+
+            for link in user.extra_links:
+                for key, img in image_map.items():
+                    if key in link:
+                        self.context.extra_links.append({"img": URL('static', '%s/images/icons' % self.context.theme_name, args=img), "link": link, "title": titles.get(key, "")})
+                        continue
+                if link not in [item['link'] for item in self.context.extra_links]:
+                    self.context.extra_links.append({"img": URL('static', '%s/images/icons' % self.context.theme_name, args='globe.png'), "link": link, "title": link})
 
     def account(self):
         self.context.auth = self.db.auth

@@ -63,11 +63,12 @@ class FaceBookAccount(OAuthAccount):
                 # if 'location' in user:
                 #     session.flocation = user['location']
                 current.session["%s_is_new_from_facebook" % user['id']] = True
+                self.db.auth.send_welcome_email(user)
                 return dict(first_name=user.get('first_name', ""),
                             last_name=user.get('last_name', ""),
                             facebookid=user['id'],
                             facebook=user.get('username', user['id']),
-                            nickname=IS_SLUG()(user.get('username', "%(first_name)s-%(last_name)s" % user) + user['id'][:5])[0],
+                            nickname=IS_SLUG()(user.get('username', "%(first_name)s-%(last_name)s" % user) + "-" + user['id'][:5])[0],
                             email=user['email'],
                             # birthdate=birthday,
                             about=user.get("bio", ""),

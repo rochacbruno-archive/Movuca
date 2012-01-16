@@ -46,7 +46,7 @@ class Access(Auth):
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: self.remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
-        self.settings.register_onaccept = [lambda form: self.send_welcome_email(form)]
+        self.settings.register_onaccept = [lambda form: self.send_welcome_email(form.vars)]
         #self.settings.profile_onvalidation = []
         self.settings.profile_onaccept = [lambda form: self.remove_facebook_google_alert(form)]  # remove facebook / google alert session
         #self.settings.change_password_onaccept = [] # send alert email
@@ -107,9 +107,16 @@ class Access(Auth):
     def remove_session(self, user):
         del self.db.session.auth
 
-    def send_welcome_email(self, form):
+    def send_welcome_email(self, user):
         # TODO RENDER EMAIL TEMPLATES
-        self.settings.mailer.send(to=form.vars.email, subject="Hi %(first_name)s %(last_name)s Welcome to Movuca CMS" % form.vars, message=[None, "<h1>WELCOME TO MOVU.CA CMS</h1><p>It is just a beta test of http://movu.ca CMS, thank you for helping with tests!</p>"])
+        if 'first_name' in user:
+            subject = "Hi %(first_name)s %(last_name)s Welcome to Movuca CMS"
+        elif 'name' in user:
+            subject = "Hi %(name)s Welcome to Movuca CMS"
+        else:
+            subject = "Hi Welcome to Movuca CMS"
+
+        self.settings.mailer.send(to=user['email'], subject=subject % user, message=[None, "<h1>WELCOME TO MOVU.CA CMS</h1><p>It is just a beta test of http://movu.ca CMS, thank you for helping with tests!</p>"])
 
 
 User = Access  # It is just for direct imports

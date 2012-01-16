@@ -67,6 +67,7 @@ class GooglePlusAccount(OAuthAccount):
                 # if 'location' in user:
                 #     session.flocation = user['location']
                 current.session["%s_is_new_from_google" % user['id']] = True
+                self.db.auth.send_welcome_email(user)
                 return dict(
                             first_name=user.get('given_name', user["name"].split()[0]),
                             last_name=user.get('family_name', user["name"].split()[-1]),
