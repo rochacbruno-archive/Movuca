@@ -92,17 +92,12 @@ def facebook():
 
 
 def google():
-    if 'state' in request.vars and request.vars.state == 'google':
-        session.state = request.vars.state
     person = Person("google")
     return person.render()
 
 
 def user():
-    if session.state and session.state == 'google':
-        redirect(CURL('person', 'google', args=request.args, vars=request.vars))
-    else:
-        redirect(CURL('person', 'facebook', args=request.args, vars=request.vars))
+    redirect(CURL('person', 'facebook', args=request.args, vars=request.vars))
 
 
 def loginbare():
