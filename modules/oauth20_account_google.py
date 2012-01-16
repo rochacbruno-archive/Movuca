@@ -67,7 +67,7 @@ class OAuthAccount(object):
             path_info = next
         else:
             path_info = r.env.path_info
-        uri = '%s:8000//%s%s' %(url_scheme, http_host, path_info)
+        uri = '%s://%s%s' %(url_scheme, http_host, path_info)
         if r.get_vars and not next:
             uri += '?' + urlencode(r.get_vars)
         return uri
