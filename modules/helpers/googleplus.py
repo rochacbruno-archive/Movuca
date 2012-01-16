@@ -2,7 +2,7 @@
 
 #from fbappauth import CLIENT_ID, CLIENT_SECRET
 #from pyfacebook import GraphAPI, GraphAPIError
-from gluon.contrib.login_methods.oauth20_account import OAuthAccount
+from oauth20_account_google import OAuthAccount
 from gluon import HTTP
 from gluon import current
 
