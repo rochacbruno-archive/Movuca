@@ -67,7 +67,7 @@ class OAuthAccount(object):
             path_info = next
         else:
             path_info = r.env.path_info
-        uri = '%s://%s%s' %(url_scheme, http_host, path_info)
+        uri = '%s:8000//%s%s' %(url_scheme, http_host, path_info)
         if r.get_vars and not next:
             uri += '?' + urlencode(r.get_vars)
         return uri
@@ -100,10 +100,10 @@ class OAuthAccount(object):
         if self.session.code:
             data = dict(client_id=self.client_id,
                         client_secret=self.client_secret,
-                        redirect_uri="http://movu.ca/demo/person/google/login",
+                        redirect_uri="http://localhost:8000/demo/person/google/login",
                         code=self.session.code,
                         grant_type='authorization_code',
-                        scope='https://www.googleapis.com/auth/userinfo.email')
+                        scope='https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile')
 
             # if self.args:
             #     data.update(self.args)
@@ -118,15 +118,9 @@ class OAuthAccount(object):
 
             if open_url:
                 try:
-                    tokendata = cgi.parse_qs(open_url.read())
-                    self.session.token = dict([(k,v[-1]) for k,v in tokendata.items()])
-                    # set expiration absolute time try to avoid broken
-                    # implementations where "expires_in" becomes "expires"
-                    # if self.session.token.has_key('expires_in'):
-                    #     exps = 'expires_in'
-                    # else:
-                    exps = 'expires_in'
-                    self.session.token['expires'] = int(self.session.token[exps]) + \
+                    from gluon.contrib import simplejson as json
+                    self.session.token = json.loads(open_url.read())
+                    self.session.token['expires'] = int(self.session.token['expires_in']) + \
                         time.time()
                 finally:
                     opener.close()

@@ -48,7 +48,7 @@ class Access(Auth):
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
         self.settings.register_onaccept = [lambda form: self.send_welcome_email(form)]
         #self.settings.profile_onvalidation = []
-        self.settings.profile_onaccept = [lambda form: self.remove_facebook_alert(form)]  # remove facebook alert session
+        self.settings.profile_onaccept = [lambda form: self.remove_facebook_google_alert(form)]  # remove facebook / google alert session
         #self.settings.change_password_onaccept = [] # send alert email
         self.settings.controller = 'person'
         self.settings.allow_basic_login = True
@@ -98,9 +98,11 @@ class Access(Auth):
             self.settings.mailer.sender = self.db.config.auth.sender
             self.settings.mailer.login = self.db.config.auth.login
 
-    def remove_facebook_alert(self, form):
+    def remove_facebook_google_alert(self, form):
         if self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]:
             del self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]
+        if self.db.session["%s_is_new_from_google" % self.db.session.auth.user.googleid]:
+            del self.db.session["%s_is_new_from_google" % self.db.session.auth.user.googleid]
 
     def send_welcome_email(self, form):
         # TODO RENDER EMAIL TEMPLATES

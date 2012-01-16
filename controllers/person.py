@@ -97,7 +97,10 @@ def google():
 
 
 def user():
-    redirect(CURL('person', 'google', args=request.args, vars=request.vars))
+    if 'state' in request.vars and request.vars.state == 'google':
+        redirect(CURL('person', 'google', args=request.args, vars=request.vars))
+    else:
+        redirect(CURL('person', 'facebook', args=request.args, vars=request.vars))
 
 
 def loginbare():

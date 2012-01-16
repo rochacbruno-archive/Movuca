@@ -21,6 +21,7 @@ class Person(Base):
         self.get_image = self.db.get_image
         self.context.theme_name = self.config.theme.name
         self.context.use_facebook = self.db.config.auth.use_facebook
+        self.context.use_google = self.db.config.auth.use_google
         self.mail = self.db.auth.settings.mailer
 
     def get_timeline(self, query, orderby=None, limitby=None):
@@ -370,8 +371,8 @@ class Person(Base):
         self.context.form = self.context.auth()
 
     def google(self):
-        # if not self.db.config.auth.use_facebook:
-        #     redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
+        if not self.db.config.auth.use_google:
+            redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
         self.context.auth = self.db.auth
         self.context.auth.settings.controller = 'person'
         self.context.auth.settings.login_url = self.CURL('person', 'google', args='login')

@@ -57,6 +57,8 @@ def get_image(image, placeholder="image", themename='basic', user=None):
             if user.thumbnail:
                 return URL('default', 'download', args=user.thumbnail, extension=False)
             # pass and let go to return default placeholder
+        elif user.photo_source == 6:
+            return user.googlepicture
         elif user.photo_source == 5:
             pass  # pass and let go to return default placeholder
         else:

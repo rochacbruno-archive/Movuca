@@ -7,6 +7,12 @@
     </div>
 {{pass}}
 
+{{if session["%s_is_new_from_google" % user.googleid]:}}
+    <div class="sixteen columns alert" id="google-alert">
+        <p>{{=XML(T("Welcome! You logged in using your google account, please go to your <a href='%s'>settings</a> page choose your username and complete your profile!", CURL('person', 'account', args='profile')))}}</p>
+    </div>
+{{pass}}
+
 
 <div class="sixteen columns" id="contact-wrapper">
 

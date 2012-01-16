@@ -27,6 +27,8 @@ class User(BaseAuth):
                       # Preferences
                       Field("privacy", "integer", notnull=True, default=1),  # 1 = public, 2 = contacts, 3 = private
                       Field("facebookid", "string"),
+                      Field("googleid", "string"),
+                      Field("googlepicture", "string"),
                       Field("registration_type", "integer", notnull=True, default=1),  # 1 = local, 2 = Facebook
                       # counters
                       Field("articles", "integer", notnull=True, default=0),

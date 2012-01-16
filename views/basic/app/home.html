@@ -53,6 +53,9 @@
           {{if use_facebook:}}
                  <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'facebook-connect.png']))}}</a>     
            {{pass}}
+           {if use_google:}}
+                 <a href="{{=URL('person', 'google', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'google-connect.png']))}}</a>     
+           {{pass}}
        <form action="{{=URL('person', 'loginbare')}}" method="post">
            {{if 'loginerror' in request.args:}}
               <label style="color:red;">{{=T("Username or password incorrect")}}</label>
