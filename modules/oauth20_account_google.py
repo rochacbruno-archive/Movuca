@@ -122,10 +122,10 @@ class OAuthAccount(object):
                     self.session.token = dict([(k,v[-1]) for k,v in tokendata.items()])
                     # set expiration absolute time try to avoid broken
                     # implementations where "expires_in" becomes "expires"
-                    if self.session.token.has_key('expires_in'):
-                        exps = 'expires_in'
-                    else:
-                        exps = 'expires'
+                    # if self.session.token.has_key('expires_in'):
+                    #     exps = 'expires_in'
+                    # else:
+                    exps = 'expires_in'
                     self.session.token['expires'] = int(self.session.token[exps]) + \
                         time.time()
                 finally:
