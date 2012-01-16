@@ -103,7 +103,7 @@ class OAuthAccount(object):
                         redirect_uri="http://movu.ca/demo/person/google/login",
                         code=self.session.code,
                         grant_type='authorization_code',
-                        scope='https://www.googleapis.com/auth/plus.me,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile')
+                        scope='https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile')
 
             # if self.args:
             #     data.update(self.args)
