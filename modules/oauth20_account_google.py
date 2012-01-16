@@ -101,7 +101,8 @@ class OAuthAccount(object):
             data = dict(client_id=self.client_id,
                         client_secret=self.client_secret,
                         redirect_uri=self.session.redirect_uri,
-                        response_type='token', code=self.session.code,
+                        #response_type='token', 
+                        code=self.session.code,
                         grant_type='authorization_code')
 
 
