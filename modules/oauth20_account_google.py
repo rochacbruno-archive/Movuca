@@ -102,11 +102,11 @@ class OAuthAccount(object):
                         client_secret=self.client_secret,
                         redirect_uri=self.session.redirect_uri,
                         code=self.session.code,
-                        grant_type='authorization_code')
+                        grant_type='authorization_code',
+                        scope='https://www.googleapis.com/auth/plus.me')
 
-            if self.args:
-                data.update(self.args)
-            del data['response_type']
+            # if self.args:
+            #     data.update(self.args)
             open_url = None
             opener = self.__build_url_opener(self.token_url)
             try:
