@@ -87,8 +87,7 @@ def account():
 
 
 def facebook():
-    if 'state' in request.vars and request.vars.state == 'google':
-        session.state = 'facebook'
+    session.state = 'facebook'
     person = Person("facebook")
     return person.render()
 
