@@ -67,7 +67,7 @@ class FaceBookAccount(OAuthAccount):
                             last_name=user.get('last_name', ""),
                             facebookid=user['id'],
                             facebook=user.get('username', user['id']),
-                            nickname=IS_SLUG(user.get('username', "%(first_name)s-%(last_name)s" % user) + user['id'][:5])[0],
+                            nickname=IS_SLUG()(user.get('username', "%(first_name)s-%(last_name)s" % user) + user['id'][:5])[0],
                             email=user['email'],
                             # birthdate=birthday,
                             about=user.get("bio", ""),
