@@ -44,7 +44,7 @@ class Access(Auth):
         self.db = db
         self.hmac_key = Auth.get_or_create_key()
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
-        #self.settings.logout_onlogout = lambda user: remove_session(user)
+        self.settings.logout_onlogout = lambda user: self.remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
         self.settings.register_onaccept = [lambda form: self.send_welcome_email(form)]
         #self.settings.profile_onvalidation = []
@@ -103,6 +103,9 @@ class Access(Auth):
             del self.db.session["%s_is_new_from_facebook" % self.db.session.auth.user.facebookid]
         if self.db.session["%s_is_new_from_google" % self.db.session.auth.user.googleid]:
             del self.db.session["%s_is_new_from_google" % self.db.session.auth.user.googleid]
+
+    def remove_session(self, user):
+        del self.db.session.auth
 
     def send_welcome_email(self, form):
         # TODO RENDER EMAIL TEMPLATES

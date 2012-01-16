@@ -366,7 +366,6 @@ class Person(Base):
         self.context.auth.settings.controller = 'person'
         self.context.auth.settings.login_url = self.CURL('person', 'facebook', args='login')
         self.context.auth.settings.login_next = self.CURL('person', 'show')
-        self.context.auth.settings.logout_next = self.CURL('person', 'facebook', args='logout')
         self.context.auth.settings.register_next = self.CURL('person', 'show')
         from helpers.facebook import FaceBookAccount
         self.context.auth.settings.login_form = FaceBookAccount(self.db)
@@ -379,7 +378,6 @@ class Person(Base):
         self.context.auth.settings.controller = 'person'
         self.context.auth.settings.login_url = self.CURL('person', 'google', args='login')
         self.context.auth.settings.login_next = self.CURL('person', 'show')
-        self.context.auth.settings.logout_next = self.CURL('person', 'google', args='logout')
         self.context.auth.settings.register_next = self.CURL('person', 'show')
         from helpers.googleplus import GooglePlusAccount
         self.context.auth.settings.login_form = GooglePlusAccount(self.db)
