@@ -101,13 +101,12 @@ class OAuthAccount(object):
             data = dict(client_id=self.client_id,
                         client_secret=self.client_secret,
                         redirect_uri=self.session.redirect_uri,
-                        #response_type='token', 
                         code=self.session.code,
                         grant_type='authorization_code')
 
-
             if self.args:
                 data.update(self.args)
+            del data['response_type']
             open_url = None
             opener = self.__build_url_opener(self.token_url)
             try:
