@@ -23,7 +23,7 @@ class GooglePlusAccount(OAuthAccount):
         secret = 'HH6ITKRWOkhS-prHliD21weA'
         OAuthAccount.__init__(self, g, kid, secret,
                               self.AUTH_URL, self.TOKEN_URL,
-                              scope='https://www.googleapis.com/auth/plus.me',
+                              scope='https://www.googleapis.com/auth/plus.me,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile',
                               user_agent='google-api-client-python-plus-cmdline/1.0',
                               xoauth_displayname='Google Plus Client Example App',
                               response_type='code',
