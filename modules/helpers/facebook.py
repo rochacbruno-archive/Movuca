@@ -4,6 +4,7 @@
 from pyfacebook import GraphAPI, GraphAPIError
 from gluon.contrib.login_methods.oauth20_account import OAuthAccount
 from gluon import HTTP
+from gluon.validators import IS_SLUG
 from gluon import current
 
 
@@ -66,7 +67,7 @@ class FaceBookAccount(OAuthAccount):
                             last_name=user.get('last_name', ""),
                             facebookid=user['id'],
                             facebook=user.get('username', user['id']),
-                            nickname=str(user.get('username', '')) + str(user['id']),
+                            nickname=IS_SLUG(user.get('username', "%(first_name)s-%(last_name)s" % user) + user['id'][:5])[0],
                             email=user['email'],
                             # birthdate=birthday,
                             about=user.get("bio", ""),
