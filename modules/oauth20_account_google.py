@@ -100,7 +100,7 @@ class OAuthAccount(object):
         if self.session.code:
             data = dict(client_id=self.client_id,
                         client_secret=self.client_secret,
-                        redirect_uri=self.session.redirect_uri,
+                        redirect_uri="http://movu.ca/demo/person/google/login",
                         code=self.session.code,
                         grant_type='authorization_code',
                         scope='https://www.googleapis.com/auth/plus.me')
