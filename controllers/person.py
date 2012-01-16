@@ -91,6 +91,11 @@ def facebook():
     return person.render()
 
 
+def google():
+    person = Person("google")
+    return person.render()
+
+
 def user():
     redirect(CURL('person', 'facebook', args=request.args, vars=request.vars))
 

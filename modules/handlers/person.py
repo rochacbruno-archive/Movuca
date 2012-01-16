@@ -369,6 +369,18 @@ class Person(Base):
         self.context.auth.settings.login_form = FaceBookAccount(self.db)
         self.context.form = self.context.auth()
 
+    def google(self):
+        # if not self.db.config.auth.use_facebook:
+        #     redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
+        self.context.auth = self.db.auth
+        self.context.auth.settings.controller = 'person'
+        self.context.auth.settings.login_url = self.CURL('person', 'google', args='login')
+        self.context.auth.settings.login_next = self.CURL('person', 'show')
+        self.context.auth.settings.register_next = self.CURL('person', 'show')
+        from helpers.googleplus import GooglePlusAccount
+        self.context.auth.settings.login_form = GooglePlusAccount(self.db)
+        self.context.form = self.context.auth()
+
     def check_availability(self, items):
         #returns True when error, False when ok
         if not all(items.values()):
