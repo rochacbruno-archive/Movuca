@@ -270,11 +270,12 @@ class Person(Base):
     def show(self, uid):
         T = self.T
         CURL = self.CURL
+        user = None
         try:
             user = self.db.auth_user[int(uid)]
         except Exception:
             user = self.db.auth_user(nickname=uid)
-        self.context.user = user
+        self.context.user = user or redirect(self.CURL('home', 'index'))
 
         buttons = CAT()
         if self.session.auth and self.session.auth.user:
