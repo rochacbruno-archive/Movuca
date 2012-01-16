@@ -26,8 +26,10 @@ class GooglePlusAccount(OAuthAccount):
                               scope='https://www.googleapis.com/auth/plus.me',
                               user_agent='google-api-client-python-plus-cmdline/1.0',
                               xoauth_displayname='Google Plus Client Example App',
-                              grant_type='authorization_code',
-                              response_type='code'
+                              response_type='code',
+                              redirect_uri="http://movu.ca/demo/person/google/login",
+                              approval_prompt='force',
+                              state='google'
                              )
         self.graph = None
 
