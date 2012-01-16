@@ -27,6 +27,7 @@ class GooglePlusAccount(OAuthAccount):
                               user_agent='google-api-client-python-plus-cmdline/1.0',
                               xoauth_displayname='Google Plus Client Example App',
                               grant_type='authorization_code',
+                              response_type='code'
                              )
         self.graph = None
 
