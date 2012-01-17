@@ -5,12 +5,15 @@
     var w2p_ajax_datetime_format = "{{=T('%Y-%m-%d %H:%M:%S')}}";
     //--></script>
 {{
-response.files.insert(0,URL('static','basic/js/jquery.js'))
+response.files.insert(0,URL('static','basic/js/jquery-1.7.1.min.js'))
+response.files.insert(1,URL('static','basic/js/jquery-ui-1.8.17.custom.min.js'))
 response.files.insert(1,URL('static','basic/css/anytime.css'))
-response.files.insert(2,URL('static','basic/js/anytime.js'))
-response.files.insert(3,URL('static','basic/js/web2py.js'))
-response.files.insert(4,URL('static','basic/js/tabs.js'))
-response.files.insert(5,URL('static','basic/js/basic.js'))
+response.files.insert(3,URL('static','basic/js/anytime.js'))
+response.files.insert(4,URL('static','basic/js/web2py.js'))
+response.files.insert(5,URL('static','basic/js/tabs.js'))
+response.files.insert(6,URL('static','basic/js/basic.js'))
+response.files.insert(7,URL('static','css/tagit-simple-grey.css'))
+response.files.insert(8,URL('static','js/tagit.js'))
 response.include_meta()
 response.include_files()
 }}

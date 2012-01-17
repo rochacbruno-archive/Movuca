@@ -4,6 +4,7 @@ from gluon.dal import Field
 from basemodel import BaseModel
 from gluon.validators import *
 from gluon import current
+from helpers.widgets import TagsWidget
 
 
 class Article(BaseModel):
@@ -44,6 +45,10 @@ class Article(BaseModel):
                       # lists
                       Field("subscriptions", "integer", default=0),
                      ]
+
+        self.widgets = {
+            "tags": TagsWidget.widget
+        }
 
         self.visibility = {
                      'author': (False, True),
@@ -91,7 +96,8 @@ class Article(BaseModel):
           "title": IS_NOT_EMPTY(),
           "description": IS_LENGTH(255, 10),
           "picture": IS_EMPTY_OR(IS_IMAGE()),
-          "license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None)
+          "license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
+          #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True)
         }
 
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}

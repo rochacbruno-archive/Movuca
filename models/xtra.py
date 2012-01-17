@@ -2,7 +2,7 @@
 
 
 def tagfy(tags, extension='html'):
-    links = [A(" %s " % tag.strip(), _href=CURL('article', 'list', vars=dict(tag=tag), extension=extension)) for tag in tags[:5]]
+    links = [A(" %s " % tag.strip(), _href=CURL('article', 'list', vars=dict(tag=tag), extension=extension)) for tag in tags]
     return CAT(*links)
 
 
@@ -175,3 +175,6 @@ else:
     response.menu.append((T('Join'), False, CURL('person', 'account', args='register'), []))
 
 response.menu.append((T('GitHub'), False, "http://github.com/rochacbruno/Movuca", []))
+
+# only for articles
+

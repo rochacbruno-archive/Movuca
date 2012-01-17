@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from gluon.sqlhtml import OptionsWidget, FormWidget
+from gluon.sqlhtml import OptionsWidget, FormWidget, StringWidget
 from gluon import *
+from gluon import current
 
 
 class Radio(OptionsWidget):
@@ -213,3 +214,31 @@ class Upload(FormWidget):
         if extension in ['gif', 'png', 'jpg', 'jpeg', 'bmp']:
             return True
         return False
+
+
+class TagsWidget(StringWidget):
+
+    @classmethod
+    def widget(cls, field, value, **attributes):
+        _id = '%s_%s' % (field._tablename, field.name)
+        _name = field.name
+        attributes['_name'] = _name
+        if field.type == 'list:integer':
+            _class = 'integer'
+        else:
+            _class = 'string'
+        requires = field.requires  # if isinstance(field.requires, (IS_NOT_EMPTY, IS_LIST_OF)) else None
+        attributes['requires'] = requires
+        attributes['hideerror'] = True
+        items = [LI(v) for v in value or ['']]
+        script = SCRIPT("""
+// from http://webspirited.com/tagit/?theme=simple-grey#demos
+$(function() {
+
+            var availableTags = %s;
+
+            $('#%s_tagit').tagit({tagSource: availableTags, select: true});
+            });
+""" % (str(value or '[]'), _id))
+        attributes['_id'] = _id + '_tagit'
+        return TAG[''](UL(*items, **attributes), script)

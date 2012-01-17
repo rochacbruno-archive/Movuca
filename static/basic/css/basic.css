@@ -353,3 +353,11 @@ img.thumbnail {
 .alert p {
     margin:10px;
 }
+
+.tagit-input:focus {
+        border: none !important;
+        color: #444 !important;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow:  none !important;
+        width:  50px !important; }

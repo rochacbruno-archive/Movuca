@@ -53,6 +53,8 @@
   response.files.append(URL('static','basic/css/superfish.css'))
     response.files.append(URL('static','basic/css/basic.css'))
   response.files.append(URL('static','basic/js/superfish.js'))
+
+
   }}
 
   {{include 'basic/app/web2py_ajax.html'}}
@@ -69,11 +71,6 @@
   middle_columns = {0:'sixteen',1:'twelve',2:'eight'}[
      (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
   }}
-
-   <!-- uncomment here to load jquery-ui -->
-  <!-- <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" /> -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
-   <!--uncomment to load jquery-ui // -->
 
 </head>
 <body>
