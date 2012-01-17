@@ -4,7 +4,9 @@ from gluon.dal import Field
 from basemodel import BaseModel
 from gluon.validators import *
 from gluon import current
-from helpers.widgets import TagsWidget
+from helpers.widgets import StringListWidget
+from helpers.customvalidators import COMMA_SEPARATED_LIST
+from gluon import SQLFORM
 
 
 class Article(BaseModel):
@@ -47,7 +49,7 @@ class Article(BaseModel):
                      ]
 
         self.widgets = {
-            "tags": TagsWidget.widget
+            "tags": StringListWidget.widget  # SQLFORM.widgets.string.widget #TagsWidget.widget
         }
 
         self.visibility = {
@@ -97,7 +99,8 @@ class Article(BaseModel):
           "description": IS_LENGTH(255, 10),
           "picture": IS_EMPTY_OR(IS_IMAGE()),
           "license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
-          #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True)
+          #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True),
+          "tags": COMMA_SEPARATED_LIST()
         }
 
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}

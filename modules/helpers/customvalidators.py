@@ -31,6 +31,16 @@ class IS_EMAIL_LIST(object):
             return (emails, None)
 
 
+class COMMA_SEPARATED_LIST(object):
+    def __init__(self, error_message="value %s is invalid", sep=","):
+        self.error_message = error_message
+        self.sep = sep
+
+    def __call__(self, value):
+            items = value.strip().replace('\n', '').replace('\t', '').split(self.sep)
+            return ([item.strip() for item in items], None)
+
+
 class IS_EMPTY_OR_MASK_OR(IS_EMPTY_OR):
     def __call__(self, value):
         if value in ['____-__-__', '    -  -  ',

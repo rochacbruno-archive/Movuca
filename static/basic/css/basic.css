@@ -354,7 +354,7 @@ img.thumbnail {
     margin:10px;
 }
 
-.tagit-input:focus {
+.tagit-new input, .tagit-new input:focus {
         border: none !important;
         color: #444 !important;
         -moz-box-shadow: none !important;

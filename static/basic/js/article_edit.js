@@ -7,6 +7,8 @@ $(document).ready(function () {
       check_check($(this));
    });
 
+   $('#article_tags').tagit({removeConfirmation: true});
+
 
 
 });

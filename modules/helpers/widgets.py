@@ -216,29 +216,52 @@ class Upload(FormWidget):
         return False
 
 
-class TagsWidget(StringWidget):
+class StringListWidget(FormWidget):
+    _class = 'string'
 
     @classmethod
     def widget(cls, field, value, **attributes):
-        _id = '%s_%s' % (field._tablename, field.name)
-        _name = field.name
-        attributes['_name'] = _name
-        if field.type == 'list:integer':
-            _class = 'integer'
+        """
+        generates an INPUT text tag.
+
+        see also: :meth:`FormWidget.widget`
+        """
+        if value:
+            value = ','.join(value)
         else:
-            _class = 'string'
-        requires = field.requires  # if isinstance(field.requires, (IS_NOT_EMPTY, IS_LIST_OF)) else None
-        attributes['requires'] = requires
-        attributes['hideerror'] = True
-        items = [LI(v) for v in value or ['']]
-        script = SCRIPT("""
-// from http://webspirited.com/tagit/?theme=simple-grey#demos
-$(function() {
+            value = None
+        default = dict(
+            _type='text',
+            value=(not value is None and str(value)) or '',
+            )
+        attr = cls._attributes(field, default, **attributes)
 
-            var availableTags = %s;
+        return INPUT(**attr)
 
-            $('#%s_tagit').tagit({tagSource: availableTags, select: true});
-            });
-""" % (str(value or '[]'), _id))
-        attributes['_id'] = _id + '_tagit'
-        return TAG[''](UL(*items, **attributes), script)
+
+# class TagsWidget(StringWidget):
+
+#     @classmethod
+#     def widget(cls, field, value, **attributes):
+#         _id = '%s_%s' % (field._tablename, field.name)
+#         _name = field.name
+#         attributes['_name'] = _name
+#         if field.type == 'list:integer':
+#             _class = 'integer'
+#         else:
+#             _class = 'string'
+#         requires = field.requires  # if isinstance(field.requires, (IS_NOT_EMPTY, IS_LIST_OF)) else None
+#         attributes['requires'] = requires
+#         attributes['hideerror'] = True
+#         items = [LI(v) for v in value or ['']]
+#         script = SCRIPT("""
+# // from http://webspirited.com/tagit/?theme=simple-grey#demos
+# $(function() {
+
+#             var availableTags = %s;
+
+#             $('#%s_tagit').tagit({tagSource: availableTags, select: true});
+#             });
+# """ % (str(value or '[]'), _id))
+#         attributes['_id'] = _id + '_tagit'
+#         return TAG[''](UL(*items, **attributes), script)

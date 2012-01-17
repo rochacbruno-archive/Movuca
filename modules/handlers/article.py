@@ -240,9 +240,6 @@ class Article(Base):
         self.context.action_links = self.action_links()
         self.db.commit()
 
-    def add_tags_to_form(self, form):
-            form.vars['tags'] = self.request.vars.tags
-
     def edit(self):
         self.context.customfield = customfield
         self.get()
@@ -251,7 +248,7 @@ class Article(Base):
         self.context.article_form = SQLFORM(self.db.article, self.context.article)
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
 
-        if self.context.article_form.process(onvalidation=self.add_tags_to_form).accepted:
+        if self.context.article_form.process().accepted:
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
             self.new_article_event('update_article', data={'event_link': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
                                                            'event_text': self.context.article_form.vars.description,
@@ -260,12 +257,6 @@ class Article(Base):
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             self.context.article.update_record(search_index="|".join(str(value) for value in self.request.vars.values()))
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
-        # else:
-        #     if self.request.vars:
-        #         self.context.article.tags = self.request.vars.tags
-        #         errors = self.context.article_form.errors
-        #         self.context.article_form = SQLFORM(self.db.article, self.context.article)
-        #         self.context.article_form.errors = errors
 
         self.context.content_form = SQLFORM(content.entity, article_data)
 
@@ -302,7 +293,7 @@ class Article(Base):
         self.db.article.content_type_id.default = content_type.id
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='')
         self.context.customfield = customfield
-        if self.context.form.process(onvalidation=self.add_tags_to_form).accepted:
+        if self.context.form.process().accepted:
             try:
                 article_id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
                 self.context.form.vars.article_id = article_id
