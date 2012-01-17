@@ -4,13 +4,29 @@
 # ## make sure administrator is on localhost
 # ###########################################################
 
-from movuca import Access, DataBase
-db = DataBase()
-auth = Access(db)
-from datamodel.article import Article, ContentType, Category
-ContentType(db)
-Category(db)
-Article(db)
+from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
+from datamodel.article import Article, ContentType, Category, Favoriters, Subscribers, Likers, Dislikers, Comments
+from datamodel.ads import Ads
+from datamodel.contenttypes import Article as ArticleData
+from datamodel.contenttypes import CookRecipe, CookRecipeBook, CodeRecipe, Product
+db = DataBase([User,
+               UserTimeLine,
+               ContentType,
+               Category,
+               Article,
+               Favoriters,
+               Subscribers,
+               Likers,
+               Dislikers,
+               Comments,
+               UserBoard,
+               UserContact,
+               CookRecipe,
+               CookRecipeBook,
+               CodeRecipe,
+               Product])
+ArticleData(db)
+auth = db.auth
 
 response.view = '%(name)s/app/appadmin.html' % db.config.theme
 
