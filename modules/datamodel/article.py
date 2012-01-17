@@ -49,7 +49,7 @@ class Article(BaseModel):
                      ]
 
         self.widgets = {
-            "tags": StringListWidget.widget  # SQLFORM.widgets.string.widget #TagsWidget.widget
+            "tags": StringListWidget.widget
         }
 
         self.visibility = {
@@ -89,7 +89,7 @@ class Article(BaseModel):
         self.comments = {
           "description": T("Text to be shown at home page, email and RSS"),
           "picture": T("Optional picture to be shown at home page, email and RSS (a thumbnail will be created)"),
-          "tags": T("A tag is used for search and to find related articles. Include one tag per line (press enter to wrap)"),
+          "tags": T("Tag is used for search and to find related articles. (comma separated)"),
           "privacy": T("Who can read this article?"),
           "draft": T("Check to save as a draft")
         }

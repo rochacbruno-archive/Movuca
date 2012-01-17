@@ -12,11 +12,18 @@ response.files.insert(3,URL('static','basic/js/anytime.js'))
 response.files.insert(4,URL('static','basic/js/web2py.js'))
 response.files.insert(5,URL('static','basic/js/tabs.js'))
 response.files.insert(6,URL('static','basic/js/basic.js'))
-response.files.insert(7,URL('static','basic/css/custom-theme/jquery-ui-1.8.16.custom.css'))
-response.files.insert(8,URL('static','basic/css/jquery.tagit.css'))
-#response.files.insert(8,URL('static','basic/css/tagit.ui-zendesk.css'))
-response.files.insert(9,URL('static','basic/js/tag-it.js'))
+}}
 
+{{
+if request.controller in ['article'] and request.function in ['edit','new']:
+    response.files.insert(7,URL('static','basic/css/custom-theme/jquery-ui-1.8.16.custom.css'))
+    response.files.insert(8,URL('static','basic/css/jquery.tagit.css'))
+    #response.files.insert(8,URL('static','basic/css/tagit.ui-zendesk.css'))
+    response.files.insert(9,URL('static','basic/js/tag-it.js'))
+pass
+}}
+
+{{
 response.include_meta()
 response.include_files()
 }}
