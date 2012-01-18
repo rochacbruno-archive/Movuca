@@ -1,5 +1,5 @@
 {{def eventbox(event):}}
-<li class="timeline-item row eight columns" style="padding-top:5px;margin:0px;">
+<li class="timeline-item row eight columns" style="padding-top:5px;margin:0px;" onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
    <div class="row">
 	<div class="seven alpha columns timeline-text" style="font-size:14px;line-height:14px;padding:0px;">
         {{if event.event_link_to:}}

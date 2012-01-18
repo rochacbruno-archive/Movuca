@@ -1,5 +1,5 @@
 {{def eventbox(event):}}
-<li class="timeline-item row four columns" style="padding-top:5px;margin:0px;">
+<li class="timeline-item row four columns" style="padding-top:5px;margin:0px;" onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
 <div class="row">
 	<div class="one columns alpha" style="margin-right:0;">
 	    <a href="{{=event_info[event.event_type]['url']}}/{{=event.event_link}}" title="{{=event.nickname}}"><img width="30" height="30" src="{{=event.event_image}}"></a>
