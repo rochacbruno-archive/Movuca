@@ -10,7 +10,7 @@
 	    <a href="{{=event_info[event.event_type]['url']}}/{{=event.event_link}}">{{=event.nickname}}</a>
 
         {{if event.event_link_to:}}
-            <a href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}">
+            <a style="text-decoration:none;color:#000;" href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}">
 	            {{=event_info[event.event_type]['title'] % event}}
 	        </a>
 	    {{else:}}

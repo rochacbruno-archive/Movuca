@@ -3,7 +3,7 @@
    <div class="row">
 	<div class="seven alpha columns timeline-text" style="font-size:14px;line-height:14px;padding:0px;">
         {{if event.event_link_to:}}
-            <a href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}">
+            <a style="text-decoration:none;color:#000;" href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}">
 	            {{=event_info[event.event_type]['title'] % event}}
 	        </a>
 	    {{else:}}
