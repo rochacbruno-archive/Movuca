@@ -96,7 +96,9 @@ class Person(Base):
                                                   "event_to": followed.nickname or followed.first_name,
                                                   "event_reference": followed.id,
                                                   "event_text": "",
-                                                  "event_link": followed.nickname or followed.id})
+                                                  "event_link": follower.nickname or follower.id,
+                                                  "event_link_to": followed.nickname or followed.id,
+                                                  "event_image_to": self.get_image(None, 'user', themename=self.context.theme_name, user=followed)})
 
                 self.mail.send(to=followed.email,
                        subject=self.T("Hi, %(nickname)s followed you on Movuca", follower),
@@ -228,10 +230,12 @@ class Person(Base):
                                   "nickname": writer_user.nickname,
                                   "event_type": "wrote_on_wall",
                                   "event_image": self.get_image(None, 'user', themename=self.context.theme_name, user=writer_user),
-                                  "event_to": self.T("own") if relation == 'yourself' else user.nickname or user.first_name,
+                                  "event_to": "" if relation == 'yourself' else user.nickname or user.first_name,
                                   "event_reference": user.id,
                                   "event_text": form.vars.board_text,
-                                  "event_link": user.nickname or user.id})
+                                  "event_link": writer_user.nickname or writer_user.id,
+                                  "event_link_to": "" if relation == 'yourself' else user.nickname or user.id,
+                                  "event_image_to": "" if relation == 'yourself' else self.get_image(None, 'user', themename=self.context.theme_name, user=user)})
 
         if writer_user.id != user.id:
             self.mail.send(to=user.email,

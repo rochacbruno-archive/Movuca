@@ -208,6 +208,8 @@ class UserTimeLine(BaseModel):
             Field("event_text", "text"),
             Field("event_image", "string"),
             Field("event_link", "string"),
+            Field("event_image_to", "string"),
+            Field("event_link_to", "string"),
         ]
 
         self.representation = {
@@ -235,7 +237,9 @@ class UserTimeLine(BaseModel):
             event_to=v.event_to,
             event_reference=int(v.event_reference),
             event_text=event_text[:50],
-            event_link=v.event_link
+            event_link=v.event_link,
+            event_image_to=v.get("event_image_to", ""),
+            event_link_to=v.get("event_link_to", ""),
         )
         self.entity.insert(**data)
         self.db.commit()

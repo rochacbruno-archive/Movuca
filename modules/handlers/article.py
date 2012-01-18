@@ -74,7 +74,9 @@ class Article(Base):
             form = SQLFORM(self.db.Comments, formstyle='divs')
             if form.process(message_onsuccess=self.T('Comment included')).accepted:
                 self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text,
-                                                                                            'event_link': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
+                                                                                            'event_link': form.vars.nickname or form.vars.user_id,
+                                                                                            'event_image': self.get_image(None, 'user', themename=self.context.theme_name, user=self.session.auth.user),
+                                                                                            'event_link_to': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
         else:
             form = A(self.T("Login to post comments"),
                      _class="button",
@@ -250,10 +252,10 @@ class Article(Base):
 
         if self.context.article_form.process().accepted:
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
-            self.new_article_event('update_article', data={'event_link': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
+            self.new_article_event('update_article', data={'event_link_to': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
                                                            'event_text': self.context.article_form.vars.description,
                                                            'event_to': "%s (%s)" % (self.context.article.content_type_id.title, self.context.article.title),
-                                                           'event_image': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
+                                                           'event_image_to': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             self.context.article.update_record(search_index="|".join(str(value) for value in self.request.vars.values()))
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
@@ -376,11 +378,13 @@ class Article(Base):
                                                 user_id=user.id,
                                                 nickname=user.nickname or "%(first_name)s %(last_name)s" % user,
                                                 event_type=event_type,
-                                                event_image=data.get('event_image', self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)),
+                                                event_image=data.get('event_image', self.get_image(None, 'user', themename=self.context.theme_name, user=user)),
                                                 event_to=data.get('event_to', "%s (%s)" % (self.context.article.content_type_id.title, self.context.article.title)),
                                                 event_reference=data.get('event_reference', self.context.article.id),
                                                 event_text=data.get('event_text', self.context.article.description),
-                                                event_link=data.get('event_link', "%s/%s" % (self.context.article.id, self.context.article.slug))
+                                                event_link=data.get('event_link', user.nickname or user.id),
+                                                event_image_to=data.get('event_image_to', self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)),
+                                                event_link_to=data.get('event_link_to', "%s/%s" % (self.context.article.id, self.context.article.slug)),
                                             ))
 
     def favorite(self):
