@@ -24,7 +24,8 @@ db = DataBase([User,
                CookRecipe,
                CookRecipeBook,
                CodeRecipe,
-               Product])
+               Product,
+               Ads])
 ArticleData(db)
 auth = db.auth
 

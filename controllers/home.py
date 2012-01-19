@@ -21,13 +21,6 @@ def index():
     return home.render("app/home")
 
 
-def base():
-    from handlers.base import Base
-    base = Base()
-    base.context.teste = "TESTEEEE"
-    return base.render("app/base")
-
-
 def search():
     q = request.vars.q
     kind = request.vars.kind
