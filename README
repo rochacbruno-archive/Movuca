@@ -19,3 +19,9 @@
 - then
 - http://localhost:8000/demo
 
+
+"""
+This file is part of Movuca The Social CMS
+Copyrighted by Bruno Cezar Rocha <rochacbruno@gmail.com>
+License: LGPLv3 (http://www.gnu.org/licenses/lgpl.html)
+"""

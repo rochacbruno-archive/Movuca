@@ -23,7 +23,7 @@ from datetime import datetime
 def pdate(value):
     if isinstance(value, str):
         value = datetime.strptime(value, "%s %s" % (DATEFORMAT, TIMEFORMAT))
-    return T(prettydate(value))
+    return prettydate(value, T=T)
 
 current.pdate = pdate
 current.ftime = ftime

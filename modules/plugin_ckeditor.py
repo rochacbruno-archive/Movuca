@@ -8,7 +8,7 @@ class CKEditor(object):
     """
     Integrates CKEditor nicely into web2py.
     """
-    def __init__(self, db=None):
+    def __init__(self, db=None, theme_name='basic'):
         """
         Initializes the CKEditor module. Requires a DAL instance.
         """
@@ -24,6 +24,7 @@ class CKEditor(object):
         self.settings.file_length_min = 0           # no minimum
         self.settings.spellcheck_while_typing = True
         self.T = current.T
+        self.theme_name = theme_name
 
         #current.plugin_ckeditor = self
 
@@ -34,8 +35,9 @@ class CKEditor(object):
         Called after settings are set to create the required tables for dealing
         with file uploads from CKEditor.
         """
-        from movuca import DataBase
-        self.db = DataBase()
+        from movuca import DataBase, User
+        from datamodel.article import Category, ContentType, Article
+        self.db = DataBase([User, Category, ContentType, Article])
 
         upload_name = self.settings.table_upload_name
 
@@ -248,7 +250,7 @@ class CKEditor(object):
         ckeditor_js = URL('static', 'plugin_ckeditor/ckeditor.js')
         jquery_js = URL('static', 'plugin_ckeditor/adapters/jquery.js')
         ckeip_js = URL('static', 'plugin_ckeditor/ckeip.js')
-        contents_css = "['%s', '%s']" % (URL('static', 'basic/css/web2py.css'), URL('static', 'plugin_ckeditor/contents.css'))
+        contents_css = "['%s', '%s']" % (URL('static', '%s/css/web2py.css' % self.theme_name), URL('static', 'plugin_ckeditor/contents.css'))
 
         immediate = ''
         if selector:

@@ -105,7 +105,7 @@ class Article(Base):
                       *[LI(
                            H5(
                               A(
-                                 self.T("%s %s" % (comment.nickname or comment.user_id,
+                                 self.T("%s %s", (comment.nickname or comment.user_id,
                                                    self.db.pdate(comment.commenttime))),
                                _href=self.CURL('person', 'show', args=comment.nickname or comment.user_id))
                              ),
@@ -565,15 +565,15 @@ class Article(Base):
         T = self.T
         userid = self.session.auth.user.id if self.session.auth else 0
         icons = {
-            "views": ICONLINK(userid, "views", T("Views (%s)" % article.views or 0), title=T("The number of times this page has been displayed"), theme_name=self.context.theme_name),
-            "favorite": ICONLINK(userid, "favorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('favorite', args=request.args), T("Click to add to your favorites"), theme_name=self.context.theme_name),
-            "unfavorite": ICONLINK(userid, "unfavorite", T("Favorite (%s)" % article.favorited or 0), "ajax('%s',[], 'links')" % CURL('unfavorite', args=request.args), T("Click to remove from your favorites"), theme_name=self.context.theme_name),
-            "like": ICONLINK(userid, "like", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('like', args=request.args), T("Click to like"), theme_name=self.context.theme_name),
-            "unlike": ICONLINK(userid, "unlike", T("Like (%s)" % article.likes or 0), "ajax('%s',[], 'links')" % CURL('unlike', args=request.args), T("Click to remove the like"), theme_name=self.context.theme_name),
-            "dislike": ICONLINK(userid, "dislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('dislike', args=request.args), T("Click to dislike"), theme_name=self.context.theme_name),
-            "undislike": ICONLINK(userid, "undislike", T("Dislike (%s)" % article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('undislike', args=request.args), T("Click to remove the dislike"), theme_name=self.context.theme_name),
-            "subscribe": ICONLINK(userid, "subscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('subscribe', args=request.args), T("Click to subscribe to this article updates"), theme_name=self.context.theme_name),
-            "unsubscribe": ICONLINK(userid, "unsubscribe", T("Subscribe (%s)" % article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args), T("Click to unsubscribe from this article updates"), theme_name=self.context.theme_name),
+            "views": ICONLINK(userid, "views", T("Views (%s)", article.views or 0), title=T("The number of times this page has been displayed"), theme_name=self.context.theme_name),
+            "favorite": ICONLINK(userid, "favorite", T("Favorite (%s)", article.favorited or 0), "ajax('%s',[], 'links')" % CURL('favorite', args=request.args), T("Click to add to your favorites"), theme_name=self.context.theme_name),
+            "unfavorite": ICONLINK(userid, "unfavorite", T("Favorite (%s)", article.favorited or 0), "ajax('%s',[], 'links')" % CURL('unfavorite', args=request.args), T("Click to remove from your favorites"), theme_name=self.context.theme_name),
+            "like": ICONLINK(userid, "like", T("Like (%s)", article.likes or 0), "ajax('%s',[], 'links')" % CURL('like', args=request.args), T("Click to like"), theme_name=self.context.theme_name),
+            "unlike": ICONLINK(userid, "unlike", T("Like (%s)", article.likes or 0), "ajax('%s',[], 'links')" % CURL('unlike', args=request.args), T("Click to remove the like"), theme_name=self.context.theme_name),
+            "dislike": ICONLINK(userid, "dislike", T("Dislike (%s)", article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('dislike', args=request.args), T("Click to dislike"), theme_name=self.context.theme_name),
+            "undislike": ICONLINK(userid, "undislike", T("Dislike (%s)", article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('undislike', args=request.args), T("Click to remove the dislike"), theme_name=self.context.theme_name),
+            "subscribe": ICONLINK(userid, "subscribe", T("Subscribe (%s)", article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('subscribe', args=request.args), T("Click to subscribe to this article updates"), theme_name=self.context.theme_name),
+            "unsubscribe": ICONLINK(userid, "unsubscribe", T("Subscribe (%s)", article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args), T("Click to unsubscribe from this article updates"), theme_name=self.context.theme_name),
             "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args), T("Click to edit"), theme_name=self.context.theme_name)
         }
 

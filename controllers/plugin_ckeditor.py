@@ -45,8 +45,9 @@ def browse():
             set = set(table_upload[key] == value)
 
     rows = set.select(orderby=table_upload.title)
-    
-    return dict(rows=rows, cknum=request.vars.CKEditorFuncNum)
+    #aditional images
+    article_images = db(db.article.author == session.auth.user.id).select(db.article.title, db.article.medium_thumbnail)
+    return dict(rows=rows, cknum=request.vars.CKEditorFuncNum, article_images=article_images)
 
 
 def delete():
