@@ -22,7 +22,7 @@ class CKEditor(object):
         self.settings.browse_filter = {}
         self.settings.file_length_max = 10485760    # 10 MB
         self.settings.file_length_min = 0           # no minimum
-        self.settings.spellcheck_while_typing = True
+        self.settings.spellcheck_while_typing = False
         self.T = current.T
         self.theme_name = theme_name
 
@@ -234,14 +234,14 @@ class CKEditor(object):
                         { name: 'insert', items : [ 'Image','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
                         { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                         { name: 'colors', items : [ 'TextColor','BGColor' ] },
-                        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About','syntaxhighlight' ] }
                      ]""",
             'basic': """[
                         { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
                         { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','-','Blockquote','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
                         { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
                         { name: 'insert', items : [ 'Image','Table','Smiley','SpecialChar'] },
-                        { name: 'colors', items : [ 'TextColor' ] },
+                        { name: 'colors', items : [ 'TextColor','syntaxhighlight'] },
                      ]""",
         }
 
@@ -298,6 +298,8 @@ class CKEditor(object):
                         filebrowserBrowseUrl: '%(browse_url)s',
                         toolbar: %(toolbar)s,
                         scayt_autoStartup: %(scayt)s,
+                        uiColor: 'transparent',
+                        extraPlugins: 'syntaxhighlight',
                     }
                 }
                 %(immediate)s
