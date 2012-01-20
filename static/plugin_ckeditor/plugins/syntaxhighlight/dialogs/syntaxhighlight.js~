@@ -112,7 +112,7 @@ CKEDITOR.dialog.add("syntaxhighlight",function(c){
 					  label:c.lang.syntaxhighlight.langLbl,
 					  "default":"python",
 					  widths:["25%","75%"],
-					  items:[["Bash (Shell)","bash"],["C#","csharp"],["C++","cpp"],["CSS","css"],["Delphi","delphi"],["Diff","diff"],["Groovy","groovy"],["Javascript","jscript"],["Java","java"],["Java FX","javafx"],["Perl","perl"],["PHP","php"],["Plain (Text)","plain"],["Python","python"],["Web2py","web2py"],["Ruby","ruby"],["Scala","scala"],["SQL","sql"],["VB","vb"],["XML/XHTML","xml"]],
+					  items:[["Bash (Shell)","bash"],["C#","csharp"],["C++","cpp"],["CSS","css"],["Delphi","delphi"],["Diff","diff"],["Groovy","groovy"],["Javascript","jscript"],["Java","java"],["Java FX","javafx"],["Perl","perl"],["PHP","php"],["Plain (Text)","plain"],["Python","python"],["Ruby","ruby"],["Scala","scala"],["SQL","sql"],["VB","vb"],["XML/XHTML","xml"]],
 					  setup:function(f){if(f.lang){this.setValue(f.lang)}},
 					  commit:function(f){f.lang=this.getValue()}}]
 				},
