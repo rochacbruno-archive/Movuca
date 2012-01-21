@@ -17,7 +17,7 @@ def index():
     home = Home(['featured', 'ads'])
     home.context.left_sidebar_enabled = True
     home.context.right_sidebar_enabled = True
-    home.context.header_enabled = True
+    home.context.header_enabled = not request.user_agent().is_mobile
     return home.render("app/home")
 
 

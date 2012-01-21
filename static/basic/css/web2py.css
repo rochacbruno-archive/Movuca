@@ -23,7 +23,7 @@ ol, ul { padding-left: 30px }
 li { margin-bottom: 0.5em; }
 span, input, select, textarea, button, label, a { display: inline }
 img { border: 0; }
-blockquote, blockquote p, p blockquote { font-style: italic; margin: 0.5em 30px 0.5em 30px; font-size: 0.9em}
+/*blockquote, blockquote p, p blockquote { font-style: italic; margin: 0.5em 30px 0.5em 30px; font-size: 0.9em}*/
 em { font-style: italic; }
 strong { font-weight: bold; }
 small { font-size: 0.8em; }

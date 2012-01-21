@@ -16,6 +16,7 @@
         .list-article-title {
             margin:0px;
             line-height:100%;
+            margin-bottom:10px;
         }
 
         .list-article-description a {

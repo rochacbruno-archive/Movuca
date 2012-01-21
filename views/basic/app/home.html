@@ -19,31 +19,6 @@
 {{end}}
 
 {{block left_sidebar}}
-   <h4 class="bottom-line">
-        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
-        {{=T("Pages & Groups")}}
-    </h4>
-    
-{{end}}
-
-
-{{if session.auth:}}
-  <h4 class="bottom-line">
-      <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
-      {{=T("Your Feed")}}
-  </h4>
-  {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,8'), ajax=True)}}
-{{pass}}
-
-<h4 class="bottom-line">
-  <img src="{{=URL('static','basic/images/icons', args='attach_round.24.png')}}" alt="{{=T('Articles')}}" title="{{=T('Articles')}}">
-  {{=T("Articles")}}
-</h4>
-{{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
-
-
-
-{{block right_sidebar}}
     {{if not session.auth:}}
     <h4 class="bottom-line">
         <img src="{{=URL('static','basic/images/icons', args='edge_arrow_right.24.png')}}" alt="{{=T('Login')}}" title="{{=T('Login')}}">
@@ -66,7 +41,42 @@
            <a href="{{=CURL('person', 'account', args='request_reset_password')}}">{{=T("Lost password")}}</a>
        </form>
     </div>
+    {{else:}}
+    <h4 class="bottom-line">
+        <img src="{{=URL('static','basic/images/icons', args='edge_arrow_right.24.png')}}" alt="{{=T('Login')}}" title="{{=T('Login')}}">
+        {{=T("Welcome")}}
+    </h4>
+    <div>
+    {{=A(IMG(_src=get_image(None, 'user', themename='basic', user=session.auth.user), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+    <br />
+    {{=A(session.auth.user.nickname, _href=CURL('person','show', args=article.author.nickname or article.author))}}
+    </div>    
     {{pass}}
+<!--    <h4 class="bottom-line">
+        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+        {{=T("Pages & Groups")}}
+    </h4> -->
+    
+{{end}}
+
+
+{{if session.auth:}}
+  <h4 class="bottom-line">
+      <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+      {{=T("Your Feed")}}
+  </h4>
+  {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,8'), ajax=True)}}
+{{pass}}
+
+<h4 class="bottom-line">
+  <img src="{{=URL('static','basic/images/icons', args='attach_round.24.png')}}" alt="{{=T('Articles')}}" title="{{=T('Articles')}}">
+  {{=T("Articles")}}
+</h4>
+{{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
+
+
+
+{{block right_sidebar}}
     <h4 class="bottom-line">
         <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
         {{=T("Public Activities")}}
