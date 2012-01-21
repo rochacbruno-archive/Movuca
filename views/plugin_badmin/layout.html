@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="{{=T.accepted_language or 'en'}}" class="no-js">
+  <head>
+    <meta charset="utf-8" />	  	
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>{{=response.title or request.application}}</title>
+    
+    <meta name="application-name" content="{{=request.application}}" />	
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    
+    <link rel="shortcut icon" href="{{=URL('static','favicon.ico')}}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{=URL('static','favicon.png')}}">
+
+    <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
+    
+    {{#------  require CSS and JS files for this page (read info in base.css) ------}}
+    {{response.files.append(URL('static','plugin_badmin/bootstrap-1.2.0.min.css'))}}
+    {{#------ include web2py specific js code (jquery, calendar, form stuff) ------}}
+    {{include 'web2py_ajax.html'}}
+
+    <style>
+    html,#footer{ background:url({{=URL(c='static',f='css/images/bg.png')}}); }
+    #content{
+      padding:60px 10px 30px;
+      background:white;
+      width:940px;
+    }
+    #footer{ padding:60px 10px; }
+    </style>
+    <script>
+    $(function(){
+      for(var i=0;i<3;i++)
+        $('.warning').animate({opacity:0},100).animate({opacity:1},100)
+      $('.close').click(function(){
+        $(this).parent().slideUp()
+      })
+      $("body").bind("click", function (e) {
+        $('.dropdown-toggle, .menu').parent("li").removeClass("open");
+      });
+      $(".dropdown-toggle, .menu").click(function (e) {
+        $('.dropdown-toggle, .menu').parent("li").removeClass("open");
+        var $li = $(this).parent("li").toggleClass('open');
+        return false;
+      });
+    })
+    </script>
+  </head>
+  
+  <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->	
+  <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+  <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+  <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+  <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> <body class="{{=request.function}}"> <!--<![endif]-->
+    
+	<div class="topbar">
+	    <div class="topbar-inner">
+        <div class="container">
+	  <h3 class="logo"><a href="{{=URL('index')}}">{{=request.application}}</a></h3>
+  	  <ul class="nav">
+        {{for c in sorted(set([t['category'] for t in tables.values()])):}}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">{{=c}}</a>
+          <ul class="dropdown-menu">
+            {{for t,d in tables.iteritems():}}
+            {{if d['category']==c:}}
+              <li><a href="{{=URL(f='index',args=[t])}}">{{=t}}</a></li>
+            {{pass}}
+            {{pass}}
+          </ul>
+        </li>
+        {{pass}}
+      </ul>
+  	  <ul class="nav secondary-nav">
+        <li><a href="{{=URL(c='default',f='index')}}">{{=T('back to %s') % request.application}}</a></li>
+        <li><a href="{{=URL(c='default',f='user',args=['logout'])}}">{{=T('logout')}}</a></li>
+      </ul>
+      </div>
+  	</div>
+	</div>
+	
+  <div class="container">
+    <div id="content">
+    {{if response.flash:}}
+    <div class="alert-message warning">
+      <a href="#" class="close">x</a>
+      <p>{{=response.flash}}</p>
+    </div>
+    {{pass}}
+      {{include}}	
+    </div>
+  </div>
+	
+	<div id="footer">
+    <div class="inner">
+      <div class="container">
+        <p style="float:right"><a href="#">{{=T('Back to top')}}</a></p>
+        <p>{{=T('Powered by')}} <a href="https://github.com/elcio/badmin">
+          Badmin
+        </a></p>
+      </div>
+    </div>
+	</div>
+    
+    <!--[if lt IE 7 ]>
+	<script src="{{=URL('static','js/dd_belatedpng.js')}}"></script>
+	<script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
+	<![endif]-->
+    
+  </body>
+</html>

@@ -1,0 +1,89 @@
+{{extend "plugin_badmin/layout.html"}}
+<script>
+
+function sort(c){
+  if($('#orderby').val()==c){
+    $('#orderby').val(c+' desc')
+  }else{
+    $('#orderby').val(c)
+  }
+  $('#filter').submit()
+}
+
+function gopage(n){
+  $('#page').val(n)
+  $('#filter').submit()
+}
+
+</script>
+
+<h1>{{=T('%s list') % table}}</h1>
+{{=filters}}
+{{colors=['blue','green','red','yellow','orange','purple']}}
+{{ccont=0}}
+<form method="post">
+<table class="zebra-striped">
+<thead>
+  <tr>
+  <th><input type="checkbox" onclick="$('.zebra-striped :checkbox').attr('checked',this.checked)"></th>
+  <th>#</th>
+    {{for c in columns:}}
+      <th class="{{=colors[ccont%len(colors)]}} header {{if o==c+' desc':}}headerSortUp{{pass}}{{if o==c:}}headerSortDown{{pass}}"><a href="javascript:sort('{{=c}}')">{{=c}}</a></th>
+      {{ccont+=1}}
+    {{pass}}
+  </tr>
+</thead>
+{{count=(page-1)*50}}
+{{for d in data:}}
+ <tr>
+   <td><input type="checkbox" name="rid" value="{{=d.id}}" /></td>
+   {{count+=1}}
+   <td>{{=count}}</td>
+    {{for c in columns:}}
+      <td><a href="{{=URL(f='edit',args=[table,d.id])}}">
+      {{if db[table][c].type.startswith('reference '):}}
+        {{try:}}
+        {{=(db[table][c].requires.label % d[c])}}
+        {{except:}}
+        {{=d[c]}}
+        {{pass}}
+      {{elif db[table][c].type=='boolean':}}
+        {{=d[c] and T('Yes') or T('No')}}
+      {{elif d[c]==None:}}
+        {{=T('<null>')}}
+      {{else:}}
+        {{=d[c]}}
+      {{pass}}
+      </a></td>
+    {{pass}}
+ </tr> 
+{{pass}}
+</table>
+<div class="pagination">
+  <ul>
+    {{if page>1:}}
+      <li class="prev"><a href="javascript:gopage({{=page-1}})">&larr; {{=T('Previous')}}</a></li>
+    {{else:}}
+      <li class="prev disabled"><a href="#">&larr; {{=T('Previous')}}</a></li>
+    {{pass}}
+    {{for p in range(1,page)[-6:]:}}
+    <li><a href="javascript:gopage({{=p}})">{{=p}}</a></li>
+    {{pass}}
+    <li class="active"><a href="#">{{=page}}</a></li>
+    {{for p in range(page+1,pages+1)[:6]:}}
+    <li><a href="javascript:gopage({{=p}})">{{=p}}</a></li>
+    {{pass}}
+    {{if page<pages:}}
+      <li class="next"><a href="javascript:gopage({{=page+1}})">{{=T('Next')}} &rarr;</a></li>
+    {{else:}}
+      <li class="next disabled"><a href="#">{{=T('Next')}} &rarr;</a></li>
+    {{pass}}
+  </ul>
+</div>
+<div class="actions">
+  {{for a in actions:}}
+  <input type="submit" value="{{=a[0]}}" class="btn {{=a[2]}}" name="action" {{if a[3]:}}onclick="return confirm('{{=a[3]}}')"{{pass}} />
+  {{pass}}
+  <a href="{{=URL(f='edit',args=[table])}}" class="btn">{{=T('new')}}</a>
+</div>
+</form>

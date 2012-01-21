@@ -1,0 +1,11 @@
+{{extend "plugin_badmin/layout.html"}}
+<h1>{{=T('Editing %s') % table}}</h1>
+{{=f}}
+<div class="container">
+<form class="actions" method="post">
+<a href="javascript:history.back()" class="btn">&larr; {{=T('back')}}</a>
+{{for a in actions:}}
+<input type="submit" value="{{=a[0]}}" class="btn {{=a[2]}}" name="action" {{if a[3]:}}onclick="return confirm('{{=a[3]}}')"{{pass}} />
+{{pass}}
+</form>
+</div>
