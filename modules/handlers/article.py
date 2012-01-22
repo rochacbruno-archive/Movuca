@@ -73,10 +73,14 @@ class Article(Base):
             self.db.Comments.comment_text.widget = ckeditor.basicwidget
             form = SQLFORM(self.db.Comments, formstyle='divs')
             if form.process(message_onsuccess=self.T('Comment included')).accepted:
-                self.new_article_event('new_article_comment', self.session.auth.user, data={'event_text': form.vars.comment_text,
-                                                                                            'event_link': form.vars.nickname or form.vars.user_id,
-                                                                                            'event_image': self.get_image(None, 'user', themename=self.context.theme_name, user=self.session.auth.user),
-                                                                                            'event_link_to': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
+                self.new_article_event('new_article_comment',
+                                        self.session.auth.user,
+                                        data={'event_text': form.vars.comment_text,
+                                              'event_link': form.vars.nickname or form.vars.user_id,
+                                              'event_image': self.get_image(None, 'user', themename=self.context.theme_name, user=self.session.auth.user),
+                                              'event_link_to': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
+                # send email to author & subscribers
+
         else:
             form = A(self.T("Login to post comments"),
                      _class="button",

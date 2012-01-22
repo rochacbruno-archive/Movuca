@@ -69,8 +69,8 @@ $(document).ready(function(){
 		    <div id="title">{{=T("Advertising")}} - </div>
 			<div onclick="javascript:window.open('{{=CURL('contact','ads')}}')" id="link">{{=T("Announce here")}}</div>
 			
-			<div style="background:url(http://vista-se.com.br/redesocial/wp-content/themes/vista-se/imgs/btn_voltar.png)" id="btn_prev"></div>
-			<div style="background:url(http://vista-se.com.br/redesocial/wp-content/themes/vista-se/imgs/btn_avancar.png)" id="btn_next"></div>
+			<div style="background:url({{=URL('static','%s/images' % theme_name, args='btn_voltar.png')}})" id="btn_prev"></div>
+			<div style="background:url({{=URL('static','%s/images' % theme_name, args='btn_avancar.png')}})" id="btn_next"></div>
 			
 	</div>
 

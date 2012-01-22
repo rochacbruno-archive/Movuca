@@ -47,9 +47,9 @@
         {{=T("Welcome")}}
     </h4>
     <div>
-    {{=A(IMG(_src=get_image(None, 'user', themename='basic', user=session.auth.user), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+    {{=A(IMG(_src=get_image(None, 'user', themename='basic', user=session.auth.user), _width=90, _height=90), _href=CURL('person','show', args=session.auth.user.nickname or session.auth.user.id))}}
     <br />
-    {{=A(session.auth.user.nickname, _href=CURL('person','show', args=article.author.nickname or article.author))}}
+    {{=A(session.auth.user.nickname, _href=CURL('person','show', args=session.auth.user.nickname or session.auth.user.id))}}
     </div>    
     {{pass}}
 <!--    <h4 class="bottom-line">
