@@ -2,9 +2,8 @@
 
 from gluon.dal import Field
 from basemodel import BaseAuth, BaseModel
-from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL, IS_SLUG, IS_NOT_EMPTY
+from gluon.validators import IS_NOT_IN_DB, IS_IN_SET, IS_EMPTY_OR, IS_DATE, IS_URL, IS_SLUG, IS_NOT_EMPTY, IS_LIST_OF
 from helpers.images import THUMB2
-from gluon import CAT, A, IMG, XML, DIV, P
 
 
 class User(BaseAuth):
@@ -30,7 +29,7 @@ class User(BaseAuth):
                       Field("facebookid", "string"),
                       Field("googleid", "string"),
                       Field("googlepicture", "string"),
-                      Field("registration_type", "integer", notnull=True, default=1),  # 1 = local, 2 = Facebook
+                      Field("registration_type", "integer", notnull=True, default=1),  # 1 = local, 2 = Facebook, 3 - google
                       # counters
                       Field("articles", "integer", notnull=True, default=0),
                       Field("draft_articles", "integer", notnull=True, default=0),
@@ -96,6 +95,7 @@ class User(BaseAuth):
           "twitter": T("twitter"),
           "facebook": T("Facebook"),
           "website": T("website"),
+          "extra_links": T("Your Links"),
           "avatar": T("avatar"),
           "photo_source": T("Photo source"),
           "about": T("about"),
@@ -113,6 +113,7 @@ class User(BaseAuth):
           "twitter": T("twitter account"),
           "facebook": T("Facebook username or ID"),
           "website": T("website or blog"),
+          "extra_links": T("Include more links (flickr, facebook page, github, etc)"),
           "avatar": T("your profile picture"),
           "photo_source": T("Which photo to use in your profile"),
           "about": T("about you"),
@@ -130,6 +131,8 @@ class User(BaseAuth):
         self.entity.nickname.requires = [IS_SLUG(), IS_NOT_IN_DB(self.db, self.entity.nickname)]
         self.entity.twitter.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.twitter))
         self.entity.facebook.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.facebook))
+
+        self.entity.extra_links.requires = IS_LIST_OF(IS_URL(allowed_schemes=['https', 'http'], prepend_scheme='http'))
 
         self.entity.photo_source.requires = IS_IN_SET(config.get_list('auth', 'photo_source'))
         self.entity.gender.requires = IS_IN_SET(config.get_list('auth', 'gender'))

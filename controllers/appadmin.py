@@ -9,6 +9,7 @@ from datamodel.article import Article, ContentType, Category, Favoriters, Subscr
 from datamodel.ads import Ads
 from datamodel.contenttypes import Article as ArticleData
 from datamodel.contenttypes import CookRecipe, CookRecipeBook, CodeRecipe, Product
+from datamodel.notification import NotificationPermission, Notification, EmailTemplate
 db = DataBase([User,
                UserTimeLine,
                ContentType,
@@ -25,7 +26,10 @@ db = DataBase([User,
                CookRecipeBook,
                CodeRecipe,
                Product,
-               Ads])
+               Ads,
+               NotificationPermission,
+               Notification,
+               EmailTemplate])
 ArticleData(db)
 auth = db.auth
 

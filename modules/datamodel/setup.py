@@ -50,6 +50,7 @@ class Setup(object):
                                                                     "private:37565e87d8f80bd680afbc31e0d4e3df"]),
             Field("registration_requires_verification", "boolean", notnull=True, default=False),
             Field("registration_requires_approval", "boolean", notnull=True, default=False),
+            Field("registration_requires_invitation", "boolean", notnull=True, default=False),
             Field("server", "string", notnull=True, default="default"),
             Field("sender", "string", notnull=True, default="mail@domain.com"),
             Field("login", "string", notnull=True, default="teste:1234"),
@@ -87,6 +88,7 @@ class Setup(object):
             ('disqus', T("Disqus")),
             ('intense', T("Intense Debate")),
             ('facebook', T("Facebook comments")),
+            ('disabled', T("Comments disabled")),
         ]
 
         self.comment_options = [
@@ -98,4 +100,28 @@ class Setup(object):
            Field("facebook_appid", "string", notnull=True, default="257838757587678"),
            Field("facebook_numposts", "integer", notnull=True, default=10),
            Field("setuptime", "datetime", notnull=True),
+        ]
+
+        notification_events = [
+                "new_contact:someone follows you",
+                "wrote_on_wall:someone writes in your board",
+                "liked:someone likes your publication",
+                "shared:someone shares your publication",
+                "favorited:someone favorite your publication",
+                "disliked:someone disliked your publication",
+                "new_article_comment:someone commented your publication",
+                "comment_reply:someone replied your comment",
+                "board_reply:someone replied your board post",
+                "subscriptions:updates in publications you are subscribed",
+                "mention:someone mentioned your name",
+                "message:you got a new message",
+        ]
+
+        notification_ways = ["site:site notifications", "email:e-mail"]
+
+        self.notification_options = [
+          Field("event", "list:string", default=notification_events, notnull=True),
+          Field("way", "list:string", default=notification_ways, notnull=True),
+          Field("worker", "string", default="site", comment="site or scheduler"),
+          Field("setuptime", "datetime", notnull=True),
         ]
