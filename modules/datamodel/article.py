@@ -90,7 +90,7 @@ class Article(BaseModel):
           "description": T("Text to be shown at home page, email and RSS"),
           "picture": T("Optional picture to be shown at home page, email and RSS (a thumbnail will be created)"),
           "tags": T("Tag is used for search and to find related articles. (comma separated)"),
-          "privacy": T("Who can read this article?"),
+          "privacy": T("Who can view this publication?"),
           "draft": T("Check to save as a draft")
         }
 

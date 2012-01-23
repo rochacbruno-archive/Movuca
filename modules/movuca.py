@@ -46,7 +46,8 @@ class Access(Auth):
         Auth.__init__(self, self.db, hmac_key=self.hmac_key)
         #self.settings.logout_onlogout = lambda user: self.remove_session(user)
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
-        self.settings.register_onaccept = [lambda form: self.send_welcome_email(form.vars)]
+        self.settings.register_onaccept = [lambda form: self.send_welcome_email(form.vars),
+                                           lambda form: self.initial_user_permission(form.vars)]
         #self.settings.profile_onvalidation = []
         self.settings.profile_onaccept = [lambda form: self.remove_facebook_google_alert(form)]  # remove facebook / google alert session
         #self.settings.change_password_onaccept = [] # send alert email
@@ -106,6 +107,11 @@ class Access(Auth):
 
     def remove_session(self, user):
         del self.db.session.auth
+
+    def initial_user_permission(self, user):
+        from datamodel.notification import NotificationPermission
+        permission = NotificationPermission(self.db)
+        permission.initial_user_permission(user)
 
     def send_welcome_email(self, user):
         # TODO RENDER EMAIL TEMPLATES

@@ -62,8 +62,9 @@ class FaceBookAccount(OAuthAccount):
                 # birthday = "%s-%s-%s" % (b[-4:], b[0:2], b[-7:-5])
                 # if 'location' in user:
                 #     session.flocation = user['location']
-                current.session["%s_is_new_from_facebook" % user['id']] = True
+                current.session["is_new_from"] = "facebook"
                 self.db.auth.send_welcome_email(user)
+                # self.db.auth.initial_user_permission(user)  # Called on profile page
                 return dict(first_name=user.get('first_name', ""),
                             last_name=user.get('last_name', ""),
                             facebookid=user['id'],

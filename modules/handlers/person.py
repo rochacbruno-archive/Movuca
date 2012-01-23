@@ -350,6 +350,10 @@ class Person(Base):
             self.context.user.update_record(password=self.db.session["%s_setpassword" % self.context.user.id])
             self.db.session["%s_setpassword" % self.context.user.id] = None
 
+        if self.db.session["is_new_from"]:
+            self.context.alerts.append(XML(self.T("Welcome! You logged in using your %s account, please go to your <a href='%s'>settings</a> page choose your username and complete your profile!",  (self.db.session["is_new_from"], self.db.CURL('person', 'account', args='profile')))))
+            self.db.auth.initial_user_permission(self.context.user)
+
         #user extra links image
         # TODO: limit the number of links?
         self.context.extra_links = []

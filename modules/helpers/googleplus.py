@@ -4,7 +4,7 @@ from oauth20_account_google import OAuthAccount
 from gluon import HTTP
 from gluon import current
 import urllib
-import urllib2
+# import urllib2
 from gluon.contrib import simplejson as json
 
 
@@ -66,7 +66,7 @@ class GooglePlusAccount(OAuthAccount):
                 # birthday = "%s-%s-%s" % (b[-4:], b[0:2], b[-7:-5])
                 # if 'location' in user:
                 #     session.flocation = user['location']
-                current.session["%s_is_new_from_google" % user['id']] = True
+                current.session["is_new_from"] = "google"
                 self.db.auth.send_welcome_email(user)
                 return dict(
                             first_name=user.get('given_name', user["name"].split()[0]),

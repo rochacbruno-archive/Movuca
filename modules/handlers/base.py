@@ -13,6 +13,7 @@ class Base(object):
         from gluon.storage import Storage
         self.meta = meta or Storage()
         self.context = context or Storage()
+        self.context.alerts = []
         self.theme = theme
         self.view = view
 

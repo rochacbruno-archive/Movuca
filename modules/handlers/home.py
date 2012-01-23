@@ -23,7 +23,6 @@ class Home(Base):
         self.context.use_google = self.db.config.auth.use_google
         self.context.theme_name = self.config.theme.name
 
-
     def last_articles(self):
         from helpers.article import latest_articles
         self.context.latest_articles = latest_articles(self.db)

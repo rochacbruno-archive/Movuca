@@ -43,15 +43,22 @@ class NotificationPermission(BaseModel):
         self.entity._initial_user_permission = self.initial_user_permission
 
     def initial_user_permission(self, user):
-        for event, value in self.events:
-            self.entity.update_or_insert(user_id=user.id, event_type=event, way=[key for key, val in self.ways])
+        try:
+            for event, value in self.events:
+                self.entity.update_or_insert(self.entity.unikey == "%s_%s" % (user.id, event),
+                                             user_id=user['id'],
+                                             event_type=event,
+                                             way=[key for key, val in self.ways])
+        except Exception:
+            self.db.rollback()
+        else:
             self.db.commit()
 
     def set_permission_to_all(self):
         users = self.db(self.db.auth_user.id > 0).select()
         for user in users:
             for event, value in self.events:
-                self.entity.update_or_insert(user_id=user.id, event_type=event, way=[key for key, val in self.ways])
+                self.entity.update_or_insert(self.entity.unikey == "%s_%s" % (user.id, event), user_id=user.id, event_type=event, way=[key for key, val in self.ways])
                 self.db.commit()
 
 
@@ -76,7 +83,7 @@ class EmailTemplate(BaseModel):
 
     def set_properties(self):
         self.fields = [
-            Field("template_key", "string"),
+            Field("template_key", "string", notnull=True, unique=True),
             Field("plain_text", "text", notnull=True, default=""),
             Field("html_text", "text", notnull=True, default=""),
             Field("subject_text", "string"),
