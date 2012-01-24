@@ -103,18 +103,18 @@ class Setup(object):
         ]
 
         notification_events = [
-                "new_contact:someone follows you",
-                "wrote_on_wall:someone writes in your board",
-                "liked:someone likes your publication",
-                "shared:someone shares your publication",
-                "favorited:someone favorite your publication",
-                "disliked:someone disliked your publication",
-                "new_article_comment:someone commented your publication",
-                "comment_reply:someone replied your comment",
-                "board_reply:someone replied your board post",
-                "subscriptions:updates in publications you are subscribed",
-                "mention:someone mentioned your name",
-                "message:you got a new message",
+                "new_contact:%s followed you %s",
+                "wrote_on_wall:%s wrote in your board %s",
+                "liked:%s liked your publication %s",
+                "shared:%s shared your publication %s",
+                "favorited:%s favorited your publication %s",
+                "disliked:%s disliked your publication %s",
+                "new_article_comment:%s commented your publication %s",
+                "comment_reply:%s replied your comment %s",
+                "board_reply:%s replied your board post %s",
+                "subscriptions:%s updates in publications you are subscribed %s",
+                "mention:%s mentioned your name %s",
+                "message:%s you got a new message %s",
         ]
 
         notification_ways = ["site:site notifications", "email:e-mail"]

@@ -39,6 +39,15 @@ class Notifier(object):
                 to = self.db.auth_user[user_id].email
 
             self.send_email(to, event_type, **kwargs)
+        else:
+            if self.record:
+                self.notification.entity[self.record].update_record(mail_sent=True)
+
+    def notify_all(self, event_type, emails, **kwargs):
+        self.send_email("Undisclosed Recipients", "%s_subscribers" % event_type, bcc=emails, **kwargs)
+
+    def notify_user(self, event_type, to, **kwargs):
+        self.send_email(to, event_type, **kwargs)
 
     def __init__(self, db):
         self.db = db
@@ -83,17 +92,22 @@ class Notifier(object):
 
         # TODO: Include Attachment
 
-        return dict(message=[plain_message, "<html>%s</html>" % html_message], subject=template.subject_text % kwargs, reply_to=template.reply_to or "noreply", bcc=template.copy_to or None)
+        return dict(message=[plain_message, "<html>%s</html>" % html_message], subject=template.subject_text % kwargs, reply_to=template.reply_to or "Undisclosed Recipients", bcc=template.copy_to or "")
 
-    def send_email(self, to, event_type, **kwargs):
-        from movuca import Mailer
-        mail = Mailer(self.db)
-        try:
-            message = self.build_message_from_template(event_type, **kwargs)
-            params = dict(to=to, **message)
-            mail.send(**params)
-        except Exception, e:
-            print str(e)
-        else:
-            if self.record:
-                self.notification.entity[self.record].update_record(mail_sent=True)
+    def send_email(self, to, event_type, bcc=[], **kwargs):
+        if self.config.notification.worker == 'site':
+            from movuca import Mailer
+            mail = Mailer(self.db)
+            try:
+                message = self.build_message_from_template(event_type, **kwargs)
+                if 'bcc' in message:
+                    bcc = message['bcc'].split(',') + bcc
+                    del message['bcc']
+
+                params = dict(to=to, bcc=bcc, **message)
+                mail.send(**params)
+            except Exception, e:
+                print str(e)
+            else:
+                if self.record:
+                    self.notification.entity[self.record].update_record(mail_sent=True)

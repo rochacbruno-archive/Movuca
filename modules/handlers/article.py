@@ -12,6 +12,8 @@ class Article(Base):
         from movuca import DataBase, User, UserTimeLine
         from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers, Comments
         self.db = DataBase([User, UserTimeLine, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments])
+        from handlers.notification import Notifier
+        self.notifier = Notifier(self.db)
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -44,21 +46,19 @@ class Article(Base):
         else:
             self.context.related_articles = False
 
-    # def get_image(self, image, placeholder="image"):
-    #     if image:
-    #         return URL('default', 'download', args=image)
-    #     else:
-    #         return URL('static', 'basic/images', args='%s.png' % placeholder)
-
     def comments(self):
         comment_system = {
             "internal": self.comment_internal,
             "disqus": self.comment_disqus,
             "intense": self.comment_intense,
-            "facebook": self.comment_facebook
+            "facebook": self.comment_facebook,
+            "disabled": self.comment_disabled
         }
 
         self.context.comments = comment_system[self.config.comment.system]()
+
+    def comment_disabled(self):
+        return " "
 
     def comment_internal(self):
         is_author = False
@@ -79,7 +79,6 @@ class Article(Base):
                                               'event_link': form.vars.nickname or form.vars.user_id,
                                               'event_image': self.get_image(None, 'user', themename=self.context.theme_name, user=self.session.auth.user),
                                               'event_link_to': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
-                # send email to author & subscribers
 
         else:
             form = A(self.T("Login to post comments"),
@@ -391,6 +390,31 @@ class Article(Base):
                                                 event_link_to=data.get('event_link_to', "%s/%s" % (self.context.article.id, self.context.article.slug)),
                                             ))
 
+            events = dict(self.notifier.permission.events)
+            if event_type not in ['update_article', 'new_article']:
+                self.notifier.notify(event_type,
+                    self.context.article.author,
+                    event_text=self.T(events.get(event_type, "%s done something on %s"), (user.nickname, data.get('event_to', self.context.article.title))),
+                    event_link=data.get('event_link_to', "%s/%s" % (self.context.article.id, self.context.article.slug)),
+                    event_reference=data.get('event_reference', self.context.article.id),
+                    event_image=data.get('event_image', self.get_image(None, 'user', themename=self.context.theme_name, user=user)),
+                    data=data
+                )
+
+            if event_type in ['new_article_comment', 'update_article']:
+                subscribers = self.db(self.db.Subscribers.article_id == self.context.article.id).select()
+                user_ids = [subscriber.user_id for subscriber in subscribers]
+                rows = self.db(self.db.auth_user.id.belongs(user_ids)).select()
+                emails = [row.email for row in rows]
+                self.notifier.notify_all(event_type,
+                    emails=emails,
+                    event_text=self.T(events.get(event_type, "%s done something on %s"), (user.nickname, data.get('event_to', self.context.article.title))),
+                    event_link=data.get('event_link_to', "%s/%s" % (self.context.article.id, self.context.article.slug)),
+                    event_reference=data.get('event_reference', self.context.article.id),
+                    event_image=data.get('event_image', self.get_image(None, 'user', themename=self.context.theme_name, user=user)),
+                    data=data
+                )
+
     def favorite(self):
         user = self.session.auth.user if self.session.auth else None
         if user:
@@ -472,7 +496,7 @@ class Article(Base):
 
                     count = self.db(self.db.Subscribers.user_id == user.id).count()
                     self.db.auth_user[user.id] = dict(subscriptions=count)
-                    self.new_article_event('subscribed', user)
+                    # self.new_article_event('subscribed', user)
                 except Exception:
                     self.db.rollback()
                 else:

@@ -23,7 +23,7 @@ class NotificationPermission(BaseModel):
 
         self.validators = {
             "way": IS_IN_SET(self.ways, multiple=True),
-            "event_type": IS_IN_SET(self.events)
+            "event_type": IS_IN_SET([(key, value % ("", "")) for key, value in self.events])
         }
 
         self.computations = {
