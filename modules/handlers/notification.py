@@ -47,7 +47,7 @@ class Notifier(object):
         self.send_email("Undisclosed Recipients", "%s_subscribers" % event_type, bcc=emails, **kwargs)
 
     def notify_user(self, event_type, to, **kwargs):
-        self.send_email(to, event_type, **kwargs)
+        self.send_email(to, event_type, bypass=True, **kwargs)
 
     def __init__(self, db):
         self.db = db
@@ -94,8 +94,8 @@ class Notifier(object):
 
         return dict(message=[plain_message, "<html>%s</html>" % html_message], subject=template.subject_text % kwargs, reply_to=template.reply_to or "Undisclosed Recipients", bcc=template.copy_to or "")
 
-    def send_email(self, to, event_type, bcc=[], **kwargs):
-        if self.config.notification.worker == 'site':
+    def send_email(self, to, event_type, bcc=[], bypass=False, **kwargs):
+        if self.config.notification.worker == 'site' or bypass:
             from movuca import Mailer
             mail = Mailer(self.db)
             try:
