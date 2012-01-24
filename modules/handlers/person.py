@@ -3,12 +3,14 @@
 from handlers.base import Base
 from gluon import *
 from helpers.person import contact_box
+from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
+from handlers.notification import Notifier
 
 
 class Person(Base):
     def start(self):
-        from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
         self.db = DataBase([User, UserTimeLine, UserContact, UserBoard])
+        self.notifier = Notifier(self.db)
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -100,10 +102,19 @@ class Person(Base):
                                                   "event_link_to": followed.nickname or followed.id,
                                                   "event_image_to": self.get_image(None, 'user', themename=self.context.theme_name, user=followed)})
 
-                self.mail.send(to=followed.email,
-                       subject=self.T("Hi, %(nickname)s followed you on Movuca", follower),
-                       message=[None, """<h1>You got a new follower!</h1><p>%(nickname)s is now following you, follow back!</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % follower])
-                       # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
+                # self.mail.send(to=followed.email,
+                #        subject=self.T("Hi, %(nickname)s followed you on Movuca", follower),
+                #        message=[None, """<h1>You got a new follower!</h1><p>%(nickname)s is now following you, follow back!</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % follower])
+                #        # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
+                self.notifier.notify("new_contact",
+                                 followed,
+                                 event_text=self.T("%(nickname)s followed you", follower),
+                                 event_link=follower.nickname or follower.id,
+                                 event_reference=followed.id,
+                                 event_image=self.get_image(None, 'user', themename=self.context.theme_name, user=follower),
+                                 follower=follower
+                                 )
+
                 relation = self.db.UserContact._relation(follower.id, followed.id)
                 if relation == 'contacts':
                     acount = followed.contacts + 1
@@ -194,7 +205,10 @@ class Person(Base):
             query = reduce(lambda a, b: (a | b), queries)
             self.context.contacts = self.db(query).select()
         else:
-            self.context.contacts = self.db(self.db.auth_user.id.belongs(friends)).select()
+            if friends:
+                self.context.contacts = self.db(self.db.auth_user.id.belongs(list(friends))).select()
+            else:
+                self.context.contacts = []
 
         from helpers.person import contact_box
         self.context.contact_box = contact_box
@@ -231,16 +245,24 @@ class Person(Base):
                                   "event_type": "wrote_on_wall",
                                   "event_image": self.get_image(None, 'user', themename=self.context.theme_name, user=writer_user),
                                   "event_to": "" if relation == 'yourself' else user.nickname or user.first_name,
-                                  "event_reference": user.id,
+                                  "event_reference": form.vars.id,
                                   "event_text": form.vars.board_text,
                                   "event_link": writer_user.nickname or writer_user.id,
                                   "event_link_to": "" if relation == 'yourself' else user.nickname or user.id,
                                   "event_image_to": "" if relation == 'yourself' else self.get_image(None, 'user', themename=self.context.theme_name, user=user)})
 
         if writer_user.id != user.id:
-            self.mail.send(to=user.email,
-                       subject=self.T("Hi, %(nickname)s posted on your Movuca board", writer_user),
-                       message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % form.vars])
+            # self.mail.send(to=user.email,
+            #            subject=self.T("Hi, %(nickname)s posted on your Movuca board", writer_user),
+            #            message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % form.vars])
+            self.notifier.notify("wrote_on_wall",
+                                 user,
+                                 event_text=form.vars.board_text,
+                                 event_link=writer_user.nickname or writer_user.id,
+                                 event_reference=form.vars.id,
+                                 event_image=self.get_image(None, 'user', themename=self.context.theme_name, user=writer_user),
+                                 writer=writer_user
+                                 )
         # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
 
     def board(self, uid):
