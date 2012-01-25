@@ -109,20 +109,15 @@ class Access(Auth):
         del self.db.session.auth
 
     def initial_user_permission(self, user):
-        from datamodel.notification import NotificationPermission
-        permission = NotificationPermission(self.db)
-        permission.initial_user_permission(user)
+        self.notifier.permission.initial_user_permission(user)
 
     def send_welcome_email(self, user):
-        # TODO RENDER EMAIL TEMPLATES
-        if 'first_name' in user:
-            subject = "Hi %(first_name)s %(last_name)s Welcome to Movuca CMS"
-        elif 'name' in user:
-            subject = "Hi %(name)s Welcome to Movuca CMS"
-        else:
-            subject = "Hi Welcome to Movuca CMS"
+        if 'name' in user:
+            user['first_name'] = user['name']
+        if 'family_name' in user:
+            user['lart_name'] = user['family_name']
 
-        self.settings.mailer.send(to=user['email'], subject=subject % user, message=[None, "<h1>WELCOME TO MOVU.CA CMS</h1><p>It is just a beta test of http://movu.ca CMS, thank you for helping with tests!</p>"])
+        self.notifier.notify_user("welcome_on_register", user['email'], **user)
 
 
 User = Access  # It is just for direct imports

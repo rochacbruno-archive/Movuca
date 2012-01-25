@@ -391,7 +391,7 @@ class Article(Base):
                                             ))
 
             events = dict(self.notifier.permission.events)
-            if event_type not in ['update_article', 'new_article']:
+            if event_type not in ['update_article', 'new_article'] and self.context.article.author != user.id:
                 self.notifier.notify(event_type,
                     self.context.article.author,
                     event_text=self.T(events.get(event_type, "%s done something on %s"), (user.nickname, data.get('event_to', self.context.article.title))),
@@ -406,9 +406,12 @@ class Article(Base):
                 user_ids = [subscriber.user_id for subscriber in subscribers]
                 rows = self.db(self.db.auth_user.id.belongs(user_ids)).select()
                 emails = [row.email for row in rows]
-                self.notifier.notify_all(event_type,
+                users = [row.id for row in rows]
+                events.update({"new_article_comment_subscribers": self.T("%s commented on article %s"), "update_article_subscribers": self.T("%s updated %s")})
+                self.notifier.notify_all("%s_subscribers" % event_type,
                     emails=emails,
-                    event_text=self.T(events.get(event_type, "%s done something on %s"), (user.nickname, data.get('event_to', self.context.article.title))),
+                    users=users,
+                    event_text=self.T(events.get("%s_subscribers" % event_type, "%s done something on %s"), (user.nickname, data.get('event_to', self.context.article.title))),
                     event_link=data.get('event_link_to', "%s/%s" % (self.context.article.id, self.context.article.slug)),
                     event_reference=data.get('event_reference', self.context.article.id),
                     event_image=data.get('event_image', self.get_image(None, 'user', themename=self.context.theme_name, user=user)),

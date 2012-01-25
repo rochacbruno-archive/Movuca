@@ -398,6 +398,15 @@ class Person(Base):
                     self.context.extra_links.append({"img": URL('static', '%s/images/icons' % self.context.theme_name, args='globe.png'), "link": link, "title": link})
 
     def account(self):
+        self.db.auth.notifier = self.notifier
+
+        verify_email = self.notifier.build_message_from_template("verify_email")
+        reset_password = self.notifier.build_message_from_template("reset_password")
+        self.db.auth.messages.verify_email = verify_email['message'][1]
+        self.db.auth.messages.reset_password = reset_password['message'][1]
+        self.db.auth.messages.verify_email_subject = verify_email['subject']
+        self.db.auth.messages.reset_password_subject = reset_password['subject']
+
         self.context.auth = self.db.auth
         self.context.form = self.db.auth()
 
@@ -411,6 +420,7 @@ class Person(Base):
             redirect(self.CURL('home', 'index', args=[username, 'loginerror']))
 
     def facebook(self):
+        self.db.auth.notifier = self.notifier
         if not self.db.config.auth.use_facebook:
             redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
         self.context.auth = self.db.auth
@@ -423,6 +433,7 @@ class Person(Base):
         self.context.form = self.context.auth()
 
     def google(self):
+        self.db.auth.notifier = self.notifier
         if not self.db.config.auth.use_google:
             redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
         self.context.auth = self.db.auth

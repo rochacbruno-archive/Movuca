@@ -43,8 +43,19 @@ class Notifier(object):
             if self.record:
                 self.notification.entity[self.record].update_record(mail_sent=True)
 
-    def notify_all(self, event_type, emails, **kwargs):
-        self.send_email("Undisclosed Recipients", "%s_subscribers" % event_type, bcc=emails, **kwargs)
+    def notify_all(self, event_type, emails, users, **kwargs):
+        for user in users:
+            params = dict(
+                user_id=user,
+                event_type=event_type,
+                event_text=kwargs.get("event_text", ""),
+                event_link=kwargs.get("event_link", ""),
+                event_reference=kwargs.get("event_reference", 0),
+                event_image=kwargs.get("event_image", ""),
+            )
+            self.insert_site_notification_all(**params)
+
+        self.send_email("Undisclosed Recipients", event_type, bcc=emails, **kwargs)
 
     def notify_user(self, event_type, to, **kwargs):
         self.send_email(to, event_type, bypass=True, **kwargs)
@@ -57,6 +68,7 @@ class Notifier(object):
         self.notification = Notification(self.db)
         self.emailtemplate = EmailTemplate(self.db)
         self.record = None
+        self.records = []
 
     def check_permission(self, event_type, user_id=None, user=None):
         row = self.permission.entity(user_id=user_id, event_type=event_type)
@@ -68,6 +80,11 @@ class Notifier(object):
 
     def insert_site_notification(self, **kwargs):
         self.record = self.notification.entity.update_or_insert(**kwargs)
+
+    def insert_site_notification_all(self, **kwargs):
+        record = self.notification.entity.update_or_insert(**kwargs)
+        if record:
+            self.records.append(record)
 
     def build_message_from_template(self, event_type, **kwargs):
         template = self.emailtemplate.entity(template_key=event_type)
@@ -111,3 +128,6 @@ class Notifier(object):
             else:
                 if self.record:
                     self.notification.entity[self.record].update_record(mail_sent=True)
+                if self.records:
+                    for record in self.records:
+                        self.notification.entity[record].update_record(mail_sent=True)
