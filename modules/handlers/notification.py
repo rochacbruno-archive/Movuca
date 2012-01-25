@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datamodel.notification import NotificationPermission, Notification, EmailTemplate
+from gluon import URL
 
 
 class Notifier(object):
@@ -19,6 +20,7 @@ class Notifier(object):
         if not any([user, user_id]):
             raise Exception("You need to inform user or user_id")
         permission = self.check_permission(event_type, user_id or user.id, user)
+        kwargs = self.check_image_urls(kwargs)
         if 'site' in permission:
             params = dict(
                 user_id=user_id or user.id,
@@ -44,6 +46,7 @@ class Notifier(object):
                 self.notification.entity[self.record].update_record(mail_sent=True)
 
     def notify_all(self, event_type, emails, users, **kwargs):
+        kwargs = self.check_image_urls(kwargs)
         for user in users:
             params = dict(
                 user_id=user,
@@ -52,12 +55,14 @@ class Notifier(object):
                 event_link=kwargs.get("event_link", ""),
                 event_reference=kwargs.get("event_reference", 0),
                 event_image=kwargs.get("event_image", ""),
+                is_read=False
             )
             self.insert_site_notification_all(**params)
 
         self.send_email("Undisclosed Recipients", event_type, bcc=emails, **kwargs)
 
     def notify_user(self, event_type, to, **kwargs):
+        kwargs = self.check_image_urls(kwargs)
         self.send_email(to, event_type, bypass=True, **kwargs)
 
     def __init__(self, db):
@@ -89,7 +94,7 @@ class Notifier(object):
     def build_message_from_template(self, event_type, **kwargs):
         template = self.emailtemplate.entity(template_key=event_type)
         if not template:
-            return dict(message="Movuca notification message, you need to define an email template for %s event" % event_type, subject="New notification from Movuca CMS")
+            return dict(message="Movuca notification message, you need to define an email template for %s event \n %s" % (event_type, str(kwargs)), subject="New notification from Movuca CMS")
 
         # if template.detect_links:
         #     from gluon import MARKMIN
@@ -131,3 +136,23 @@ class Notifier(object):
                 if self.records:
                     for record in self.records:
                         self.notification.entity[record].update_record(mail_sent=True)
+
+    def check_image_urls(self, args):
+        if 'event_image' in args:
+            args['event_image'] = self.ensure_image_url(args['event_image'])
+        if 'event_image_to' in args:
+            args['event_image_to'] = self.ensure_image_url(args['event_image_to'])
+
+        if 'data' in args:
+            if 'event_image' in args['data']:
+                args['data']['event_image'] = self.ensure_image_url(args['data']['event_image'])
+            if 'event_image_to' in args['data']:
+                args['data']['event_image_to'] = self.ensure_image_url(args['data']['event_image_to'])
+        return args
+
+    def ensure_image_url(self, url):
+        if url.startswith("http"):
+            return url
+        else:
+            parts = url.split("/")
+            return URL(parts[1], parts[2], parts[3], args=parts[4:], scheme=True, host=True, extension=False)
