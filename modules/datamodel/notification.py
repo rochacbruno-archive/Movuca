@@ -75,6 +75,7 @@ class Notification(BaseModel):
             Field("event_image", "string"),
             Field("mail_sent", "boolean", default=False),
             Field("is_read", "boolean", default=False),
+            Field("kwargs", "text"),
         ]
 
 

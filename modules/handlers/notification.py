@@ -29,6 +29,7 @@ class Notifier(object):
                 event_link=kwargs.get("event_link", ""),
                 event_reference=kwargs.get("event_reference", 0),
                 event_image=kwargs.get("event_image", ""),
+                kwargs=str(kwargs)
             )
             self.insert_site_notification(**params)
 
@@ -55,7 +56,8 @@ class Notifier(object):
                 event_link=kwargs.get("event_link", ""),
                 event_reference=kwargs.get("event_reference", 0),
                 event_image=kwargs.get("event_image", ""),
-                is_read=False
+                is_read=False,
+                kwargs=str(kwargs)
             )
             self.insert_site_notification_all(**params)
 
