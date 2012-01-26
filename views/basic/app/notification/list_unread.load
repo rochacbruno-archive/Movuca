@@ -1,0 +1,21 @@
+{{
+def get_link(event_type, event_link):
+    return event_info[event_type]['url_to']+"/"+event_link
+}}
+<input type="hidden" value="{{=",".join([str(i) for i in notifications_ids])}}" name="notifications_ids" id="notifications_ids">
+<ul style="list-style:none;padding-left:0px;">
+{{for notification in notifications:}}
+	<li class="five columns" style="padding-left:0px !important;">
+	  
+	   <p class="five columns" style="margin-left:0px;">
+	     <img src="{{=notification.event_image}}" width=35 style="float:left;margin:5px;">
+	     <a style="max-width:50px;" href="{{=get_link(notification.event_type, notification.event_link)}}">
+	      {{=notification.event_text}}
+	      {{=notification.event_type}}
+	     </a>
+	   </p>
+	   <hr />
+	   
+	</li>
+{{pass}}
+</ul>

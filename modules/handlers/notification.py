@@ -2,6 +2,38 @@
 
 from datamodel.notification import NotificationPermission, Notification, EmailTemplate
 from gluon import URL
+from handlers.base import Base
+from movuca import DataBase, User
+
+
+class Notifications(Base):
+    def start(self):
+        self.db = DataBase([User, Notification])
+
+    def pre_render(self):
+        # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
+        self.response = self.db.response
+        self.request = self.db.request
+        self.config = self.db.config
+        self.session = self.db.session
+        self.T = self.db.T
+        self.CURL = self.db.CURL
+        self.get_image = self.db.get_image
+        self.context.theme_name = self.config.theme.name
+
+    def list_unread(self, user_id):
+        self.context.notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).select(orderby=~self.db.Notification.created_on)
+        self.context.notifications_ids = [row.id for row in self.context.notifications]
+
+    def counter(self, user_id):
+        self.context.count = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).count()
+
+    def mark_as_read(self, user_id, ids):
+        ids = ids.split(",")
+        notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.id.belongs(ids))).select()
+        for notification in notifications:
+            notification.update_record(is_read=True)
+        self.db.commit()
 
 
 class Notifier(object):

@@ -59,6 +59,8 @@ new_picture_comment={'url': CURL(),
 wrote_on_wall={'url': CURL('person', 'show', extension=False),
                'url_to': CURL('person', 'show', extension=False),
                'icon': "board.24.png",
-               'title': T(" wrote on %(event_to)s board")}
+               'title': T(" wrote on %(event_to)s board")},
+new_article_comment_subscribers={'url_to': CURL('article', 'show', extension=False)},
+update_article_subscribers={'url_to': CURL('article', 'show', extension=False)},
 
                )

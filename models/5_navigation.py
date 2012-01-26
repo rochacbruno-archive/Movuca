@@ -52,7 +52,10 @@ if session.auth:
                                           (T('Logout'), False, CURL('default', 'user', args='logout'), []),
                                   ])
     )
-    response.menu.append((DIV(IMG(_src=URL('static', 'images', args='alert.18.png'), alt=T("Alert"), title=T("Notifications")), " (1)", _onclick="alert('Sorry, notifications page is under construction!')"), False, False, []))
+    response.menu.append((DIV(IMG(_src=URL('static', 'images', args='alert.18.png'), alt=T("Alert"), title=T("Notifications")),
+                                  " (", SPAN(_id="notification-counter"), ")",
+                                  _id="notification-opener",
+                                  ), False, False, []))
 else:
     response.menu.append((T('Login'), False, CURL('person', 'account', args='login'), []))
     response.menu.append((T('Join'), False, CURL('person', 'account', args='register'), []))

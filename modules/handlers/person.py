@@ -257,8 +257,8 @@ class Person(Base):
             #            message=[None, """<h1>You got a new post on your board!</h1><p>%(board_text)s</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % form.vars])
             self.notifier.notify("wrote_on_wall",
                                  user,
-                                 event_text=form.vars.board_text,
-                                 event_link=writer_user.nickname or writer_user.id,
+                                 event_text=self.db.T("%s wrote on your wall: %s", (writer_user.nickname, form.vars.board_text)),
+                                 event_link=user.nickname or user.id,
                                  event_reference=form.vars.id,
                                  event_image=self.get_image(None, 'user', themename=self.context.theme_name, user=writer_user),
                                  writer=writer_user

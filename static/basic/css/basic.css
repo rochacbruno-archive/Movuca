@@ -362,3 +362,7 @@ img.thumbnail {
         -webkit-box-shadow: none !important;
         box-shadow:  none !important;
         width:  80px !important; }
+
+.cke_dialog_ui_vbox_child input[type="file"]{
+    width:50%;
+}

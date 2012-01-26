@@ -6,6 +6,10 @@
 	height:220px; 
 	/*background:#fff;*/
 	padding:5px;
+
+	background: none;
+    border: none;
+    color: #404040;
 }
 #featured ul.ui-tabs-nav{ 
 	position:absolute; 
@@ -13,12 +17,20 @@
 	list-style:none; 
 	padding:0; margin:0; 
 	width:250px; 
+	border-bottom:none;
 }
 #featured ul.ui-tabs-nav li{ 
 	padding:1px 0; padding-left:13px;  
 	font-size:12px; 
 	line-height:12px;
 	color:#666; 
+	white-space: normal;
+	margin-bottom:3px;
+	width:250px;
+}
+#featured ul.ui-tabs-nav li:hover{ 
+    background:none;
+    border-bottom:none;
 }
 #featured ul.ui-tabs-nav li img{ 
 	float:left; margin:2px 5px; 
@@ -36,6 +48,14 @@
 	color:#333;  
 	background:#fff; 
 	line-height:18px;
+	border-radius:none;
+	padding: 0px 0px 0px 0px;
+	border-color:none;
+  border:none;
+  -webkit-border-radius: none;
+  -moz-border-radius: none;
+  border-radius: none;
+  width:250px;
 }
 #featured li.ui-tabs-nav-item a:hover{ 
 	background:#f2f2f2; 
@@ -49,6 +69,10 @@
 #featured .ui-tabs-panel{ 
 	width:400px; height:220px; 
 	background:#999; position:relative;
+
+	border-width: 0;
+    display: block;
+    padding: 0;
 }
 #featured .ui-tabs-panel .info{ 
 	position:absolute; 
