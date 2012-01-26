@@ -11,6 +11,10 @@
 * allow sub categories in article (how?)
 * tag cloud
 * better search
+* delete article (is_active=False, also set is_active in all queries)
+* article thrash
+* save articel as template >> new from template
+* allow constrinutor authors for article
 * show notifications in menu
 * default email templates for all events
 * allow attachments in template emails (?)
