@@ -11,7 +11,7 @@ def get_link(event_type, event_link):
 	     <img src="{{=notification.event_image}}" width=35 style="float:left;margin:5px;">
 	     <a style="max-width:50px;" href="{{=get_link(notification.event_type, notification.event_link)}}">
 	      {{=notification.event_text}}
-	      {{=notification.event_type}}
+	      {{#=notification.event_type}}
 	     </a>
 	   </p>
 	   <hr />
