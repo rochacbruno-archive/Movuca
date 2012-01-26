@@ -1,6 +1,6 @@
 $(document).ready(function () {
     
-    ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+    //ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
 
     $("#notification-dialog").dialog({
 			autoOpen: false,

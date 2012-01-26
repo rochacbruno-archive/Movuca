@@ -61,6 +61,13 @@
 
   <script type="text/javascript">
     jQuery(function(){ jQuery('ul.sf-menu').supersubs({minWidth:12,maxWidth:30,extraWidth:3}).superfish(); });
+
+  
+    {{if session.auth and session.auth.user:}}
+    $(document).ready(function () {
+       ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+    });
+    {{pass}}
   </script>
 
   {{
