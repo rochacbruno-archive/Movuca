@@ -1,6 +1,57 @@
-**TODO**
+# TODO
 
-- change the classes of contact box
-- better home page
-- send emails/notifications
-
+* change the classes of contact box
+* better home page
+* menu builder
+* profile form
+* profile permissions forms
+* check privacy for person
+* article privacy
+* article categories (fix)
+* allow sub categories in article (how?)
+* tag cloud
+* better search
+* show notifications in menu
+* default email templates for all events
+* allow attachments in template emails (?)
+* events documentation
+* allow upload fields in contenttypes
+* bootstrap 2 basic theme
+* Site visibility option in config |  open / only home page open / only home page & profiles open / closed (to members)
+* Worker for notifications with web2py scheduller
+* widgets for home page
+* plugin manager
+* admin for users
+* admin for admins
+* groups
+* group forums
+* pages
+* add article to group
+* pictures in board (picture is a content type?)
+* mentions in board (@username 9lessons.com)
+* get comment event from disqus API (there is a way?)
+* Button to send board posts to facebook (when logged in with facebook, or get the access_token)
+* logins in a modal
+* better modal for images in article
+* picture gallery for users
+* User menu (lateral)
+* Ads manager (google ads, boobox)
+* blog(s) mode
+* allow registration optin in config?
+* Install interface
+* config admin
+* notify subscribers button in article edit
+* announce new article in facebook (when logged in)
+* Drafts manager
+* Fix bugs in counters
+* user fav, liked, disliked lists
+* multi content articles
+* multi pages in article (tabs?)
+* pagination for search and lists
+* pagination for comments
+* Display "loading..." message in all buttons
+* Messages system (Kenji Plugin?)
+* Configurable list widget with tabs (for home page, see globo.com)
+* responsive images src.sencha or responsivekit
+* context.alerts manager
+* docs (how to use sphinx?)
