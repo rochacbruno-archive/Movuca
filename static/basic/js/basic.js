@@ -35,3 +35,10 @@ $(document).ready(function () {
 		return false;
 	});
 });
+
+(function poll(){
+   setTimeout(function(){
+      ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+      poll();
+  }, 30000);
+})();
