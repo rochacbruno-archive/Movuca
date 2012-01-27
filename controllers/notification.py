@@ -8,11 +8,11 @@ def list_unread():
     notifications = Notifications()
     notifications.list_unread(session.auth.user.id)
     return notifications.render("app/notification/list_unread")
-\
+
 
 def list_latest():
     notifications = Notifications()
-    notifications.list_latest(session.auth.user.id)
+    notifications.list_latest(session.auth.user.id, limitby=None)
     return notifications.render("app/notification/list_latest")
 
 
