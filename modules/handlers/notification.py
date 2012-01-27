@@ -82,6 +82,7 @@ class Notifier(object):
         if not any([user, user_id]):
             raise Exception("You need to inform user or user_id")
         permission = self.check_permission(event_type, user_id or user.id, user)
+        kwargs['http_host'] = str(self.db.request.env.http_host)
         kwargs = self.check_image_urls(kwargs)
         if 'site' in permission:
             params = dict(
@@ -109,6 +110,7 @@ class Notifier(object):
                 self.notification.entity[self.record].update_record(mail_sent=True)
 
     def notify_all(self, event_type, emails, users, **kwargs):
+        kwargs['http_host'] = str(self.db.request.env.http_host)
         kwargs = self.check_image_urls(kwargs)
         for user in users:
             params = dict(
@@ -168,7 +170,7 @@ class Notifier(object):
 
         from gluon.template import render
         from gluon import current
-        self.render = lambda text: render(text, context=dict(theme_name=self.config.theme.name, CURL=self.db.CURL, http_host='http://' + self.db.request.env.http_host, event_type=event_type, event_info=current.event_info, **kwargs))
+        self.render = lambda text: render(text, context=dict(theme_name=self.config.theme.name, CURL=self.db.CURL, event_type=event_type, event_info=current.event_info, **kwargs))
         # >>> from gluon.template import render
         # >>> render(str(MARKMIN("{{=number}} Bruno http://dfdfd.com")), context={"number":1})
         # '<p>1 Bruno <a href="http://dfdfd.com">http://dfdfd.com</a></p>'
