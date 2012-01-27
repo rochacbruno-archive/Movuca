@@ -28,8 +28,8 @@ $(document).ready(function () {
               }
                ] 
         );
-        obj.dialog( "option", "height", 530 );
-        obj.dialog( "option", "position", 'top' );
+        obj.dialog( "option", "height", 400 );
+        obj.dialog( "option", "position", [$( "#notification-opener" ).offset().left,40] );
         //obj.dialog( "option", "title", 'Notifications' );
 		$("#notification-dialog").dialog("open");
 		return false;

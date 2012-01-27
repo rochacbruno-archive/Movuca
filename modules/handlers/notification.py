@@ -1,5 +1,23 @@
 # -*- coding: utf-8 -*-
 
+###############################################################################
+# Movuca - The Social CMS
+# Copyright (C) 2012  Bruno Cezar Rocha <rochacbruno@gmail.com>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###############################################################################
+
 from datamodel.notification import NotificationPermission, Notification, EmailTemplate
 from gluon import URL
 from handlers.base import Base
@@ -25,15 +43,26 @@ class Notifications(Base):
         self.context.notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).select(orderby=~self.db.Notification.created_on)
         self.context.notifications_ids = [row.id for row in self.context.notifications]
 
+    def list_latest(self, user_id, limitby="0,10"):
+        if isinstance(limitby, str):
+            limitby = [int(index) for index in limitby.split(",")]
+
+        self.context.notifications = self.db((self.db.Notification.user_id == user_id)).select(orderby=~self.db.Notification.created_on, limitby=limitby)
+        self.context.notifications_ids = [row.id for row in self.context.notifications if row.is_read == False]
+
     def counter(self, user_id):
-        self.context.count = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).count()
+        try:
+            self.context.count = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).count()
+        except Exception:
+            self.context.count = 0
 
     def mark_as_read(self, user_id, ids):
         ids = ids.split(",")
-        notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.id.belongs(ids))).select()
-        for notification in notifications:
-            notification.update_record(is_read=True)
-        self.db.commit()
+        if ids:
+            notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False) & (self.db.Notification.id.belongs(ids))).select()
+            for notification in notifications:
+                notification.update_record(is_read=True)
+                self.db.commit()
 
 
 class Notifier(object):

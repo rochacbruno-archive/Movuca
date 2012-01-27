@@ -1,0 +1,28 @@
+{{
+def get_link(event_type, event_link):
+    return event_info[event_type]['url_to']+"/"+event_link
+}}
+<input type="hidden" value="{{=",".join([str(i) for i in notifications_ids])}}" name="notifications_ids" id="notifications_ids">
+<ul style="list-style:none;padding-left:0px;">
+{{for notification in notifications:}}
+	<li class="five columns" style="padding-left:0px !important; border-bottom: 1px solid #ccc; {{='background-color:#E4E4E4 !important;' if not notification.is_read else ''}} ">
+	  
+	   <p class="five columns" style="margin-left:0px;">
+	     <img src="{{=notification.event_image}}" width=35 style="float:left;margin:5px;">
+	     
+	     {{if notification.is_read:}}
+         <a style="max-width:50px;" href="{{=get_link(notification.event_type, notification.event_link)}}">
+	     {{else:}}
+	     <a style="max-width:50px;" href="#" onclick="ajax($('#notification-dialog').attr('data-mark-url')+'?notifications_ids={{=notification.id}}',[],''); window.location = '{{=get_link(notification.event_type, notification.event_link)}}'; return false;">
+         {{pass}}
+
+	      {{=notification.event_text}}
+	      {{#=notification.event_type}}
+	     </a>
+	   </p>
+	   
+	   
+	</li>
+{{pass}}
+</ul>
+<a href="{{=URL('person', 'show', extension=False)}}" class="ui-button">{{=T("View all notifications")}}</a>

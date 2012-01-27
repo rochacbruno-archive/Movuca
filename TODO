@@ -54,6 +54,8 @@
 * pagination for search and lists
 * pagination for comments
 * Display "loading..." message in all buttons
+* jqueryui all buttons
+* solve google login bug
 * Messages system (Kenji Plugin?)
 * Configurable list widget with tabs (for home page, see globo.com)
 * responsive images src.sencha or responsivekit
