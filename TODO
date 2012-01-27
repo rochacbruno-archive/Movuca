@@ -15,8 +15,8 @@
 * article thrash
 * save articel as template >> new from template
 * allow constrinutor authors for article
-* show notifications in menu
-* default email templates for all events
+* show notifications in menu (### DONE ###)
+* default email templates for all events (### IN PROGRESS ###)
 * allow attachments in template emails (?)
 * events documentation
 * allow upload fields in contenttypes
@@ -38,6 +38,9 @@
 * logins in a modal
 * better modal for images in article
 * picture gallery for users
+* new members widget
+* registered event_type
+* online users widget
 * User menu (lateral)
 * Ads manager (google ads, boobox)
 * blog(s) mode

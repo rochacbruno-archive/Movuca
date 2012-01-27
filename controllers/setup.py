@@ -27,4 +27,4 @@ def reload():
     from config import Config
     config = Config(autogetconfig=False)
     config.get_config(expire=0)
-    return config.auth
+    return getattr(config, request.args(0) or "auth")

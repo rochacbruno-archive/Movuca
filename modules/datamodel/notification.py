@@ -99,3 +99,119 @@ class EmailTemplate(BaseModel):
         self.widgets = {
             "html_text": ckeditor.widget
         }
+
+    def set_fixtures(self):
+        self.default_html = """
+        <html>
+        <p>
+            <a href="http://movu.ca/demo">
+               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+            </a>
+        </p>
+        <p>
+          <img src="{{=event_image}}" width="100">
+          <br />
+          <h2>
+          {{=event_text}}
+          </h2>
+          <br />
+          <a href="{{=event_info[event_type]['url_to']+'/'+event_link}}"> Click here and go to the event!</a>
+        </p>
+        <p>
+            This is a notification of {{=event_type}} from Movuca The Social CMS - http://movu.ca
+        </p>
+        Movuca Beta
+        </html>
+        """
+        self.default_welcome_html = """
+        <html>
+        <p>
+            <a href="http://movu.ca/demo">
+               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+            </a>
+        </p>
+        <p>
+           Welcome to Movuca Social CMS
+           <br/>
+           Go to your profile and complete your data!
+        </p>
+        <p>
+            This is a notification from Movuca The Social CMS - http://movu.ca
+        </p>
+        Movuca Beta
+        </html>
+        """
+        self.default_verify_email_html = """
+        <html>
+        <p>
+            <a href="http://movu.ca/demo">
+               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+            </a>
+        </p>
+        <p>
+           Click the link below to verify your e-mail
+           <br/>
+           {{=CURL('person', 'account', args=['verify_email'], scheme=True, host=True)}}/%(key)s
+        </p>
+        <p>
+            This is a notification from Movuca The Social CMS - http://movu.ca
+        </p>
+        Movuca Beta
+        </html>
+        """
+        self.default_reset_password_html = """
+        <html>
+        <p>
+            <a href="http://movu.ca/demo">
+               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+            </a>
+        </p>
+          <p>
+           Click the link below to reset your password
+           <br/>
+           {{=CURL('person', 'account', args=['reset_password'], scheme=True, host=True)}}/%(key)s
+        </p>
+        <p>
+            This is a notification from Movuca The Social CMS - http://movu.ca
+        </p>
+        Movuca Beta
+        </html>
+        """
+        self.default_keys = dict(self.db.config.get_list('notification', 'event'))
+        self.auth_keys = {}
+        self.auth_keys['welcome_on_register'] = "Welcome to Movuca Social CMS"
+        self.auth_keys['verify_email'] = "Verify your email"
+        self.auth_keys['reset_password'] = "Reset your password"
+        for key, subject in self.default_keys.items():
+            if not self.db(self.entity.template_key == key).count():
+                self.entity.insert(
+                    template_key=key,
+                    plain_text="Movuca CMS Notification",
+                    html_text=self.default_html,
+                    subject_text=subject % ("", ""),
+                )
+
+        if not self.db(self.entity.template_key == 'welcome_on_register').count():
+                self.entity.insert(
+                    template_key='welcome_on_register',
+                    plain_text="Movuca CMS Notification",
+                    html_text=self.default_welcome_html,
+                    subject_text="Welcome to Movuca The Social CMS",
+                )
+        if not self.db(self.entity.template_key == 'verify_email').count():
+                self.entity.insert(
+                    template_key='verify_email',
+                    plain_text="Movuca CMS Notification",
+                    html_text=self.default_verify_email_html,
+                    subject_text="Movuca CMS - Verify your email",
+                )
+        if not self.db(self.entity.template_key == 'reset_password').count():
+                self.entity.insert(
+                    template_key='reset_password',
+                    plain_text="Movuca CMS Notification",
+                    html_text=self.default_reset_password_html,
+                    subject_text="Movuca CMS Reset your password",
+                )
+
+
+

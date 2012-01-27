@@ -112,7 +112,8 @@ class Setup(object):
                 "new_article_comment:%s commented your publication %s",
                 "comment_reply:%s replied your comment %s",
                 "board_reply:%s replied your board post %s",
-                "subscriptions:%s updates in publications you are subscribed %s",
+                "new_article_comment_subscribers:%s comments on publications you are subscribed %s",
+                "update_article_subscribers:%s updates on publications you are subscribed %s",
                 "mention:%s mentioned your name %s",
                 "message:%s you got a new message %s",
         ]

@@ -167,7 +167,8 @@ class Notifier(object):
         self.pre_render = lambda value: value
 
         from gluon.template import render
-        self.render = lambda text: render(text, context=dict(theme_name=self.config.theme.name, **kwargs))
+        from gluon import current
+        self.render = lambda text: render(text, context=dict(theme_name=self.config.theme.name, CURL=self.db.CURL, event_type=event_type, event_info=current.event_info, **kwargs))
         # >>> from gluon.template import render
         # >>> render(str(MARKMIN("{{=number}} Bruno http://dfdfd.com")), context={"number":1})
         # '<p>1 Bruno <a href="http://dfdfd.com">http://dfdfd.com</a></p>'
