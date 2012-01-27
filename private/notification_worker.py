@@ -24,7 +24,7 @@ while True:
             s_to_parse = row.kwargs or "{}"
             kwargs = eval(s_to_parse.strip())  # from str to dict (can user json?)
             email = row.user_id.email
-            if notifier.send_email(email, row.event_type, **kwargs):
+            if notifier.send_email(email, row.event_type, bypass=True, **kwargs):
                 row.update_record(mail_sent=True)
                 print "success:", email, row.event_type, row.id
             else:

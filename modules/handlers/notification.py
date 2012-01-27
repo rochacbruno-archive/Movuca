@@ -191,16 +191,17 @@ class Notifier(object):
                     del message['bcc']
 
                 params = dict(to=to, bcc=bcc, **message)
-                result = mail.send(**params)
+                sent = mail.send(**params)
             except Exception, e:
                 print str(e)
+                sent = False
             else:
                 if self.record:
                     self.notification.entity[self.record].update_record(mail_sent=True)
                 if self.records:
                     for record in self.records:
                         self.notification.entity[record].update_record(mail_sent=True)
-            return result
+            return sent
 
     def check_image_urls(self, args):
         if 'event_image' in args:
