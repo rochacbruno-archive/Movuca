@@ -22,6 +22,7 @@ from datamodel.notification import NotificationPermission, Notification, EmailTe
 from gluon import URL
 from handlers.base import Base
 from movuca import DataBase, User
+from helpers.object_cleaner import clean_object
 
 
 class Notifications(Base):
@@ -90,7 +91,7 @@ class Notifier(object):
                 event_link=kwargs.get("event_link", ""),
                 event_reference=kwargs.get("event_reference", 0),
                 event_image=kwargs.get("event_image", ""),
-                kwargs=str(kwargs)
+                kwargs=clean_object(kwargs, self.db.T)
             )
             self.insert_site_notification(**params)
 
@@ -118,7 +119,7 @@ class Notifier(object):
                 event_reference=kwargs.get("event_reference", 0),
                 event_image=kwargs.get("event_image", ""),
                 is_read=False,
-                kwargs=str(kwargs)
+                kwargs=clean_object(kwargs, self.db.T)
             )
             self.insert_site_notification_all(**params)
 

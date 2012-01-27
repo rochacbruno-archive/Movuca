@@ -21,11 +21,7 @@ while True:
     rows = db(db.notification.mail_sent == False).select()
     for row in rows:
         s_to_parse = row.kwargs or "{}"
-        s_to_parse = s_to_parse.replace("<Storage {", "{")
-        s_to_parse = s_to_parse.replace("}>", "}")
-        s_to_parse = s_to_parse.replace(">,", ",")
-        s_to_parse = s_to_parse.replace("<lazyT", "")
-        kwargs = eval(s_to_parse)  # from str to dict (can user json?)
+        kwargs = eval(s_to_parse.strip())  # from str to dict (can user json?)
 
         notifier.send_email(row.user_id.email, row.event_type, **kwargs)
         row.update_record(mail_sent=True)
