@@ -115,7 +115,7 @@ class EmailTemplate(BaseModel):
           {{=event_text}}
           </h2>
           <br />
-          <a href="{{=event_info[event_type]['url_to']+'/'+event_link}}"> Click here and go to the event!</a>
+          <a href="{{=http_host+event_info[event_type]['url_to']+'/'+event_link}}"> Click here and go to the event!</a>
         </p>
         <p>
             This is a notification of {{=event_type}} from Movuca The Social CMS - http://movu.ca
