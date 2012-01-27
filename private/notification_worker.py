@@ -20,10 +20,18 @@ mail = Mailer(db)
 while True:
     rows = db(db.notification.mail_sent == False).select()
     for row in rows:
-        s_to_parse = row.kwargs or "{}"
-        kwargs = eval(s_to_parse.strip())  # from str to dict (can user json?)
-
-        notifier.send_email(row.user_id.email, row.event_type, **kwargs)
-        row.update_record(mail_sent=True)
-        db.commit()
+        try:
+            s_to_parse = row.kwargs or "{}"
+            kwargs = eval(s_to_parse.strip())  # from str to dict (can user json?)
+            email = row.user_id.email
+            if notifier.send_email(email, row.event_type, **kwargs):
+                row.update_record(mail_sent=True)
+                print "success:", email, row.event_type, row.id
+            else:
+                print "failed", email, row.event_type, row.id
+        except Exception, e:
+            db.rollback()
+            print str(e)
+        else:
+            db.commit()
     time.sleep(60)  # check every minute
