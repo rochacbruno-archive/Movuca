@@ -48,7 +48,7 @@ class Notifications(Base):
         if isinstance(limitby, str):
             limitby = [int(index) for index in limitby.split(",")]
 
-        self.context.notifications = self.db((self.db.Notification.user_id == user_id)).select(orderby=~self.db.Notification.created_on, limitby=limitby)
+        self.context.notifications = self.db((self.db.Notification.user_id == user_id)).select(orderby=self.db.Notification.is_read | ~self.db.Notification.created_on, limitby=limitby)
         self.context.notifications_ids = [row.id for row in self.context.notifications if row.is_read == False]
 
     def counter(self, user_id):
