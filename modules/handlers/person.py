@@ -314,6 +314,7 @@ class Person(Base):
     def show(self, uid):
         T = self.T
         CURL = self.CURL
+        self.db.auth.notifier = self.notifier
         user = None
         try:
             user = self.db.auth_user[int(uid)]

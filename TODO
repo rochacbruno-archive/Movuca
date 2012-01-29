@@ -3,8 +3,8 @@
 * change the classes of contact box
 * better home page
 * menu builder
-* profile form
-* profile permissions forms
+* profile form (### IN PROGRESS ###)
+* profile permissions forms (### PROGRESS ###)
 * check privacy for person
 * article privacy
 * article categories (fix)
@@ -16,7 +16,7 @@
 * save articel as template >> new from template
 * allow constrinutor authors for article
 * show notifications in menu (### DONE ###)
-* default email templates for all events (### IN PROGRESS ###)
+* default email templates for all events (### DONE ###)
 * allow attachments in template emails (?)
 * events documentation
 * allow upload fields in contenttypes

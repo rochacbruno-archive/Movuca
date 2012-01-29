@@ -58,3 +58,24 @@ def data():
       LOAD('default','data.load',args='tables',ajax=True,user_signature=True)
     """
     return dict(form=crud())
+
+
+def boxsearch():
+    q = request.vars.searchword
+    q = q.replace("@", "")
+    q = q.replace(" ", "%")
+    # return DIV(
+    #     A("teste", _class="addname", title="testando"),
+    #     BR(),
+    #     _class="display_box",
+    #     _align="left"
+    # )
+
+    return XML("""
+<div class="display_box" align="left">
+
+<img src="user_img/srinivas.jpg" style="width:25px; float:left; margin-right:6px" />
+<a href="#" class='addname' title='Srinivas&nbsp;Tamada'>
+<b>s</b>riniva<b>s</b>&nbsp;Tamada </a><br/>
+<span style="font-size:9px; color:#999999">India</span></div>
+    """)
