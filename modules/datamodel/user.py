@@ -135,7 +135,7 @@ class User(BaseAuth):
         self.entity.extra_links.requires = IS_EMPTY_OR(IS_LIST_OF(IS_URL(allowed_schemes=['https', 'http'], prepend_scheme='http')))
 
         self.entity.photo_source.requires = IS_IN_SET(config.get_list('auth', 'photo_source'))
-        self.entity.gender.requires = IS_IN_SET(config.get_list('auth', 'gender'))
+        self.entity.gender.requires = IS_EMPTY_OR(IS_IN_SET(config.get_list('auth', 'gender')))
         self.entity.privacy.requires = IS_IN_SET(config.get_list('auth', 'privacy'))
         #date format not allowed on gae
         if not request.env.web2py_runtime_gae:
