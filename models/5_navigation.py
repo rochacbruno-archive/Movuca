@@ -1,6 +1,13 @@
 response.menu = []
 
 if session.auth:
+
+    logout_url = (T('Logout'), False, CURL('person', 'account', args='logout'), [])
+    if session.facebooklogin:
+        logout_url = (T('Logout'), False, CURL('person', 'facebook', args='logout'), [])
+    elif session.googlelogin:
+        logout_url = (T('Logout'), False, CURL('person', 'google', args='logout'), [])
+
     response.menu.append(
         (T('Create'), False, False, [
                                   (T('Content'), False, False, [
@@ -49,7 +56,7 @@ if session.auth:
                                           (T('My Activities'), False, CURL('person', 'usertimeline'), []),
                                           (T('My Board'), False, CURL('person', 'usertimeline'), []),
                                           (T('My Messages'), False, False, []),
-                                          (T('Logout'), False, CURL('default', 'user', args='logout'), []),
+                                          logout_url,
                                   ])
     )
     response.menu.append((DIV(IMG(_src=URL('static', 'images', args='alert.18.png'), alt=T("Alert"), title=T("Notifications")),
