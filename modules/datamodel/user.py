@@ -132,7 +132,7 @@ class User(BaseAuth):
         self.entity.twitter.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.twitter))
         self.entity.facebook.requires = IS_EMPTY_OR(IS_NOT_IN_DB(self.db, self.entity.facebook))
 
-        self.entity.extra_links.requires = IS_LIST_OF(IS_URL(allowed_schemes=['https', 'http'], prepend_scheme='http'))
+        self.entity.extra_links.requires = IS_EMPTY_OR(IS_LIST_OF(IS_URL(allowed_schemes=['https', 'http'], prepend_scheme='http')))
 
         self.entity.photo_source.requires = IS_IN_SET(config.get_list('auth', 'photo_source'))
         self.entity.gender.requires = IS_IN_SET(config.get_list('auth', 'gender'))
