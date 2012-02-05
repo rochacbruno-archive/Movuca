@@ -14,7 +14,7 @@
     
     <div class="row list-article-row">
       <div class="span2" style="padding:10px">
-         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
+         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100, _style="max-height:100px;"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
          <span class="list-article-like"><i class="icon-leaf"></i>{{=T("%s likes", article.likes or 0)}}</span>
       </div>
       <div class="span8" style="padding:10px">
