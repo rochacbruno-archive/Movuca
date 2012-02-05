@@ -44,7 +44,7 @@ def contact_box(row,
 
     ret = DIV(_class="%s contact-item %s" % (css.get("main", ""), current.getclass(2)),
               _id="item_%s" % uid)
-    ret.append(IMG(_style="margin:0 10px 0;max-height:92px;max-width:92px;", _class="%s alpha thumbnail" % css.get("img", ""), _src=current.get_image(None, 'user', themename=themename, user=user_record)))
+    ret.append(IMG(_style="margin:0 10px 0;height:92px;width:92px;max-height:92px;max-width:92px;", _class="%s alpha thumbnail" % css.get("img", ""), _src=current.get_image(None, 'user', themename=themename, user=user_record)))
     infodiv = DIV(_class="%s omega" % css.get("div", ""))
     infodiv.append(TAG.STRONG(name))
     if follows_you:
