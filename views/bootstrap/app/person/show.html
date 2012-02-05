@@ -73,7 +73,17 @@
             <div class="person-articles person-box">
                 <h4><i class="icon-list-alt"></i>{{=T("Articles")}}</h4>
                 {{if relation == 'yourself':}}
-                    {{=A(T("Write a new article"), _class="btn btn-info", _style="margin-bottom:5px;", _href=CURL('article', 'new', args='Article'))}}
+                    <div class="btn-group">
+                        {{=A(T("Write a new article"), _class="btn btn-info", _style="margin-bottom:5px;", _href=CURL('article', 'new', args='Article'))}}
+                        <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                          {{=LI(A(T("Write a new article"), _href=CURL('article', 'new', args='Article')))}}
+                          {{=LI(A(T("Write a new cook recipe"), _href=CURL('article', 'new', args='CookRecipe')))}}
+                          {{=LI(A(T("Insert a new product"), _href=CURL('article', 'new', args='Product')))}}
+                        </ul>
+                    </div>
                 {{pass}}
                 {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,3'), ajax=True)}}
             </div>

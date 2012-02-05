@@ -74,6 +74,11 @@ fieldset legend {text-transform:uppercase;
  	margin-top:20px;
  }
 
+.person-box h4{
+    margin-top:10px;
+    margin-bottom:10px;
+    border-bottom:1px solid #444;
+}
 /* .container-fluid{
  	padding-right:8%;padding-left:8%;
  }*/

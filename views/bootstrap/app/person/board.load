@@ -1,6 +1,7 @@
-<div class="board-form well" style="padding-top:5px;margin:0px;">
+
     
 {{if not isinstance(form, str):}}
+<div class="board-form well" style="padding-top:5px;margin:0px;">
     {{=form.custom.begin}}
        
         <div class="{{='control-group error' if form.errors else ''}}">
@@ -13,11 +14,12 @@
         <button type="submit" class="btn-info btn-large">{{=T("Post")}}</button>
     
     {{=form.custom.end}}
+</div>
 {{else:}}
   {{=form}}
 {{pass}}
 
-</div>
+
 
 
 {{if board:}}
