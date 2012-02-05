@@ -62,6 +62,9 @@ class Base(object):
         self.context.theme_name = self.config.theme.name
 
     def render(self, view=None, theme=None):
+        self.context.use_facebook = self.db.config.auth.use_facebook
+        self.context.use_google = self.db.config.auth.use_google
+        self.context.theme_name = self.config.theme.name
         if theme:
             self.theme = theme
             self.context.theme_name = theme
