@@ -41,3 +41,6 @@ class Home(Base):
         self.context.featured = self.db(self.db.Article.featured == True).select(limitby=(0, 4), orderby="<random>")
         if not self.context.featured:
             self.context.featured = self.db(self.db.Article).select(limitby=(0, 4), orderby=~self.db.Article.likes)
+
+    def featured_members(self):
+        self.context.featured_members = self.db(self.db.auth_user).select(limitby=(0, 9), orderby=~self.db.auth_user.articles)

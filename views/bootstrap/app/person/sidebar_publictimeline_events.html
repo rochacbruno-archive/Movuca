@@ -1,10 +1,10 @@
 {{def eventbox(event):}}
 <li class="timeline-item row well" style="padding-top:5px;margin:0px;" onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
-<div class="row">
+<div class="row-fluid">
 	<div class="span2" style="margin-right:0;">
 	    <a href="{{=event_info[event.event_type]['url']}}/{{=event.event_link}}" title="{{=event.nickname}}"><img  src="{{=event.event_image}}" style="max-height:50px;"></a>
 	</div>
-	<div class="span5 timeline-text" style="font-size:12px;line-height:12px;padding:0px;text-align:center;">
+	<div class="span6 timeline-text" style="font-size:12px;line-height:12px;padding:0px;text-align:center;">
 		
 	    <p  onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
 	    {{if 'iconclass' in event_info[event.event_type]:}}
@@ -20,7 +20,7 @@
 	{{pass}}
 </div>
 
-<div class="row" style="margin:0;padding:0;">
+<div class="row-fluid" style="margin:0;padding:0;">
 	<div class="" style="text-align:right;font-size:12px;line-height:12px;padding:0px;"><i class="icon-time"></i>{{=pdate(event.created_on)}} &nbsp;&nbsp;&nbsp;</div>
 </div>
 
