@@ -1,4 +1,17 @@
 $(document).ready(function () {
+
+
+  // $('.loader').ajaxStart(function(){
+  //   $(this).show();
+  // }).ajaxStop(function(){
+  //   $(this).hide();
+  // });
+    
+
+  // $("#loading_animation").bind({
+  //     ajaxStart: function() { $(this).show(); },
+  //     ajaxStop: function() { $(this).hide(); }
+  // });
     
     //ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
 

@@ -1,0 +1,107 @@
+{{response.files.append(URL('static','basic/css/jqModal.css'))}}
+{{response.files.append(URL('static','basic/js/jqModal.js'))}}
+{{response.files.append(URL('static','basic/js/cookrecipe_show.js'))}}
+{{extend "basic/app/layout.html"}}
+{{block right_sidebar}}
+    <h4 class="bottom-line" style="margin-top:0px;">
+        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+        {{=T("Public Activities")}}
+    </h4>
+    {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
+{{end}}
+<div class="twelve columns center  show-article-wrapper">
+    <div class="row show-article-meta">
+      <div class="two columns alpha article-author-picture">
+         {{=A(IMG(_src=get_image(None, 'user', themename='basic', user=article.author), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
+      </div>
+      <div class="ten columns omega">
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} {{=ftime(article.publish_date)}} </em>
+          {{if article.category_id:}}
+              <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'list', vars=dict(category=article.category_id.name.replace(' ','_'))))}}</em> 
+          {{pass}}
+          <div class="show-article-information" id="links">
+              {{=action_links}}
+          </div>
+       
+      </div>
+    </div>
+    <div class="row show-article-content">
+        <div class="twelve columns alpha">
+          <div class="show-article-description article-box">
+              {{=H5(T("Recipe Description"))}}
+              {{=article.description}}
+          </div>
+       </div>
+       <div class="eight columns alpha">
+          <div class="jqmWindow" id="photomodal">
+              <a href='#' class="jqmClose">{{=T("Close")}}</a>
+              <br />
+              <img class="photo jqmClose" src="{{=URL('static','images',args='blank.gif')}}" />
+          </div>
+          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="eight columns alpha recipephoto")}}
+       
+
+            <div class="row show-article-tags">
+             {{if article.tags:}}
+                 <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
+             {{pass}}
+           </div>
+       </div>
+
+       <div class="four columns omega cook-recipe-information">
+
+        <!-- Lockerz Share BEGIN -->
+          <ul>
+            <li>
+            {{include 'basic/app/share_buttons.html'}}
+            {{share(classes="cook-recipe-share", columns="", like=False, tweet=False)}}
+            </li>
+          </ul>
+          <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+          <!-- Lockerz Share END -->
+         {{difficulty = dict([("1", T("Easy")), ("2", T("Medium")), ("3", T("Hard"))])}}
+         {{article_data.fdifficulty = difficulty[article_data.difficulty]}}
+         {{article_data.fservings = "%g" % article_data.servings}}
+         {{fields=[(T("Prep Time"),'prep_time'), (T("Cook Time"),'cook_time'), (T("Difficulty"),'fdifficulty'), (T("Servings"),'fservings')]}}
+         {{=UL(*[LI(SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields])}}
+         <ul>
+            <li id="addtobookbutton">
+               {{=LOAD('cookrecipe','addtobookbutton',args=15,ajax=True)}}
+            </li>
+            <li>
+               <button>{{=T("Print Recipe")}}</button>
+            </li>
+        </ul>
+       
+       </div>
+
+       <div class="five columns alpha cook-recipe-ingredients article-box">
+          
+              {{=H5(T("Ingredients"))}}
+              {{=UL(*[LI(item) for item in article_data.ingredients])}}
+          
+       </div>
+
+       <div class="seven columns omega cook-recipe-instructions article-box">
+              {{=H5(T("Preparation Instructions"))}}
+              {{=XML(article_data.instructions)}}
+       </div>
+       
+       <div class="twelve columns alpha article-box"> 
+          {{=H5(T("References"))}}
+          {{=MARKMIN(article_data.credits)}}
+       </div>
+    </div>
+    {{share()}}
+    <div class="row show-article-related article-box">
+    {{if related_articles:}}
+         <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Related articles')}}" title="{{=T('Related articles')}}">{{=T("Related articles")}}</h4>
+        {{=related_articles}}
+    {{pass}}
+    </div>
+    <div class="row show-article-comments article-box">
+        {{=comments}}
+    </div>
+
+</div>

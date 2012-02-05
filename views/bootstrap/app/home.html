@@ -1,0 +1,80 @@
+{{response.files.append(URL('static','bootstrap/js/home_index.js'))}}
+{{extend "bootstrap/app/layout.html"}}
+
+{{block header}}
+ <div class="row-fluid hero-unit" style="padding:0px;">
+    <div style="padding:15px;">
+    {{include "bootstrap/app/featured_slider.html"}}
+    {{include "bootstrap/app/featured_members.html"}}
+    </div>
+</div>
+{{end}}
+
+{{block left_sidebar}}
+    {{if not session.auth:}}
+     <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">{{=T("Connect!")}}</li>
+              <li>
+                  <div>
+                        {{if use_facebook:}}
+                               <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'bootstrap', args=['images', 'facebook-connect.png']))}}</a>     
+                         {{pass}}
+                         {{if use_google:}}
+                               <a href="{{=URL('person', 'google', args='login')}}">{{=IMG(_src=URL('static', 'bootstrap', args=['images', 'google-connect.png']))}}</a>     
+                         {{pass}}
+                     <form action="{{=URL('person', 'loginbare')}}" method="post">
+                         {{if 'loginerror' in request.args:}}
+                            <label style="color:red;">{{=T("Username or password incorrect")}}</label>
+                         {{pass}}
+                         <div class="input-prepend">
+                         <span class="add-on"><i class="icon-envelope"></i></span>
+                         <input type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'loginerror' else '')}}  style="width:70%"/>
+                         </div>
+                         <div class="input-prepend">
+                         <span class="add-on"><i class="icon-lock"></i></span>
+                         <input type="password" name="password" id="password" placeholder="{{=T('your password')}}"  style="width:70%"/>
+                         </div>
+                         <button class="btn">{{=T("Go")}}</button> 
+                     </form>
+                  </div>
+              </li>
+              <li><a href="{{=CURL('person', 'account', args='request_reset_password')}}"><i class="icon-asterisk"></i>{{=T("Lost password")}}</a></li>
+              <li class=""><a href="{{=CURL('person', 'account', args='register')}}"><i class="icon-user"></i>{{=T("Create your account")}}</a></li>
+            </ul>
+          </div><!--/.well -->
+
+    {{else:}}
+     {{super}}
+    {{pass}}
+<!--    <h4 class="bottom-line">
+        <img src="{{=URL('static','bootstrap/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
+        {{=T("Pages & Groups")}}
+    </h4> -->
+   
+{{end}}
+
+
+{{if session.auth:}}
+  <h4 class="bottom-line">
+      <i class="icon-th-list"></i>
+      {{=T("Your Feed")}}
+  </h4>
+  {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,5'), ajax=True)}}
+{{pass}}
+
+  <h4 class="bottom-line">
+      <i class="icon-list-alt"></i>
+      {{=T("Articles")}}
+  </h4>
+{{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
+
+
+
+{{block right_sidebar}}
+      <h4 class="bottom-line">
+      <i class="icon-volume-up"></i>
+      {{=T("Public Feed")}}
+  </h4>
+    {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
+{{end}}

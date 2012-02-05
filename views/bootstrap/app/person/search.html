@@ -1,0 +1,28 @@
+{{extend "bootstrap/app/layout.html"}}
+{{block left_sidebar}}
+    {{super}}
+{{end}}
+
+{{=T("Find a Contact")}}
+
+{{button = form.elements(_type='submit')[0]}}
+{{button['_class'] = 'btn btn-success'}}
+{{button['_value'] = T('Find')}}
+{{=form}}
+
+{{if results:}}
+
+{{
+css={"main": "well span5", "img": "span", "div": "four columns"}	
+}}
+
+<div class="row-fluid" id="search-wrapper">
+    <h4>{{=T("Results")}}</h4>
+    <hr />
+    {{for contact in results:}}
+        {{action  = 'unfollow' if contact.id in list(contacts_list)+list(following_list) else 'follow'}}
+        {{follows_you = contact.id in followers_list}}
+        {{=contact_box(contact, 'search', action=action, follows_you=follows_you, css=css, themename="bootstrap")}}
+    {{pass}}
+</div>
+{{pass}}

@@ -80,13 +80,36 @@
   }}
 
 <script type="text/javascript">
-  var uvOptions = {};
-  (function() {
-    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/xI7XaFvYY317GCzbHNxDQ.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  // var uvOptions = {};
+  // (function() {
+  //   var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+  //   uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/xI7XaFvYY317GCzbHNxDQ.js';
+  //   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  // })();
+
+var _ues = {
+host:'movuca.userecho.com',
+forum:'10714',
+category:null,
+lang:'en',
+tab_corner_radius:6,
+tab_font_size:18,
+tab_image_hash:'RmVlZGJhY2s%3D',
+tab_alignment:'left',
+tab_text_color:'#FFFFFF',
+tab_bg_color:'#080707',
+tab_hover_color:'#857D7D'
+};
+
+(function() {
+    var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+    _ue.src = ('https:' == document.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
   })();
+
 </script>
+
+
 
 {{if request.controller in ['article'] and request.function in ['show']:}}
 <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shCore.js"></script>
@@ -118,6 +141,11 @@
 
 </head>
 <body>
+
+<!-- <div class="loader">
+  Loading...
+</div> -->
+    
 <div id="notification-dialog" title="Notifications" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {

@@ -9,7 +9,9 @@ def contact_box(row,
                 ajax=False,
                 where=None,
                 action=None,
-                follows_you=None):
+                follows_you=None,
+                css={"main": "six columns", "img": "two columns", "div": "four columns"},
+                themename="basic"):
     T = current.T
     CURL = current.CURL
     if kind in ['contact', 'search']:
@@ -40,10 +42,10 @@ def contact_box(row,
         if not where:
             where = 'contact' if kind == 'follower' else 'following'
 
-    ret = DIV(_class="six columns contact-item %s" % current.getclass(2),
+    ret = DIV(_class="%s contact-item %s" % (css.get("main", ""), current.getclass(2)),
               _id="item_%s" % uid)
-    ret.append(IMG(_class="two columns alpha thumbnail", _src=current.get_image(None, 'user', themename='basic', user=user_record)))
-    infodiv = DIV(_class="four columns omega")
+    ret.append(IMG(_style="margin:0 10px 0;max-height:92px;max-width:92px;", _class="%s alpha thumbnail" % css.get("img", ""), _src=current.get_image(None, 'user', themename=themename, user=user_record)))
+    infodiv = DIV(_class="%s omega" % css.get("div", ""))
     infodiv.append(TAG.STRONG(name))
     if follows_you:
         infodiv.append(BR())
@@ -51,14 +53,16 @@ def contact_box(row,
     infodiv.append(BR())
     infodiv.append(text)
     infodiv.append(BR())
+    buttondiv = DIV(_class="btn-group")
 
     if kind != 'search':
-        infodiv.append(TAG.BUTTON(T(action),
+        buttondiv.append(TAG.BUTTON(T(action), _class="button %s" % "btn btn-danger" if action == 'unfollow' else 'btn btn-success',
             _onclick="jQuery(this).parent().parent().hide();append_ajax('%s',[],'%s-wrapper')" % (URL('person', action, args=uid), where)))
     else:
-        infodiv.append(TAG.BUTTON(T(action),
-            _onclick="jQuery(this).text('%s');append_ajax('%s',[],'%s-wrapper')" % (T("Done"), URL('person', action, args=uid), where)))
+        buttondiv.append(TAG.BUTTON(T(action), _class="button %s" % "btn btn-danger" if action == 'unfollow' else 'btn btn-success',
+            _onclick="jQuery(this).text('%s');ajax('%s',[],'%s-wrapper')" % (T("Done"), URL('person', action, args=uid), where)))
 
-    infodiv.append(A(T("View Profile"), _class="button", _href=CURL('person', 'show', args=uid)))
+    buttondiv.append(A(T("View Profile"), _class="button btn", _href=CURL('person', 'show', args=uid)))
+    infodiv.append(buttondiv)
     ret.append(infodiv)
     return ret

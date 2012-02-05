@@ -1,0 +1,55 @@
+<div class="board-form well" style="padding-top:5px;margin:0px;">
+    
+{{if not isinstance(form, str):}}
+    {{=form.custom.begin}}
+       
+        <div class="{{='control-group error' if form.errors else ''}}">
+            <label>{{=form.custom.label.board_text}}</label>
+            <input type="text" placeholder="Type something…" name="board_text" id="user_board_board_text" class="string span12">
+        </div>
+        <label class="checkbox">
+          <input type="checkbox">{{=T("Publish on facebook")}}</label>
+
+        <button type="submit" class="btn-info btn-large">{{=T("Post")}}</button>
+    
+    {{=form.custom.end}}
+{{else:}}
+  {{=form}}
+{{pass}}
+
+</div>
+
+
+{{if board:}}
+	<ul class="board-messages" style="list-style: none;margin-left:0px;">
+		{{for msg in board:}}
+		<li class="row board-item well" style="padding-top:5px;margin:0px;">
+		
+		<div class="row-fluid">
+		  <div class="span2">
+		   {{=A(IMG(_src=get_image(None, 'user', themename=theme_name, user=msg.writer), _width=50, _height=50, _class="one columns alpha"), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
+		   </div>
+	       <div class="span10">
+		       {{=MARKMIN(msg.board_text)}}
+		   </div>
+        </div>
+         <div class="row-fluid">
+		   <div class="span8" style="text-align:left">
+		    {{=A(get_name_of(msg.writer), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
+		       <i class="icon-time"></i> {{=pdate(msg.created_on)}}
+		   </div>
+           <div class="span4" style="text-align:right">
+              <a><i class="icon-share-alt"></i>{{=T('reply')}}</a> | <a><i class="icon-retweet"></i>{{=T('repost')}}</a> | <a><i class="icon-edit"></i>{{=T('edit')}}</a> &nbsp;&nbsp;
+		   </div>
+        </div>
+		</li>
+		{{pass}}
+	</ul>
+  <a href="{{=CURL('person','board', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,25'))}}">{{=T("View all board posts")}}</a>
+{{else:}}
+   {{if relation in ['contacts', 'follower']:}}
+       {{=T("No posts on this board, write first!")}}
+   {{else:}}
+      {{=T("No posts on this board!")}}
+   {{pass}}
+{{pass}}

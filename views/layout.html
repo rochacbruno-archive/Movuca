@@ -12,7 +12,7 @@
 	   (even in intranet) & Chrome Frame
 	   Remove this if you use the .htaccess -->
   <!--[if IE]>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge{{=not request.is_local and ',chrome=1' or ''}}">
   <![endif]-->
   
   <title>{{=response.title or request.application}}</title>
@@ -37,21 +37,25 @@
 
   <!-- All JavaScript at the bottom, except for Modernizr which enables 
 	   HTML5 elements & feature detects -->
-  <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>  
+  <script src="{{=URL('static','js/modernizr.custom.js')}}"></script>  
 
   <!-- include stylesheets -->
   {{
   response.files.append(URL('static','css/skeleton.css'))
   response.files.append(URL('static','css/web2py.css'))
-  response.files.append(URL('static','css/superfish.css'))
-  response.files.append(URL('static','js/superfish.js'))
+  if response.menu:
+     response.files.append(URL('static','css/superfish.css'))
+     response.files.append(URL('static','js/superfish.js'))
+  pass
   }}
 
   {{include 'web2py_ajax.html'}}
 
+  {{if response.menu:}}
   <script type="text/javascript">
     jQuery(function(){ jQuery('ul.sf-menu').supersubs({minWidth:12,maxWidth:30,extraWidth:3}).superfish(); });
   </script>
+  {{pass}}
 
   {{
   # using sidebars need to know what sidebar you want to use
@@ -70,19 +74,22 @@
   <div class="wrapper"><!-- for sticky footer -->
   
     <div class="topbar">
-      <div class="container header">    
+      <div class="container">    
         <div class="sixteen columns">
           <div id="navbar">{{='auth' in globals() and auth.navbar(separators=(' ',' | ',''))}}</div>
           {{is_mobile=request.user_agent().is_mobile}}
-          <div id="menu">{{=MENU(response.menu, _class='mobile-menu' if is_mobile else 'sf-menu',mobile=is_mobile)}}
+	  {{if response.menu:}}
+          <div id="menu">
+             {{=MENU(response.menu, _class='mobile-menu' if is_mobile else 'sf-menu',mobile=is_mobile)}}
           </div>
+          {{pass}}
         </div>
       </div>
     </div><!-- topbar -->
     
     <div class="flash">{{=response.flash or ''}}</div>
     
-    <div class="main">
+    <div class="header">
       <div class="container">         
         <div class="sixteen columns">
           <h1 class="remove-bottom" style="margin-top: .5em;">
@@ -90,11 +97,10 @@
           </h1>
           <h5>{{=response.subtitle or ''}}</h5>
         </div>
-        
         <div class="sixteen columns">
-          <div class="statusbar">
+          <div class="statusbar clearfix">
             {{block statusbar}}
-            <span class="breadcrumbs">{{=request.function}}</span>
+            <div class="breadcrumbs">{{=request.function.replace('_', ' ').title()}}</div>
             {{end}}
             <!-- AddToAny BEGIN -->
             <div style="float:right; padding-top: .25em;" class="a2a_kit a2a_default_style">
@@ -103,7 +109,11 @@
             <!-- AddToAny END -->
           </div>
         </div>
-        
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="container">                 
         {{if left_sidebar_enabled:}}
         <div class="four columns left-sidebar">
           {{block left_sidebar}}
@@ -135,11 +145,11 @@
   </div><!-- wrapper -->
 
   <div class="footer">
-    <div class="container header">    
+    <div class="container">    
       <div class="sixteen columns">
         {{block footer}} <!-- this is default footer -->
-        <div class="footer-content" >
-          {{=T('Copyright')}} &#169; 2011
+        <div class="footer-content clearfix">
+          <div class="copyright">{{=T('Copyright')}} &#169; 2011</div>
           <div style="float: right;">
             <a href="http://www.web2py.com/">
             <img style="padding-bottom: 0;" src="{{=URL('static','images/poweredby.png')}}"/>
@@ -155,6 +165,6 @@
 	<script src="{{=URL('static','js/dd_belatedpng.js')}}"></script>
 	<script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
 	<![endif]-->
-  {{if response.google_analytics_id:}}<script>/* http://mathiasbynens.be/notes/async-analytics-snippet */ var _gaq=[['_setAccount','{{=response.google_analytics_id}}'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script')) </script>{{pass}}
+  {{if response.google_analytics_id:}}<script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', '{{=response.google_analytics_id}}']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script> {{pass}}
 </body>
 </html>

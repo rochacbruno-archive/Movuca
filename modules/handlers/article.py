@@ -630,7 +630,7 @@ class Article(Base):
 def ICONLINK(user, icon, text, action=None, title="Click", theme_name="basic"):
     from gluon import current
     request = current.request
-    bt = A(_class="icon-link",
+    bt = A(_class="icon_link",
               _onclick=action if user else "window.location = '%s'" % URL('default', 'user', args='login', vars=dict(_next=URL('article', 'show', args=request.args))),
               _style="cursor:pointer;",
               _title=title)
@@ -647,16 +647,22 @@ def has_permission_to_edit(session, record):
     return record.author == userid
 
 
-def customfield(form, field):
+def customfield(form, field, css={"main": "row", "label": "", "comment": "", "widget": "", "input": "", "error": ""}):
     tablefield = (form.table, field)
-    maindiv = DIV(_id="%s_%s__row" % tablefield, _class="row")
-    labeldiv = DIV(_class="w2p_fl")
-    commentdiv = DIV(_class="w2p_fc")
-    widgetdiv = DIV(_class="w2p_fw")
+    maindiv = DIV(_id="%s_%s__row" % tablefield, _class=css.get("main", ""))
+    if field in form.errors:
+        maindiv["_class"] += css.get("error", "")
+    labeldiv = DIV(_class="w2p_fl %s" % css.get("label", ""))
+    commentdiv = DIV(_class="w2p_fc %s" % css.get("comment", ""))
+    widgetdiv = DIV(_class="w2p_fw %s" % css.get("widget", ""))
 
     label = LABEL(form.custom.label[field], _for="%s_%s" % tablefield, _id="%s_%s__label" % tablefield)
     comment = form.custom.comment[field]
     widget = form.custom.widget[field]
+
+    widget_class = widget.attributes.get("_class", "")
+    widget_class += css.get("input", "")
+    widget["_class"] = widget_class
 
     labeldiv.append(label)
     commentdiv.append(comment)

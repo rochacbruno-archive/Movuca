@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>{{=response.meta.title or request.application}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="">
+    <meta name="author" content="">
+     <meta name="application-name" content="{{=request.application}}" />
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="{{=URL('static','bootstrap/css', args='bootstrap.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','bootstrap/css', args='movuca.css')}}" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="{{=URL('static','bootstrap/css', args='bootstrap-responsive.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','bootstrap/css', args='calendar.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','bootstrap/css', args='custom-theme/jquery-ui-1.8.16.custom.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','bootstrap/css', args='jquery.tagit.css')}}" rel="stylesheet">
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="{{=URL('static','bootstrap/favicon.ico')}}" type="image/x-icon">
+
+  
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{=URL('static', 'bootstrap/js')}}/jquery.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-transition.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-alert.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-modal.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-dropdown.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-scrollspy.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-tab.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-tooltip.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-popover.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-button.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-collapse.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-carousel.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap-typeahead.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/calendar.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/jquery-ui-1.8.17.custom.min.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/web2py.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/bootstrap.js"></script>
+    <script src="{{=URL('static', 'bootstrap/js')}}/tag-it.js"></script>
+    {{include 'bootstrap/app/web2py_ajax.html'}}
+
+
+    <script type="text/javascript">
+
+    {{if session.auth and session.auth.user:}}
+    $(document).ready(function () {
+       ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+    });
+
+    (function poll(){
+       setTimeout(function(){
+          ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+          poll();
+      }, 30000);
+    })();
+    {{pass}}
+  </script>
+
+   {{
+  # using sidebars need to know what sidebar you want to use
+  left_sidebar_enabled = globals().get('left_sidebar_enabled',False)
+  right_sidebar_enabled = globals().get('right_sidebar_enabled',False)
+  middle_columns = {0:'span12',1:'',2:'span9'}[
+     (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
+  header_enabled = globals().get('header_enabled',False)
+  }}
+
+  <script type="text/javascript">
+  // var uvOptions = {};
+  // (function() {
+  //   var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+  //   uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/xI7XaFvYY317GCzbHNxDQ.js';
+  //   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  // })();
+
+var _ues = {
+host:'movuca.userecho.com',
+forum:'10714',
+category:null,
+lang:'en',
+tab_corner_radius:6,
+tab_font_size:12,
+tab_image_hash:'RmVlZGJhY2s%3D',
+tab_alignment:'right',
+tab_text_color:'#FFFFFF',
+tab_bg_color:'#080707',
+tab_hover_color:'#857D7D'
+};
+
+(function() {
+    var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+    _ue.src = ('https:' == document.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
+  })();
+
+</script>
+
+{{if request.controller in ['article'] and request.function in ['show']:}}
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shCore.js"></script>
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushBash.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCpp.js"></script>
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCSharp.js"></script> -->
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCss.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDelphi.js"></script> -->
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDiff.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushGroovy.js"></script> -->
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushJava.js"></script> -->
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushJScript.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPhp.js"></script> -->
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPlain.js"></script>
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPython.js"></script>
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushWeb2py.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushRuby.js"></script> -->
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushScala.js"></script> -->
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushSql.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushVb.js"></script> -->
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushXml.js"></script>
+ <link type="text/css" rel="stylesheet" href="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/styles/shCore.css"/>
+ <link type="text/css" rel="stylesheet" href="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/styles/shThemeDefault.css"/>
+ <script type="text/javascript">
+  SyntaxHighlighter.config.clipboardSwf = '{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/clipboard.swf';
+  SyntaxHighlighter.all();
+ </script>
+{{pass}}
+
+  </head>
+
+  <body>
+
+    <div id="notification-dialog" title="Notifications" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=133622423420992";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#" style="padding-bottom:0;padding-top:5px;"><img src="{{=URL('static', 'images', args='minilogo_white.png')}}" style="max-height:30px;"></a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">Create</a></li>
+              <li><a href="#contact">Explore</a></li>
+              <li><a href="#contact" id="notification-opener"><i class="icon-white icon-envelope"></i> (<span id="notification-counter"></span>)</a></li>
+            </ul>
+                <form class="navbar-search pull-right" method="GET" action="{{=CURL('home','search')}}">
+                  <select name="kind" class="search-query span2" id="kind"><option value="article">Articles</option><option value="user">Users</option></select>
+                  <input type="text" class="search-query" placeholder="{{=T('Type word or name to find')}}" name="q" id="q">
+                  <input type="submit" class="search-query" value="{{=T('Search')}}">  
+                </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        
+        {{if left_sidebar_enabled:}}
+        <div class="span3">
+          {{block left_sidebar}}
+          {{if session.auth:}}
+          <div class="well sidebar-nav">
+          <div style="margin:20px;"> 
+            <ul class="thumbnails">
+              <li class="span3">
+                <a class="thumbnail">
+                  {{=IMG(_src=get_image(None, 'user', themename='bootstrap', user=session.auth.user))}}
+                </a>
+                {{=A(session.auth.user.nickname, _href="#")}}
+              </li>
+            </ul> 
+          </div>
+
+            <ul class="nav nav-list">
+              <li class="nav-header">Create</li>
+              <li class="active"><a href="#"><i class="icon-star"></i> Home</a></li>
+              <li><a href="#"><i class="icon-star"></i> Article</a></li>
+              <li><a href="#"><i class="icon-star"></i> Recipe</a></li>
+              <li><a href="#"><i class="icon-star"></i> Product</a></li>
+              <li class="nav-header">Explore</li>
+              <li><a href="#"><i class="icon-star"></i> Members</a></li>
+              <li><a href="#"><i class="icon-star"></i> Articles</a></li>
+              <li><a href="#"><i class="icon-star"></i> Groups</a></li>
+              <li><a href="#"><i class="icon-star"></i> Pages</a></li>
+              <li class="nav-header">Me</li>
+              <li><a href="#"><i class="icon-star"></i> My profile</a></li>
+              <li><a href="#"><i class="icon-star"></i> My settings</a></li>
+              <li><a href="#"><i class="icon-star"></i> My content</a></li>
+            </ul>
+          </div><!--/.well -->
+            {{pass}}
+          {{end}}
+        </div><!--/span-->
+        {{pass}}
+        
+        {{master_columns = "span12" if not any([left_sidebar_enabled,right_sidebar_enabled]) else 'span9'}}
+        <div class="{{=master_columns}}"> <!--master-->
+
+      {{if header_enabled:}}
+         {{block header}}  
+          <div class="hero-unit">
+            <h1>Hello, world!</h1>
+            <p>This is a template for a simple marketing or 
+informational website. It includes a large callout called the hero unit 
+and three supporting pieces of content. Use it as a starting point to 
+create something more unique.</p>
+            <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+          </div>
+         {{end}}
+      {{pass}}
+
+
+          <div class="row-fluid">
+
+            <div class="{{=middle_columns}}">
+
+            {{if alerts:}}
+            <div class="fade in alert alert-info">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                {{for alert in alerts:}}
+                <p>{{=alert}}</p>
+                {{pass}}
+            </div>
+            {{pass}}
+  
+            {{block center}}
+              {{include}}
+            {{end}}
+            </div><!--/span-->
+
+            {{if right_sidebar_enabled:}}
+            <div class="span3">
+              {{block right_sidebar}}
+              <h3>Right Sidebar</h3>
+              <p></p>
+              {{end}}
+            </div><!--/span-->
+            {{pass}}
+             
+          </div><!--/row-->
+          
+        </div><!--/span--><!--/master-->
+      </div><!--/row-->
+
+      <hr>
+      
+      {{block footer}}
+      <footer>
+        <p>© Company 2012</p>
+      </footer>
+      {{end}}
+
+    </div><!--/.fluid-container-->
+  
+
+</body></html>

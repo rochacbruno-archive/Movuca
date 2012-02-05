@@ -1,0 +1,21 @@
+<div class="span7 featured">
+     <h6>
+      {{=T("Featured content")}}
+     </h6> 
+  <div class="carousel slide" id="myCarousel">
+  <div class="carousel-inner">
+    {{for i,article in enumerate(featured):}}
+    <div class="item {{='active' if i == 0 else ''}}">
+      <img alt="" src="{{=get_image(article.medium_thumbnail or article.picture, article.content_type_id.identifier)}}" style="max-height:400px;height:400px;width:100%;">
+      <div class="carousel-caption">
+        <h4><a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}" >{{=article.title}}</a></h4>
+        {{desc = article.description or ''}}
+        <p>{{=desc[:101]}}... <a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}">{{=T("read more")}}</a>.</p>
+      </div>
+    </div>
+    {{pass}}
+  </div>
+  <a data-slide="prev" href="#myCarousel" class="left carousel-control">‹</a>
+  <a data-slide="next" href="#myCarousel" class="right carousel-control">›</a>
+</div>
+</div>

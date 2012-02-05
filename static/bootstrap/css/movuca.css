@@ -1,0 +1,75 @@
+.icon_link {
+	margin-right:10px;
+}
+
+.icon_link img {
+	margin-right:5px;
+}
+
+/*.cke_editor_article_data_body {
+	width:90%;
+}*/
+
+form .error {
+	color:red;
+}
+
+/*fieldset { padding: 0; border-top: 1px #DEDEDE solid;}
+fieldset legend {text-transform:uppercase; 
+	             font-weight: bold; 
+	             padding: 0; 
+	             background: #f1f1f1;
+                 line-height:14px;
+                 font-size:14px;
+	            }*/
+
+.tagit-new input, .tagit-new input:focus {
+        border: none !important;
+        color: #444 !important;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow:  none !important;
+        width:  80px !important; }
+
+.cke_dialog_ui_vbox_child input[type="file"]{
+    width:50%;
+}
+
+.edit-article-wrapper{
+    
+}
+
+    .edit-article-wrapper ul {
+        padding-left:0px;
+    }
+    .edit-article-wrapper li{
+       list-style: none; 
+        
+    }
+
+    .edit-article-wrapper textarea,
+    .edit-article-wrapper select,
+    .edit-article-wrapper input[type='text'] {
+        width:100%;
+    }
+
+    .edit-article-wrapper #article_description {
+        height:50px;
+    }
+
+    .edit-article-wrapper #article_body {
+        height:700px;
+    }
+
+    .edit-article-wrapper .fieldrow {
+        margin-bottom:10px;
+    }
+
+    .edit-article-wrapper .cke_contents {
+        height:600px !important;
+    }
+
+
+ .extra-links{
+ 	margin-top:20px;
+ }

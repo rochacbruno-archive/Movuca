@@ -1,0 +1,36 @@
+{{def share(lockerz=True, like=True, send=True, tweet=True, classes="row-fluid share-buttons", columns="span", data_action="recommend", onlyshare=False, onlysharebutton=False, text="Share"):}}
+    {{if onlyshare:}}
+                <a class="a2a_dd" href="http://www.addtoany.com/share_save"><i class="icon-share" style="margin-right:5px;"></i>{{=T(text)}}</a>
+    {{else:}}
+        {{item_url = URL(request.controller,request.function,args=request.args,vars=request.vars,scheme=True,host=True)}}  
+        <div class="a2a_kit a2a_default_style {{=classes}}">
+            {{if lockerz:}}
+            <div class="{{=columns}}">
+                {{if onlysharebutton:}}
+                    <a class="a2a_dd" href="http://www.addtoany.com/share_save">{{=T(text)}}</a>
+                {{else:}}
+                    <a class="a2a_dd" href="http://www.addtoany.com/share_save">{{=T(text)}}</a>
+                    <span class="a2a_divider"></span>
+                    <a class="a2a_button_facebook"></a>
+                    <a class="a2a_button_twitter"></a>
+                    <a class="a2a_button_email"></a>
+                    <a class="a2a_button_google_gmail"></a>
+                    <a class="a2a_button_google_plus"></a>
+                    <a class="a2a_button_tumblr"></a>
+                {{pass}}
+            </div>
+            {{pass}}
+            {{if tweet:}}
+                <div class="{{=columns}}">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-url="{{=item_url}}" data-related="movucacms">{{=T("Tweet")}}</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                </div>
+            {{pass}}
+            {{if like:}}
+                <div class="fb-like {{=columns}}" data-href="{{=item_url}}" data-send="{{='true' if send else 'false'}}" data-layout="button_count" data-width="160" data-show-faces="false" data-font="verdana" data-action="{{=data_action}}"></div>
+            {{pass}}
+
+        </div>
+    {{pass}}
+    <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+{{return}}
