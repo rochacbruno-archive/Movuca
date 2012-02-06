@@ -26,11 +26,13 @@ def delete():
 
 def list():
     article = Article('list')
+    article.context.left_sidebar_enabled = True
     return article.render("app/article/list")
 
 
 def search():
     article = Article('search')
+    article.context.left_sidebar_enabled = True
     return article.render("app/article/search")
 
 
@@ -110,6 +112,10 @@ def editcomment():
 def removecomment():
     article = Article('removecomment')
     return ''
+
+
+def removeevent():
+    return "alert('ok')"
 
 def vote():
     pass

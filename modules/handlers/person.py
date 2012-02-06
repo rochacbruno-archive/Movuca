@@ -312,6 +312,24 @@ class Person(Base):
             limitby = (0, 12)
         self.context.board = self.db(self.db.UserBoard.user_id == user.id).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
 
+    def removeboard(self, msg_id, user_id):
+        msg = self.db.UserBoard[int(msg_id)]
+        if msg and (user_id in [msg.created_by, msg.user_id]):
+            msg.delete_record()
+            self.db.commit()
+            self.context.eval = "$('#msg_%s').hide();" % msg_id
+        else:
+            self.context.eval = "alert('%s')" % self.T("It is not possible to delete")
+
+    def removeevent(self, event_id, user_id):
+        event = self.db.UserTimeLine[int(event_id)]
+        if event and (user_id in [event.created_by, event.event_reference]):
+            event.delete_record()
+            self.db.commit()
+            self.context.eval = "$('#event_%s').hide();" % event_id
+        else:
+            self.context.eval = "alert('%s')" % self.T("It is not possible to delete")
+
     def show(self, uid):
         T = self.T
         CURL = self.CURL

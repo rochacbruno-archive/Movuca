@@ -81,8 +81,21 @@ def board():
     return person.render('app/person/board')
 
 
+def removeboard():
+    person = Person()
+    person.removeboard(request.args(0), session.auth.user.id)
+    return person.context.eval
+
+
+def removeevent():
+    person = Person()
+    person.removeevent(request.args(0), session.auth.user.id)
+    return person.context.eval
+
+
 def account():
     person = Person("account")
+    person.context.left_sidebar_enabled = True if 'profile' in request.args else False
     return person.render('app/person/account')
 
 

@@ -1,5 +1,20 @@
 {{include TIMELINEFUNCTIONS}}
+
+
+
 <ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+<script>
+$(document).ready(function () {
+  $(".removeevent").click(function() {
+      url = $(this).attr('data-url');
+      if (confirm("Delete?")) {
+        ajax(url,[],':eval');
+        //jQuery($(this)).parent().hide();
+        return false;
+        }
+  });
+});
+</script>
  <li class="timeline-item row well" style="padding-top:5px;margin:0px;">
     {{=form.custom.begin}}
        

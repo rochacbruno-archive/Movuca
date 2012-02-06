@@ -47,6 +47,17 @@ $(document).ready(function () {
 		$("#notification-dialog").dialog("open");
 		return false;
 	});
+
+
+  // $(".delitem").click(function() {
+  //     url = $(this).attr('data-url');
+  //     if (confirm("Delete?")) {
+  //       ajax(url,[],':eval');
+  //       //jQuery($(this)).parent().hide();
+  //       return false;
+  //       }
+  // });
+
 });
 
 // (function poll(){

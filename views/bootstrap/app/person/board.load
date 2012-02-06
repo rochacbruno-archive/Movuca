@@ -23,11 +23,27 @@
 
 
 {{if board:}}
+
+<script>
+$(document).ready(function () {
+  $(".removeboard").click(function() {
+      url = $(this).attr('data-url');
+      if (confirm("Delete?")) {
+        ajax(url,[],':eval');
+        //jQuery($(this)).parent().hide();
+        return false;
+        }
+  });
+});
+</script>
+
 	<ul class="board-messages" style="list-style: none;margin-left:0px;">
 		{{for msg in board:}}
-		<li class="row board-item well" style="padding-top:5px;margin:10px 0;">
-		<a class="close" data-id="{{=msg.id}}">&times;</a>
-		<div class="row-fluid">
+		<li class="row board-item well" style="padding-top:5px;margin:10px 0;" id="msg_{{=msg.id}}">
+    {{if session.auth and (session.auth.user.id in [msg.created_by, msg.user_id]):}}
+		<a class="close removeboard" data-url="{{=URL('person', 'removeboard', args=msg.id, extension=False)}}">&times;</a>
+		{{pass}}
+    <div class="row-fluid">
 		  <div class="span2">
 		   {{=A(IMG(_src=get_image(None, 'user', themename=theme_name, user=msg.writer), _width=50, _height=50, _class="one columns alpha"), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
 		   </div>
