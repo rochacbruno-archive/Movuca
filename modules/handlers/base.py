@@ -65,6 +65,10 @@ class Base(object):
         self.context.use_facebook = self.db.config.auth.use_facebook
         self.context.use_google = self.db.config.auth.use_google
         self.context.theme_name = self.config.theme.name
+
+        if self.response.flash:
+            self.context.alerts.append(self.response.flash)
+
         if theme:
             self.theme = theme
             self.context.theme_name = theme
