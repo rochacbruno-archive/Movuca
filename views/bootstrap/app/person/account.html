@@ -14,6 +14,8 @@
 <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
 <hr />
 <div id="web2py_user_form">
+	{{submit_button = form.elements(_type="submit")[0]}}
+	{{submit_button['_class'] = "btn btn-primary"}}
 	{{=form}}
 	<hr />
 	{{if request.args(0) in ['login', 'register'] and use_facebook:}}

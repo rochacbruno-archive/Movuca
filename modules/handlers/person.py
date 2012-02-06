@@ -301,7 +301,8 @@ class Person(Base):
             board_text_label = T("Write something on %s's board", user.nickname)
 
         if relation in ['contacts', 'yourself', 'follower']:
-            self.db.UserBoard.board_text.label = CAT(board_text_label, A(T(" add photo "), _onclick="alert('Sorry, Photo upload is under development!');"))
+            #self.db.UserBoard.board_text.label = CAT(board_text_label, A(T(" add photo "), _onclick="alert('Sorry, Photo upload is under development!');"))
+            self.db.UserBoard.board_text.label = board_text_label
             self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
         else:
             self.context.form = ''
@@ -354,11 +355,11 @@ class Person(Base):
                     'follower': CURL('person', 'follow', args=[user.id, 'profile'])}
 
             buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class="btn"))
-            buttons.append(TAG.BUTTON(T("Message"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
+            #buttons.append(TAG.BUTTON(T("Message"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
             buttons.append(TAG.BUTTON(T("Report/Block"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
         else:
             buttons.append(A(T("Edit Profile"), _class="button btn", _href=CURL('default', 'user', args='profile')))
-            buttons.append(A(T("My Messages"), _class="button btn", _href=CURL('person', 'messages', args=user.nickname or user.id)))
+            #buttons.append(A(T("My Messages"), _class="button btn", _href=CURL('person', 'messages', args=user.nickname or user.id)))
 
         self.context.buttons = buttons
         self.context.resume = UL(
@@ -366,7 +367,7 @@ class Person(Base):
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='favorite_rounded.24.png')), A(T("Has %s favorites", user.favorites))),
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Liked %s articles", user.likes))),
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='face.24.png')), A(T("Has %s contacts", user.contacts), _href=self.CURL('person', 'contacts', args=user.nickname or user.id))),
-                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='movuca.24.png')), A(T("Joined %s groups", user.groups))),
+                                 #LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='movuca.24.png')), A(T("Joined %s groups", user.groups))),
                                  _class="person-resume"
                                 )
 

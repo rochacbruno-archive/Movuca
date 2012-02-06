@@ -112,3 +112,7 @@ search_form = FORM(
     _method="GET",
     _action=CURL("home", "search")
 )
+
+
+def iicon(iconname):
+    return TAG['i'](_class="icon-%s" % iconname, _style="margin-right:5px;")
