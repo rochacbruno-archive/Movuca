@@ -71,6 +71,9 @@ class Article(Base):
             ckeditor = CKEditor()
             self.db.Comments.comment_text.widget = ckeditor.basicwidget
             form = SQLFORM(self.db.Comments, formstyle='divs')
+            submit_button = form.elements(_type='submit')[0]
+            submit_button['_class'] = "btn btn-info"
+            submit_button['_value'] = self.T("Post comment")
             if form.process(message_onsuccess=self.T('Comment included')).accepted:
                 self.new_article_event('new_article_comment',
                                         self.session.auth.user,
@@ -88,7 +91,12 @@ class Article(Base):
                                        args=[self.context.article.id,
                                              self.context.article.slug]))))
 
-        comments = self.db(self.db.Comments.article_id == self.context.article.id).select(orderby=self.db.Comments.created_on)
+        if 'commentlimitby' in self.request.vars:
+            limitby = [int(item) for item in self.request.vars.commentlimitby.split(',')]
+        else:
+            limitby = (0, 5)
+        comment_set = self.db(self.db.Comments.article_id == self.context.article.id)
+        comments = comment_set.select(orderby=~self.db.Comments.created_on, limitby=limitby)
 
         if comments and is_author:
             edit_in_place = ckeditor.bulk_edit_in_place(["comment_%(id)s" % comment for comment in comments], URL('editcomment'))
@@ -101,9 +109,17 @@ class Article(Base):
         else:
             edit_in_place = ('', '')
 
+        self.context.lencomments = comment_set.count()
+
+        def showmore(anchor, limitby=limitby, lencomments=self.context.lencomments):
+            if lencomments > limitby[1]:
+                return A(self.T('show more comments'), _class="button btn", _style="width:97%;", _href=self.CURL(args=self.request.args, vars={"commentlimitby": "0,%s" % (limitby[1] + 10)}, anchor=anchor))
+            else:
+                return ''
+
         return DIV(
-                  H4(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='board.24.png')), self.T("Comments")),
-                  UL(
+                  H4(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='board.24.png')), self.T("Comments"), " (%s)" % self.context.lencomments),
+                  UL(form,
                       *[LI(
                            H5(
                               A(
@@ -122,7 +138,7 @@ class Article(Base):
                           ) for comment in comments],
                   **dict(_class="comment_ul")),
                   edit_in_place[1],
-                  form,
+                  showmore("comment_%s" % comment.id),
                   _class="internal-comments article-box"
                   )
 

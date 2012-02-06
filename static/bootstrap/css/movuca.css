@@ -69,6 +69,15 @@ fieldset legend {text-transform:uppercase;
         height:600px !important;
     }
 
+.show-article-comments {
+
+}
+
+    .show-article-comments .cke_contents {
+        height:150px !important;
+    }
+
+
 
  .extra-links{
  	margin-top:20px;

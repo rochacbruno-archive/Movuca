@@ -1,7 +1,7 @@
 # TODO
 
-* change the classes of contact box
-* better home page
+* change the classes of contact box (### DONE ###)
+* better home page (### DONE ###)
 * menu builder
 * profile form (### IN PROGRESS ###)
 * profile permissions forms (### PROGRESS ###)
@@ -20,7 +20,7 @@
 * allow attachments in template emails (?)
 * events documentation
 * allow upload fields in contenttypes
-* bootstrap 2 basic theme
+* bootstrap 2 basic theme (### DONE ###)
 * Site visibility option in config |  open / only home page open / only home page & profiles open / closed (to members)
 * Worker for notifications with web2py scheduller
 * widgets for home page
@@ -41,7 +41,7 @@
 * new members widget
 * registered event_type
 * online users widget
-* User menu (lateral)
+* User menu (lateral) (### IN PROGRESS ###)
 * Ads manager (google ads, boobox)
 * blog(s) mode
 * allow registration optin in config?
@@ -55,10 +55,10 @@
 * multi content articles
 * multi pages in article (tabs?)
 * pagination for search and lists
-* pagination for comments
+* pagination for comments (### DONE ###)
 * Display "loading..." message in all buttons
 * jqueryui all buttons
-* solve google login bug
+* solve google login bug (### DONE ###) ???
 * Messages system (Kenji Plugin?)
 * Configurable list widget with tabs (for home page, see globo.com)
 * responsive images src.sencha or responsivekit
