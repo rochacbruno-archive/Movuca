@@ -119,12 +119,12 @@ tab_hover_color:'#857D7D'
 <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCSharp.js"></script> -->
 <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCss.js"></script>
 <!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDelphi.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDiff.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDiff.js"></script> -->
 <!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushGroovy.js"></script> -->
 <!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushJava.js"></script> -->
 <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushJScript.js"></script>
 <!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPhp.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPlain.js"></script>
+<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPlain.js"></script> -->
 <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPython.js"></script>
 <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushWeb2py.js"></script>
 <!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushRuby.js"></script> -->
@@ -164,13 +164,60 @@ tab_hover_color:'#857D7D'
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#" style="padding-bottom:0;padding-top:5px;"><img src="{{=URL('static', 'images', args='minilogo_white.png')}}" style="max-height:30px;"></a>
+          <a class="brand" href="{{=CURL('home', 'index')}}" style="padding-bottom:0;padding-top:5px;"><img src="{{=URL('static', 'images', args='minilogo_white.png')}}" style="max-height:30px;"></a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">Create</a></li>
-              <li><a href="#contact">Explore</a></li>
-              <li><a href="#contact" id="notification-opener"><i class="icon-white icon-envelope"></i> (<span id="notification-counter"></span>)</a></li>
+              {{if session.auth:}}
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T('Create')}}<b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>{{=A(T('Article'), _href=CURL('article', 'new', args='Article'))}}</li>
+                      <li>{{=A(T('Cook Recipe'), _href=CURL('article', 'new', args='CookRecipe'))}}</li>
+                      <li>{{=A(T('Product'), _href=CURL('article', 'new', args='Product'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('Group'), _href=CURL('group', 'new'))}}</li>
+                      <li>{{=A(T('Page'), _href=CURL('page', 'new'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
+                      <li>{{=A(T('Bundle'), _href=CURL('bundle', 'new'))}}</li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T('Explore')}}<b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>{{=A(T('Find articles'), _href=CURL('article', 'search'))}}</li>
+                      <li>{{=A(T('Find members'), _href=CURL('person', 'search'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('All articles'), _href=CURL('article', 'list'))}}</li>
+                      <li>{{=A(T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T('Me')}}<b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>{{=A(T('Dashboard'), _href=CURL('person', 'show'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('My profile'), _href=CURL('person', 'show'))}}</li>
+                      <li>{{=A(T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id, 'limitby': '0,50'}))}}</li>
+                      <li>{{=A(T('My contacts'), _href=CURL('person', 'contacts'))}}</li>
+                  </ul>
+                </li>
+
+                <li><a href="#notification" id="notification-opener" title="{{=T('notifications')}}"><i class="icon-white icon-envelope"></i> (<span id="notification-counter"></span>)</a></li>
+                
+              {{else:}}
+                <li><a href="{{=CURL('person', 'account', args='login')}}">{{=T("Login")}}</a></li>
+                <li><a href="{{=CURL('person', 'account', args='register')}}">{{=T("Register")}}</a></li>
+              {{pass}}
+              <li><a href="http://github.com/rochacbruno/Movuca" target="_blank">{{=T("Github")}}</a></li>
             </ul>
                 <form class="navbar-search pull-right" method="GET" action="{{=CURL('home','search')}}">
                   <select name="kind" class="search-query span2" id="kind"><option value="article">Articles</option><option value="user">Users</option></select>

@@ -140,7 +140,7 @@ class CKEditor(object):
                 }
         }
         </script>
-        """ % (self.T("Are you sure you want to delete this comment?"),
+        """ % (self.T("Are you sure you want to delete?"),
                URL('article', 'removecomment'))
                )
         ]
@@ -162,7 +162,8 @@ class CKEditor(object):
                 selector=selector,
                 url=url,
                 double_message=self.T("Double click the text above to edit"),
-                delete_message=self.T("Delete this comment")
+                delete_message=self.T("Delete"),
+                reply_message=self.T("Reply")
             )
         )) for selector in selectorlist]
 
