@@ -49,7 +49,7 @@ def contact_box(row,
     infodiv.append(TAG.STRONG(name))
     if follows_you:
         infodiv.append(BR())
-        infodiv.append(EM(T("Follows you!")))
+        infodiv.append(SPAN(T("Follows you!"), _class="label label-info"))
     infodiv.append(BR())
     infodiv.append(text)
     infodiv.append(BR())

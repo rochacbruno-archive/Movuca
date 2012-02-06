@@ -138,7 +138,7 @@ class Article(Base):
                           ) for comment in comments],
                   **dict(_class="comment_ul")),
                   edit_in_place[1],
-                  showmore("comment_%s" % comment.id),
+                  showmore("comment_%s" % comment.id) if comments else '',
                   _class="internal-comments article-box"
                   )
 
