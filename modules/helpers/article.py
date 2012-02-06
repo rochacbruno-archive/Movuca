@@ -25,7 +25,7 @@ def related_gae(db, query):
 
 
 def related(db, query):
-    return db(query).select(orderby="<random>", limitby=(0, 4))
+    return db(query).select(orderby="<random>", limitby=(0, 5))
 
 therms = [('&', 'and'),
         ('|', 'or'),

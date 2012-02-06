@@ -37,12 +37,11 @@ class Article(Base):
         if related_articles:
             self.context.related_articles = UL(*[LI(
                                               DIV(
-                                                IMG(_src=self.get_image(related.thumbnail, related.content_type_id.identifier), _width=120)
-                                              ),
-                                              A(related.title, _href=self.CURL('article', 'show', args=[related.id, related.slug])),
-                                              **{'_data-url': self.CURL('article', 'show', args=[related.id, related.slug])}
+                                                IMG(_src=self.get_image(related.thumbnail, related.content_type_id.identifier), _width=100, _height=100, _style="max-height:100px;"),
+                                              A(related.title, _href=self.CURL('article', 'show', args=[related.id, related.slug])), _class="thumbnail"),
+                                              **{'_class': "span2", '_data-url': self.CURL('article', 'show', args=[related.id, related.slug])}
                                               ) for related in related_articles],
-                                              **dict(_class="related-articles"))
+                                              **dict(_class="related-articles thumbnails"))
         else:
             self.context.related_articles = False
 
