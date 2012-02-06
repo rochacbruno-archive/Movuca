@@ -22,7 +22,7 @@ $.fn.ckeip = function (options, callback) {
         var eip_html = $(this).html();
         var u_id = Math.floor(Math.random() * 99999999);
 
-        $(this).before("<div id='ckeip_" + u_id + "'  style='display:none;'><div class='ckeip_toolbar'><a href='#' class='ckeip_save button primary pill' id='save_ckeip_" + u_id + "'>Save</a> <a href='#' class='ckeip_cancel button negative pill' id='cancel_ckeip_" + u_id + "'>Cancel </a></div><textarea class='ckeip_textarea' id ='ckeip_e_" + u_id + "' cols='" + settings.e_width + "' rows='" + settings.e_height + "'  >" + eip_html + "</textarea></div>");
+        $(this).before("<div id='ckeip_" + u_id + "'  style='display:none;'><div class='ckeip_toolbar'><a href='#' class='ckeip_save button btn btn-primary primary pill' id='save_ckeip_" + u_id + "'>Save</a> <a href='#' class='ckeip_cancel button btn negative pill' id='cancel_ckeip_" + u_id + "'>Cancel </a></div><textarea class='ckeip_textarea' id ='ckeip_e_" + u_id + "' cols='" + settings.e_width + "' rows='" + settings.e_height + "'  >" + eip_html + "</textarea></div>");
 
         $('#ckeip_e_' + u_id + '').ckeditor(settings.ckeditor_config);
 
@@ -64,7 +64,7 @@ $.fn.ckeip = function (options, callback) {
 
                 $(original_html).html(ckeip_html);
                 cleanup();
-            });;
+            });
             return false;
 
         });

@@ -1,0 +1,4 @@
+.cke_skin_kama .insertcode_textarea textarea.cke_dialog_ui_input_textarea {
+    font-family: 'andale mono', 'lucida console', monospace;
+    white-space: pre!important; /* Fix line break issues under IE7/8 */
+}

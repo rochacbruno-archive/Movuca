@@ -259,14 +259,14 @@ class CKEditor(object):
                         { name: 'insert', items : [ 'Image','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
                         { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                         { name: 'colors', items : [ 'TextColor','BGColor' ] },
-                        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About','syntaxhighlight' ] }
+                        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About','InsertCode' ] }
                      ]""",
             'basic': """[
                         { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
                         { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','-','Blockquote','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
                         { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
                         { name: 'insert', items : [ 'Image','Table','Smiley','SpecialChar'] },
-                        { name: 'colors', items : [ 'TextColor','syntaxhighlight'] },
+                        { name: 'colors', items : [ 'TextColor','InsertCode'] },
                      ]""",
         }
 
@@ -283,6 +283,14 @@ class CKEditor(object):
                 jQuery(function() {
                     var config = ckeditor_config();
                     jQuery('%s').ckeditor(config);
+                    CKEDITOR.on('instanceReady', function(ev) {
+                        ev.editor.dataProcessor.writer.setRules('pre', {
+                            breakBeforeOpen : true,
+                            breakAfterOpen : false,
+                            breakBeforeClose : false,
+                            breakAfterClose : true
+                        });
+                    });
                 });
             """ % selector
 
@@ -324,7 +332,10 @@ class CKEditor(object):
                         toolbar: %(toolbar)s,
                         scayt_autoStartup: %(scayt)s,
                         uiColor: 'transparent',
-                        extraPlugins: 'syntaxhighlight',
+                        extraPlugins: 'insertcode',
+                        keystrokes: [
+                             [CKEDITOR.CTRL + 68 /*D*/, 'insertcode'],
+                        ],
                     }
                 }
                 %(immediate)s

@@ -112,32 +112,15 @@ tab_hover_color:'#857D7D'
 
 </script>
 
-{{if request.controller in ['article'] and request.function in ['show']:}}
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shCore.js"></script>
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushBash.js"></script>
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCpp.js"></script>
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCSharp.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushCss.js"></script>
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDelphi.js"></script> -->
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushDiff.js"></script> -->
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushGroovy.js"></script> -->
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushJava.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushJScript.js"></script>
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPhp.js"></script> -->
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPlain.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushPython.js"></script>
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushWeb2py.js"></script>
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushRuby.js"></script> -->
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushScala.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushSql.js"></script>
-<!-- <script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushVb.js"></script> -->
-<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/shBrushXml.js"></script>
- <link type="text/css" rel="stylesheet" href="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/styles/shCore.css"/>
- <link type="text/css" rel="stylesheet" href="{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/styles/shThemeRDark.css"/>
- <script type="text/javascript">
-  SyntaxHighlighter.config.clipboardSwf = '{{=URL('static','plugin_ckeditor')}}/plugins/syntaxhighlight/scripts/clipboard.swf';
-  SyntaxHighlighter.all();
- </script>
+{{if request.controller in ['article'] and request.function in ['show', 'edit']:}}
+<link type="text/css" rel="stylesheet" href="{{=URL('static','plugin_ckeditor')}}/plugins/insertcode/styles/prettify.css"/>
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/insertcode/styles/prettify.js"></script>
+
+<script type="text/javascript">
+jQuery(function() {
+   prettyPrint();
+});
+</script>
 {{pass}}
 
   </head>
@@ -366,7 +349,7 @@ create something more unique.</p>
       
       {{block footer}}
       <footer>
-        <p>© Company 2012</p>
+        <p>© 2012</p>
       </footer>
       {{end}}
 
