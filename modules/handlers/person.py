@@ -189,7 +189,8 @@ class Person(Base):
         else:
             followed = self.session.auth.user if self.session.auth else redirect(self.CURL('person', 'account', args='login'))
 
-        self.context.followers = self.db(self.db.UserContact.followed == followed.id).select()
+        if followed:
+            self.context.followers = self.db(self.db.UserContact.followed == followed.id).select()
 
     def following(self, arg=None):
         if arg:
@@ -202,7 +203,8 @@ class Person(Base):
         else:
             follower = self.session.auth.user if self.session.auth else redirect(self.CURL('person', 'account', args='login'))
 
-        self.context.following = self.db(self.db.UserContact.follower == follower.id).select()
+        if follower:
+            self.context.following = self.db(self.db.UserContact.follower == follower.id).select()
 
     def contacts(self, arg=None):
         self.followers(arg)
