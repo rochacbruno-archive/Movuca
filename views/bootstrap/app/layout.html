@@ -283,11 +283,11 @@ jQuery(function() {
                          {{pass}}
                          <div class="input-prepend">
                          <span class="add-on"><i class="icon-envelope"></i></span>
-                         <input type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'loginerror' else '')}}  style="width:70%"/>
+                         <input required='required' type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'loginerror' else '')}}  style="width:70%"/>
                          </div>
                          <div class="input-prepend">
                          <span class="add-on"><i class="icon-lock"></i></span>
-                         <input type="password" name="password" id="password" placeholder="{{=T('your password')}}"  style="width:70%"/>
+                         <input required='required' type="password" name="password" id="password" placeholder="{{=T('your password')}}"  style="width:70%"/>
                          </div>
                          <button class="btn">{{=T("Go")}}</button> 
                      </form>

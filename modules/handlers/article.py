@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR
 from gluon.validators import IS_SLUG
 from helpers.images import THUMB2
 import os
@@ -83,13 +83,15 @@ class Article(Base):
                                               'event_link_to': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
 
         else:
-            form = A(self.T("Login to post comments"),
-                     _class="button",
+            form = CAT(A(self.T("Login to post comments"),
+                     _class="button btn",
                      _href=self.CURL('default', 'user',
                                   args='login',
                                   vars=dict(_next=self.CURL('article', 'show',
                                        args=[self.context.article.id,
-                                             self.context.article.slug]))))
+                                             self.context.article.slug])))),
+                       BR(),
+                       BR())
 
         if 'commentlimitby' in self.request.vars:
             limitby = [int(item) for item in self.request.vars.commentlimitby.split(',')]
