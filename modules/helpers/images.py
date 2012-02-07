@@ -113,6 +113,10 @@ class GetImages(object):
         return "http://graph.facebook.com/%s/picture?type=large" % user.split('/')[-1].strip()
 
     @staticmethod
+    def get_google_image(user):
+        return user or self.get_no_image(user)
+
+    @staticmethod
     def getphoto(user=None, img=False):
         if not user:
             if 'auth' in current.session:
@@ -124,6 +128,7 @@ class GetImages(object):
         '3': GetImages.get_facebook_image,
         '4': GetImages.get_twitter_image,
         '5': GetImages.get_no_image,
+        '6': GetImages.get_google_image
         }
 
         value = {
@@ -132,6 +137,7 @@ class GetImages(object):
         '3': 'facebook',
         '4': 'twitter',
         '5': 'id',
+        '6': 'googlepicture'
         }
 
         photo_source = action[str(user.photo_source)]
