@@ -77,9 +77,9 @@
                         <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                          {{=LI(A(T("Write a new article"), _href=CURL('article', 'new', args='Article')))}}
-                          {{=LI(A(T("Write a new cook recipe"), _href=CURL('article', 'new', args='CookRecipe')))}}
-                          {{=LI(A(T("Insert a new product"), _href=CURL('article', 'new', args='Product')))}}
+                        {{for content_type in content_types:}}
+                          {{=LI(A(T("Write a new %s", content_type.title), _href=CURL('article', 'new', args=content_type.identifier)))}}
+                        {{pass}}
                         </ul>
                     </div>
                 {{pass}}

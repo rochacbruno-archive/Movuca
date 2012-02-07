@@ -235,10 +235,10 @@ jQuery(function() {
           <div style="margin:20px;"> 
             <ul class="thumbnails">
               <li class="span3">
-                <a class="thumbnail">
+                <a class="thumbnail" href="{{=CURL('person', 'show', args=session.auth.user.nickname)}}">
                   {{=IMG(_src=get_image(None, 'user', themename='bootstrap', user=session.auth.user))}}
                 </a>
-                {{=A(session.auth.user.nickname, _href="#")}}
+                {{=A(session.auth.user.nickname, _href=CURL('person', 'show', args=session.auth.user.nickname))}}
               </li>
             </ul> 
           </div>
