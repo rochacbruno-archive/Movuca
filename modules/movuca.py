@@ -66,6 +66,7 @@ class Access(Auth):
         #self.settings.register_onaccept = lambda form: add_to_users_group(form)
         self.settings.register_onaccept = [lambda form: self.send_welcome_email(form.vars),
                                            lambda form: self.initial_user_permission(form.vars)]
+        #self.settings.login_onaccept = [lambda form: self.initial_user_permission(form.vars)]
         #self.settings.profile_onvalidation = []
         self.settings.profile_onaccept = [lambda form: self.remove_facebook_google_alert(form)]  # remove facebook / google alert session
         #self.settings.change_password_onaccept = [] # send alert email
@@ -77,7 +78,7 @@ class Access(Auth):
         self.settings.logged_url = self.url('account', args='profile')
         self.settings.login_next = self.db.CURL('person', 'show')
         self.settings.register_next = self.db.CURL('person', 'show')
-        self.settings.profile_next = self.db.CURL('person', 'show')
+        self.settings.profile_next = self.db.CURL('person', 'account', args='profile')
         self.settings.retrieve_username_next = self.url('account', args='login')
         self.settings.retrieve_password_next = self.url('account', args='login')
         self.settings.request_reset_password_next = self.url('account', args='login')

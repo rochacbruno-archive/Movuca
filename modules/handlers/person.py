@@ -453,6 +453,11 @@ class Person(Base):
 
         self.context.auth = self.db.auth
         self.context.form = self.db.auth()
+        self.context.customfield = customfield
+        if 'profile' in self.request.args:
+            self.notifier.permission.add_permission_if_dont_exists(self.db.auth.user)
+            self.context.permissions = self.db(self.notifier.permission.entity.user_id == self.db.auth.user_id).select()
+            self.context.permission_events = dict(self.notifier.permission.events)
 
     def loginbare(self):
         username = self.request.vars.email
@@ -499,3 +504,54 @@ class Person(Base):
                 return {}
 
         return self.db.auth_user._validate(**items_to_check)
+
+    def notificationpermission(self, pid, way, action):
+        permission = self.notifier.permission.entity(user_id=self.db.auth.user.id, id=pid)
+        if permission:
+            current_way = permission.way
+            if action == "enable" and not way in current_way:
+                current_way.append(way)
+                permission.update_record(way=current_way)
+                self.db.commit()
+                self.context.button = TAG.BUTTON(TAG['i'](_class="icon-ok", _style="margin-right:5px;"),
+                    self.T("Enabled"),
+                    _class="notificationpermission btn btn-success",
+                    _id="%s_%s" % (way, pid),
+                    **{"_data-url": URL('person', 'notificationpermission', args=[pid, way, 'disable'])})
+            elif action == "disable" and way in current_way:
+                current_way.remove(way)
+                permission.update_record(way=current_way)
+                self.db.commit()
+                self.context.button = TAG.BUTTON(TAG['i'](_class="icon-off", _style="margin-right:5px;"),
+                    self.T("Disabled"),
+                    _class="notificationpermission btn btn-danger",
+                    _id="%s_%s" % (way, pid),
+                    **{"_data-url": URL('person', 'notificationpermission', args=[pid, way, 'enable'])})
+
+
+def customfield(form, field, css={"main": "row", "label": "", "comment": "", "widget": "", "input": "", "error": ""}):
+    tablefield = (form.table, field)
+    maindiv = DIV(_id="%s_%s__row" % tablefield, _class=css.get("main", ""))
+    if field in form.errors:
+        maindiv["_class"] += css.get("error", "")
+    labeldiv = DIV(_class="w2p_fl %s" % css.get("label", ""))
+    commentdiv = DIV(_class="w2p_fc %s" % css.get("comment", ""))
+    widgetdiv = DIV(_class="w2p_fw %s" % css.get("widget", ""))
+
+    label = LABEL(form.custom.label[field], _for="%s_%s" % tablefield, _id="%s_%s__label" % tablefield)
+    comment = form.custom.comment[field]
+    widget = form.custom.widget[field]
+
+    widget_class = widget.attributes.get("_class", "")
+    widget_class += css.get("input", "")
+    widget["_class"] = widget_class
+
+    labeldiv.append(label)
+    commentdiv.append(comment)
+    widgetdiv.append(widget)
+
+    maindiv.append(labeldiv)
+    maindiv.append(commentdiv)
+    maindiv.append(widgetdiv)
+
+    return maindiv

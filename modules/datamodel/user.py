@@ -89,39 +89,21 @@ class User(BaseAuth):
           "last_name": T("Last Name"),
           "email": T("E-mail"),
           "password": T("Password"),
-          "nickname": T("Username"),
-          "privacy": T("Privacy"),
-          "tagline": T("Tagline"),
-          "twitter": T("twitter"),
-          "facebook": T("Facebook"),
-          "website": T("website"),
-          "extra_links": T("Your Links"),
-          "avatar": T("avatar"),
-          "photo_source": T("Photo source"),
-          "about": T("about"),
-          "gender": T("Gender"),
-          "birthdate": T("Birth Date"),
-          "country": T("Country"),
-          "city": T("City"),
-          "languages": T("Languages")
-        }
-
-        self.comments = {
-          "nickname": T("Your desired username"),
-          "privacy": T("Your profile privacy"),
-          "tagline": T("A short sentence about you"),
-          "twitter": T("twitter account"),
-          "facebook": T("Facebook username or ID"),
-          "website": T("website or blog"),
-          "extra_links": T("Include more links (flickr, facebook page, github, etc)"),
-          "avatar": T("your profile picture"),
-          "photo_source": T("Which photo to use in your profile"),
+          "nickname": T("Nickname - will be used for links and signatures"),
+          "privacy": T("Privacy - Profile and content visibility"),
+          "tagline": T("Tagline -  short sentence about you"),
+          "twitter": T("twitter - your twitter username"),
+          "facebook": T("Facebook - Your facebook username or id"),
+          "website": T("website - your primary link on the web"),
+          "extra_links": T("Extra links - up to 5 links for your profiles (blog, github, company etc)"),
+          "avatar": T("Avatar - Used only when photo source is 'upload'"),
+          "photo_source": T("Photo source - you can use the avatar from:"),
           "about": T("about you"),
           "gender": T("Gender"),
           "birthdate": T("Birth Date"),
           "country": T("Country"),
           "city": T("City"),
-          "languages": T("Languages you speak")
+          "languages": T("Languages")
         }
 
     def set_validators(self):

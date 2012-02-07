@@ -45,10 +45,23 @@ class NotificationPermission(BaseModel):
     def initial_user_permission(self, user):
         try:
             for event, value in self.events:
-                self.entity.update_or_insert(self.entity.unikey == "%s_%s" % (user.id, event),
+                self.entity.update_or_insert(self.entity.unikey == "%s_%s" % (user['id'], event),
                                              user_id=user['id'],
                                              event_type=event,
                                              way=[key for key, val in self.ways])
+        except Exception:
+            self.db.rollback()
+        else:
+            self.db.commit()
+
+    def add_permission_if_dont_exists(self, user):
+        try:
+            for event, value in self.events:
+                permission = self.entity(unikey="%s_%s" % (user['id'], event))
+                if not permission:
+                    self.entity.insert(user_id=user['id'],
+                                       event_type=event,
+                                       way=[key for key, val in self.ways])
         except Exception:
             self.db.rollback()
         else:

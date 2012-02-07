@@ -11,13 +11,28 @@
      });
     </script>
 {{pass}}
-<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
-<hr />
+
+    {{if 'profile' in request.args:}}
+    	<h2>{{=T("Your settings")}}</h2>
+    {{else:}}
+		<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+		<hr />
+    {{pass}}
+
+
+
 <div id="web2py_user_form">
 	{{submit_button = form.elements(_type="submit")[0]}}
 	{{submit_button['_class'] = "btn btn-primary"}}
-	{{=form}}
-	<hr />
+
+
+    {{if 'profile' in request.args:}}
+        {{include "bootstrap/app/person/profile.html"}}
+    {{else:}}
+       {{=form}}
+	   <hr />
+    {{pass}}
+
 	{{if request.args(0) in ['login', 'register'] and use_facebook:}}
          <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'facebook-connect.png']))}}</a>     
 	{{pass}}

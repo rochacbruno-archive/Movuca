@@ -140,3 +140,12 @@ def check_availability():
     else:
         items['img'] = str(IMG(_title=T("Available"), _class="%(field)s_availability_img" % items, _src=URL('static', person.context.theme_name, args=['images', 'icons', 'right.24.png'])))
         return "jQuery('.%(field)s_availability_img').hide();jQuery('#auth_user_%(field)s').css({'border': '1px solid green'});jQuery('#auth_user_%(field)s').parent().append('%(img)s');" % items
+
+
+def notificationpermission():
+    person = Person()
+    pid = request.args(0)
+    way = request.args(1)
+    action = request.args(2)
+    person.notificationpermission(pid, way, action)
+    return person.context.button
