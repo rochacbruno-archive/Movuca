@@ -2,7 +2,7 @@
 
 from handlers.base import Base
 from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR
-from gluon.validators import IS_SLUG
+from gluon.validators import IS_SLUG, IS_IN_DB
 from helpers.images import THUMB2
 import os
 
@@ -313,6 +313,8 @@ class Article(Base):
         self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
 
         self.db.article.content_type_id.default = content_type.id
+        category_set = self.db(self.db.Category.content_type == content_type.id)
+        self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s")
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='')
         self.context.customfield = customfield
         if self.context.form.process().accepted:
