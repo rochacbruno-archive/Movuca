@@ -1,0 +1,19 @@
+{{left_sidebar_enabled=True}}
+{{extend 'bootstrap/app/layout.html'}}
+
+{{include "bootstrap/app/person/privatetimeline_events.html"}}
+
+<div class="alert" style="padding-top:5px;margin:5px 0;">
+<h2>{{=T("Public timeline")}}</h2>
+</div>  
+
+<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+ {{for event in events:}}
+    {{eventbox(event)}}
+ {{pass}}
+</ul>
+{{if events:}}
+<!--   <a href="{{=CURL('person','publictimeline', extension=False,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a> -->
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

@@ -5,7 +5,7 @@
 
  {{for article in articles:}}
 
-<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:0;padding:0;">
+<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
     
     <div class="row list-article-row">
       <div class="span2" style="padding:10px">

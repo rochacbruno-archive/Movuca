@@ -1,3 +1,34 @@
+{{left_sidebar_enabled=True}}
+{{extend 'bootstrap/app/layout.html'}}
+
+
+<div class="alert" style="padding-top:5px;margin:5px 0;">
+  <div class="span12 row-fluid" style="padding:15px;">
+              <div class="span2">
+                      <ul class="thumbnails" style="text-align:left;">
+                      <li class="author-picture span8">
+                              {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=user)), _class="thumbnail", _href=CURL('person', 'show', args=user.nickname or user.id))}}
+                      </li>
+                      </ul>
+              </div>
+              <div class="span10">
+                  <div class="">
+                      <h2>{{=A(get_name_of(user), _href=CURL('person', 'show', args=user.nickname or user.id))}} - {{=T("Board")}}</h2>
+                      <em>{{=user.city or ''}} {{=user.country or ''}}</em>  <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
+                      <p>{{=user.tagline or ''}}</p>
+                      <em  id="relation-text">{{=relation_text}}</em>
+                  </div>
+                  <div class="btn-group">
+                      {{=buttons}}
+                  </div>
+              </div>
+
+  </div>
+  &nbsp;
+</div>  
+
+<hr />
+
 
     
 {{if not isinstance(form, str):}}
@@ -63,7 +94,7 @@ $(document).ready(function () {
 		</li>
 		{{pass}}
 	</ul>
-  <a href="{{=CURL('person','board', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,100'))}}">{{=T("View all board posts")}}</a>
+  <!-- <a href="{{=CURL('person','board', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,25'))}}">{{=T("View all board posts")}}</a> -->
 {{else:}}
    {{if relation in ['contacts', 'follower']:}}
        {{=T("No posts on this board, write first!")}}

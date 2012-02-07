@@ -57,6 +57,8 @@ class Person(Base):
         else:
             user = self.db.auth_user[self.session.auth.user.id]
         self.context.user = user
+        if self.request.extension == "html":
+            self.show(user.id)
         if user:
             query = self.db.UserTimeLine.user_id == user.id
             if 'limitby' in self.request.vars:
@@ -284,6 +286,8 @@ class Person(Base):
         # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
 
     def board(self, uid):
+        if self.request.extension == 'html':
+            self.show(uid)
         T = self.T
         try:
             user = self.db.auth_user[int(uid)]
@@ -372,7 +376,7 @@ class Person(Base):
                     'following': CURL('person', 'unfollow', args=[user.id, 'profile']),
                     'follower': CURL('person', 'follow', args=[user.id, 'profile'])}
 
-            buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class="btn"))
+            buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class="btn btn-danger" if relation in ['following', 'contacts'] else 'btn btn-success'))
             #buttons.append(TAG.BUTTON(T("Message"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
             buttons.append(TAG.BUTTON(T("Report/Block"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
         else:
