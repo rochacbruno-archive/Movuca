@@ -1,15 +1,16 @@
 {{response.files.append(URL('static','bootstrap/js/article_list.js'))}}
 {{extend "bootstrap/app/layout.html"}}
 
-<h3>{{=T("Search")}}</h3>
+<h3>{{=T("Search in articles")}}</h3>
 
+{{form.append(CAT(BR(), BUTTON(T("Find"), _class="btn btn-success")))}}
 {{=form}}
 
 {{if results:}}
   <h3>{{=T("Results")}}</h3> 
   {{for article in results:}}
 
-<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:0;padding:0;">
+<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
     
     <div class="row list-article-row">
       <div class="span2" style="padding:10px">
