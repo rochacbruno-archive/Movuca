@@ -117,7 +117,7 @@ class GetImages(object):
         if image and image.startswith("http"):
             return image
         else:
-            return self.get_no_image(image)
+            return GetImages.get_no_image(image)
 
     @staticmethod
     def getphoto(user=None, img=False):
