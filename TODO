@@ -72,22 +72,22 @@
 
 
 ### IN PROGRESS ###
-* profile form (### IN PROGRESS ###)
-* profile permissions forms (### PROGRESS ###)
+
 
 ### DONE ###
-* change the classes of contact box (### DONE ###)
-* better home page (### DONE ###)
-* default email templates for all events (### DONE ###)
-* show notifications in menu (### DONE ###)
-* bootstrap 2 basic theme (### DONE ###)
-* solve google login bug (### DONE ###) ???
-* pagination for comments (### DONE ###)
-* User menu (lateral) (### DONE ###)
-* board delete (### DONE ###)
-* article categories (fix)  (### DONE ###)
-
+* change the classes of contact box 
+* better home page 
+* default email templates for all events 
+* show notifications in menu 
+* bootstrap 2 basic theme 
+* solve google login bug 
+* pagination for comments
+* User menu (lateral) 
+* board delete 
+* article categories (fix)  
+* profile form 
+* profile permissions forms 
 
 ### CANCELED ###
-* menu builder (### Canceled ###)
-* better search (### Canceled ###)
+* menu builder 
+* better search 

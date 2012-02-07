@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def clean_object(d=None, T=lambda x: x):
+def clean_object(d=None, T=lambda x, y: (x, y)):
     """
     Takes a Row object and clean unpickeable objects
     """
@@ -9,9 +9,11 @@ def clean_object(d=None, T=lambda x: x):
     from gluon.dal import Row, Set, Field
     from gluon.storage import Storage
     from gluon.languages import lazyT
+    import datetime
+    # print type(datetime.date(2012, 01, 01))
     if not d:
         d = {"nome": "BRuno", "field": Field("test"), "row": Row(), "sto": Storage(),
-                "data": {"nome": "bla", "T": lazyT("aaaa %s", "bbbb"), "l": lambda: 1, "st": Storage(), "set": Set(None, None), "valor": 1.4},
+                "data": {"birthdate": datetime.date(2012, 01, 01), "nome": "bla", "T": lazyT("aaaa %s", "bbbb"), "l": lambda: 1, "st": Storage(), "set": Set(None, None), "valor": 1.4},
              "numero": 7}
 
     for item, value in d.items():
@@ -36,6 +38,7 @@ def clean_object(d=None, T=lambda x: x):
 
 
 if __name__ == "__main__":
+    import datetime
     d = clean_object()
     s = str(d)
     print eval(s)

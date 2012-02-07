@@ -17,9 +17,10 @@ def list_latest():
 
 
 def count():
-    notifications = Notifications()
-    notifications.counter(session.auth.user.id)
-    return notifications.context.count
+    if session.auth and session.auth.user:
+        notifications = Notifications()
+        notifications.counter(session.auth.user.id)
+        return notifications.context.count
 
 
 def mark_as_read():
