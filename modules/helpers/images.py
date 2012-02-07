@@ -113,8 +113,11 @@ class GetImages(object):
         return "http://graph.facebook.com/%s/picture?type=large" % user.split('/')[-1].strip()
 
     @staticmethod
-    def get_google_image(user):
-        return user or self.get_no_image(user)
+    def get_google_image(image):
+        if image and image.startswith("http"):
+            return image
+        else:
+            return self.get_no_image(image)
 
     @staticmethod
     def getphoto(user=None, img=False):
