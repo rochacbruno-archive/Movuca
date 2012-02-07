@@ -166,9 +166,9 @@ jQuery(function() {
                       {{=T('Create')}}<b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                      <li>{{=A(T('Article'), _href=CURL('article', 'new', args='Article'))}}</li>
-                      <li>{{=A(T('Cook Recipe'), _href=CURL('article', 'new', args='CookRecipe'))}}</li>
-                      <li>{{=A(T('Product'), _href=CURL('article', 'new', args='Product'))}}</li>
+                      {{for content_type in content_types:}}
+                          <li>{{=A(T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
+                      {{pass}} 
                       <li class="divider"></li>
                       <li>{{=A(T('Group'), _href=CURL('group', 'new'))}}</li>
                       <li>{{=A(T('Page'), _href=CURL('page', 'new'))}}</li>
@@ -246,10 +246,10 @@ jQuery(function() {
             <ul class="nav nav-list">
               <li class="nav-header">Create</li>
               <!-- <li class="active"><a href="#"><i class="icon-star"></i> Home</a></li> -->
-              <li>{{=A(iicon('list-alt'), T('Article'), _href=CURL('article', 'new', args='Article'))}}</li>
-          <!--<li>{{=A(iicon('list-alt'), T('Cook Recipe'), _href=CURL('article', 'new', args='CookRecipe'))}}</li>
-              <li>{{=A(iicon('list-alt'), T('Product'), _href=CURL('article', 'new', args='Product'))}}</li>
-              <li>{{=A(iicon('list-alt'), T('Group'), _href=CURL('group', 'new'))}}</li>
+              {{for content_type in content_types:}}
+                  <li>{{=A(iicon('list-alt'), T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
+              {{pass}}
+          <!--<li>{{=A(iicon('list-alt'), T('Group'), _href=CURL('group', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Page'), _href=CURL('page', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Bundle'), _href=CURL('bundle', 'new'))}}</li> -->

@@ -22,6 +22,7 @@ class Home(Base):
         self.context.use_facebook = self.db.config.auth.use_facebook
         self.context.use_google = self.db.config.auth.use_google
         self.context.theme_name = self.config.theme.name
+        self.context.content_types = self.db(self.db.ContentType).select()
 
     def last_articles(self):
         from helpers.article import latest_articles

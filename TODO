@@ -1,17 +1,13 @@
-# TODO
+### TODO ###
 
-
-* profile form (### IN PROGRESS ###)
-* profile permissions forms (### PROGRESS ###)
 * check privacy for person
 * article privacy
-* article categories (fix)
 * allow sub categories in article (how?)
 * tag cloud
 * delete article (is_active=False, also set is_active in all queries)
 * article thrash
 * save articel as template >> new from template
-* allow constrinutor authors for article
+* allow constributor authors for article
 * allow attachments in template emails (?)
 * events documentation
 * allow upload fields in contenttypes
@@ -56,7 +52,6 @@
 * context.alerts manager
 * board replies
 * board shares
-
 * comment reply
 * comment moderation for admins
 * comment moderation options for author
@@ -76,6 +71,11 @@
 * REST API
 
 
+### IN PROGRESS ###
+* profile form (### IN PROGRESS ###)
+* profile permissions forms (### PROGRESS ###)
+
+### DONE ###
 * change the classes of contact box (### DONE ###)
 * better home page (### DONE ###)
 * default email templates for all events (### DONE ###)
@@ -85,6 +85,9 @@
 * pagination for comments (### DONE ###)
 * User menu (lateral) (### DONE ###)
 * board delete (### DONE ###)
+* article categories (fix)  (### DONE ###)
 
+
+### CANCELED ###
 * menu builder (### Canceled ###)
 * better search (### Canceled ###)

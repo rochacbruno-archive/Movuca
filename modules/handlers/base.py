@@ -32,6 +32,7 @@ class Base(object):
         self.meta = meta or Storage()
         self.context = context or Storage()
         self.context.alerts = []
+        self.context.content_types = []
         self.theme = theme
         self.view = view
 

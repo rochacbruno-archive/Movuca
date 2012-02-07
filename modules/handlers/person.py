@@ -22,12 +22,13 @@ from handlers.base import Base
 from gluon import *
 from helpers.person import contact_box
 from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
+from datamodel.article import ContentType
 from handlers.notification import Notifier
 
 
 class Person(Base):
     def start(self):
-        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard])
+        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard, ContentType])
         self.notifier = Notifier(self.db)
 
     def pre_render(self):
@@ -43,6 +44,7 @@ class Person(Base):
         self.context.use_facebook = self.db.config.auth.use_facebook
         self.context.use_google = self.db.config.auth.use_google
         self.mail = self.db.auth.settings.mailer
+        self.context.content_types = self.db(self.db.ContentType).select()
 
     def get_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
