@@ -128,6 +128,8 @@ jQuery(function() {
   <body>
 
     <div id="notification-dialog" title="Notifications" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
+
+{{if request.controller in ['article'] and request.function in ['show']:}}
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -136,7 +138,7 @@ jQuery(function() {
   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=133622423420992";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
-
+{{pass}}
 
 
     <div class="navbar navbar-fixed-top">

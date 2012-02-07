@@ -389,7 +389,7 @@ class Article(Base):
         else:
             limitby = (0, 10)
         self.context.articles = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
-        if 'author' in self.request.vars:
+        if 'author' in self.request.vars and self.context.articles:
             self.context.title = str(self.db.T("Articles wrote by %s", self.context.articles[0].author.nickname))
 
     def new_article_event(self, event_type, user=None, data={}):

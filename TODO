@@ -8,7 +8,6 @@
 * article categories (fix)
 * allow sub categories in article (how?)
 * tag cloud
-* better search
 * delete article (is_active=False, also set is_active in all queries)
 * article thrash
 * save articel as template >> new from template
@@ -36,10 +35,9 @@
 * new members widget
 * registered event_type
 * online users widget
-* User menu (lateral) (### IN PROGRESS ###)
 * Ads manager (google ads, boobox)
 * blog(s) mode
-* allow registration optin in config?
+* allow registration option in config? (a way to disable regitration)
 * Install interface
 * config admin
 * notify subscribers button in article edit
@@ -58,7 +56,7 @@
 * context.alerts manager
 * board replies
 * board shares
-* board delete
+
 * comment reply
 * comment moderation for admins
 * comment moderation options for author
@@ -85,5 +83,8 @@
 * bootstrap 2 basic theme (### DONE ###)
 * solve google login bug (### DONE ###) ???
 * pagination for comments (### DONE ###)
+* User menu (lateral) (### DONE ###)
+* board delete (### DONE ###)
 
 * menu builder (### Canceled ###)
+* better search (### Canceled ###)
