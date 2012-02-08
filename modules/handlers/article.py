@@ -266,6 +266,11 @@ class Article(Base):
     def edit(self):
         self.context.customfield = customfield
         self.get()
+        if not (has_permission_to_edit(self.session, self.context.article) \
+                    or (self.db.auth.has_membership("admin", self.db.auth.user_id) \
+                        or self.db.auth.has_membership("editor", self.db.auth.user_id))):
+            redirect(self.CURL('article', 'show', args=[self.context.article.id, self.context.article.slug]))
+
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
         self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
         self.context.article_form = SQLFORM(self.db.article, self.context.article)
@@ -644,6 +649,9 @@ class Article(Base):
             links.append('unsubscribe' if subscribed else 'subscribe')
 
         if has_permission_to_edit(self.session, self.context.article):
+            links.append('edit')
+        elif self.session.auth and \
+            (self.db.auth.has_membership("admin", self.db.auth.user_id) or self.db.auth.has_membership("editor", self.db.auth.user_id)):
             links.append('edit')
 
         return CAT(*[icons[link] for link in links])
