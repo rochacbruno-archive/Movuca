@@ -113,3 +113,22 @@ fieldset legend {text-transform:uppercase;
 /* .container-fluid{
  	padding-right:8%;padding-left:8%;
  }*/
+
+ .cook-recipe-information ul {
+    list-style:none;
+
+ }
+
+ .recipe-labels li {
+   font-weight:bold;
+   font-size:1.2em;
+   line-height:2em;
+ } 
+
+  .recipe-labels li span {
+   color:#444;
+ } 
+
+ .addtobookbutton {
+  width:90%;
+ }

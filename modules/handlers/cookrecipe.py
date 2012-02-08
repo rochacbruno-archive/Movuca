@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import BUTTON, URL
+from gluon import BUTTON, URL, TAG
 
 
 class CookRecipe(Base):
@@ -62,16 +62,16 @@ class CookRecipe(Base):
         if user:
             already = self.db.CookRecipeBook(article_id=int(self.request.args(0)), user_id=user.id)
             if already:
-                bt = BUTTON(self.T("On your book! (remove)"),
-                            _class="button already-on-book",
+                bt = BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), self.T("On your book!"),
+                            _class="button already-on-book btn btn-success addtobookbutton",
                             _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'removefrombook', args=self.request.args(0)))
             else:
-                bt = BUTTON(self.T("Add to my book"),
-                            _class="button button not-on-book",
+                bt = BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
+                            _class="button button not-on-book btn btn-info addtobookbutton",
                             _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'addtobook', args=self.request.args(0)))
         else:
-            bt = BUTTON(self.T("Add to my book"),
-                            _class="button button not-on-book",
-                            _onclick="window.location = '%s';" % URL('default', 'user',
+            bt = BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
+                            _class="button button not-on-book btn btn-info addtobookbutton",
+                            _onclick="window.location = '%s';" % URL('person', 'account',
                                  args='login', vars=dict(_next=self.CURL('article', 'show', args=self.request.args(0)))))
         return bt
