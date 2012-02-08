@@ -651,7 +651,7 @@ class Article(Base):
         if has_permission_to_edit(self.session, self.context.article):
             links.append('edit')
         elif self.session.auth and \
-            (self.db.auth.has_membership("admin", self.db.auth.user_id) or self.db.auth.has_membership("editor", self.db.auth.user_id)):
+            (self.db.auth.has_membership("admin", self.session.auth.user.id) or self.db.auth.has_membership("editor", self.session.auth.user.id)):
             links.append('edit')
 
         return CAT(*[icons[link] for link in links])
