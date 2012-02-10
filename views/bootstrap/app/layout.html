@@ -228,7 +228,7 @@ jQuery(function() {
       <div class="row-fluid">
         
         {{if left_sidebar_enabled:}}
-        <div class="span3">
+        <div class="span3 mobilehidden">
           {{block left_sidebar}}
           {{if session.auth:}}
           <div class="well sidebar-nav">
@@ -268,8 +268,8 @@ jQuery(function() {
             </ul>
           </div><!--/.well -->
             {{else:}}
-                  <div class="well sidebar-nav">
-            <ul class="nav nav-list">
+            <div class="well sidebar-nav ">
+            <ul id="usersidebar" class="nav nav-list">
               <li class="nav-header">{{=T("Connect!")}}</li>
               <li>
                   <div>

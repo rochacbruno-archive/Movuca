@@ -25,26 +25,30 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
     </div>
 
 
+{{
+css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control-group error"}
+}}  
+
     <div class="span3 form-actions" style="margin-top:0;">
         
 
         <fieldset class="span11">
             <legend>{{=T("Category & Tags")}}</legend>
-            {{=customfield(form, 'category_id', css=css)}}
-            {{=customfield(form, 'tags', css=css)}}
+            {{=customfield(form, 'category_id', css=css2)}}
+            {{=customfield(form, 'tags', css=css2)}}
         </fieldset>
 
         <fieldset class="span11">
             <legend>{{=T("options")}}</legend>
-            {{=customfield(form, 'privacy', css=css)}}
-            {{=customfield(form, 'license', css=css)}}
+            {{=customfield(form, 'privacy', css=css2)}}
+            {{=customfield(form, 'license', css=css2)}}
 
             
         </fieldset>
 
         <fieldset class="span11">
             <legend>{{=T("Save")}}</legend>
-            {{=customfield(form, 'draft', css=css)}}
+            {{=customfield(form, 'draft', css=css2)}}
             <br />
             <button class="full-width btn-primary btn-large" id="publish">{{=T("Publish")}}</button>
             <button class="full-width btn-primary btn-large" id="draft">{{=T("Save as a draft")}}</button>

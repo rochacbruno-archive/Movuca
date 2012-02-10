@@ -1,109 +1,111 @@
-{{response.files.append(URL('static','basic/css/jqModal.css'))}}
-{{response.files.append(URL('static','basic/js/jqModal.js'))}}
-{{response.files.append(URL('static','basic/js/article_show.js'))}}
-{{extend "basic/app/layout.html"}}
-{{block right_sidebar}}
-    <h4 class="bottom-line" style="margin-top:0px;">
-        <img src="{{=URL('static','basic/images/icons', args='monitor.24.png')}}" alt="{{=T('Activities')}}" title="{{=T('Activities')}}">
-        {{=T("Public Activities")}}
-    </h4>
-    {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,8'), ajax=True)}}
+{{response.files.append(URL('static','bootstrap/js/cookrecipe_show.js'))}}
+{{extend "bootstrap/app/layout.html"}}
+
+{{block left_sidebar}}
+   {{super}}
 {{end}}
-<style>
-    .product-information ul{
-        padding-left:5px;
-    }
 
-    .product-information li {
-        border: 1px solid #fff;
-        list-style: none; 
-        padding: 5px;
-        background-color:#F5F5F5;
-    }
+<div class="article-container">
 
-    .product-information button {
-        width:100%;
-    }
-
-    .product-ingredients ul {
-        padding-left:15px;
-    }
-
-    .product-label {
-        color:blue;
-    }
-</style>
-<div class="twelve columns center  show-article-wrapper">
-    <div class="row show-article-meta">
-      <div class="two columns alpha article-author-picture">
-         {{=A(IMG(_src=get_image(None, 'user', themename='basic', user=article.author), _width=90, _height=90), _href=CURL('person','show', args=article.author.nickname or article.author))}}
-      </div>
-      <div class="ten columns omega">
+  <div class="row-fluid alert show-article-meta" style="padding:0;">
+      <div class="srow-fluid" style="padding:15px;">    
+        <ul class="thumbnails span2" style="text-align:left;">
+        <li class="author-picture span8">
+                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="thumbnail",_href=CURL('person','show', args=article.author.nickname or article.author))}}
+        </li>
+        </ul>
+        <div class="span10">  
           {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
-          <em>{{=T(article.content_type_id.title)}} {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} {{=ftime(article.publish_date)}} </em>
-          {{if article.category_id:}}
-              <em>{{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'list', vars=dict(category=article.category_id.name.replace(' ','_'))))}}</em> 
+        </div>
+        <div class="span10">  
+          <em><span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
+              {{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'list', vars=dict(category=article.category_id.name.replace(' ','_'))))}}</em> 
           {{pass}}
-          <div class="show-article-information" id="links">
-              {{=action_links}}
-          </div>
+        </div>
+        <div class="span10 action_links" style="margin-top:10px;" id="links"> 
+          {{=action_links}}
+        </div>                
       </div>
-    </div>
+     
+  </div>
 
-    <div class="row show-article-content">
-        <div class="twelve columns alpha">
-          <div class="show-article-description article-box">
-              {{=H5(T("Product Description"))}}
-              {{=article.description}}
-          </div>
-       </div>
-       <div class="eight columns alpha">
-          <div class="jqmWindow" id="photomodal">
-              <a href='#' class="jqmClose">{{=T("Close")}}</a>
-              <br />
-              <img class="photo jqmClose" src="{{=URL('static','images',args='blank.gif')}}" />
-          </div>
-          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="eight columns alpha")}}
-            <div class="row show-article-tags">
-             {{if article.tags:}}
-                 <img src="{{=URL('static','%s/images/icons' % theme_name, args='tag_rounded.24.png')}}" alt="{{=T('Tags')}}" title="{{=T('Tags')}}"><em>{{=tagfy(article.tags)}} </em>
-             {{pass}}
-           </div>
-       </div>
-       <div class="four columns omega product-information">
+  {{include 'bootstrap/app/share_buttons.html'}}
+  {{#share()}}
+  
+<div class="row-fluid show-article-description">      
+    <div class="show-article-description article-box">
+            {{=H4(iicon('gift'), T("Product Description"))}}
+      <blockquote class="show-article-description span10" style="margin-top:15px;">
+            <p>{{=article.description}}</p>
+      </blockquote>
+    </div>
+</div>  
+
+ <div class="row-fluid show-article-content">   
+
+
+
+       <div class="span4 alert-info cook-recipe-information" style="margin:0;padding:10px 0;margin-left:0px;">
+
         <!-- Lockerz Share BEGIN -->
           <ul>
             <li>
-            {{include 'basic/app/share_buttons.html'}}
-            {{share(classes="product-share", columns="", like=False, tweet=False)}}
+            {{include 'bootstrap/app/share_buttons.html'}}
+            {{share(classes="cook-recipe-share", columns="", like=False, tweet=False)}}
             </li>
           </ul>
           <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
           <!-- Lockerz Share END -->
-         {{sizes = dict([("L", T("Large")),("M", T("Medium")), ("S", T("Small"))])}}
-         {{article_data.fproduct_size = sizes[article_data.product_size]}}
-         {{article_data.fprice = "$ %.2f" % article_data.price}}
-         {{fields=[(T("Product Size"),'product_size'), (T("Manufacturer"),'manufacturer'), (T("In Stock"),'in_stock'), (T("Price"),'fprice')]}}
-         {{=UL(*[LI(SPAN(label, _class="product-label"),": ",article_data[field]) for label,field in fields])}}
-         <ul>
-            <li id="buybutton">
-               <button onclick="ACTION TO BUY THE PRODUCT">{{=T("Buy")}}</button>
+         {{product_size = dict([("L", T("Large")), ("M", T("Medium")), ("S", T("Small"))])}}
+         {{icons=dict(fproduct_size=iicon("resize-horizontal"), manufacturer=iicon("flag"), in_stock=iicon('th'), price=iicon('barcode'))}}
+         {{article_data.fproduct_size = product_size[article_data.product_size]}}
+         {{fields=[(T("Product Size"),'fproduct_size'), (T("Manufacturer"),'manufacturer'), (T("In Stock"),'in_stock'), (T("Price"),'price')]}}
+         {{=UL(*[LI(icons[field], SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields], _class="recipe-labels")}}
+         <ul class="btn-group">
+            <li>
+               <button class="btn addtobookbutton" onclick="alert('Ít is just a test!');">{{=iicon('shopping-cart')}}{{=T("Add to cart")}}</button>
             </li>
         </ul>
+       
        </div>
-       <div class="seven columns omega product-instructions article-box">
-              {{=H5(T("Specifications"))}}
-              {{=XML(article_data.info)}}
+
+       {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="span7 recipephoto")}}
+
+ </div>
+
+ <div class="row-fluid show-article-content"> 
+
+       <div class="span12 alpha article-box"> 
+          {{=H4(iicon('folder-close'), T("Specifications"))}}
+          {{=XML(article_data.info)}}
        </div>
-    </div>
-    {{share()}}
-    <div class="row show-article-related article-box">
+
+ </div>
+
+  <div class="row-fluid show-article-tags">
+       {{if article.tags:}}
+           <i class="icon-tags"></i><em>{{=tagfy(article.tags)}} </em>
+       {{pass}}
+  </div> 
+
+ {{share()}}
+
+  <div class="row-fluid show-article-related article-box">
     {{if related_articles:}}
-         <h4><img src="{{=URL('static','%s/images/icons' % theme_name, args='attach_round.24.png')}}" alt="{{=T('Related articles')}}" title="{{=T('Related articles')}}">{{=T("Related articles")}}</h4>
+         <h4><i class="icon-magnet"></i>{{=T("Related articles")}}</h4>
         {{=related_articles}}
     {{pass}}
-    </div>
-    <div class="row show-article-comments article-box">
+  </div>  
+
+  <div class="row-fluid show-article-comments article-box">
+        {{comments.elements('img')[0]['_style'] = "display:none"}}
+        {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
+        {{lis = comments.elements('.comment_li')}}
+        {{for li in lis:}}
+           {{li['_class'] += " well"}}
+        {{pass}}
+        {{comments['_class'] += "row-fluid"}}
+        {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
         {{=comments}}
-    </div>
+  </div>    
 </div>

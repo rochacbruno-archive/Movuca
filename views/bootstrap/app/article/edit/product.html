@@ -1,48 +1,69 @@
-{{response.files.append(URL('static','basic/js/article_edit.js'))}}
-{{extend "basic/app/layout.html"}}
+{{response.files.append(URL('static','bootstrap/js/article_edit.js'))}}
+{{extend "bootstrap/app/layout.html"}}
+{{
+css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error"} 
+}}
+
 {{=article_form.custom.begin}}
-<div class="row edit-article-wrapper">
-    <div class="twelve columns alpha">
-       <fieldset>
+<div class="row-fluid edit-article-wrapper">
+    <div class="span8 alert" style="padding:0;margin:0;padding-bottom:20px;">
+       
+       <fieldset class="span11">
             <legend>{{=T("The Basics")}}</legend>
-            {{=customfield(article_form, 'title')}}
-            {{=customfield(article_form, 'description')}}
-            {{=customfield(article_form, 'picture')}}
+            {{=customfield(article_form, 'title', css=css)}}
+            {{=customfield(article_form, 'description', css=css)}}
+            {{=customfield(article_form, 'picture', css=css)}}
        </fieldset>
-       <fieldset>
-            <legend>{{=T("Properties")}}</legend>
-            <div class="five columns alpha">
-                {{=customfield(content_form, 'price')}}
-                {{=customfield(content_form, 'in_stock')}}
+
+       <fieldset class="span11">
+            <legend>{{=T("Inarticle_formation")}}</legend>
+            <div class="span5"> 
+                {{=customfield(content_form, 'price', css=css)}}
+                {{=customfield(content_form, 'in_stock', css=css)}}
             </div>
-            <div class="five columns omega">
-                {{=customfield(content_form, 'manufacturer')}}
-                {{=customfield(content_form, 'product_size')}}
+            <div class="span5">
+                {{=customfield(content_form, 'manufacturer', css=css)}}
+                {{=customfield(content_form, 'product_size', css=css)}}
             </div>
        </fieldset>
-       <fieldset>
+        <fieldset class="span11">
             <legend>{{=T("Specifications")}}</legend>
-            {{=customfield(content_form, 'info')}}
+                {{=customfield(content_form, 'info', css=css)}}
        </fieldset>
-   </div>
-    <div class="four columns omega">
-        <fieldset>
-            <legend>{{=T("Category & Tags")}}</legend>
-            {{=customfield(article_form, 'category_id')}}
-            {{=customfield(article_form, 'tags')}}
-        </fieldset>
-        <fieldset>
-            <legend>{{=T("options")}}</legend>
-            {{=customfield(article_form, 'privacy')}}
-            {{=customfield(article_form, 'license')}}
-        </fieldset>
-        <fieldset>
-            <legend>{{=T("Save")}}</legend>
-            {{=customfield(article_form, 'draft')}}
-            <br />
-            <button class="full-width" id="publish">{{=T("Publish")}}</button>
-            <button class="full-width" id="draft">{{=T("Save as a draft")}}</button>
-        </fieldset>
     </div>
+
+{{
+css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control-group error"}
+}}    
+
+
+    <div class="span3 article_form-actions" style="margin-top:0;">
+        
+
+        <fieldset class="span11">
+            <legend>{{=T("Category & Tags")}}</legend>
+            {{=customfield(article_form, 'category_id', css=css2)}}
+            {{=customfield(article_form, 'tags', css=css2)}}
+        </fieldset>
+        <fieldset class="span11">
+            <legend>{{=T("options")}}</legend>
+            {{=customfield(article_form, 'privacy', css=css2)}}
+            {{=customfield(article_form, 'license', css=css2)}}
+        </fieldset>
+        <fieldset class="span11">
+            <legend>{{=T("Save")}}</legend>
+            {{=customfield(article_form, 'draft', css=css2)}}
+            <br />
+            <button class="full-width btn-primary btn-large" id="publish">{{=T("Publish")}}</button>
+            <button class="full-width btn-primary btn-large" id="draft">{{=T("Save as a draft")}}</button>
+
+            
+        </fieldset>
+
+
+
+    </div>
+
+
 </div>
 {{=article_form.custom.end}}
