@@ -63,7 +63,7 @@ class Setup(object):
         ]
 
         self.theme_options = [
-            Field("name", "string", notnull=True, default="basic"),
+            Field("name", "string", notnull=True, default="bootstrap"),  # basic
             Field("setuptime", "datetime", notnull=True),
         ]
 

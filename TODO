@@ -43,7 +43,6 @@
 * user fav, liked, disliked lists
 * multi content articles
 * multi pages in article (tabs?)
-* pagination for search and lists
 * Display "loading..." message in all buttons
 * jqueryui all buttons
 * Messages system (Kenji Plugin?)
@@ -87,6 +86,8 @@
 * article categories (fix)  
 * profile form 
 * profile permissions forms 
+* pagination for search and lists
+
 
 ### CANCELED ###
 * menu builder 

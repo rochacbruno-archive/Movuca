@@ -77,7 +77,7 @@ def board():
     else:
         user_id = None
     person = Person()
-    person.board(request.args(0) or user_id or redirect(login_url))
+    person.board(request.args(0) or user_id or redirect(login_url), request.vars.postid)
     return person.render('app/person/board')
 
 

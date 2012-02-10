@@ -314,7 +314,7 @@ class Person(Base):
                                  )
         # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
 
-    def board(self, uid):
+    def board(self, uid, post_id=None):
         if self.request.extension == 'html':
             self.show(uid)
         T = self.T
@@ -341,15 +341,22 @@ class Person(Base):
             self.context.form = ''
 
         query = self.db.UserBoard.user_id == user.id
-        #### pagination
-        self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
-        self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
-        self.context.paginator.records = self.db(query).count()
-        self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
-        limitby = self.context.paginator.limitby()
-        #### /pagination
-        if 'limitby' in self.request.vars:
-            limitby = [int(item) for item in self.request.vars.limitby.split(',')]
+
+        if post_id:
+            query = query & (self.db.UserBoard.id == post_id)
+            self.context.form = self.context.paginate_selector = \
+                self.context.paginator = self.context.paginate_info = ""
+            limitby = None
+        else:
+            #### pagination
+            self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+            self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+            self.context.paginator.records = self.db(query).count()
+            self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+            limitby = self.context.paginator.limitby()
+            #### /pagination
+            if 'limitby' in self.request.vars:
+                limitby = [int(item) for item in self.request.vars.limitby.split(',')]
 
         self.context.board = self.db(query).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
 

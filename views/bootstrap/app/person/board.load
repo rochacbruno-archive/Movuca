@@ -54,7 +54,7 @@ $(document).ready(function () {
          <div class="row-fluid">
 		   <div class="span8" style="text-align:left">
 		    {{=A(get_name_of(msg.writer), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
-		       <i class="icon-time"></i> {{=pdate(msg.created_on)}}
+		       <i class="icon-time"></i> <a href="{{=CURL('person', 'board', args=msg.user_id.nickname, vars={'postid': msg.id}, extension=False)}}">{{=pdate(msg.created_on)}}</a>
 		   </div>
         <!-- div class="span4" style="text-align:right">
               <a><i class="icon-share-alt"></i>{{=T('reply')}}</a> | <a><i class="icon-retweet"></i>{{=T('repost')}}</a> | <a><i class="icon-edit"></i>{{=T('edit')}}</a> &nbsp;&nbsp;
