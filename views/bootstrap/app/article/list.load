@@ -34,7 +34,7 @@
 {{pass}}
 
 {{if articles:}}
-  {{request.vars.limitby = "0,10"}}
+  {{request.vars.limitby = None}}
   <a href="{{=CURL('article','list', extension=False, vars=request.vars)}}">{{=T("View all articles")}}</a>
 {{else:}}
   {{=T("This user has no articles.")}}

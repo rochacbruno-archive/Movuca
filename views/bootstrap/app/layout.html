@@ -199,7 +199,7 @@ jQuery(function() {
                       <li>{{=A(T('My profile'), _href=CURL('person', 'show'))}}</li>
                       <li>{{=A(T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
                       <li class="divider"></li>
-                      <li>{{=A(T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id, 'limitby': '0,50'}))}}</li>
+                      <li>{{=A(T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
                       <li>{{=A(T('My contacts'), _href=CURL('person', 'contacts'))}}</li>
                        <li class="divider"></li>
                       <li>{{=A(T('Logout'), _href=logout_url)}}</li>
@@ -262,7 +262,7 @@ jQuery(function() {
               <li>{{=A(iicon('th-large'), T('Dashboard'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('adjust'), T('My profile'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('cog'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
-              <li>{{=A(iicon('list-alt'), T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id, 'limitby': '0,50'}))}}</li>
+              <li>{{=A(iicon('list-alt'), T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
               <li>{{=A(iicon('user'), T('My contacts'), _href=CURL('person', 'contacts'))}}</li>
               <li>{{=A(iicon('off'), T('Logout'), _href=logout_url)}}</li>
             </ul>

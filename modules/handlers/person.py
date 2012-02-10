@@ -24,6 +24,7 @@ from helpers.person import contact_box
 from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
 from datamodel.article import ContentType
 from handlers.notification import Notifier
+from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 
 
 class Person(Base):
@@ -63,20 +64,31 @@ class Person(Base):
             self.show(user.id)
         if user:
             query = self.db.UserTimeLine.user_id == user.id
+            #### pagination
+            self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+            self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+            self.context.paginator.records = self.db(query).count()
+            self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+            limitby = self.context.paginator.limitby()
+            #### /pagination
             if 'limitby' in self.request.vars:
                 limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-            else:
-                limitby = None
             self.get_timeline(query, limitby=limitby)
 
         self.context.TIMELINEFUNCTIONS = '%s/app/person/usertimeline_events.html' % self.context.theme_name
 
     def publictimeline(self):
+        query = self.db.UserTimeLine
+        #### pagination
+        self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+        self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+        self.context.paginator.records = self.db(query).count()
+        self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+        limitby = self.context.paginator.limitby()
+        #### /pagination
         if 'limitby' in self.request.vars:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        else:
-            limitby = None
-        self.get_timeline(self.db.UserTimeLine, limitby=limitby)
+        self.get_timeline(query, limitby=limitby)
         if self.db.request.args(0) == "sidebar":
             self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_publictimeline_events.html' % self.context.theme_name
         else:
@@ -88,10 +100,15 @@ class Person(Base):
         allowed = list(self.context.following_list) + list(self.context.contacts_list)
         allowed.append(self.session.auth.user.id)
         query = self.db.UserTimeLine.created_by.belongs(allowed)
+        #### pagination
+        self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+        self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+        self.context.paginator.records = self.db(query).count()
+        self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+        limitby = self.context.paginator.limitby()
+        #### /pagination
         if 'limitby' in self.request.vars:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        else:
-            limitby = None
         self.get_timeline(query, limitby=limitby)
         if self.db.request.args(0) == "sidebar":
             self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_privatetimeline_events.html' % self.context.theme_name
@@ -254,7 +271,15 @@ class Person(Base):
                 queries.append(self.db.auth_user.tagline.like("%" + word + "%"))
 
             query = reduce(lambda a, b: (a | b), queries)
-            self.context.results = self.db(query & (self.db.auth_user.id != self.session.auth.user.id)).select(orderby=~self.db.auth_user.id)
+            finalquery = query & (self.db.auth_user.id != self.session.auth.user.id)
+            #### pagination
+            self.context.paginate_selector = PaginateSelector(paginates=(25, 50, 100))
+            self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+            self.context.paginator.records = self.db(finalquery).count()
+            self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+            limitby = self.context.paginator.limitby()
+            #### /pagination
+            self.context.results = self.db(finalquery).select(orderby=~self.db.auth_user.id, limitby=limitby)
 
             from helpers.person import contact_box
             self.context.contact_box = contact_box
@@ -314,11 +339,19 @@ class Person(Base):
             self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
         else:
             self.context.form = ''
+
+        query = self.db.UserBoard.user_id == user.id
+        #### pagination
+        self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+        self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+        self.context.paginator.records = self.db(query).count()
+        self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+        limitby = self.context.paginator.limitby()
+        #### /pagination
         if 'limitby' in self.request.vars:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        else:
-            limitby = (0, 12)
-        self.context.board = self.db(self.db.UserBoard.user_id == user.id).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
+
+        self.context.board = self.db(query).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
 
     def removeboard(self, msg_id, user_id):
         msg = self.db.UserBoard[int(msg_id)]

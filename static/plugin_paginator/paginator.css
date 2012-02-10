@@ -1,0 +1,63 @@
+/* original by: http://activeadmin.info/ */
+div.paginator {
+  display: inline; margin-left: 10px; 
+  font-size: 0.8em; font-weight: bold; font-family: Helvetica, Arial, sans-serif;
+  }
+  div.paginator a {
+    box-shadow: 0 1px 2px #aaaaaa;
+    -moz-box-shadow: 0 1px 2px #aaaaaa;
+    -webkit-box-shadow: 0 1px 2px #aaaaaa;
+    text-decoration: none;
+    margin-right: 3px;
+    cursor: pointer;
+    background: #f9f9f9;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#dddbdb));
+    background: -moz-linear-gradient(-90deg, #f9f9f9, #dddbdb);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#f9f9f9, endColorstr=#dddbdb);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#f9f9f9, endColorstr=#dddbdb);
+    text-shadow: white 0 1px 0;
+    color: #777; 
+    }
+    div.paginator a:hover {
+      color: #444;
+      box-shadow: 0 1px 3px #888888;
+      -moz-box-shadow: 0 1px 3px #888888;
+      -webkit-box-shadow: 0 1px 3px #888888; }
+    div.paginator a:active {
+      box-shadow: inset 0 1px 2px #aaaaaa;
+      -moz-box-shadow: inset 0 1px 2px #aaaaaa;
+      -webkit-box-shadow: inset 0 1px 2px #aaaaaa; }
+  div.paginator em {
+    box-shadow: 0 1px 2px #aaaaaa;
+    -moz-box-shadow: 0 1px 2px #aaaaaa;
+    -webkit-box-shadow: 0 1px 2px #aaaaaa;
+    background: #838a90;
+    background: -webkit-gradient(linear, left top, left bottom, from(#838a90), to(#414549));
+    background: -moz-linear-gradient(-90deg, #838a90, #414549);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#838a90, endColorstr=#414549);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#838a90, endColorstr=#414549);
+    text-shadow: black 0 1px 0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.0em;
+    color: #efefef; }
+    div.paginator em:hover {
+      color: #fff;
+      box-shadow: 0 1px 3px #888888;
+      -moz-box-shadow: 0 1px 3px #888888;
+      -webkit-box-shadow: 0 1px 3px #888888; }
+    div.paginator em:active {
+      box-shadow: inset 0 1px 2px black;
+      -moz-box-shadow: inset 0 1px 2px black;
+      -webkit-box-shadow: inset 0 1px 2px black; }
+  div.paginator a, div.paginator em {
+    margin-right: 4px;
+    padding: 2px 5px;
+    border: none;}
+    
+span.paginate_selector, span.paginate_info {
+  font-size: 0.85em; color: #B3BCC1;
+}
+span.paginate_info b {
+  color: #5C6469;
+}

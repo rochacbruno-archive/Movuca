@@ -19,7 +19,7 @@ $(document).ready(function () {
  {{pass}}
 </ul>
 {{if events:}}
-  <a href="{{=CURL('person','usertimeline', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,100'))}}">{{=T("View all activities")}}</a>
+  <a href="{{=CURL('person','usertimeline', extension=False, args=user.nickname or user.id,vars=dict())}}">{{=T("View all activities")}}</a>
 {{else:}}
   {{=T("No events on this timeline")}}
 {{pass}}

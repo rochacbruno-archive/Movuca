@@ -34,7 +34,7 @@ $(document).ready(function () {
  {{pass}}
 </ul>
 {{if events:}}
-  <a href="{{=CURL('person','privatetimeline', extension=False,vars=dict(limitby='0,100'))}}">{{=T("View all activities")}}</a>
+  <a href="{{=CURL('person','privatetimeline', extension=False,vars=dict())}}">{{=T("View all activities")}}</a>
 {{else:}}
   {{=T("No events on this timeline")}}
 {{pass}}

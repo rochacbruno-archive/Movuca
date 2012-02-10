@@ -5,7 +5,8 @@
 
 <div class="alert" style="padding-top:5px;margin:5px 0;">
 <h2>{{=T("Your contacts timeline")}}</h2>
-</div>  
+</div> 
+
 
 
 <ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
@@ -35,10 +36,25 @@ $(document).ready(function () {
     
     {{=form.custom.end}}
  </li>
+
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div> 
+
  {{for event in events:}}
     {{eventbox(event)}}
  {{pass}}
 </ul>
+
+<div class="span12 pagination pagination-centered" align="center">
+  {{=paginator}}
+</div>
+
 {{if events:}}
   <!-- <a href="{{=CURL('person','privatetimeline', extension=False,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a> -->
 {{else:}}

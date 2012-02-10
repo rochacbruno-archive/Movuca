@@ -4,6 +4,7 @@ from handlers.base import Base
 from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR
 from gluon.validators import IS_SLUG, IS_IN_DB
 from helpers.images import THUMB2
+from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 import os
 
 
@@ -368,7 +369,14 @@ class Article(Base):
         self.context.form = FORM(INPUT(_type="text", _name="q", _id="q", _value=q or ''), _method="GET")
         if q:
             query = (self.db.Article.search_index.like("%" + q + "%")) | (self.db.Article.tags.contains(q))
-            self.context.results = self.db(query).select()
+            #### pagination
+            self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+            self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+            self.context.paginator.records = self.db(query).count()
+            self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+            limitby = self.context.paginator.limitby()
+            #### /pagination
+            self.context.results = self.db(query).select(limitby=limitby)
         else:
             self.context.results = []
 
@@ -376,7 +384,7 @@ class Article(Base):
         self.context.title = str(self.db.T("Articles "))
         queries = []
         for field, value in self.request.vars.items():
-            if field not in ['limitby', 'orderby', 'tag', 'category', 'or']:
+            if field not in ['limitby', 'orderby', 'tag', 'category', 'or', 'page', 'paginate']:
                 queries.append(self.db.Article[field] == value)
             if field == 'tag':
                 queries.append(self.db.Article.tags.contains(value))
@@ -392,10 +400,15 @@ class Article(Base):
         queries.append(self.db.Article.draft == False)
         query = reduce(lambda a, b: (a & b), queries)
 
+        #### pagination
+        self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+        self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+        self.context.paginator.records = self.db(query).count()
+        self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+        limitby = self.context.paginator.limitby()
+        #### /pagination
         if self.request.vars.limitby:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        else:
-            limitby = (0, 10)
         self.context.articles = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
         if 'author' in self.request.vars and self.context.articles:
             self.context.title = str(self.db.T("Articles wrote by %s", self.context.articles[0].author.nickname))

@@ -42,7 +42,15 @@ $(document).ready(function () {
 </div>  
 
 <hr />
-
+{{if events:}}
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div> 
 
 <ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
  {{for event in events:}}
@@ -50,7 +58,10 @@ $(document).ready(function () {
  {{pass}}
 </ul>
 
-{{if events:}}
+<div class="span12 pagination pagination-centered" align="center">
+  {{=paginator}}
+</div>
+
   <!-- <a href="{{=CURL('person','usertimeline', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a> -->
 {{else:}}
   {{=T("No events on this timeline")}}

@@ -3,8 +3,17 @@
 <div class="alert" style="padding-top:5px;margin:5px 0;">
 <h3>{{=title}}</h3>
 </div>
- {{for article in articles:}}
 
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div>  
+
+{{for article in articles:}}
 <div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
     
     <div class="row list-article-row">
@@ -25,6 +34,9 @@
       </div>
     </div>
 </div>
-
-
 {{pass}}  
+
+<div class="span12 pagination pagination-centered" align="center">
+    {{=paginator}}
+</div>
+

@@ -68,7 +68,18 @@ $(document).ready(function () {
 });
 </script>
 
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div>  
+
 	<ul class="board-messages" style="list-style: none;margin-left:0px;">
+
+
 		{{for msg in board:}}
 		<li class="row board-item well" style="padding-top:5px;margin:10px 0;" id="msg_{{=msg.id}}">
     {{if session.auth and (session.auth.user.id in [msg.created_by, msg.user_id]):}}
@@ -93,7 +104,14 @@ $(document).ready(function () {
         </div>
 		</li>
 		{{pass}}
+
+
 	</ul>
+
+   <div class="span12 pagination pagination-centered" align="center">
+      {{=paginator}}
+   </div>
+
   <!-- <a href="{{=CURL('person','board', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,25'))}}">{{=T("View all board posts")}}</a> -->
 {{else:}}
    {{if relation in ['contacts', 'follower']:}}
