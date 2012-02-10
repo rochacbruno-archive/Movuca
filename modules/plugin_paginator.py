@@ -79,7 +79,7 @@ class Paginator(UL):
                 self.append(_get_page_el(page))
             if self.page + _pad_next <= pages:
                 if self.page + _pad_next <= pages - 2:
-                    self.append(SPAN('... '))
+                    self.append(LI(A('... ', _href="#"), _class="disabled"))
                 elif self.page + _pad_next == pages - 1:
                     self.append(_get_page_el(pages - 1))
                 self.append(_get_page_el(pages))
