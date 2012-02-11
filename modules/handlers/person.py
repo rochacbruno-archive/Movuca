@@ -104,7 +104,17 @@ class Person(Base):
         else:
             self.context.TIMELINEFUNCTIONS = '%s/app/person/privatetimeline_events.html' % self.context.theme_name
 
-    def update_contact_counter(self, follower, followed):
+    def update_contact_counter(self, follower=None, followed=None, arg=None):
+        if arg:
+            try:
+                query = self.db.auth_user.id == int(self.request.args(0))
+            except:
+                query = self.db.auth_user.nickname == self.request.args(0)
+
+            follower = self.db(query).select().first()
+        else:
+            follower = self.session.auth.user if self.session.auth else redirect(self.CURL('person', 'account', args='login'))
+
         def update_counter(person):
             i_follow = self.db(self.db.UserContact.follower == person.id).select(self.db.UserContact.followed)
             follows_me = self.db(self.db.UserContact.followed == person.id).select(self.db.UserContact.follower)
@@ -113,28 +123,15 @@ class Person(Base):
             contacts = len(i_follow_set & follows_me_set)
             following = len(i_follow_set - follows_me_set)
             followers = len(follows_me_set - i_follow_set)
-            result = self.db(self.db.auth_user.id == person.id).update(contacts=contacts, isfollowing=following, followers=followers)
+            self.db(self.db.auth_user.id == person.id).update(contacts=contacts, isfollowing=following, followers=followers)
             self.db.commit()
             if person.id == self.db.auth.user_id:
                 self.db.auth.user.update(contacts=contacts, isfollowing=following, followers=followers)
-            print "##" * 20
-            print "I follow %s %s" % (person.nickname, person.id)
-            print i_follow
-            print "follows me"
-            print follows_me
-            print "i follow set"
-            print i_follow_set
-            print "follow me set"
-            print follows_me_set
-            print "contacts"
-            print contacts
-            print "following"
-            print following
-            print "follower"
-            print followers
-            print result
-        update_counter(follower)
-        update_counter(followed)
+
+        if follower:
+            update_counter(follower)
+        if followed:
+            update_counter(followed)
 
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
@@ -243,6 +240,8 @@ class Person(Base):
             self.context.following = self.db(self.db.UserContact.follower == follower.id).select()
 
     def contacts(self, arg=None):
+        if 'refresh' in self.request.vars:
+            self.update_contact_counter(arg=arg)
         self.followers(arg)
         self.following(arg)
 
