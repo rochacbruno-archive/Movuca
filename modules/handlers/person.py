@@ -292,7 +292,7 @@ class Person(Base):
             query = reduce(lambda a, b: (a | b), queries)
             finalquery = query & (self.db.auth_user.id != self.session.auth.user.id)
             #### pagination
-            self.context.paginate_selector = PaginateSelector(paginates=(25, 50, 100))
+            self.context.paginate_selector = PaginateSelector(paginates=(26, 50, 100))
             self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
             self.context.paginator.records = self.db(finalquery).count()
             self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
