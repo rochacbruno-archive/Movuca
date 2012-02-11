@@ -250,6 +250,8 @@ class Article(Base):
 
     def show(self):
         self.get()
+        if self.context.article.draft == True and (self.context.article.author != self.db.auth.user_id):
+            redirect(self.CURL('home', 'index'))
         self.related_articles()
         self.comments()
         content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
@@ -376,6 +378,7 @@ class Article(Base):
             self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
             limitby = self.context.paginator.limitby()
             #### /pagination
+            query &= self.db.Article.draft == False
             self.context.results = self.db(query).select(limitby=limitby)
         else:
             self.context.results = []
@@ -384,7 +387,7 @@ class Article(Base):
         self.context.title = str(self.db.T("Articles "))
         queries = []
         for field, value in self.request.vars.items():
-            if field not in ['limitby', 'orderby', 'tag', 'category', 'or', 'page', 'paginate']:
+            if field not in ['limitby', 'orderby', 'tag', 'category', 'or', 'page', 'paginate', 'draft']:
                 queries.append(self.db.Article[field] == value)
             if field == 'tag':
                 queries.append(self.db.Article.tags.contains(value))
@@ -397,7 +400,13 @@ class Article(Base):
                     cat_qry = self.db.Article.category_id == cat_id
                 queries.append(cat_qry)
                 self.context.title += str(self.db.T("in %s category ", value.replace('_', ' ')))
-        queries.append(self.db.Article.draft == False)
+
+        if 'draft' in self.request.vars:
+            queries = [self.db.Article.draft == True, self.db.Article.author == self.db.auth.user_id]
+            self.context.title = self.T("Your drafts")
+        else:
+            queries.append(self.db.Article.draft == False)
+
         query = reduce(lambda a, b: (a & b), queries)
 
         #### pagination

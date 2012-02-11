@@ -18,7 +18,11 @@
           {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
         </div>
         <div class="span10">  
-          <em><span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
+          <em>
+            {{if article.draft:}}
+                <span class="label label-important">{{=T("Draft")}}</span> 
+            {{pass}}
+            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
               {{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'list', vars=dict(category=article.category_id.name.replace(' ','_'))))}}</em> 
           {{pass}}
         </div>
