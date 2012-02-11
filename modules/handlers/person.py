@@ -418,13 +418,17 @@ class Person(Base):
 
         self.context.buttons = buttons
         self.context.resume = UL(
-                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='attach_round.24.png')), A(T("Wrote %s articles", user.articles), _href=self.CURL('article', 'list', vars={'author': user.id, 'limitby': '0,25'}))),
-                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='favorite_rounded.24.png')), A(T("Has %s favorites", user.favorites))),
-                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Liked %s articles", user.likes))),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='attach_round.24.png')), A(T("Wrote %s articles", user.articles), _href=self.CURL('article', 'list', vars={'author': user.id}))),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='favorite_rounded.24.png')), A(T("Has %s favorites", user.favorites), _href=self.CURL('article', 'list', vars={'favorite': user.id}))),
+                                 LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Liked %s articles", user.likes), _href=self.CURL('article', 'list', vars={'like': user.id}))),
                                  LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='face.24.png')), A(T("Has %s contacts", user.contacts), _href=self.CURL('person', 'contacts', args=user.nickname or user.id))),
                                  #LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='movuca.24.png')), A(T("Joined %s groups", user.groups))),
                                  _class="person-resume"
                                 )
+
+        if user.id == self.db.auth.user_id:
+            self.context.resume.append(LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Disliked %s articles", user.dislikes), _href=self.CURL('article', 'list', vars={'dislike': user.id}))))
+            self.context.resume.append(LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Subscribed to %s articles", user.subscriptions), _href=self.CURL('article', 'list', vars={'subscribe': user.id}))))
 
         self.response.meta.title = "%s | %s | %s" % (
                                                      user.nickname or user.first_name,

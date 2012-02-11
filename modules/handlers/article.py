@@ -386,10 +386,14 @@ class Article(Base):
             self.context.results = []
 
     def list(self):
+        denied_fields = ['limitby', 'orderby', 'tag', 'category', 'or',
+                          'page', 'paginate', 'draft', 'favorite', 'like',
+                          'dislike', 'subscribe', 'comment']
+
         self.context.title = str(self.db.T("Articles "))
         queries = []
         for field, value in self.request.vars.items():
-            if field not in ['limitby', 'orderby', 'tag', 'category', 'or', 'page', 'paginate', 'draft']:
+            if field not in denied_fields:
                 queries.append(self.db.Article[field] == value)
             if field == 'tag':
                 queries.append(self.db.Article.tags.contains(value))
@@ -402,12 +406,23 @@ class Article(Base):
                     cat_qry = self.db.Article.category_id == cat_id
                 queries.append(cat_qry)
                 self.context.title += str(self.db.T("in %s category ", value.replace('_', ' ')))
+            if field == "draft":
+                queries.append(self.db.Article.draft == True)
+                queries.append(self.db.Article.author == self.db.auth.user_id)
+                self.context.title = self.T("Your drafts")
+            else:
+                queries.append(self.db.Article.draft == False)
 
-        if 'draft' in self.request.vars:
-            queries = [self.db.Article.draft == True, self.db.Article.author == self.db.auth.user_id]
-            self.context.title = self.T("Your drafts")
-        else:
-            queries.append(self.db.Article.draft == False)
+            action_tables = {"favorite": self.db.Favoriters,
+                             "like": self.db.Likers,
+                             "dislike": self.db.Dislikers,
+                             "subscribe": self.db.Subscribers}
+
+            if field in action_tables:
+                articles = self.db(action_tables[field].user_id == value).select()
+                articles_ids = [article.article_id for article in articles]
+                queries = [self.db.Article.draft == False, self.db.Article.id.belongs(articles_ids)]
+                self.context.title = self.T("Your %ss", field.capitalize())
 
         query = reduce(lambda a, b: (a & b), queries)
 

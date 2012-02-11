@@ -36,9 +36,9 @@
 * allow registration option in config? (a way to disable regitration)
 * Install interface
 * config admin
-* notify subscribers button in article edit
+
 * announce new article in facebook (when logged in)
-* Drafts manager
+
 * Fix bugs in counters
 * user fav, liked, disliked lists
 * multi content articles
@@ -60,7 +60,7 @@
 * invite friends from google and FB
 * twitter Oauth2
 * allow schedulled posts (TRIGGER IN SITE, CRON, WORKER or SCHEDULLER)
-* upgrade syntax highlighter
+
 * registration requires invitation (web2py list)
 * docs (how to use sphinx?)
 * Asynchronous messaging & Web Chat
@@ -87,7 +87,9 @@
 * profile form 
 * profile permissions forms 
 * pagination for search and lists
-
+* notify subscribers button in article edit
+* Drafts manager
+* upgrade syntax highlighter
 
 ### CANCELED ###
 * menu builder 
