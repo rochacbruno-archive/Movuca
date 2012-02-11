@@ -180,7 +180,7 @@ class Person(Base):
                 #     follower_user.update_record(contacts=bcount)
                 self.update_contact_counter(follower, followed)
 
-                return contact_box(followed, 'contact', ajax=True)
+                return contact_box(followed, 'contact', ajax=True, css={"main": "well span5", "img": "span", "div": "four columns"})
             else:
                 return self.T('You cannot follow yourself')
         else:
@@ -208,7 +208,7 @@ class Person(Base):
                 #     bcount = follower_user.contacts - 1
                 #     follower_user.update_record(contacts=bcount)
                 self.update_contact_counter(follower, followed)
-                return contact_box(followed, 'follower', ajax=True)
+                return contact_box(followed, 'follower', ajax=True, css={"main": "well span5", "img": "span", "div": "four columns"})
             else:
                 return self.T('You cannot unfollow yourself')
         else:

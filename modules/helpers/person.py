@@ -57,7 +57,7 @@ def contact_box(row,
 
     if kind != 'search':
         buttondiv.append(TAG.BUTTON(T(action), _class="button %s" % "btn btn-danger" if action == 'unfollow' else 'btn btn-success',
-            _onclick="jQuery(this).parent().parent().hide();append_ajax('%s',[],'%s-wrapper')" % (URL('person', action, args=uid), where)))
+            _onclick="jQuery(this).parent().parent().parent().hide();append_ajax('%s',[],'%s-wrapper')" % (URL('person', action, args=uid), where)))
     else:
         buttondiv.append(TAG.BUTTON(T(action), _class="button %s" % "btn btn-danger" if action == 'unfollow' else 'btn btn-success',
             _onclick="jQuery(this).text('%s');ajax('%s',[],'%s-wrapper')" % (T("Done"), URL('person', action, args=uid), where)))
