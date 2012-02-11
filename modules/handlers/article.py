@@ -388,7 +388,7 @@ class Article(Base):
             query &= self.db.Article.draft == False
             if "content_type_id" in self.request.vars:
                 query &= self.db.Article.content_type_id == self.request.vars.content_type_id
-            self.context.results = self.db(query).select(limitby=limitby)
+            self.context.results = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
         else:
             self.context.results = []
 
