@@ -427,7 +427,7 @@ class Article(Base):
     def new_article_event(self, event_type, user=None, data={}):
         if not user:
             user = self.session.auth.user if self.session.auth else None
-        if user:
+        if user and (event_type not in ['update_article'] or self.request.vars.notify_subscribers):
             self.db.UserTimeLine._new_event(v=dict(
                                                 user_id=user.id,
                                                 nickname=user.nickname or "%(first_name)s %(last_name)s" % user,

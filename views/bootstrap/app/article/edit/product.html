@@ -54,6 +54,10 @@ css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control
             <legend>{{=T("Save")}}</legend>
             {{=customfield(article_form, 'draft', css=css2)}}
             <br />
+            
+            <div id="article_draft__row" class="row-fluid"><div class="w2p_fl "><label id="article_draft__label" for="notify_subscribers">{{=T("Notify?")}}</label></div><div class="w2p_fc ">Check to send edit notifications to subscribers</div><div class="w2p_fw "><input type="checkbox" checked="checked" value="on" name="notify_subscribers" id="notify_subscribers" class="boolean span12"></div></div>
+            
+            <br />
             <button class="full-width btn-primary btn-large" id="publish">{{=T("Publish")}}</button>
             <button class="full-width btn-primary btn-large" id="draft">{{=T("Save as a draft")}}</button>
 
