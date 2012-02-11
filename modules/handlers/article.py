@@ -410,8 +410,6 @@ class Article(Base):
                 queries.append(self.db.Article.draft == True)
                 queries.append(self.db.Article.author == self.db.auth.user_id)
                 self.context.title = self.T("Your drafts")
-            else:
-                queries.append(self.db.Article.draft == False)
 
             action_tables = {"favorite": self.db.Favoriters,
                              "like": self.db.Likers,
@@ -425,6 +423,9 @@ class Article(Base):
                 queries.append(self.db.Article.id.belongs(articles_ids))
                 queries.append(self.db.Article.draft == False)
                 self.context.title = self.T("%s %ss", (nickname, field))
+
+        if not "draft" in self.request.vars:
+            queries.append(self.db.Article.draft == False)
 
         query = reduce(lambda a, b: (a & b), queries)
 
