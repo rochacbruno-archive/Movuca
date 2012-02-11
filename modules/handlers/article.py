@@ -379,6 +379,8 @@ class Article(Base):
             limitby = self.context.paginator.limitby()
             #### /pagination
             query &= self.db.Article.draft == False
+            if "content_type_id" in self.request.vars:
+                query &= self.db.Article.content_type_id == self.request.vars.content_type_id
             self.context.results = self.db(query).select(limitby=limitby)
         else:
             self.context.results = []
