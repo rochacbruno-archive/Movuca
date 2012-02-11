@@ -421,7 +421,8 @@ class Article(Base):
             if field in action_tables:
                 articles = self.db(action_tables[field].user_id == value).select()
                 articles_ids = [article.article_id for article in articles]
-                queries = [self.db.Article.draft == False, self.db.Article.id.belongs(articles_ids)]
+                queries.append(self.db.Article.id.belongs(articles_ids))
+                queries.append(self.db.Article.draft == False)
                 self.context.title = self.T("Your %ss", field.capitalize())
 
         query = reduce(lambda a, b: (a & b), queries)
