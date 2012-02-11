@@ -92,11 +92,11 @@ class GetImages(object):
 
     @staticmethod
     def get_url_image(url):
-        return URL('static', 'images', args='people.png')
+        return URL('static', 'images', args='people.png', extension=False)
 
     @staticmethod
     def get_no_image(nothing):
-        return URL('static', 'images', args='people.png')
+        return URL('static', 'images', args='people.png', extension=False)
 
     @staticmethod
     def get_upload_image(image):

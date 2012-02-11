@@ -239,6 +239,60 @@ class StringListWidget(FormWidget):
         return INPUT(**attr)
 
 
+class ListWidget(StringWidget):
+
+    @classmethod
+    def widget(cls, field, value, **attributes):
+        _id = '%s_%s' % (field._tablename, field.name)
+        _name = field.name
+        if field.type == 'list:integer':
+            _class = 'integer'
+        else:
+            _class = 'string'
+        requires = field.requires if isinstance(field.requires, (IS_NOT_EMPTY, IS_LIST_OF)) else None
+        items = [LI(INPUT(_id=_id, _class=_class, _name=_name, value=v, hideerror=True, requires=requires)) \
+                   for v in value or ['']]
+        buttons = UL()
+        buttons.append(TAG.BUTTON(TAG.I(_class="icon-plus", _style="margin-right:10px;"), current.T("add new"), _class="btn", _id=_id + '_add'))
+        script = SCRIPT("""
+// from http://refactormycode.com/codes/694-expanding-input-list-using-jquery
+(function(){
+jQuery.fn.grow_input = function() {
+  return this.each(function() {
+    var ul = this;
+    jQuery(ul).find(":text").after('<a href="javascript:void(0)>+</a>').keypress(function (e) { return (e.which == 13) ? pe(ul) : true; }).next().click(function(){ pe(ul) });
+    jQuery('#%(id)s_add').click(function(){
+        pe(ul);
+        return false;
+    });
+
+  });
+};
+function pe(ul) {
+  var new_line = ml(ul);
+  rel(ul);
+  new_line.appendTo(ul);
+  new_line.find(":text").focus();
+  return false;
+}
+function ml(ul) {
+  var line = jQuery(ul).find("li:first").clone(true);
+  line.find(':text').val('');
+  return line;
+}
+function rel(ul) {
+  jQuery(ul).find("li").each(function() {
+    var trimmed = jQuery.trim(jQuery(this.firstChild).val());
+    if (trimmed=='') jQuery(this).remove(); else jQuery(this.firstChild).val(trimmed);
+  });
+}
+})();
+jQuery(document).ready(function(){jQuery('#%(id)s_grow_input').grow_input();});
+""" % dict(id=_id))
+        attributes['_id'] = _id + '_grow_input'
+        return TAG[''](UL(*items, **attributes), buttons, script)
+
+
 # class TagsWidget(StringWidget):
 
 #     @classmethod

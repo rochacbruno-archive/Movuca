@@ -40,7 +40,6 @@
 * announce new article in facebook (when logged in)
 
 * Fix bugs in counters
-* user fav, liked, disliked lists
 * multi content articles
 * multi pages in article (tabs?)
 * Display "loading..." message in all buttons
@@ -90,6 +89,7 @@
 * notify subscribers button in article edit
 * Drafts manager
 * upgrade syntax highlighter
+* user fav, liked, disliked lists
 
 ### CANCELED ###
 * menu builder 

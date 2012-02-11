@@ -45,6 +45,8 @@ class User(BaseAuth):
                       Field("responses", "integer", notnull=True, default=0),
                       Field("groups", "integer", notnull=True, default=0),
                       Field("contacts", "integer", notnull=True, default=0),
+                      Field("isfollowing", "integer", notnull=True, default=0),
+                      Field("followers", "integer", notnull=True, default=0),
                       Field("userpages", "integer", notnull=True, default=0),
                       Field("pictures", "integer", notnull=True, default=0),
                       Field("favorites", "integer", notnull=True, default=0),

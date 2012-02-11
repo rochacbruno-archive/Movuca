@@ -104,6 +104,38 @@ class Person(Base):
         else:
             self.context.TIMELINEFUNCTIONS = '%s/app/person/privatetimeline_events.html' % self.context.theme_name
 
+    def update_contact_counter(self, follower, followed):
+        def update_counter(person):
+            i_follow = self.db(self.db.UserContact.follower == person.id).select(self.db.UserContact.followed)
+            follows_me = self.db(self.db.UserContact.followed == person.id).select(self.db.UserContact.follower)
+            i_follow_set = set([row.followed for row in i_follow])
+            follows_me_set = set([row.follower for row in follows_me])
+            contacts = len(i_follow_set & follows_me_set)
+            following = len(i_follow_set - follows_me_set)
+            followers = len(follows_me_set - i_follow_set)
+            result = self.db(self.db.auth_user.id == person.id).update(contacts=contacts, isfollowing=following, followers=followers)
+            self.db.commit()
+            if person.id == self.db.auth.user_id:
+                self.db.auth.user.update(contacts=contacts, isfollowing=following, followers=followers)
+            print "##" * 20
+            print "I follow %s %s" % (person.nickname, person.id)
+            print i_follow
+            print "follows me"
+            print follows_me
+            print "i follow set"
+            print i_follow_set
+            print "follow me set"
+            print follows_me_set
+            print "contacts"
+            print contacts
+            print "following"
+            print following
+            print "follower"
+            print followers
+            print result
+        update_counter(follower)
+        update_counter(followed)
+
     def follow(self):
         follower = self.session.auth.user if self.session.auth else None
         if not follower and 'profile' in self.request.args:
@@ -130,10 +162,6 @@ class Person(Base):
                                                   "event_link_to": followed.nickname or followed.id,
                                                   "event_image_to": self.get_image(None, 'user', themename=self.context.theme_name, user=followed)})
 
-                # self.mail.send(to=followed.email,
-                #        subject=self.T("Hi, %(nickname)s followed you on Movuca", follower),
-                #        message=[None, """<h1>You got a new follower!</h1><p>%(nickname)s is now following you, follow back!</p>Note: this is a beta test of http://movu.ca CMS, thank you for the help with tests""" % follower])
-                #        # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
                 self.notifier.notify("new_contact",
                                  followed,
                                  event_text=self.T("%(nickname)s followed you", follower),
@@ -143,13 +171,14 @@ class Person(Base):
                                  follower=follower
                                  )
 
-                relation = self.db.UserContact._relation(follower.id, followed.id)
-                if relation == 'contacts':
-                    acount = followed.contacts + 1
-                    followed.update_record(contacts=acount)
-                    follower_user = self.db.auth_user[int(follower.id)]
-                    bcount = follower_user.contacts + 1
-                    follower_user.update_record(contacts=bcount)
+                # relation = self.db.UserContact._relation(follower.id, followed.id)
+                # if relation == 'contacts':
+                #     acount = followed.contacts + 1
+                #     followed.update_record(contacts=acount)
+                #     follower_user = self.db.auth_user[int(follower.id)]
+                #     bcount = follower_user.contacts + 1
+                #     follower_user.update_record(contacts=bcount)
+                self.update_contact_counter(follower, followed)
 
                 return contact_box(followed, 'contact', ajax=True)
             else:
@@ -168,16 +197,17 @@ class Person(Base):
 
         if follower and followed:
             if not yourself:
-                relation = self.db.UserContact._relation(follower.id, followed.id)
+                #relation = self.db.UserContact._relation(follower.id, followed.id)
                 query = (self.db.UserContact.follower == follower.id) & (self.db.UserContact.followed == followed.id)
                 self.db(query).delete()
                 self.db.commit()
-                if relation == 'contacts':
-                    acount = followed.contacts - 1
-                    followed.update_record(contacts=acount)
-                    follower_user = self.db.auth_user[int(follower.id)]
-                    bcount = follower_user.contacts - 1
-                    follower_user.update_record(contacts=bcount)
+                # if relation == 'contacts':
+                #     acount = followed.contacts - 1
+                #     followed.update_record(contacts=acount)
+                #     follower_user = self.db.auth_user[int(follower.id)]
+                #     bcount = follower_user.contacts - 1
+                #     follower_user.update_record(contacts=bcount)
+                self.update_contact_counter(follower, followed)
                 return contact_box(followed, 'follower', ajax=True)
             else:
                 return self.T('You cannot unfollow yourself')

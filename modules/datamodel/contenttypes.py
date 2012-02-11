@@ -5,6 +5,7 @@ from basemodel import BaseModel, ContentModel
 from gluon.validators import IS_NOT_EMPTY, IS_IN_SET, IS_LENGTH, IS_EMPTY_OR
 from gluon import current
 from plugin_ckeditor import CKEditor
+from helpers.widgets import ListWidget
 
 
 class Article(ContentModel):
@@ -62,7 +63,8 @@ class CookRecipe(ContentModel):
         }
 
         self.widgets = {
-            "instructions": ckeditor.widget
+            "instructions": ckeditor.widget,
+            "ingredients": ListWidget.widget
         }
 
         self.labels = {
@@ -76,7 +78,7 @@ class CookRecipe(ContentModel):
         }
 
         self.comments = {
-            "ingredients": T("One item per line. Press enter to wrap. e.g: 3 cups of water<enter>"),
+            "ingredients": T("Include one item then press enter or click in 'add new' to include more"),
             "instructions": T("You can include pictures."),
             "prep_time": T("The whole time considering ingredients preparation."),
             "cook_time": T("The time needed after all ingredients are ready."),

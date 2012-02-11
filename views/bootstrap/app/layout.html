@@ -263,9 +263,9 @@ jQuery(function() {
               <li>{{=A(iicon('th-large'), T('Dashboard'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('adjust'), T('My profile'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('cog'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
-              <li>{{=A(iicon('list-alt'), T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
-              <li>{{=A(iicon('pencil'), T('My drafts'), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
-              <li>{{=A(iicon('user'), T('My contacts'), _href=CURL('person', 'contacts'))}}</li>
+              <li>{{=A(iicon('list-alt'), T('My articles (%s)', session.auth.user.articles), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
+              <li>{{=A(iicon('pencil'), T('My drafts (%s)', session.auth.user.draft_articles), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
+              <li>{{=A(iicon('user'), T('My contacts (%s)', session.auth.user.contacts), _href=CURL('person', 'contacts'))}}</li>
               <li>{{=A(iicon('off'), T('Logout'), _href=logout_url)}}</li>
             </ul>
           </div><!--/.well -->

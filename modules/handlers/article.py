@@ -287,6 +287,7 @@ class Article(Base):
                                                            'event_image_to': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             self.context.article.update_record(search_index="|".join(str(value) for value in self.request.vars.values()))
+            self.update_article_counter()
             redirect(self.CURL('article', 'show', args=[self.context.article.id, IS_SLUG()(self.request.vars.title)[0]]))
 
         self.context.content_form = SQLFORM(content.entity, article_data)
@@ -317,7 +318,7 @@ class Article(Base):
         else:
             self.db.article.picture.uploadfield = "picture_blob"
             self.db.article.thumbnail.uploadfield = "thumbnail_blob"
-        self.db.article.author.default = self.session.auth.user.id
+        self.db.article.author.default = self.db.auth.user_id
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
         self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
 
@@ -343,15 +344,21 @@ class Article(Base):
                 self.context.article = self.db.article[article_id]
                 self.context.article.update_record(search_index="|".join(str(value) for value in self.context.form.vars.values()))
 
+                self.update_article_counter()
+
                 if not self.context.article.draft:
                     self.new_article_event('new_article')
-                    count = int(self.context.article.author.articles) + 1
-                    self.context.article.author.update_record(articles=count)
-                else:
-                    count = int(self.context.article.author.draft_articles) + 1
-                    self.context.article.author.update_record(draft_articles=count)
 
                 redirect(self.CURL('article', 'show', args=[article_id, IS_SLUG()(self.context.form.vars.title)[0]]))
+
+    def update_article_counter(self):
+        user = self.context.article.author
+        articles = self.db((self.db.Article.author == user) & (self.db.Article.draft == False)).count()
+        draft_articles = self.db((self.db.Article.author == user) & (self.db.Article.draft == True)).count()
+        user.update_record(articles=articles, draft_articles=draft_articles)
+        self.db.commit()
+        self.db.auth.user.articles = articles
+        self.db.auth.user.draft_articles = draft_articles
 
     def tag(self):
         pass
