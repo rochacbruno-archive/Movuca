@@ -5,7 +5,8 @@
 {{if len(content_types) > 1:}}
     {{=T("Filter")}}: 
     {{=A(T("All"), _href=CURL("article","list", args=request.args, vars={k: v for k, v in request.vars.items() if k != "content_type_id"}))}}
-    {{=CAT(*[A(" | ", T(content_type.title), _href=CURL("article","list", args=request.args, vars=dict(content_type_id=content_type.id, **{k: v for k, v in request.vars.items() if k != "content_type_id"}))) for content_type in content_types])}}
+    {{=CAT(*[A(" | ", T(content_type.title), _href=CURL("article","list", args=request.args,
+      vars=dict(content_type_id=content_type.id, **dict([(k,v) for k, v in request.vars.items() if k != "content_type_id"])))) for content_type in content_types])}}
 {{pass}}
 </div>
 
