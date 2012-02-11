@@ -420,10 +420,11 @@ class Article(Base):
 
             if field in action_tables:
                 articles = self.db(action_tables[field].user_id == value).select()
+                nickname = articles[0].user_id.nickname if articles else self.db.auth_user[value].nickname
                 articles_ids = [article.article_id for article in articles]
                 queries.append(self.db.Article.id.belongs(articles_ids))
                 queries.append(self.db.Article.draft == False)
-                self.context.title = self.T("Your %ss", field.capitalize())
+                self.context.title = self.T("%s %ss", (nickname, field))
 
         query = reduce(lambda a, b: (a & b), queries)
 
