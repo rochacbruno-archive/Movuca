@@ -69,7 +69,7 @@
             </div>
             {{pass}}
             <div class="person-articles person-box">
-                <h4><i class="icon-list-alt"></i>{{=T("Articles")}}</h4>
+                <h4><i class="icon-list-alt"></i>{{=T("Articles (%s)", user.articles)}}</h4>
                 {{if relation == 'yourself':}}
                     <div class="btn-group">
                         {{=A(T("Write a new article"), _class="btn btn-info", _style="margin-bottom:5px;", _href=CURL('article', 'new', args='Article'))}}
