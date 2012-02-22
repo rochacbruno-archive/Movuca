@@ -435,6 +435,8 @@ class Article(Base):
 
         if not "draft" in self.request.vars:
             queries.append(self.db.Article.draft == False)
+        if not "draft" in self.request.vars:
+            queries.append(self.db.Article.draft == False)
 
         query = reduce(lambda a, b: (a & b), queries)
 

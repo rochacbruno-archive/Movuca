@@ -36,7 +36,7 @@ class Article(BaseModel):
                       Field("publish_tz", "string"),
                       Field("featured", "boolean", default=False),
                       # privacy
-                      Field("privacy", "integer"),
+                      Field("privacy", "integer", default=1),
                       Field("license", "string"),
                       # counters
                       Field("likes", "integer", default=0),
@@ -114,13 +114,13 @@ class Article(BaseModel):
         self.entity.publish_date.default = current.request.now
         self.entity.author_nickname.compute = lambda row: self.db.auth_user[row.author].nickname
         self.entity.author.default = session.auth.user.id if session.auth else None
-        self.entity.privacy.requires = IS_IN_SET([
-                                                 ("1", T("Public")),
-                                                 ("2", T("Contacts & Groups")),
-                                                 ("3", T("Contacts")),
-                                                 ("4", T("Groups")),
-                                                  ],
-                                                  zero=None)
+        # self.entity.privacy.requires = IS_IN_SET([
+        #                                          ("1", T("Public")),
+        #                                          ("2", T("Contacts & Groups")),
+        #                                          ("3", T("Contacts")),
+        #                                          ("4", T("Groups")),
+        #                                           ],
+        #                                           zero=None)
 
 
 class ContentType(BaseModel):
