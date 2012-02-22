@@ -754,7 +754,7 @@ def get_tag_count(count):
         return 1
     elif count <= 4:
         return 2
-    elif count <= 10:
+    elif count <= 6:
         return 3
     elif count <= 15:
         return 4
