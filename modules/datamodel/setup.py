@@ -29,7 +29,7 @@ class Setup(object):
             Field("formstyle", "string", notnull=True, default="divs"),
             Field("photo_source", "list:string", notnull=True, default=["1:upload", "2:gravatar", "3:facebook", "4:twitter", "5:no photo", "6:Google"]),
             Field("gender", "list:string", notnull=True, default=["Male:Male", "Female:Female", "Not specified:Not specified"]),
-            Field("privacy", "list:string", notnull=True, default=["1:Public", "2:Visible only for contacts", "3:Private"]),
+            Field("privacy", "list:string", notnull=True, default=["1:Public", "2:Visible only for contacts"]),
             Field("use_facebook", "boolean", notnull=True, default=True),
             Field("facebook", "list:string", notnull=True, default=["id:133622423420992",
                                                                      "secret:6b0880726a21a89dfcb07c19c7807817",

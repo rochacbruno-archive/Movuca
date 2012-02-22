@@ -92,7 +92,7 @@ class User(BaseAuth):
           "email": T("E-mail"),
           "password": T("Password"),
           "nickname": T("Nickname - will be used for links and signatures"),
-          "privacy": T("Privacy - Profile and content visibility"),
+          "privacy": T("Privacy - Profile visibility"),
           "tagline": T("Tagline -  short sentence about you"),
           "twitter": T("twitter - your twitter username"),
           "facebook": T("Facebook - Your facebook username or id"),

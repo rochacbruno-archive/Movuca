@@ -36,9 +36,33 @@ class Person(Base):
         self.mail = self.db.auth.settings.mailer
         self.context.content_types = self.db(self.db.ContentType).select()
 
-    def get_timeline(self, query, orderby=None, limitby=None):
+    def check_if_allowed(self, row):
+        if self.db.auth.user_id:
+            relation = self.db.UserContact._relation(self.db.auth.user_id, row.user_timeline.user_id)
+        else:
+            relation = 'unknown'
+
+        if row.user_timeline.user_id.privacy != 1 and \
+               relation not in ['contacts', 'follower', 'yourself'] and \
+                   not self.db.auth.has_membership("admin", self.db.auth.user_id):
+            return False
+        else:
+            return True
+
+    def get_private_timeline(self, query, orderby=None, limitby=None):
         timeline = self.db.UserTimeLine
-        self.context.events = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
+        timeline.allowed = Field.Lazy(lambda row: self.check_if_allowed(row))
+        rows = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
+        self.context.events = rows.find(lambda row: row.allowed() == True)
+
+    def get_timeline(self, query, orderby=None, limitby=None, public=True):
+        timeline = self.db.UserTimeLine
+        if public:
+            self.context.events = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
+        else:
+            timeline.allowed = Field.Lazy(lambda row: self.check_if_allowed(row))
+            rows = self.db(query).select(orderby=orderby or ~timeline.created_on, limitby=limitby or (0, 20))
+            self.context.events = rows.find(lambda row: row.allowed() == True)
 
     def usertimeline(self):
         if self.request.args(0):
@@ -62,12 +86,13 @@ class Person(Base):
             #### /pagination
             if 'limitby' in self.request.vars:
                 limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-            self.get_timeline(query, limitby=limitby)
+            self.get_timeline(query, limitby=limitby, public=user.privacy == 1)
+            #self.context.paginator.records = self.context.paginate_info.records = len(self.context.events)
 
         self.context.TIMELINEFUNCTIONS = '%s/app/person/usertimeline_events.html' % self.context.theme_name
 
     def publictimeline(self):
-        query = self.db.UserTimeLine
+        query = (self.db.UserTimeLine.user_id == self.db.auth_user.id) & (self.db.auth_user.privacy == 1)
         #### pagination
         self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
         self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
@@ -77,7 +102,8 @@ class Person(Base):
         #### /pagination
         if 'limitby' in self.request.vars:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        self.get_timeline(query, limitby=limitby)
+        self.get_timeline(query, limitby=limitby, public=True)
+        #self.context.paginator.records = self.context.paginate_info.records = len(self.context.events)
         if self.db.request.args(0) == "sidebar":
             self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_publictimeline_events.html' % self.context.theme_name
         else:
@@ -98,7 +124,8 @@ class Person(Base):
         #### /pagination
         if 'limitby' in self.request.vars:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        self.get_timeline(query, limitby=limitby)
+        self.get_private_timeline(query, limitby=limitby)
+        #self.context.paginator.records = self.context.paginate_info.records = len(self.context.events)
         if self.db.request.args(0) == "sidebar":
             self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_privatetimeline_events.html' % self.context.theme_name
         else:
@@ -376,7 +403,14 @@ class Person(Base):
             if 'limitby' in self.request.vars:
                 limitby = [int(item) for item in self.request.vars.limitby.split(',')]
 
-        self.context.board = self.db(query).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
+        if self.context.user.privacy != 1 and \
+               relation not in ['contacts', 'follower', 'yourself'] and \
+                   not self.db.auth.has_membership("admin", self.db.auth.user_id):
+            self.view = 'app/person/board_private'
+            self.context.board = []
+        else:
+            self.view = 'app/person/board'
+            self.context.board = self.db(query).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
 
     def removeboard(self, msg_id, user_id):
         msg = self.db.UserBoard[int(msg_id)]
@@ -481,7 +515,7 @@ class Person(Base):
             self.db.session["%s_setpassword" % self.context.user.id] = None
 
         if self.db.session["is_new_from"]:
-            self.context.alerts.append(XML(self.T("Welcome! You logged in using your %s account, please go to your <a href='%s'>settings</a> page choose your username and complete your profile!",  (self.db.session["is_new_from"], self.db.CURL('person', 'account', args='profile')))))
+            self.context.alerts.append(XML(self.T("Welcome! You logged in using your %s account, please go to your <a href='%s'>settings</a> page choose your username and complete your profile!", (self.db.session["is_new_from"], self.db.CURL('person', 'account', args='profile')))))
             self.db.auth.initial_user_permission(self.context.user)
 
         #user extra links image
@@ -504,6 +538,13 @@ class Person(Base):
                         continue
                 if link not in [item['link'] for item in self.context.extra_links]:
                     self.context.extra_links.append({"img": URL('static', '%s/images/icons' % self.context.theme_name, args='globe.png'), "link": link, "title": link})
+
+        if self.context.user.privacy != 1 and \
+               relation not in ['contacts', 'follower', 'yourself'] and \
+                   not self.db.auth.has_membership("admin", self.db.auth.user_id):
+            self.view = 'app/person/show_private'
+        else:
+            self.view = 'app/person/show'
 
     def account(self):
         self.db.auth.notifier = self.notifier

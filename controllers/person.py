@@ -66,7 +66,7 @@ def show():
         user_id = None
     person = Person()
     person.show(request.args(0) or user_id or redirect(login_url))
-    return person.render('app/person/show')
+    return person.render()
 
 
 def board():
@@ -78,7 +78,7 @@ def board():
         user_id = None
     person = Person()
     person.board(request.args(0) or user_id or redirect(login_url), request.vars.postid)
-    return person.render('app/person/board')
+    return person.render()
 
 
 def removeboard():
