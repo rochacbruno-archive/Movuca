@@ -278,7 +278,7 @@ class Article(Base):
             self.context.article.update_record(is_active=False)
             self.update_article_counter()
             self.session.flash = self.T("Article deleted!")
-            redirect(self.CURL('article', 'list'))
+            redirect(self.CURL('article', 'list', vars={"author": self.db.auth.user_id}))
 
     def edit(self):
         self.context.customfield = customfield
