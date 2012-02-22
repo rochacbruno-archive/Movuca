@@ -269,6 +269,8 @@ class Article(Base):
     def edit(self):
         self.context.customfield = customfield
         self.get()
+        category_set = self.db(self.db.Category.content_type == self.context.article.content_type_id)
+        self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s", multiple=True)
         if not (has_permission_to_edit(self.session, self.context.article) \
                     or (self.db.auth.has_membership("admin", self.db.auth.user_id) \
                         or self.db.auth.has_membership("editor", self.db.auth.user_id))):
@@ -324,7 +326,7 @@ class Article(Base):
 
         self.db.article.content_type_id.default = content_type.id
         category_set = self.db(self.db.Category.content_type == content_type.id)
-        self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s")
+        self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s", multiple=True)
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='')
         self.context.customfield = customfield
         if self.context.form.process().accepted:
@@ -407,10 +409,10 @@ class Article(Base):
                 self.context.title += str(self.db.T("tagged with %s ", value))
             if field == 'category':
                 try:
-                    cat_qry = self.db.Article.category_id == int(value)
+                    cat_qry = self.db.Article.category_id.contains(int(value))
                 except:
                     cat_id = self.db(self.db.Category.name == value.replace('_', ' ')).select().first().id
-                    cat_qry = self.db.Article.category_id == cat_id
+                    cat_qry = self.db.Article.category_id.contains(cat_id)
                 queries.append(cat_qry)
                 self.context.title += str(self.db.T("in %s category ", value.replace('_', ' ')))
             if field == "draft":

@@ -24,7 +24,7 @@ class Article(BaseModel):
                       Field("medium_thumbnail", "upload"),
                       Field("thumbnail", "upload"),
                       Field("draft", "boolean", default=False),
-                      Field("category_id", "reference article_category"),
+                      Field("category_id", "list:reference article_category"),
                       Field("tags", "list:string"),
                       Field("keywords", "string"),
                       # control

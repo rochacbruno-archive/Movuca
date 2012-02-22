@@ -23,7 +23,8 @@
                 <span class="label label-important">{{=T("Draft")}}</span> 
             {{pass}}
             <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
-              {{=T('in')}} {{=A(article.category_id.name, _href=CURL('article', 'list', vars=dict(category=article.category_id.name.replace(' ','_'))))}}</em> 
+              {{=T('in')}} 
+              {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 
           {{pass}}
         </div>
         <div class="span10 action_links" style="margin-top:10px;" id="links"> 
