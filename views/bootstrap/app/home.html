@@ -17,6 +17,8 @@
       {{=T("Your Feed")}}
   </h4>
   {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,5'), ajax=True)}}
+
+  <br/>
 {{pass}}
 
   <h4 class="bottom-line">
@@ -33,4 +35,11 @@
       {{=T("Public Feed")}}
   </h4>
     {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
+
+    <br/>
+        <h4 class="bottom-line">
+      <i class="icon-tag"></i>
+      {{=T("Tags")}}
+  </h4>
+    {{=LOAD('article','tagcloud.load', ajax=True)}}
 {{end}}

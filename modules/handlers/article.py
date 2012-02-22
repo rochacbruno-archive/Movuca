@@ -27,7 +27,7 @@ class Article(Base):
         self.get_image = self.db.get_image
         self.context.theme_name = self.config.theme.name
         #self.view = "app/home.html"
-        self.context.content_types = self.db(self.db.ContentType).select()
+        self.context.content_types = self.context.content_types or self.db(self.db.ContentType).select()
 
     def lastest_articles(self):
         from helpers.article import latest_articles
@@ -734,6 +734,34 @@ class Article(Base):
                 links.append('delete')
 
         return CAT(*[icons[link] for link in links])
+
+    def tagcloud(self):
+        articles = self.db((self.db.Article.draft == False) & (self.db.Article.is_active == True)).select()
+        tags = []
+        for article in articles:
+            if article.tags:
+                tags += article.tags
+        tagset = set(tags)
+        self.context.tags = {}
+        for tag in tagset:
+            self.context.tags[tag] = get_tag_count(tags.count(tag))
+        # bypass content_types query
+        self.context.content_types = True
+
+
+def get_tag_count(count):
+    if count <= 1:
+        return 1
+    elif count <= 4:
+        return 2
+    elif count <= 10:
+        return 3
+    elif count <= 15:
+        return 4
+    elif count <= 20:
+        return 5
+    else:
+        return 6
 
 
 def ICONLINK(user, icon, text, action=None, title="Click", theme_name="basic"):

@@ -135,3 +135,8 @@ def tag():
 def category():
     article = Article('category')
     return article.render("app/article/category")
+
+
+def tagcloud():
+    article = Article('tagcloud')
+    return article.render("app/article/tagcloud")
