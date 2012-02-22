@@ -7,19 +7,24 @@ $(document).ready(function () {
       check_check($(this));
    });
 
-   var availableTags = new Array();
+   var availableTags = ["banana"];
 
    $.getJSON('../tagcloud.json', function(data) {
       $.each(data['tags'], function(key, val) {
         availableTags.push(key);
       });
-   });
-   $('#article_tags').tagit({
+
+      $('#article_tags').tagit({
        removeConfirmation: true,
        availableTags: availableTags,
+       });
    });
 
-
+   if ($('.tagit').length == 0) {
+      $('#article_tags').tagit({
+       removeConfirmation: true,
+      });
+   }
 
 });
 
