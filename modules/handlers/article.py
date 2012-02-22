@@ -250,7 +250,8 @@ class Article(Base):
 
     def show(self):
         self.get()
-        if self.context.article.draft == True and (self.context.article.author != self.db.auth.user_id):
+        if (self.context.article.draft == True or self.context.article.is_active == False) \
+                and (self.context.article.author != self.db.auth.user_id):
             redirect(self.CURL('home', 'index'))
         self.related_articles()
         self.comments()
@@ -265,6 +266,19 @@ class Article(Base):
         self.context.article.update_record(views=self.context.article.views + 1)
         self.context.action_links = self.action_links()
         self.db.commit()
+
+    def delete(self):
+        self.get()
+        if not (has_permission_to_edit(self.session, self.context.article) \
+                    or (self.db.auth.has_membership("admin", self.db.auth.user_id) \
+                        or self.db.auth.has_membership("editor", self.db.auth.user_id))):
+            redirect(self.CURL('article', 'show', args=[self.context.article.id, self.context.article.slug]))
+
+        if "confirmation" in self.request.vars and self.request.vars.confirmation == "1":
+            self.context.article.update_record(is_active=False)
+            self.update_article_counter()
+            self.session.flash = self.T("Article deleted!")
+            redirect(self.CURL('article', 'list'))
 
     def edit(self):
         self.context.customfield = customfield
@@ -282,6 +296,8 @@ class Article(Base):
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
 
         if self.context.article_form.process().accepted:
+            if self.context.article.is_active == False:
+                self.context.article.update_record(is_active=True)
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
             self.new_article_event('update_article', data={'event_link_to': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
                                                            'event_text': self.context.article_form.vars.description,
@@ -355,8 +371,8 @@ class Article(Base):
 
     def update_article_counter(self):
         user = self.context.article.author
-        articles = self.db((self.db.Article.author == user) & (self.db.Article.draft == False)).count()
-        draft_articles = self.db((self.db.Article.author == user) & (self.db.Article.draft == True)).count()
+        articles = self.db((self.db.Article.author == user) & (self.db.Article.draft == False) & (self.db.Article.is_active == True)).count()
+        draft_articles = self.db((self.db.Article.author == user) & (self.db.Article.draft == True) & (self.db.Article.is_active == True)).count()
         user.update_record(articles=articles, draft_articles=draft_articles)
         self.db.commit()
         self.db.auth.user.articles = articles
@@ -388,6 +404,7 @@ class Article(Base):
             limitby = self.context.paginator.limitby()
             #### /pagination
             query &= self.db.Article.draft == False
+            query &= self.db.Article.is_active == True
             if "content_type_id" in self.request.vars:
                 query &= self.db.Article.content_type_id == self.request.vars.content_type_id
             self.context.results = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
@@ -397,7 +414,7 @@ class Article(Base):
     def list(self):
         denied_fields = ['limitby', 'orderby', 'tag', 'category', 'or',
                           'page', 'paginate', 'draft', 'favorite', 'like',
-                          'dislike', 'subscribe', 'comment']
+                          'dislike', 'subscribe', 'comment', 'thrash']
 
         self.context.title = str(self.db.T("Articles "))
         queries = []
@@ -419,6 +436,10 @@ class Article(Base):
                 queries.append(self.db.Article.draft == True)
                 queries.append(self.db.Article.author == self.db.auth.user_id)
                 self.context.title = self.T("Your drafts")
+            if field == "thrash":
+                queries.append(self.db.Article.is_active == False)
+                queries.append(self.db.Article.author == self.db.auth.user_id)
+                self.context.title = self.T("Your deleted articles")
 
             action_tables = {"favorite": self.db.Favoriters,
                              "like": self.db.Likers,
@@ -435,8 +456,8 @@ class Article(Base):
 
         if not "draft" in self.request.vars:
             queries.append(self.db.Article.draft == False)
-        if not "draft" in self.request.vars:
-            queries.append(self.db.Article.draft == False)
+        if not "thrash" in self.request.vars:
+            queries.append(self.db.Article.is_active == True)
 
         query = reduce(lambda a, b: (a & b), queries)
 
@@ -685,7 +706,8 @@ class Article(Base):
             "undislike": ICONLINK(userid, "undislike", T("Dislike (%s)", article.dislikes or 0), "ajax('%s',[], 'links')" % CURL('undislike', args=request.args), T("Click to remove the dislike"), theme_name=self.context.theme_name),
             "subscribe": ICONLINK(userid, "subscribe", T("Subscribe (%s)", article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('subscribe', args=request.args), T("Click to subscribe to this article updates"), theme_name=self.context.theme_name),
             "unsubscribe": ICONLINK(userid, "unsubscribe", T("Subscribe (%s)", article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args), T("Click to unsubscribe from this article updates"), theme_name=self.context.theme_name),
-            "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args), T("Click to edit"), theme_name=self.context.theme_name)
+            "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args), T("Click to edit"), theme_name=self.context.theme_name),
+            "delete": ICONLINK(userid, "delete", T("Delete"), "window.location = '%s'" % CURL('delete', args=request.args), T("Click to delete"), theme_name=self.context.theme_name),
         }
 
         links = ['views']
@@ -703,9 +725,13 @@ class Article(Base):
 
         if has_permission_to_edit(self.session, self.context.article):
             links.append('edit')
+            if self.context.article.is_active:
+                links.append('delete')
         elif self.session.auth and \
             (self.db.auth.has_membership("admin", self.db.auth.user_id) or self.db.auth.has_membership("editor", self.db.auth.user_id)):
             links.append('edit')
+            if self.context.article.is_active:
+                links.append('delete')
 
         return CAT(*[icons[link] for link in links])
 

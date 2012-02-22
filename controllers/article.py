@@ -21,7 +21,9 @@ def new():
 
 
 def delete():
-    pass
+    article = Article('delete')
+    article.context.left_sidebar_enabled = True
+    return article.render("app/article/delete")
 
 
 def list():
