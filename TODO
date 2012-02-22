@@ -1,11 +1,6 @@
 ### TODO ###
 
-* check privacy for person
 * article privacy
-* allow sub categories in article (how?)
-* tag cloud
-* delete article (is_active=False, also set is_active in all queries)
-* article thrash
 * save articel as template >> new from template
 * allow constributor authors for article
 * allow attachments in template emails (?)
@@ -36,16 +31,12 @@
 * allow registration option in config? (a way to disable regitration)
 * Install interface
 * config admin
-
 * announce new article in facebook (when logged in)
-
 * multi content articles
 * multi pages in article (tabs?)
-
 * Messages system (Kenji Plugin?)
 * Configurable list widget with tabs (for home page, see globo.com)
 * responsive images src.sencha or responsivekit
-* context.alerts manager
 * board replies
 * board shares
 * comment reply
@@ -57,7 +48,6 @@
 * invite friends from google and FB
 * twitter Oauth2
 * allow schedulled posts (TRIGGER IN SITE, CRON, WORKER or SCHEDULLER)
-
 * registration requires invitation (web2py list)
 * docs (how to use sphinx?)
 * Asynchronous messaging & Web Chat
@@ -65,7 +55,6 @@
 * Events Agenda
 * RSS
 * REST API
-
 
 ### IN PROGRESS ###
 
@@ -89,6 +78,12 @@
 * upgrade syntax highlighter
 * user fav, liked, disliked lists
 * Fix bugs in counters
+* check privacy for person
+* allow sub categories in article (list:reference)
+* tag cloud
+* delete article (is_active=False, also set is_active in all queries)
+* article thrash
+* context.alerts manager
 
 
 ### CANCELED ###

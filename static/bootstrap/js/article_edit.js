@@ -7,7 +7,17 @@ $(document).ready(function () {
       check_check($(this));
    });
 
-   $('#article_tags').tagit({removeConfirmation: true});
+   var availableTags = new Array();
+
+   $.getJSON('../tagcloud.json', function(data) {
+      $.each(data['tags'], function(key, val) {
+        availableTags.push(key);
+      });
+   });
+   $('#article_tags').tagit({
+       removeConfirmation: true,
+       availableTags: availableTags,
+   });
 
 
 
