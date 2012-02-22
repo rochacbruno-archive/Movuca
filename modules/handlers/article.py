@@ -740,7 +740,7 @@ class Article(Base):
         tags = []
         for article in articles:
             if article.tags:
-                tags += article.tags
+                tags += [tag.lower() for tag in article.tags]
         tagset = set(tags)
         self.context.tags = {}
         for tag in tagset:
