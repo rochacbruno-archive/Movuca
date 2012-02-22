@@ -36,7 +36,7 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
 
         <fieldset class="span11">
             <legend>{{=T("options")}}</legend>
-            {{=customfield(article_form, 'privacy', css=css)}}
+            {{#=customfield(article_form, 'privacy', css=css)}}
             {{=customfield(article_form, 'license', css=css)}}
 
             
