@@ -208,12 +208,78 @@ jQuery(function() {
                   </ul>
                 </li>
 
+                {{for item in get_menu(menus, 2):}}
+                <li class="dropdown logged-in-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}<b class="caret"></b>
+                  </a>
+                  {{submenu = get_menu(menus, 2, item.id)}}
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}   
+
+                {{for item in get_menu(menus, 3):}}
+                <li class="dropdown admin-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}<b class="caret"></b>
+                  </a>
+                  {{submenu = get_menu(menus, 3, item.id)}}
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}   
+
                 <li><a href="#notification" id="notification-opener" title="{{=T('notifications')}}"><i class="icon-white icon-envelope"></i> (<span id="notification-counter"></span>)</a></li>
                 
               {{else:}}
                 <li><a href="{{=CURL('person', 'account', args='login')}}">{{=T("Login")}}</a></li>
                 <li><a href="{{=CURL('person', 'account', args='register')}}">{{=T("Register")}}</a></li>
+
+                {{for item in get_menu(menus, 1):}}
+                <li class="dropdown logged-out-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}<b class="caret"></b>
+                  </a>
+                  {{submenu = get_menu(menus, 1, item.id)}}
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}  
+
               {{pass}}
+
+                {{for item in get_menu(menus, 4):}}
+                <li class="dropdown everyone-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}<b class="caret"></b>
+                  </a>
+                  {{submenu = get_menu(menus, 4, item.id)}}
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}  
+
             </ul>
                 <form class="navbar-search pull-right" method="GET" action="{{=CURL('home','search')}}">
                   <select name="kind" class="search-query span2" id="kind"><option value="article">Articles</option><option value="user">Users</option></select>

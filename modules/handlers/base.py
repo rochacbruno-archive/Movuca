@@ -22,6 +22,7 @@ class Base(object):
         self.context = context or Storage()
         self.context.alerts = []
         self.context.content_types = []
+        self.context.menus = []
         self.theme = theme
         self.view = view
 
@@ -55,6 +56,14 @@ class Base(object):
         self.context.use_facebook = self.db.config.auth.use_facebook
         self.context.use_google = self.db.config.auth.use_google
         self.context.theme_name = self.config.theme.name
+
+        # define menu table if not defined
+        if not "menu" in self.db.tables:
+            from datamodel.menu import Menu
+            Menu(self.db)
+        # load menus
+        if not self.context.menus:
+            self.context.menus = self.db(self.db.menu).select()
 
         if self.response.flash:
             self.context.alerts.append(self.response.flash)

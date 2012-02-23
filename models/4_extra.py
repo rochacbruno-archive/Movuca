@@ -116,3 +116,26 @@ search_form = FORM(
 
 def iicon(iconname):
     return TAG['i'](_class="icon-%s" % iconname, _style="margin-right:5px;")
+
+
+def get_menu(menus, visibility=1, parent=None, place="top"):
+    ret = []
+    if not parent:
+        ret = menus.find(lambda row: (row.parent == 0 or row.parent == None) and row.visibility == visibility and row.place == place)
+    else:
+        ret = menus.find(lambda row: row.parent == parent and row.visibility == visibility and row.place == place)
+    return ret
+
+
+def get_menu_link(menu):
+    if menu.href.startswith("http") or menu.href.startswith("mailto") or menu.href.startswith("#"):
+        return menu.href
+    if menu.href.startswith("{"):
+        try:
+            from gluon.contrib import simplejson as json
+            params = json.loads(menu.href, encoding="utf-8")
+            for key in params:
+                params[key] = str(params[key])
+            return CURL(**params)
+        except Exception:
+            return CURL()

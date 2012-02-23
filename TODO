@@ -57,9 +57,13 @@
 
 ### IN PROGRESS ###
 * Questions & Answers
-* Menus (for admins)
 * Static Pages (for admins)
-* better modal for images in article
+* Menus (for admins)
+-- menu admin panel
+-- add article to menu
+-- add static page to menu
+-- process menus for bottom and left
+
 * Install interface
 * config admin
 * board replies
@@ -102,3 +106,4 @@
 * better search 
 * Display "loading..." message in all buttons
 * jqueryui all buttons
+* better modal for images in article
