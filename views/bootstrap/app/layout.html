@@ -170,11 +170,13 @@ jQuery(function() {
                           <li>{{=A(T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
                       {{pass}} 
                       <li class="divider"></li>
+                      <li>{{=A(T('Status update'), _href=CURL('person', 'board'))}}</li>
+<!--                       <li class="divider"></li>
                       <li>{{=A(T('Group'), _href=CURL('group', 'new'))}}</li>
                       <li>{{=A(T('Page'), _href=CURL('page', 'new'))}}</li>
                       <li class="divider"></li>
                       <li>{{=A(T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
-                      <li>{{=A(T('Bundle'), _href=CURL('bundle', 'new'))}}</li>
+                      <li>{{=A(T('Bundle'), _href=CURL('bundle', 'new'))}}</li> -->
                   </ul>
                 </li>
                 <li class="dropdown">
@@ -194,8 +196,6 @@ jQuery(function() {
                       {{=T('Me')}}<b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                      <li>{{=A(T('Dashboard'), _href=CURL('person', 'show'))}}</li>
-                      <li class="divider"></li>
                       <li>{{=A(T('My profile'), _href=CURL('person', 'show'))}}</li>
                       <li>{{=A(T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
                       <li class="divider"></li>
@@ -250,6 +250,7 @@ jQuery(function() {
               {{for content_type in content_types:}}
                   <li>{{=A(iicon('list-alt'), T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
               {{pass}}
+              <li>{{=A(iicon('comment'), T('Status update'), _href=CURL('person', 'board'))}}</li>
           <!--<li>{{=A(iicon('list-alt'), T('Group'), _href=CURL('group', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Page'), _href=CURL('page', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
@@ -260,8 +261,7 @@ jQuery(function() {
               <li>{{=A(iicon('list'), T('All articles'), _href=CURL('article', 'list'))}}</li>
               <li>{{=A(iicon('th'), T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
               <li class="nav-header">Me</li>
-              <li>{{=A(iicon('th-large'), T('Dashboard'), _href=CURL('person', 'show'))}}</li>
-              <li>{{=A(iicon('adjust'), T('My profile'), _href=CURL('person', 'show'))}}</li>
+              <li>{{=A(iicon('th-large'), T('My profile'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('cog'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
               <li>{{=A(iicon('list-alt'), T('My articles (%s)', session.auth.user.articles), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
               <li>{{=A(iicon('pencil'), T('My drafts (%s)', session.auth.user.draft_articles), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>

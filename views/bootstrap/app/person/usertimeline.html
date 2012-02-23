@@ -39,6 +39,7 @@ $(document).ready(function () {
 
   </div>
   &nbsp;
+     <a href="{{=CURL('person', 'usertimeline', extension='rss', vars=request.vars, args=request.args)}}" class="pull-right">{{=iicon('signal')}}{{=T("RSS feed")}}</a>
 </div>  
 
 <hr />

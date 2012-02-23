@@ -50,11 +50,11 @@ def ICONLINK(icon, text, action=None):
     return bt
 
 
-def get_image(image, placeholder="image", themename='basic', user=None):
+def get_image(image, placeholder="image", themename='basic', user=None, host=False, scheme=False):
     if user:
         if user.photo_source == 1:
             if user.thumbnail:
-                return URL('default', 'download', args=user.thumbnail, extension=False)
+                return URL('default', 'download', args=user.thumbnail, extension=False, host=host, scheme=scheme)
             # pass and let go to return default placeholder
         # elif user.photo_source == 6:
         #     return user.googlepicture
@@ -68,9 +68,9 @@ def get_image(image, placeholder="image", themename='basic', user=None):
     if image and image.startswith("http://"):
         return image
     if image:
-        return URL('default', 'download', args=image, extension=False)
+        return URL('default', 'download', args=image, extension=False, host=host, scheme=scheme)
     else:
-        return URL('static', '%s/images' % themename, args='%s.png' % placeholder, extension=False)
+        return URL('static', '%s/images' % themename, args='%s.png' % placeholder, extension=False, host=host, scheme=scheme)
 
 current.get_image = get_image
 
