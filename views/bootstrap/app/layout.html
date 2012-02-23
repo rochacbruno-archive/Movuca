@@ -224,6 +224,7 @@ jQuery(function() {
                 </li>
                 {{pass}}   
 
+              {{if 'admin' in session.auth.user_groups:}}   
                 {{for item in get_menu(menus, 3):}}
                 <li class="dropdown admin-menu">
                   <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
@@ -238,7 +239,8 @@ jQuery(function() {
                   </ul>
                   {{pass}}
                 </li>
-                {{pass}}   
+                {{pass}}
+              {{pass}}   
 
                 <li><a href="#notification" id="notification-opener" title="{{=T('notifications')}}"><i class="icon-white icon-envelope"></i> (<span id="notification-counter"></span>)</a></li>
                 
