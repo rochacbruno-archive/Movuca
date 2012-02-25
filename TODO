@@ -63,7 +63,8 @@
 -- add article to menu
 -- add static page to menu
 -- process menus for bottom and left
-
+-- cache menu select
+-- fixtures for default menus
 * Install interface
 * config admin
 * board replies

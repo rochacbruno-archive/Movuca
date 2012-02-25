@@ -29,6 +29,8 @@
     <link href="{{=URL('static','bootstrap/css', args='calendar.css')}}" rel="stylesheet">
     <link href="{{=URL('static','bootstrap/css', args='custom-theme/jquery-ui-1.8.16.custom.css')}}" rel="stylesheet">
     <link href="{{=URL('static','bootstrap/css', args='jquery.tagit.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','css', args='zocial.css')}}" rel="stylesheet">
+    
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{=URL('static','bootstrap/favicon.ico')}}" type="image/x-icon">
 
@@ -209,11 +211,12 @@ jQuery(function() {
                 </li>
 
                 {{for item in get_menu(menus, 2):}}
-                <li class="dropdown logged-in-menu">
+                {{submenu = get_menu(menus, 2, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} logged-in-menu">
                   <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
-                      {{=T(item.title)}}<b class="caret"></b>
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
                   </a>
-                  {{submenu = get_menu(menus, 2, item.id)}}
+                  
                   {{if submenu:}}
                   <ul class="dropdown-menu">
                       {{for subitem in submenu:}}
@@ -224,13 +227,14 @@ jQuery(function() {
                 </li>
                 {{pass}}   
 
-              {{if 'admin' in session.auth.user_groups:}}   
+              {{if 'admin' in session.auth.user_groups.values():}}   
                 {{for item in get_menu(menus, 3):}}
-                <li class="dropdown admin-menu">
+                {{submenu = get_menu(menus, 3, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} admin-menu">
                   <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
-                      {{=T(item.title)}}<b class="caret"></b>
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
                   </a>
-                  {{submenu = get_menu(menus, 3, item.id)}}
+                  
                   {{if submenu:}}
                   <ul class="dropdown-menu">
                       {{for subitem in submenu:}}
@@ -249,11 +253,12 @@ jQuery(function() {
                 <li><a href="{{=CURL('person', 'account', args='register')}}">{{=T("Register")}}</a></li>
 
                 {{for item in get_menu(menus, 1):}}
-                <li class="dropdown logged-out-menu">
+                {{submenu = get_menu(menus, 1, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} logged-out-menu">
                   <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
-                      {{=T(item.title)}}<b class="caret"></b>
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
                   </a>
-                  {{submenu = get_menu(menus, 1, item.id)}}
+                  
                   {{if submenu:}}
                   <ul class="dropdown-menu">
                       {{for subitem in submenu:}}
@@ -267,11 +272,12 @@ jQuery(function() {
               {{pass}}
 
                 {{for item in get_menu(menus, 4):}}
-                <li class="dropdown everyone-menu">
+                {{submenu = get_menu(menus, 4, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} logged-in-menu">
                   <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
-                      {{=T(item.title)}}<b class="caret"></b>
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
                   </a>
-                  {{submenu = get_menu(menus, 4, item.id)}}
+                  
                   {{if submenu:}}
                   <ul class="dropdown-menu">
                       {{for subitem in submenu:}}
@@ -344,11 +350,16 @@ jQuery(function() {
               <li>
                   <div>
                         {{if use_facebook:}}
-                               <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'bootstrap', args=['images', 'facebook-connect.png']))}}</a>     
+                               <a title="{{=T('Enter using facebook account')}}" href="{{=URL('person', 'facebook', args='login')}}" class='zocial facebook '>
+                                  <span>Facebook</span>
+                               </a>     
                          {{pass}}
                          {{if use_google:}}
-                               <a href="{{=URL('person', 'google', args='login')}}">{{=IMG(_src=URL('static', 'bootstrap', args=['images', 'google-connect.png']))}}</a>     
+                               <a title="{{=T('Enter using google account')}}" href="{{=URL('person', 'google', args='login')}}" class='zocial google '>
+                                   <span>Google</span>
+                               </a>     
                          {{pass}}
+                         <br/><br/>
                      <form action="{{=URL('person', 'loginbare')}}" method="post">
                          {{if 'loginerror' in request.args:}}
                             <label style="color:red;">{{=T("Username or password incorrect")}}</label>
@@ -362,6 +373,7 @@ jQuery(function() {
                          <input required='required' type="password" name="password" id="password" placeholder="{{=T('your password')}}"  style="width:70%"/>
                          </div>
                          <button class="btn">{{=T("Go")}}</button> 
+
                      </form>
                   </div>
               </li>
@@ -427,7 +439,7 @@ create something more unique.</p>
       
       {{block footer}}
       <footer>
-        <p>© 2012</p>
+        <p>© 2012 - Open Source Software (LGPLv3) <a target="_blank" class="zocial github pull-right" href="http://github.com/rochacbruno/Movuca" style="margin-left:10px;"><span>Fork me on Github</span></a><a target="_blank" class="zocial paypal pull-right" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rochacbruno%40gmail%2ecom&lc=BR&item_name=Movuca%20Social%20CMS&no_note=0&currency_code=BRL&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest"><span>Donate with Paypal</span></a></p>
       </footer>
       {{end}}
 

@@ -63,7 +63,7 @@ class Base(object):
             Menu(self.db)
         # load menus
         if not self.context.menus:
-            self.context.menus = self.db(self.db.menu).select()
+            self.context.menus = self.db(self.db.menu.is_active == True).select(cache=(self.db.cache.ram, 300))
 
         if self.response.flash:
             self.context.alerts.append(self.response.flash)

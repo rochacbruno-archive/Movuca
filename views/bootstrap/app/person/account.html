@@ -34,10 +34,14 @@
     {{pass}}
 
 	{{if request.args(0) in ['login', 'register'] and use_facebook:}}
-         <a href="{{=URL('person', 'facebook', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'facebook-connect.png']))}}</a>     
+       <a title="{{=T('Enter using facebook account')}}" href="{{=URL('person', 'facebook', args='login')}}" class='zocial facebook'>
+          <span>{{=T('Connect with facebook')}}</span>
+       </a>       
 	{{pass}}
 	{{if request.args(0) in ['login', 'register'] and use_google:}}
-         <a href="{{=URL('person', 'google', args='login')}}">{{=IMG(_src=URL('static', 'basic', args=['images', 'google-connect.png']))}}</a>     
+        <a title="{{=T('Enter using google account')}}" href="{{=URL('person', 'google', args='login')}}" class='zocial google'>
+           <span>{{=T('Connect with google')}}</span>
+       </a>      
 	{{pass}}
 	{{if request.args(0)=='login':}}
 		{{if not 'register' in auth.settings.actions_disabled:}}
