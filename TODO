@@ -21,7 +21,6 @@
 * get comment event from disqus API (there is a way?)
 * Button to send board posts to facebook (when logged in with facebook, or get the access_token)
 * logins in a modal
-
 * picture gallery for users
 * new members widget
 * registered event_type
@@ -29,20 +28,15 @@
 * Ads manager (google ads, boobox)
 * blog(s) mode
 * allow registration option in config? (a way to disable regitration)
-
 * announce new article in facebook (when logged in)
 * multi content articles
 * multi pages in article (tabs?)
 * Messages system (Kenji Plugin?)
-* Configurable list widget with tabs (for home page, see globo.com)
 * responsive images src.sencha or responsivekit
-
 * board shares
-
 * comment moderation for admins
 * comment moderation options for author
 * allow author to set own disqus, facebook, intensedebate keys
-
 * read links and scrap (similar to open graph in facebook)
 * invite friends from google and FB
 * twitter Oauth2
@@ -52,7 +46,6 @@
 * Asynchronous messaging & Web Chat
 * Services and Products display window & Shopping Cart
 * Events Agenda
-
 * REST API
 
 ### IN PROGRESS ###
@@ -67,6 +60,7 @@
 -- fixtures for default menus
 * Install interface
 * config admin
+* admin dashboard
 * board replies
 * comment reply
 * opengraph meta tags
@@ -101,6 +95,7 @@
 * RSS for articles list
 * RSS for timelines
 * RSS for board posts
+* Configurable list widget with tabs (for home page, see globo.com)
 
 ### CANCELED ###
 * menu builder 
