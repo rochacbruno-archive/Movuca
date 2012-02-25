@@ -17,17 +17,54 @@
       {{=T("Your Feed")}}
   </h4>
   {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,5'), ajax=True)}}
-
   <br/>
 {{pass}}
 
+<!-- content tabs -->
   <h4 class="bottom-line">
       <i class="icon-list-alt"></i>
-      {{=T("Articles")}}
+      {{=T("Content")}}
   </h4>
-{{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True)}}
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load')}}">{{=T("All")}}</a></li>
+      {{for i, content_type in enumerate(content_types):}}
+          {{if i <= 1:}}
+          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id})}}">{{=T(content_type.title)}}</a></li>
+          {{pass}}
+      {{pass}}
+      {{if len(content_types) > 2:}}
+              <!-- <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id})}}">{{=T(content_type.title)}}</a></li> -->
+              <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      {{=T("More")}}
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {{for i, content_type in enumerate(content_types):}}
+                         {{if i > 1:}}
+                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id})}}">{{=T(content_type.title)}}</a></li>
+                         {{pass}}
+                    {{pass}}
+ 
+                  </ul>
+              </li>
+      {{pass}}
+    </ul> 
+    <script>
+    $(function () {
+      $('.tabs a:last').tab('show')
 
+      $('a[data-toggle="tab"]').on('show', function (e) {
+         e.target; // activated tab
+         e.relatedTarget; // previous tab
+         url = $(e.target).attr("href");
+         web2py_ajax_page("GET", url, "", "content-placeholder")
+      })
+    })
+    </script>
+    {{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True, target="content-placeholder")}}
 
+<!-- /content tabs -->
 
 {{block right_sidebar}}
       <h4 class="bottom-line">
