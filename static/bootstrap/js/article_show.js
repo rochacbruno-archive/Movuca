@@ -3,6 +3,10 @@ $(document).ready(function () {
      window.location = $(this).attr("data-url");
   });
 
+    $(".vote").click(function(){
+        url = $(this).attr('data-url');
+        ajax(url,[],':eval');
+    });
 
   // var loadPhoto=function(hash){ 
   //                          var w = $(window).width()

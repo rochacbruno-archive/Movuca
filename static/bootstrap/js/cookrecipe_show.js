@@ -3,6 +3,11 @@ $(document).ready(function () {
      window.location = $(this).attr("data-url");
   });
 
+  $(".vote").click(function(){
+      url = $(this).attr('data-url');
+      ajax(url,[],':eval');
+  });
+
   //$('#photomodal').jqm({ajax: $('img.recipephoto').attr('src'),modal: true, trigger: 'img.recipephoto'});
   //$('#photomodal').jqm({ajax: '@src', target: '.photo',modal: true, trigger: 'img.recipephoto'});
   //var myOpen=function(hash){ hash.w.css('background','red').show(); };

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR, TAG
 from gluon.validators import IS_SLUG, IS_IN_DB
 from helpers.images import THUMB2
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
@@ -11,8 +11,8 @@ import os
 class Article(Base):
     def start(self):
         from movuca import DataBase, User, UserTimeLine
-        from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers, Comments
-        self.db = DataBase([User, UserTimeLine, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments])
+        from datamodel.article import Category, Article, ContentType, Favoriters, Subscribers, Likers, Dislikers, Comments, CommentVotes
+        self.db = DataBase([User, UserTimeLine, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments, CommentVotes])
         from handlers.notification import Notifier
         self.notifier = Notifier(self.db)
 
@@ -48,6 +48,11 @@ class Article(Base):
             self.context.related_articles = False
 
     def comments(self):
+        if not self.context.article:
+            self.get()
+            self.context.content_types = [""]
+            self.context.menus = [""]
+
         comment_system = {
             "internal": self.comment_internal,
             "disqus": self.comment_disqus,
@@ -121,15 +126,52 @@ class Article(Base):
             else:
                 return ''
 
+        self.context.commentvotes = self.db((self.db.CommentVotes.comment_id == self.db.Comments.id) & \
+                                            (self.db.Comments.article_id == self.context.article.id)).select()
+
+        count_votes_results = {}  # it is a cache for the list comp
+
+        def count_votes(comment_id):
+            if comment_id not in count_votes_results:
+                rows = self.context.commentvotes.find(lambda row: row.article_comment_votes.comment_id == comment_id)
+                up = []
+                down = []
+                for row in rows:
+                    if row.article_comment_votes.vote == 0:
+                        down.append(row.article_comment_votes.user_id)
+                    else:
+                        up.append(row.article_comment_votes.user_id)
+                lenup = len(up)
+                lendown = len(down)
+                count = lenup - lendown
+                count_votes_results[comment_id] = dict(up=up, down=down, lenup=lenup, lendown=lendown, count=count)
+            return count_votes_results[comment_id]
+
         return DIV(
                   H4(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='board.24.png')), self.T("Comments"), " (%s)" % self.context.lencomments),
                   UL(form,
                       *[LI(
+                          DIV(
+                          DIV(
+                            A(iicon('arrow-up'), _class="vote" if self.db.auth.user_id not in count_votes(comment.id)["up"] else "vote votedisabled", **{"_data-url": URL('article', 'votecomment', vars=dict(comment=comment.id, vote=1))}),
+                            BR(),
+                            SPAN(count_votes(comment.id)["count"], _id="countvote_%s" % comment.id, _class="countvote label label-success" if count_votes(comment.id)["count"] > 0 else "countvote label label-important" if count_votes(comment.id)["count"] < 0 else  "countvote label label-info"),
+                            BR(),
+                            A(iicon('arrow-down'), _class="vote" if self.db.auth.user_id not in count_votes(comment.id)["down"] else "vote votedisabled", **{"_data-url": URL('article', 'votecomment', vars=dict(comment=comment.id, vote=0))}),
+                            _class="comment_vote_buttons span1"
+                            ),
+                          DIV(
                            H5(
                               A(
-                                 self.T("%s %s", (comment.nickname or comment.user_id,
-                                                   self.db.pdate(comment.commenttime))),
-                               _href=self.CURL('person', 'show', args=comment.nickname or comment.user_id))
+                                comment.nickname or comment.user_id,
+                               _href=self.CURL('person', 'show', args=comment.nickname or comment.user_id),
+                               _class="link_to_user",
+                               **{"_data-id": comment.user_id}
+                               ),
+                              XML("&nbsp;"),
+                              A(
+                                self.db.pdate(comment.commenttime),
+                               _href=self.CURL('article', 'comment', args=comment.id))
                              ),
                             DIV(
                                XML(comment.comment_text),
@@ -138,12 +180,17 @@ class Article(Base):
                                   '_data-id': comment.id,
                                   '_id': "comment_%s" % comment.id}
                              ),
+                            _class="comment_div span10"
+                            ),
+                            _class="row"
+                            ),
                             _class="comment_li"
                           ) for comment in comments],
                   **dict(_class="comment_ul")),
                   edit_in_place[1],
                   showmore("comment_%s" % comment.id) if comments else '',
-                  _class="internal-comments article-box"
+                  _class="internal-comments article-box",
+
                   )
 
     def editcomment(self):
@@ -167,6 +214,59 @@ class Article(Base):
                     self.db.commit()
             except:
                 pass
+
+    def vote_comment(self):
+        user = self.db.auth.user
+        if user:
+            try:
+                comment_id = int(self.request.vars['comment'])
+                vote = self.request.vars['vote']
+                inserted = self.db.CommentVotes.validate_and_insert(user_id=user.id, comment_id=comment_id, vote=vote)
+                print inserted
+                if int(vote) == 0:
+                    self.context.voted = """
+                        current = $("#countvote_%(comment_id)s").text();
+                        newv = parseInt(current) - 1;
+                        $("#countvote_%(comment_id)s").text(newv);
+                        if (newv > 0) {
+                            $("#countvote_%(comment_id)s").removeClass("label-important");
+                            $("#countvote_%(comment_id)s").removeClass("label-info");
+                            $("#countvote_%(comment_id)s").addClass("label-success");
+                        }
+                        if (newv < 0) {
+                            $("#countvote_%(comment_id)s").removeClass("label-success");
+                            $("#countvote_%(comment_id)s").removeClass("label-info");
+                            $("#countvote_%(comment_id)s").addClass("label-important");
+                        }
+                        if (newv == 0) {
+                            $("#countvote_%(comment_id)s").removeClass("label-success");
+                            $("#countvote_%(comment_id)s").removeClass("label-important");
+                            $("#countvote_%(comment_id)s").addClass("label-info");
+                        }
+                    """ % dict(comment_id=comment_id)
+                else:
+                    self.context.voted = """
+                        current = $("#countvote_%(comment_id)s").text();
+                        newv = parseInt(current) + 1;
+                        $("#countvote_%(comment_id)s").text(newv);
+                        if (newv > 0) {
+                            $("#countvote_%(comment_id)s").removeClass("label-important");
+                            $("#countvote_%(comment_id)s").removeClass("label-info");
+                            $("#countvote_%(comment_id)s").addClass("label-success");
+                        }
+                        if (newv < 0) {
+                            $("#countvote_%(comment_id)s").removeClass("label-success");
+                            $("#countvote_%(comment_id)s").removeClass("label-info");
+                            $("#countvote_%(comment_id)s").addClass("label-important");
+                        }
+                        if (newv == 0) {
+                            $("#countvote_%(comment_id)s").removeClass("label-success");
+                            $("#countvote_%(comment_id)s").removeClass("label-important");
+                            $("#countvote_%(comment_id)s").addClass("label-info");
+                        }
+                    """ % dict(comment_id=comment_id)
+            except Exception:
+                self.context.voted = """alert('You already voted for this comment');"""
 
     def comment_disqus(self):
         js = """
@@ -812,3 +912,7 @@ def customfield(form, field, css={"main": "row", "label": "", "comment": "", "wi
     maindiv.append(widgetdiv)
 
     return maindiv
+
+
+def iicon(iconname):
+    return TAG['i'](_class="icon-%s" % iconname, _style="margin-right:5px;")

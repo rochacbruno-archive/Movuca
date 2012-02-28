@@ -103,7 +103,9 @@ def undislike():
 
 
 def comment():
-    pass
+    # change to show comment
+    article = Article('comments')
+    return article.render("app/article/comment")
 
 
 def editcomment():
@@ -119,8 +121,10 @@ def removecomment():
 def removeevent():
     return "alert('ok')"
 
-def vote():
-    pass
+
+def votecomment():
+    article = Article('vote_comment')
+    return article.context.voted
 
 
 def book():

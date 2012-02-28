@@ -227,6 +227,7 @@ class Comments(BaseModel):
             Field("replies", "integer", notnull=True, default=0),
             Field("comment_text", "text", notnull=True),
             Field("commenttime", "datetime"),
+            Field("answer", "boolean", default=False),
         ]
 
         self.visibility = {
@@ -239,4 +240,24 @@ class Comments(BaseModel):
 
         self.computations = {
           "nickname": lambda r: self.db.auth_user[r.user_id].nickname
+        }
+
+
+class CommentVotes(BaseModel):
+    tablename = "article_comment_votes"
+
+    def set_properties(self):
+        self.fields = [
+            Field("comment_id", "reference article_comments", notnull=True),
+            Field("user_id", "reference auth_user", notnull=True),
+            Field("vote", "integer", notnull=True, default=1),
+            Field("unikey", unique=True, notnull=True)
+        ]
+
+        self.validators = {
+            "vote": IS_IN_SET([(0, "Down"), (1, "Up")])
+        }
+
+        self.computations = {
+            "unikey": lambda row: "%(user_id)s_%(comment_id)s_%(vote)s" % row
         }

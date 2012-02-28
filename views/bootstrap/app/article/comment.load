@@ -1,0 +1,11 @@
+{{comments.elements('img')[0]['_style'] = "display:none"}}
+{{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
+{{lis = comments.elements('.comment_li')}}
+{{for li in lis:}}
+   {{li['_class'] += " well"}}
+{{pass}}
+{{comments['_class'] += "row-fluid"}}
+{{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+<script src="{{=URL('static', 'bootstrap/js', extension=False)}}/jquery.js"></script>
+{{=comments}}
+

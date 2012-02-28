@@ -137,3 +137,13 @@ fieldset legend {text-transform:uppercase;
   margin-left:0 !important;
   text-align:center;
  }
+
+.comment_vote_buttons {
+  float:left;
+  height:100%;
+}
+
+.votedisabled, .vote {
+  cursor:pointer !important;
+}
+
