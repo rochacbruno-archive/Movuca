@@ -56,7 +56,10 @@
   {{share() if len(article.description) > 1000 else ''}} 
 
   <div class="row-fluid show-article-comments article-box">
-        {{comments.elements('label')[0]["_style"] = "display:none;"}}
+        {{label = comments.elements('label')}}
+        {{if label:}}
+           {{label[0]["_style"] = "display:none;"}} 
+        {{pass}}  
         {{comments.elements('img')[0]['_style'] = "display:none"}}
         {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
         {{comments.elements('h4')[0]["_style"] = "display:none"}}
@@ -67,7 +70,10 @@
         {{pass}}
         {{comments['_class'] += "row-fluid"}}
         {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
-        {{comments.elements(_type='submit')[0]["_value"] = T("Post your answer")}}
+        {{submit = comments.elements(_type='submit')}}
+        {{if submit:}}
+            {{submit[0]["_value"] = T("Post your answer")}}
+        {{pass}}
         {{=comments}}
   </div>
 
