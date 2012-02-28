@@ -96,7 +96,7 @@ class Article(BaseModel):
 
         self.validators = {
           "title": IS_NOT_EMPTY(),
-          "description": IS_LENGTH(255, 10),
+          "description": IS_NOT_EMPTY(),
           "picture": IS_EMPTY_OR(IS_IMAGE()),
           "license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
           #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True),
@@ -132,8 +132,8 @@ class ContentType(BaseModel):
             Field("title", notnull=True),
             Field("description"),
             Field("identifier", unique=True, notnull=True),
-            Field("classname", unique=True, notnull=True),
-            Field("tablename", unique=True, notnull=True),
+            Field("classname", notnull=True),
+            Field("tablename", notnull=True),
             Field("viewname", "string"),
             Field("childs", "integer", notnull=True, default=1),
         ]
@@ -236,10 +236,15 @@ class Comments(BaseModel):
             "parent_id": (False, False),
             "commenttime": (False, False),
             "replies": (False, False),
+            "answer": (False, False),
         }
 
         self.computations = {
           "nickname": lambda r: self.db.auth_user[r.user_id].nickname
+        }
+
+        self.validators = {
+          "comment_text": IS_LENGTH(1024, 10)
         }
 
 

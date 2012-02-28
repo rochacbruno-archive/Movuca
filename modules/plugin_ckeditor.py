@@ -124,7 +124,7 @@ class CKEditor(object):
         function removecomment(selector) {
             if (confirm("%s")) {
                 ajax('%s/'+selector,[1],'');
-                jQuery('#'+selector).parent().hide();
+                jQuery('#'+selector).parent().parent().parent().hide();
                 return false;
                 }
         }

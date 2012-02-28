@@ -1,0 +1,82 @@
+{{response.files.append(URL('static','bootstrap/js/question_edit.js'))}}
+{{extend "bootstrap/app/layout.html"}}
+
+<style>
+    .edit-article-wrapper .cke_contents {
+        height:250px !important;
+    }
+
+</style>
+
+{{
+css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error"} 
+}}
+
+{{
+article_form.custom.label["description"] = T("Question")   
+article_form.custom.comment["description"] = T("what do you want to know? be short and specific")
+
+from plugin_ckeditor import CKEditor
+ckeditor = CKEditor()
+from gluon.storage import Storage
+class myfield(object):
+    name = "description"
+    def __str__(self):
+        return "article.description"
+pass
+}}
+
+{{=article_form.custom.begin}}
+<div class="row-fluid edit-article-wrapper">
+    <div class="span8 alert" style="padding:0;margin:0;padding-bottom:20px;">
+       
+       <fieldset class="span11">
+             <legend>{{=T("Edit the question")}}</legend>
+            {{=customfield(article_form, 'title', css=css)}}
+            {{#=customfield(article_form, 'description', css=css)}}
+            {{#=customfield(article_form, 'picture', css=css)}}
+            {{=ckeditor.widget(field=myfield(),value=article_form.vars.description or article_form.custom.dspval.description)}}
+       </fieldset>
+    </div>
+
+
+    <div class="span3 form-actions" style="margin-top:0;">
+        
+
+        <fieldset class="span11">
+            <legend>{{=T("Category & Tags")}}</legend>
+            {{=customfield(article_form, 'category_id', css=css)}}
+            {{=customfield(article_form, 'tags', css=css)}}
+        </fieldset>
+
+        <fieldset class="span11" style="display:none;">
+            <legend>{{=T("options")}}</legend>
+            {{#=customfield(article_form, 'privacy', css=css)}}
+            {{=customfield(article_form, 'license', css=css)}}
+
+            
+        </fieldset>
+
+        <fieldset class="span11">
+            <legend>{{=T("Save")}}</legend>
+            {{=customfield(article_form, 'draft', css=css)}}
+            <br />
+
+            <div id="article_draft__row" class="row-fluid"><div class="w2p_fl "><label id="article_draft__label" for="notify_subscribers">{{=T("Notify?")}}</label></div><div class="w2p_fc ">Check to send edit notifications to subscribers</div><div class="w2p_fw "><input type="checkbox" checked="checked" value="on" name="notify_subscribers" id="notify_subscribers" class="boolean span12"></div></div>
+            
+            <br />
+
+            <button class="full-width btn-primary btn-large" id="publish">{{=T("Update your question")}}</button>
+            <button class="full-width btn-primary btn-large" id="draft">{{=T("Save as a draft")}}</button>
+
+            
+        </fieldset>
+
+
+
+    </div>
+
+
+</div>
+{{=article_form.custom.end}}
+

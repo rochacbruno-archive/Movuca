@@ -38,7 +38,7 @@
   <div class="well">
     
     <form method="POST" action="">
-        <h3>{{=iicon('trash')}}{{=T("are you sure you want to send this article to the thrash?")}}</h3>
+        <h3>{{=iicon('trash')}}{{=T("are you sure you want to send this %s to the trash?", article.content_type_id.title)}}</h3>
 
         <a href="{{=CURL('article', 'show', args=request.args, vars=request.vars)}}" class="btn btn-primary">{{=iicon('arrow-left icon-white')}} {{=T("cancel")}}</a>
         <input type="hidden" id="confirmation" name="confirmation" value="1"> 

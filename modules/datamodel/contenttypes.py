@@ -37,6 +37,23 @@ class Article(ContentModel):
         }
 
 
+class Question(ContentModel):
+    tablename = "question_data"
+
+    def set_properties(self):
+        self.fields = [
+            Field("answer", "integer"),
+        ]
+
+        self.visibility = {
+            "answer": (False, False)
+        }
+
+    def set_fixtures(self):
+        ckeditor = CKEditor()
+        self.db.article.description.widget = ckeditor.widget
+
+
 class CookRecipe(ContentModel):
     tablename = "cookrecipe_data"
 

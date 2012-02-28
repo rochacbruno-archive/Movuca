@@ -50,6 +50,7 @@
 
 ### IN PROGRESS ###
 * Questions & Answers
+- comment votes
 * Static Pages (for admins)
 * Menus (for admins)
 -- menu admin panel
@@ -64,7 +65,7 @@
 * board replies
 * comment reply
 * opengraph meta tags
-
+*
 
 ### DONE ###
 * change the classes of contact box 

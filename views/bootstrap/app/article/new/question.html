@@ -1,0 +1,69 @@
+{{response.files.append(URL('static','bootstrap/js/question_new.js'))}}
+{{extend "bootstrap/app/layout.html"}}
+
+<style>
+    .edit-article-wrapper .cke_contents {
+        height:250px !important;
+    }
+
+</style>
+{{
+css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error"} 
+}}
+
+{{
+form.custom.label["description"] = T("Question")   
+form.custom.comment["description"] = T("what do you want to know? be short and specific")
+}}
+
+{{=form.custom.begin}}
+<div class="row-fluid edit-article-wrapper">
+    <div class="span8 alert" style="padding:0;margin:0;padding-bottom:20px;">
+       
+       <fieldset class="span11">
+            <legend>{{=T("Ask a question")}}</legend>
+            {{=customfield(form, 'title', css=css)}}
+            {{=customfield(form, 'description', css=css)}}
+            {{#=customfield(form, 'picture', css=css)}}
+       </fieldset>
+    </div>
+
+
+{{
+css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control-group error"}
+}}  
+
+    <div class="span3 form-actions" style="margin-top:0;">
+        
+
+        <fieldset class="span11">
+            <legend>{{=T("Category & Tags")}}</legend>
+            {{=customfield(form, 'category_id', css=css2)}}
+            {{=customfield(form, 'tags', css=css2)}}
+        </fieldset>
+
+        <fieldset class="span11" style="display:none;">
+            <legend>{{=T("options")}}</legend>
+            {{#=customfield(form, 'privacy', css=css2)}}
+            {{=customfield(form, 'license', css=css2)}}
+
+            
+        </fieldset>
+
+        <fieldset class="span11">
+            <legend>{{=T("Save")}}</legend>
+            {{=customfield(form, 'draft', css=css2)}}
+            <br />
+            <button class="full-width btn-primary btn-large" id="publish">{{=T("Post your question")}}</button>
+            <button class="full-width btn-primary btn-large" id="draft">{{=T("Save as a draft")}}</button>
+
+            
+        </fieldset>
+
+
+
+    </div>
+
+
+</div>
+{{=form.custom.end}}

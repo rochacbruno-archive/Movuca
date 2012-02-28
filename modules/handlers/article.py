@@ -2,7 +2,7 @@
 
 from handlers.base import Base
 from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR, TAG
-from gluon.validators import IS_SLUG, IS_IN_DB
+from gluon.validators import IS_SLUG, IS_IN_DB, IS_EMAIL, IS_LENGTH
 from helpers.images import THUMB2
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 import os
@@ -66,6 +66,14 @@ class Article(Base):
     def comment_disabled(self):
         return " "
 
+    def is_lenght(self, form):
+        if len(form.vars.comment_text) < 5:
+            form.errors.comment_text = self.T("Comment too short")
+            self.context.alerts.append(form.errors.comment_text)
+        if len(form.vars.comment_text) > 1024:
+            form.errors.comment_text = self.T("Comment too long")
+            self.context.alerts.append(form.errors.comment_text)
+
     def comment_internal(self):
         is_author = False
         if self.session.auth and self.session.auth.user:
@@ -74,6 +82,7 @@ class Article(Base):
             self.db.Comments.user_id.default = self.session.auth.user.id
             self.db.Comments.commenttime.default = self.request.now
             self.db.Comments.comment_text.label = self.T("Post your comment")
+            self.db.Comments.comment_text.requires = IS_EMAIL()
             from plugin_ckeditor import CKEditor
             ckeditor = CKEditor()
             self.db.Comments.comment_text.widget = ckeditor.basicwidget
@@ -81,7 +90,7 @@ class Article(Base):
             submit_button = form.elements(_type='submit')[0]
             submit_button['_class'] = "btn btn-info"
             submit_button['_value'] = self.T("Post comment")
-            if form.process(message_onsuccess=self.T('Comment included')).accepted:
+            if form.process(message_onsuccess=self.T('Comment included'), onvalidation=self.is_lenght).accepted:
                 self.new_article_event('new_article_comment',
                                         self.session.auth.user,
                                         data={'event_text': form.vars.comment_text,
@@ -90,7 +99,7 @@ class Article(Base):
                                               'event_link_to': "%s/%s#comment_%s" % (self.context.article.id, self.context.article.slug, form.vars.id)})
 
         else:
-            form = CAT(A(self.T("Login to post comments"),
+            form = CAT(A(self.T("Login to post"),
                      _class="button btn",
                      _href=self.CURL('default', 'user',
                                   args='login',
@@ -101,11 +110,20 @@ class Article(Base):
                        BR())
 
         if 'commentlimitby' in self.request.vars:
-            limitby = [int(item) for item in self.request.vars.commentlimitby.split(',')]
+            try:
+                limitby = [int(item) for item in self.request.vars.commentlimitby.split(',')]
+            except:
+                limitby = (0, 5)
         else:
             limitby = (0, 5)
+
+        orderby = ~self.db.Comments.created_on
+        if "commentorder" in self.request.vars:
+            if self.request.vars.commentorder == "oldest":
+                orderby = self.db.Comments.created_on
+
         comment_set = self.db(self.db.Comments.article_id == self.context.article.id)
-        comments = comment_set.select(orderby=~self.db.Comments.created_on, limitby=limitby)
+        comments = comment_set.select(orderby=orderby, limitby=limitby)
 
         if comments and is_author:
             edit_in_place = ckeditor.bulk_edit_in_place(["comment_%(id)s" % comment for comment in comments], URL('editcomment'))
@@ -122,7 +140,9 @@ class Article(Base):
 
         def showmore(anchor, limitby=limitby, lencomments=self.context.lencomments):
             if lencomments > limitby[1]:
-                return A(self.T('show more comments'), _class="button btn", _style="width:97%;", _href=self.CURL(args=self.request.args, vars={"commentlimitby": "0,%s" % (limitby[1] + 10)}, anchor=anchor))
+                # rvars = {"commentlimitby": "0,%s" % (limitby[1] + 10)}
+                self.request.vars['commentlimitby'] = "0,%s" % (limitby[1] + 10)
+                return A(self.T('show more comments'), _class="button btn", _style="width:97%;", _href=self.CURL(args=self.request.args, vars=self.request.vars, anchor=anchor))
             else:
                 return ''
 
@@ -147,9 +167,23 @@ class Article(Base):
                 count_votes_results[comment_id] = dict(up=up, down=down, lenup=lenup, lendown=lendown, count=count)
             return count_votes_results[comment_id]
 
+        if "commentorder" in self.request.vars:
+            if self.request.vars.commentorder == "upvoted":
+                comments = comments.sort(lambda row: ~count_votes(row.id)["count"])
+            if self.request.vars.commentorder == "downvoted":
+                comments = comments.sort(lambda row: count_votes(row.id)["count"])
+
         return DIV(
                   H4(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='board.24.png')), self.T("Comments"), " (%s)" % self.context.lencomments),
                   UL(form,
+                     DIV(self.T("order by: "),
+                        A(self.T("newest "), _href=self.CURL(args=self.request.args, anchor="internal-comments", vars=dict(commentorder="newest", commentlimitby=self.request.vars.commentlimitby))),
+                        A(self.T("oldest "), _href=self.CURL(args=self.request.args, anchor="internal-comments", vars=dict(commentorder="oldest", commentlimitby=self.request.vars.commentlimitby))),
+                         A(self.T("upvoted "), _href=self.CURL(args=self.request.args, anchor="internal-comments", vars=dict(commentorder="upvoted", commentlimitby=self.request.vars.commentlimitby))),
+                         A(self.T("downvoted"), _href=self.CURL(args=self.request.args, anchor="internal-comments", vars=dict(commentorder="downvoted", commentlimitby=self.request.vars.commentlimitby))),
+                        _class="pull-right",
+                        _id="comment_order") if len(comments) > 1 else DIV(),
+                     BR(),
                       *[LI(
                           DIV(
                           DIV(
@@ -190,6 +224,7 @@ class Article(Base):
                   edit_in_place[1],
                   showmore("comment_%s" % comment.id) if comments else '',
                   _class="internal-comments article-box",
+                  _id="internal-comments"
 
                   )
 
@@ -221,8 +256,7 @@ class Article(Base):
             try:
                 comment_id = int(self.request.vars['comment'])
                 vote = self.request.vars['vote']
-                inserted = self.db.CommentVotes.validate_and_insert(user_id=user.id, comment_id=comment_id, vote=vote)
-                print inserted
+                self.db.CommentVotes.validate_and_insert(user_id=user.id, comment_id=comment_id, vote=vote)
                 if int(vote) == 0:
                     self.context.voted = """
                         current = $("#countvote_%(comment_id)s").text();
@@ -267,6 +301,13 @@ class Article(Base):
                     """ % dict(comment_id=comment_id)
             except Exception:
                 self.context.voted = """alert('You already voted for this comment');"""
+        else:
+            self.context.voted = """
+                if (confirm("%(message)s")){
+                    window.location = "%(url)s";
+                }
+            """ % dict(url=self.CURL("person", "account", args="login"),
+                       message=self.T("You have to be logged in to vote. Click Ok to login, Cancel to return."))
 
     def comment_disqus(self):
         js = """
