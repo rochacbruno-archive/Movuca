@@ -49,8 +49,7 @@
 * REST API
 
 ### IN PROGRESS ###
-* Questions & Answers
-- comment votes
+* Flatten html in description
 * Static Pages (for admins)
 * Menus (for admins)
 -- menu admin panel
@@ -97,6 +96,8 @@
 * RSS for timelines
 * RSS for board posts
 * Configurable list widget with tabs (for home page, see globo.com)
+* Questions & Answers
+- comment votes
 
 ### CANCELED ###
 * menu builder 

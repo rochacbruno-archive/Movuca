@@ -139,3 +139,22 @@ def get_menu_link(menu):
             return CURL(**params)
         except Exception:
             return CURL()
+
+
+def remove_tags(s):
+    try:
+        import lxml.html
+        return lxml.html.fromstring(s).text_content()
+    except Exception:
+        # is there a better way?
+        s = s.replace("<p>", "")
+        s = s.replace("</p>", "")
+        s = s.replace("<div>", "")
+        s = s.replace("</div>", "")
+        s = s.replace("<strong>", "")
+        s = s.replace("</strong>", "")
+        s = s.replace("<b>", "")
+        s = s.replace("</b>", "")
+        s = s.replace("<pre>", "")
+        s = s.replace("</pre>", "")
+        return s

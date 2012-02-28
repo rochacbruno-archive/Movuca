@@ -24,7 +24,7 @@
               <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
           {{pass}}
           <p class="list-article-description">
-              {{=A("%s ..." % article.description[:150], _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+              {{=A("%s ..." % remove_tags(article.description[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
           </p>
 
       </div>
