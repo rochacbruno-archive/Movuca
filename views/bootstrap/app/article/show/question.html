@@ -47,6 +47,14 @@
      </blockquote> 
   </div>  
 
+  {{if article_data.answer:}}
+      <div class="row-fluid show-article-answer article-box">
+        <h4><i class="icon-ok"></i>{{=T("Correct answer")}}</h4>
+        <small>{{=T("The author has choosen this as the correct answer:")}}</small>
+      {{=LOAD('article', 'showcomment.load', args=article_data.answer, ajax=True)}}
+    </div>
+  {{pass}}
+
   <div class="row-fluid show-article-tags">
        {{if article.tags:}}
            <i class="icon-tags"></i><em>{{=tagfy(article.tags)}} </em>
@@ -66,7 +74,12 @@
         {{=H4(iicon("question-sign"), T("Answers (%s)", lencomments))}}
         {{lis = comments.elements('.comment_li')}}
         {{for li in lis:}}
-           {{li['_class'] += " well"}}
+          {{comment_id = li.attributes["_data-cid"]}}
+          {{if comment_id != article_data.answer:}}
+              {{li['_class'] += " well"}}
+          {{else:}}
+              {{li['_class'] += " alert alert-success"}}
+          {{pass}}
         {{pass}}
         {{comments['_class'] += "row-fluid"}}
         {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
@@ -74,6 +87,20 @@
         {{if submit:}}
             {{submit[0]["_value"] = T("Post your answer")}}
         {{pass}}
+
+        {{if session.auth:}}
+            {{if session.auth.user.id == article.author:}}
+              {{for li in lis:}}
+                 {{comment_id = li.attributes["_data-cid"]}}
+                 {{if comment_id != article_data.answer:}}
+                     {{li.append(A(iicon("ok"), _title=T("Mark it as the correct answer"), _href=CURL("article", "isanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
+                 {{else:}}
+                     {{li.append(A(iicon("remove"), _title=T("Unmark it as the correct answer"), _href=CURL("article", "isnotanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
+                 {{pass}} 
+              {{pass}}
+            {{pass}}
+        {{pass}}
+
         {{=comments}}
   </div>
 

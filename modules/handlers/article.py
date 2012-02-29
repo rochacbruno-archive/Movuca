@@ -15,6 +15,7 @@ class Article(Base):
         self.db = DataBase([User, UserTimeLine, ContentType, Category, Article, Favoriters, Subscribers, Likers, Dislikers, Comments, CommentVotes])
         from handlers.notification import Notifier
         self.notifier = Notifier(self.db)
+        self.count_votes_results = {}
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -47,6 +48,72 @@ class Article(Base):
         else:
             self.context.related_articles = False
 
+    def count_votes(self, comment_id):
+        if comment_id not in self.count_votes_results:
+            rows = self.context.commentvotes.find(lambda row: row.article_comment_votes.comment_id == comment_id)
+            up = []
+            down = []
+            for row in rows:
+                if row.article_comment_votes.vote == 0:
+                    down.append(row.article_comment_votes.user_id)
+                else:
+                    up.append(row.article_comment_votes.user_id)
+            lenup = len(up)
+            lendown = len(down)
+            count = lenup - lendown
+            self.count_votes_results[comment_id] = dict(up=up, down=down, lenup=lenup, lendown=lendown, count=count)
+        return self.count_votes_results[comment_id]
+
+    def showcomment(self):
+        comment_id = self.request.args(0) or redirect(self.CURL('home', 'index'))
+        comment = self.db.Comments[comment_id]
+        self.context.commentvotes = self.db((self.db.CommentVotes.comment_id == self.db.Comments.id) & \
+                                            (self.db.Comments.id == comment.id)).select()
+        self.context.comments = DIV(
+                  UL(BR(),
+                      *[LI(
+                          DIV(
+                          DIV(
+                            A(iicon('arrow-up'), _class="vote" if self.db.auth.user_id not in self.count_votes(comment.id)["up"] else "vote votedisabled", **{"_data-url": URL('article', 'votecomment', vars=dict(comment=comment.id, vote=1))}),
+                            BR(),
+                            SPAN(self.count_votes(comment.id)["count"], _id="countvote_%s" % comment.id, _class="countvote label label-success" if self.count_votes(comment.id)["count"] > 0 else "countvote label label-important" if self.count_votes(comment.id)["count"] < 0 else  "countvote label label-info"),
+                            BR(),
+                            A(iicon('arrow-down'), _class="vote" if self.db.auth.user_id not in self.count_votes(comment.id)["down"] else "vote votedisabled", **{"_data-url": URL('article', 'votecomment', vars=dict(comment=comment.id, vote=0))}),
+                            _class="comment_vote_buttons span1"
+                            ),
+                          DIV(
+                           H5(
+                              A(
+                                comment.nickname or comment.user_id,
+                               _href=self.CURL('person', 'show', args=comment.nickname or comment.user_id, extension=False),
+                               _class="link_to_user",
+                               **{"_data-id": comment.user_id}
+                               ),
+                              XML("&nbsp;"),
+                              A(
+                                self.db.pdate(comment.commenttime),
+                               _href=self.CURL('article', 'showcomment', args=comment.id, extension=False))
+                             ),
+                            DIV(
+                               XML(comment.comment_text),
+                               **{'_class': 'editable commentitem',
+                                  '_data-object': 'comment',
+                                  '_data-id': comment.id,
+                                  '_id': "comment_%s" % comment.id}
+                             ),
+                            _class="comment_div span10"
+                            ),
+                            _class="row"
+                            ),
+                            _class="comment_li",
+                            **{"_data-cid": comment.id}
+                          ) for comment in [comment]],
+                  **dict(_class="comment_ul")),
+                  _class="internal-comments article-box",
+                  _id="internal-comments"
+
+                  )
+
     def comments(self):
         if not self.context.article:
             self.get()
@@ -65,6 +132,32 @@ class Article(Base):
 
     def comment_disabled(self):
         return " "
+
+    def isanswer(self):
+        empty = [""]
+        self.context.alerts = empty
+        self.context.menus = empty
+        self.context.content_types = empty
+        comment_id = self.request.args(0)
+        comment = self.db.Comments[comment_id]
+        self.context.article = self.db.Article[comment.article_id]
+        if self.context.article and self.context.article.author == self.db.auth.user_id:
+            content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
+            self.context.article_data.update_record(answer=comment_id)
+        redirect(self.request.vars._next)
+
+    def isnotanswer(self):
+        empty = [""]
+        self.context.alerts = empty
+        self.context.menus = empty
+        self.context.content_types = empty
+        comment_id = self.request.args(0)
+        comment = self.db.Comments[comment_id]
+        self.context.article = self.db.Article[comment.article_id]
+        if self.context.article and self.context.article.author == self.db.auth.user_id:
+            content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
+            self.context.article_data.update_record(answer=None)
+        redirect(self.request.vars._next)
 
     def is_lenght(self, form):
         if len(form.vars.comment_text) < 5:
@@ -205,7 +298,7 @@ class Article(Base):
                               XML("&nbsp;"),
                               A(
                                 self.db.pdate(comment.commenttime),
-                               _href=self.CURL('article', 'comment', args=comment.id))
+                               _href=self.CURL('article', 'showcomment', args=comment.id))
                              ),
                             DIV(
                                XML(comment.comment_text),
@@ -218,7 +311,8 @@ class Article(Base):
                             ),
                             _class="row"
                             ),
-                            _class="comment_li"
+                            _class="comment_li",
+                            **{"_data-cid": comment.id}
                           ) for comment in comments],
                   **dict(_class="comment_ul")),
                   edit_in_place[1],

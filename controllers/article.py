@@ -102,10 +102,20 @@ def undislike():
         return article.context.error
 
 
-def comment():
-    # change to show comment
-    article = Article('comments')
-    return article.render("app/article/comment")
+def showcomment():
+    article = Article('showcomment')
+    article.context.left_sidebar_enabled = True
+    return article.render("app/article/showcomment")
+
+
+def isanswer():
+    article = Article('isanswer')
+    return article.render()
+
+
+def isnotanswer():
+    article = Article('isnotanswer')
+    return article.render()
 
 
 def editcomment():

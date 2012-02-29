@@ -1,0 +1,52 @@
+{{extend "bootstrap/app/layout.html"}}
+
+
+{{lis = comments.elements('.comment_li')}}
+{{for li in lis:}}
+   {{li['_class'] += " well"}}
+{{pass}}
+{{comments['_class'] += "row-fluid"}}
+{{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+{{=comments}}
+
+{{article = commentvotes[0].article_comments.article_id}}
+
+<h3>{{=T("Commented on:")}}</h3>
+
+<div class="article-container">
+
+  <div class="row-fluid alert show-article-meta" style="padding:0;">
+      <div class="srow-fluid" style="padding:15px;">    
+        <ul class="thumbnails span2" style="text-align:left;">
+        <li class="author-picture span8">
+                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="thumbnail",_href=CURL('person','show', args=article.author.nickname or article.author))}}
+        </li>
+        </ul>
+        <div class="span10">  
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+        </div>
+        <div class="span10">  
+          <em>
+            {{if article.draft:}}
+                <span class="label label-important">{{=T("Draft")}}</span> 
+            {{pass}}
+            {{if not article.is_active:}}
+                <span class="label label-important">{{=iicon('trash icon-white')}}{{=T("Deleted")}}</span> 
+            {{pass}}
+            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
+              {{=T('in')}} 
+              {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 
+          {{pass}}
+        </div>                
+      </div>
+     
+  </div>
+  <div class="row-fluid show-article-content">
+    <blockquote class="show-article-description span10" style="margin-top:15px;">
+      {{=XML(article.description)}}
+     </blockquote> 
+  </div>  
+</div>
+
+
+
