@@ -128,6 +128,10 @@ def removecomment():
     return ''
 
 
+def removereply():
+    article = Article('removereply')
+    return ''
+
 def removeevent():
     return "alert('ok')"
 

@@ -49,10 +49,17 @@
 
   {{if article_data.answer:}}
       <div class="row-fluid show-article-answer article-box">
-        <h4><i class="icon-ok"></i>{{=T("Correct answer")}}</h4>
+        <h4><i class="icon-ok"></i> {{=T("Correct answer")}}</h4>
         <small>{{=T("The author has choosen this as the correct answer:")}}</small>
+
+        {{if session.auth:}}
+            {{if session.auth.user.id == article.author:}}
+                     {{=A(iicon("remove"),T("Unmark it as the correct answer"), _title=T("Unmark it as the correct answer"), _href=CURL("article", "isnotanswer", args=article_data.answer, extension=False, vars=dict(_next=request.url)))}}
+            {{pass}}
+        {{pass}}
+
       {{=LOAD('article', 'showcomment.load', args=article_data.answer, ajax=True)}}
-    </div>
+      </div>
   {{pass}}
 
   <div class="row-fluid show-article-tags">
@@ -92,10 +99,12 @@
             {{if session.auth.user.id == article.author:}}
               {{for li in lis:}}
                  {{comment_id = li.attributes["_data-cid"]}}
+                 {{div = li.elements(".comment_vote_buttons")[0]}}
+                 {{div.append(BR())}}
                  {{if comment_id != article_data.answer:}}
-                     {{li.append(A(iicon("ok"), _title=T("Mark it as the correct answer"), _href=CURL("article", "isanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
+                     {{div.append(A(iicon("ok"), _title=T("Mark it as the correct answer"), _href=CURL("article", "isanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
                  {{else:}}
-                     {{li.append(A(iicon("remove"), _title=T("Unmark it as the correct answer"), _href=CURL("article", "isnotanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
+                     {{div.append(A(iicon("remove"), _title=T("Unmark it as the correct answer"), _href=CURL("article", "isnotanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
                  {{pass}} 
               {{pass}}
             {{pass}}

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR, TAG
-from gluon.validators import IS_SLUG, IS_IN_DB, IS_EMAIL, IS_LENGTH
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR, TAG, MARKMIN
+from gluon.validators import IS_SLUG, IS_IN_DB, IS_EMAIL
 from helpers.images import THUMB2
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 import os
@@ -215,7 +215,7 @@ class Article(Base):
             if self.request.vars.commentorder == "oldest":
                 orderby = self.db.Comments.created_on
 
-        comment_set = self.db(self.db.Comments.article_id == self.context.article.id)
+        comment_set = self.db((self.db.Comments.article_id == self.context.article.id) & (self.db.Comments.parent_id == None))
         comments = comment_set.select(orderby=orderby, limitby=limitby)
 
         if comments and is_author:
@@ -307,10 +307,15 @@ class Article(Base):
                                   '_data-id': comment.id,
                                   '_id': "comment_%s" % comment.id}
                              ),
+                            DIV(
+                               A(iicon("share-alt"), self.T("reply")),
+                               _class="pull-right reply-button"
+                              ) if self.db.auth.user else DIV(),
                             _class="comment_div span10"
                             ),
                             _class="row"
                             ),
+                            self.get_comment_replies(comment),
                             _class="comment_li",
                             **{"_data-cid": comment.id}
                           ) for comment in comments],
@@ -321,6 +326,40 @@ class Article(Base):
                   _id="internal-comments"
 
                   )
+
+    def get_comment_replies(self, comment):
+        if comment.replies > 0:
+            replies = comment.article_comments.select(orderby=~self.db.Comments.created_on)
+            return DIV(
+                    DIV(H5(self.T("replies (%s)", comment.replies)), _class="span1 comment_replies"),
+                    DIV(
+                       UL(*[LI(
+                               A(
+                                reply.nickname or reply.user_id,
+                               _href=self.CURL('person', 'show', args=reply.nickname or reply.user_id),
+                               _class="link_to_user",
+                               **{"_data-id": reply.user_id}
+                               ),
+                              XML("&nbsp;"),
+                              self.db.pdate(reply.commenttime),
+                              self.remove_reply_button(reply),
+                              BR(),
+                              TAG.blockquote(
+                                  XML(MARKMIN(reply.comment_text)),
+                                  _class="comment_reply_text"
+                              ),
+                              _class="lireply",
+                              ) for reply in replies]),
+                       _class="comment_replies span10 well"),
+                    _class="row"
+                    )
+        else:
+            return ""
+
+    def remove_reply_button(self, reply):
+        user_id = self.db.auth.user_id
+        if (user_id == reply.user_id) or ('admin' in self.db.auth.user_groups) or (user_id == self.context.article.author):
+            return TAG.I(_class="icon-remove remove-reply", **{"_data-url": URL('article', 'removereply', args="reply_%s" % reply.id)})
 
     def editcomment(self):
         user = self.session.auth.user if self.session.auth else None
@@ -338,8 +377,24 @@ class Article(Base):
             comment_id = self.request.args(0).split('_')[1]
             try:
                 comment = self.db.Comments[int(comment_id)]
-                if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author):
+                if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author) or ('admin' in self.db.auth.user_groups):
                     comment.delete_record()
+                    self.db.commit()
+            except:
+                pass
+
+    def removereply(self):
+        user = self.session.auth.user if self.session.auth else None
+        if user:
+            comment_id = self.request.args(0).split('_')[1]
+            try:
+                comment = self.db.Comments[int(comment_id)]
+                parent = self.db.Comments[comment.parent_id]
+                if (comment and user) and (user.id == comment.user_id or user.id == comment.article_id.author) or ('admin' in self.db.auth.user_groups):
+                    comment.delete_record()
+                    self.db.commit()
+                    replies = self.db(self.db.Comments.parent_id == parent.id).count()
+                    parent.update_record(replies=replies)
                     self.db.commit()
             except:
                 pass

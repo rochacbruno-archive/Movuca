@@ -8,6 +8,14 @@ $(document).ready(function () {
         ajax(url,[],':eval');
     });
 
+  $(".remove-reply").click(function(){
+    if (confirm("delete?")) {
+        url = $(this).attr('data-url');
+        ajax(url,[1],'');
+        $(this).parent().hide();
+    }
+  });
+   
   // var loadPhoto=function(hash){ 
   //                          var w = $(window).width()
   //                          var h = $(window).height()
@@ -28,3 +36,14 @@ $(document).ready(function () {
   //                       trigger: '.show-article-content img, .commentitem img',
   //                       onShow:loadPhoto});
 });
+
+
+function removereply(selector) {
+          if (confirm("delete?")) {
+              obj = jQuery('#' + selector);
+              url = obj.attr("data-url");
+              ajax(url+selector,[1],'');
+              obj.hide();
+              return false;
+              }
+      }
