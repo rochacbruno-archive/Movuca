@@ -625,7 +625,7 @@ class Article(Base):
 
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
         self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
-        self.context.article_form = SQLFORM(self.db.article, self.context.article)
+        self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
 
         if self.context.article_form.process().accepted:
@@ -676,7 +676,7 @@ class Article(Base):
         self.db.article.content_type_id.default = content_type.id
         category_set = self.db(self.db.Category.content_type == content_type.id)
         self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s", multiple=True)
-        self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='')
+        self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='', _id="article_form")
         self.context.customfield = customfield
         if self.context.form.process().accepted:
             try:

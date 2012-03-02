@@ -62,11 +62,12 @@
 * config admin
 * admin dashboard
 * board replies
-* comment reply
+
 * opengraph meta tags
 *
 
 ### DONE ###
+
 * change the classes of contact box 
 * better home page 
 * default email templates for all events 
@@ -98,6 +99,7 @@
 * Configurable list widget with tabs (for home page, see globo.com)
 * Questions & Answers
 - comment votes
+* comment reply
 
 ### CANCELED ###
 * menu builder 

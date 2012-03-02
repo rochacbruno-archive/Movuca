@@ -29,6 +29,22 @@ $(document).ready(function () {
 });
 
 
+$(function(){
+  var formObject = $('#article_form');
+  formObject.data('original_serialized_form', formObject.serialize());
+ 
+  $(':submit').click(function() {
+    window.onbeforeunload = null;
+  });
+ 
+  window.onbeforeunload = function() {
+    if (formObject.data('original_serialized_form') !== formObject.serialize()) {
+      return "If you leave the page all your changes will be lost!.";
+    }
+  };
+});
+
+
 function check_check(obj){
     if ($(obj).is(':checked')){
            $('#publish').hide();
