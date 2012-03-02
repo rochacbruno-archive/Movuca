@@ -347,6 +347,8 @@ class Article(Base):
 
     def get_inner_comment_replies(self, comment):
         replies = comment.article_comments.select(orderby=~self.db.Comments.created_on)
+        if not self.context.article:
+            self.context.article_id = comment.article_id
         return CAT(
                   DIV(H5(self.T("replies (%s)", comment.replies)), _class="span1 comment_replies"),
                   DIV(
