@@ -3,7 +3,7 @@ $(document).ready(function () {
      window.location = $(this).attr("data-url");
   });
 
-    $(".vote").click(function(){
+   jQuery(document).on("click", ".vote", function(){ 
         url = $(this).attr('data-url');
         ajax(url,[],':eval');
     });
@@ -33,7 +33,7 @@ $(document).ready(function () {
     }
   });  
 
-  $(".reply-button").click(function(){
+  jQuery(document).on("click", ".reply-button", function(){
     parent_id = $(this).parent().parent().parent().attr('data-cid');
     url = $(this).attr("data-url");
     obj = stringFormat("<div class='reply-form' id='reply-form-{0}'><input type='hidden' id='parent_{0}' name='parent_{0}' value='{0}'/><textarea id='reply_text_{0}' name='reply_text_{0}'></textarea><br/><button class='btn btn-primary submit-reply' data-id='{0}' data-url='{1}'>Ok</button> <button class='btn cancel-reply'>Cancel</button></div>", parent_id, url)

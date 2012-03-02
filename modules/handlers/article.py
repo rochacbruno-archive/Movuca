@@ -101,10 +101,16 @@ class Article(Base):
                                   '_data-id': comment.id,
                                   '_id': "comment_%s" % comment.id}
                              ),
+                            DIV(
+                               A(iicon("share-alt"), self.T("reply")),
+                               _class="pull-right reply-button",
+                               **{"_data-url": URL('article', 'addreply')}
+                              ) if self.db.auth.user else DIV(),
                             _class="comment_div span10"
                             ),
                             _class="row"
                             ),
+                            self.get_comment_replies(comment),
                             _class="comment_li",
                             **{"_data-cid": comment.id}
                           ) for comment in [comment]],
