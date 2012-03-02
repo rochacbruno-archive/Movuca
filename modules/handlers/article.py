@@ -309,7 +309,8 @@ class Article(Base):
                              ),
                             DIV(
                                A(iicon("share-alt"), self.T("reply")),
-                               _class="pull-right reply-button"
+                               _class="pull-right reply-button",
+                               **{"_data-url": URL('article', 'addreply')}
                               ) if self.db.auth.user else DIV(),
                             _class="comment_div span10"
                             ),
@@ -329,32 +330,63 @@ class Article(Base):
 
     def get_comment_replies(self, comment):
         if comment.replies > 0:
-            replies = comment.article_comments.select(orderby=~self.db.Comments.created_on)
             return DIV(
-                    DIV(H5(self.T("replies (%s)", comment.replies)), _class="span1 comment_replies"),
-                    DIV(
-                       UL(*[LI(
-                               A(
-                                reply.nickname or reply.user_id,
-                               _href=self.CURL('person', 'show', args=reply.nickname or reply.user_id),
-                               _class="link_to_user",
-                               **{"_data-id": reply.user_id}
-                               ),
-                              XML("&nbsp;"),
-                              self.db.pdate(reply.commenttime),
-                              self.remove_reply_button(reply),
-                              BR(),
-                              TAG.blockquote(
-                                  XML(MARKMIN(reply.comment_text)),
-                                  _class="comment_reply_text"
-                              ),
-                              _class="lireply",
-                              ) for reply in replies]),
-                       _class="comment_replies span10 well"),
-                    _class="row"
+                     self.get_inner_comment_replies(comment),
+                    _class="row comment_replies_wrapper",
+                    _id="comment_replies_wrapper_%s" % comment.id
                     )
         else:
-            return ""
+            return DIV(_class="row comment_replies_wrapper", _id="comment_replies_wrapper_%s" % comment.id)
+
+    def get_inner_comment_replies(self, comment):
+        replies = comment.article_comments.select(orderby=~self.db.Comments.created_on)
+        return CAT(
+                  DIV(H5(self.T("replies (%s)", comment.replies)), _class="span1 comment_replies"),
+                  DIV(
+                     UL(*[LI(
+                             A(
+                              reply.nickname or reply.user_id,
+                             _href=self.CURL('person', 'show', args=reply.nickname or reply.user_id),
+                             _class="link_to_user",
+                             **{"_data-id": reply.user_id}
+                             ),
+                            XML("&nbsp;"),
+                            self.db.pdate(reply.commenttime),
+                            self.remove_reply_button(reply),
+                            BR(),
+                            TAG.blockquote(
+                                XML(MARKMIN(reply.comment_text)),
+                                _class="comment_reply_text"
+                            ),
+                            _class="lireply",
+                            ) for reply in replies]),
+                     _class="comment_replies span10 well",
+                     _id="comment_replies_%s" % comment.id)
+                   )
+
+    def addreply(self):
+        #<Storage {'reply_text_89': 'ddddddddddddddddddd', 'parent_89': '89'}>
+        text = None
+        parent = None
+        for item, value in self.request.vars.items():
+            if item.startswith("reply_text"):
+                text = value
+            elif item.startswith("parent"):
+                parent = value
+
+        comment = self.db.Comments[parent]
+        if comment:
+            self.db.Comments.validate_and_insert(article_id=comment.article_id,
+                                    user_id=self.db.auth.user_id,
+                                    nickname=self.db.auth.user.nickname,
+                                    parent_id=parent,
+                                    comment_text=text,
+                                    commenttime=self.request.now)
+            self.db.commit()
+            replies = self.db(self.db.Comments.parent_id == comment.id).count()
+            comment.update_record(replies=replies)
+            self.db.commit()
+            self.context.replies = self.get_inner_comment_replies(comment)
 
     def remove_reply_button(self, reply):
         user_id = self.db.auth.user_id

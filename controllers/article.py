@@ -128,6 +128,11 @@ def removecomment():
     return ''
 
 
+def addreply():
+    article = Article("addreply")
+    return article.context.replies
+
+
 def removereply():
     article = Article('removereply')
     return ''

@@ -37,6 +37,22 @@ function append_ajax(u,s,t) {
     jQuery.ajax({type: "POST", url: u, data: query, success: function(msg) { if(t) { if(t==':eval') eval(msg); else jQuery("#" + t).append(msg); } } }); 
 }
 
+function prepend_ajax(u,s,t) {
+    query = '';
+    if (typeof s == "string") {
+        d = jQuery(s).serialize();
+        if(d){ query = d; }
+    } else {
+        pcs = [];
+        if (s !== null && s !== undefined) for(i=0; i<s.length; i++) {
+            q = jQuery("[name="+s[i]+"]").serialize();
+            if(q){pcs.push(q);}
+        }
+        if (pcs.length>0){query = pcs.join("&");}
+    }
+    jQuery.ajax({type: "POST", url: u, data: query, success: function(msg) { if(t) { if(t==':eval') eval(msg); else jQuery("#" + t).prepend(msg); } } }); 
+}
+
 String.prototype.reverse = function () { return this.split('').reverse().join('');};
 function web2py_ajax_fields(target) {
   jQuery('input.integer', target).keyup(function(){this.value=this.value.reverse().replace(/[^0-9\-]|\-(?=.)/g,'').reverse();});
@@ -123,3 +139,17 @@ function web2py_comet(url,onmessage,onopen,onclose) {
   } else return false; // not supported
 }
 
+function stringFormat() {
+      var s = arguments[0];
+      for (var i = 0; i < arguments.length - 1; i++) {       
+          var reg = new RegExp("\\{" + i + "\\}", "gm");             
+          s = s.replace(reg, arguments[i + 1]);
+      }
+      return s;
+};
+
+
+jQuery(document).on("load", "blink", function(){ 
+     jQuery(this).effect("highlight", {}, 3000);
+     //jQuery(this).effect("pulsate", { times:3 }, 2000);
+}); 

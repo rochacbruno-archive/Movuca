@@ -8,42 +8,36 @@ $(document).ready(function () {
         ajax(url,[],':eval');
     });
 
-  $(".remove-reply").click(function(){
+  jQuery(document).on("click", ".submit-reply", function(){ 
+      url = jQuery(this).attr('data-url');
+      parent_id = jQuery(this).attr('data-id');
+      target = stringFormat('comment_replies_wrapper_{0}', parent_id)
+      parent = stringFormat('parent_{0}', parent_id)
+      reply_text = stringFormat('reply_text_{0}', parent_id)
+      ajax(url, [parent, reply_text], target);
+      jQuery(this).parent().remove()
+      return false;
+  }); 
+
+  jQuery(document).on("click", ".cancel-reply", function(){
+    jQuery(this).parent().remove()
+    return false;
+  });
+
+
+  jQuery(document).on("click", ".remove-reply", function(){
     if (confirm("delete?")) {
         url = $(this).attr('data-url');
         ajax(url,[1],'');
         $(this).parent().hide();
     }
+  });  
+
+  $(".reply-button").click(function(){
+    parent_id = $(this).parent().parent().parent().attr('data-cid');
+    url = $(this).attr("data-url");
+    obj = stringFormat("<div class='reply-form' id='reply-form-{0}'><input type='hidden' id='parent_{0}' name='parent_{0}' value='{0}'/><textarea id='reply_text_{0}' name='reply_text_{0}'></textarea><br/><button class='btn btn-primary submit-reply' data-id='{0}' data-url='{1}'>Ok</button> <button class='btn cancel-reply'>Cancel</button></div>", parent_id, url)
+    $(this).parent().append(obj);
   });
    
-  // var loadPhoto=function(hash){ 
-  //                          var w = $(window).width()
-  //                          var h = $(window).height()
-  //                          hash.w.children("img").attr('src', hash.t.src).css({'max-width':w - 100, 'max-height': h - 100})
-  //                          hash.w.css(
-  //                                    {
-  //                                    'width':'auto',
-  //                                    'max-width':w - 100,
-  //                                    'max-height': h - 100,
-  //                                    'top': '5%',
-  //                                    'left': '40%',
-
-  //                                     }
-  //                                     ).show();
-                            
-  //                        }; 
-  // $('#photomodal').jqm({modal: false, 
-  //                       trigger: '.show-article-content img, .commentitem img',
-  //                       onShow:loadPhoto});
 });
-
-
-function removereply(selector) {
-          if (confirm("delete?")) {
-              obj = jQuery('#' + selector);
-              url = obj.attr("data-url");
-              ajax(url+selector,[1],'');
-              obj.hide();
-              return false;
-              }
-      }

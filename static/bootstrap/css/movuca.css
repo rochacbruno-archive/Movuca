@@ -175,3 +175,12 @@ fieldset legend {text-transform:uppercase;
   cursor: pointer;
   margin-left:10px;
 }
+
+.reply-form {
+  margin-top:15px;
+}
+
+.reply-form textarea {
+  width:100%;
+}
+

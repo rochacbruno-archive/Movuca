@@ -244,7 +244,7 @@ class Comments(BaseModel):
         }
 
         self.validators = {
-          "comment_text": IS_LENGTH(1024, 10)
+          "comment_text": IS_LENGTH(1024, 2)
         }
 
 
