@@ -69,6 +69,7 @@ class Article(Base):
         comment = self.db.Comments[comment_id]
         self.context.commentvotes = self.db((self.db.CommentVotes.comment_id == self.db.Comments.id) & \
                                             (self.db.Comments.id == comment.id)).select()
+        self.context.article = comment.article_id
         self.context.comments = DIV(
                   UL(BR(),
                       *[LI(
