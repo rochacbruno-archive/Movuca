@@ -90,7 +90,7 @@ class Article(Base):
                                _class="link_to_user",
                                **{"_data-id": comment.user_id}
                                ),
-                              XML("&nbsp;"),
+                              XML("&nbsp; "),
                               A(
                                 self.db.pdate(comment.commenttime),
                                _href=self.CURL('article', 'showcomment', args=comment.id, extension=False))
@@ -401,6 +401,8 @@ class Article(Base):
         user_id = self.db.auth.user_id
         if (user_id == reply.user_id) or ('admin' in self.db.auth.user_groups) or (user_id == self.context.article.author):
             return TAG.I(_class="icon-remove remove-reply", **{"_data-url": URL('article', 'removereply', args="reply_%s" % reply.id)})
+        else:
+            return ""
 
     def editcomment(self):
         user = self.session.auth.user if self.session.auth else None
