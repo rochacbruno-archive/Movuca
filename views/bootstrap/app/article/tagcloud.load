@@ -50,5 +50,5 @@
            A(tag, _href=CURL('article', 'list', vars={"tag": tag}, extension=False)),
            _class="tag%s" % counter
            ) 
-        for tag, counter in tags.items()])}}
+        for tag, counter in tags.items() if counter > 2])}}
 </div>
