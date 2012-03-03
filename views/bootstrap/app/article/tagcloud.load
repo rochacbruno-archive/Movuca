@@ -31,16 +31,16 @@
     font-size: 120%;
 }
 .tag3 {
-    font-size: 140%;
-}
-.tag4 {
     font-size: 160%;
 }
-.tag5 {
+.tag4 {
     font-size: 180%;
 }
-.tag6 {
+.tag5 {
     font-size: 200%;
+}
+.tag6 {
+    font-size: 220%;
 }
 </style>
 
