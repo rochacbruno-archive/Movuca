@@ -38,7 +38,7 @@ class COMMA_SEPARATED_LIST(object):
 
     def __call__(self, value):
             items = value.strip().replace('\n', '').replace('\t', '').split(self.sep)
-            return ([item.strip() for item in items], None)
+            return ([item.strip().lower() for item in items], None)
 
 
 class IS_EMPTY_OR_MASK_OR(IS_EMPTY_OR):

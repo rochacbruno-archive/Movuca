@@ -46,9 +46,10 @@
 
 
 <div class="tags alert alert-info">
+{{tags_keys = sorted(tags.keys())}}
 {{=UL(*[LI(
            A(tag, _href=CURL('article', 'list', vars={"tag": tag}, extension=False)),
-           _class="tag%s" % counter
-           ) 
-        for tag, counter in tags.items() if counter > 1])}}
+           _class="tag%s" % tags[tag]
+           )
+        for tag in tags_keys if tags[tag] > 1])}}
 </div>
