@@ -44,7 +44,6 @@
 }
 </style>
 
-<!-- git is shit -->
 <div class="tags alert alert-info">
 {{tags_keys = sorted(tags.keys())}}
 {{=UL(*[LI(
