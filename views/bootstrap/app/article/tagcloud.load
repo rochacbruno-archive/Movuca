@@ -44,8 +44,8 @@
 }
 </style>
 
-
-<div class="tags alert alert-info ">
+<!-- git is shit -->
+<div class="tags alert alert-info">
 {{tags_keys = sorted(tags.keys())}}
 {{=UL(*[LI(
            A(tag, _href=CURL('article', 'list', vars={"tag": tag}, extension=False)),
