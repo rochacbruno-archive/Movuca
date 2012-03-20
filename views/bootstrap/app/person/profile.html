@@ -4,8 +4,9 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
 <div class="tabbable">
 
 <ul class="nav nav-tabs">
-	<li class="active"><a href="#1" data-toggle="tab">{{=T("Profile")}}</a></li>
-	<li><a href="#2" data-toggle="tab">{{=T("Notifications")}}</a></li>
+	<li class="active"><a href="#1" data-toggle="tab">{{=iicon('user')}}{{=T("Profile")}}</a></li>
+	<li><a href="#2" data-toggle="tab">{{=iicon('volume-up')}}{{=T("Notifications")}}</a></li>
+	<li><a href="{{=CURL('person', 'account', args='change_password')}}">{{=iicon('key')}}{{=T("Password")}}</a></li>
 </ul>
 	<div class="tab-content">
 		<div class="tab-pane active row-fluid" id="1" style="padding:0;margin:0;padding-bottom:20px;">

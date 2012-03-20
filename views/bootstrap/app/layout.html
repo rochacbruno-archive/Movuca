@@ -15,6 +15,7 @@
 
     <!-- Le styles -->
     <link href="{{=URL('static','bootstrap/css', args='bootstrap.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','bootstrap/css', args='font-awesome.css')}}" rel="stylesheet">
     <link href="{{=URL('static','bootstrap/css', args='movuca.css')}}" rel="stylesheet">
     <style type="text/css">
       body {
@@ -124,6 +125,13 @@ jQuery(function() {
 });
 </script>
 {{pass}}
+
+   <script>
+   $(document).ready(function(){
+      var data;
+      web2py_comet('ws://127.0.0.1:8888/realtime/group',function(e){data=eval('('+e.data+')')});
+   });
+   </script>
 
   </head>
 
@@ -336,11 +344,11 @@ jQuery(function() {
               <li>{{=A(iicon('th'), T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
               <li class="nav-header">Me</li>
               <li>{{=A(iicon('th-large'), T('My profile'), _href=CURL('person', 'show'))}}</li>
-              <li>{{=A(iicon('cog'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
+              <li>{{=A(iicon('cogs'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
               <li>{{=A(iicon('list-alt'), T('My articles (%s)', session.auth.user.articles), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
               <li>{{=A(iicon('pencil'), T('My drafts (%s)', session.auth.user.draft_articles), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
               <li>{{=A(iicon('user'), T('My contacts (%s)', session.auth.user.contacts), _href=CURL('person', 'contacts'))}}</li>
-              <li>{{=A(iicon('off'), T('Logout'), _href=logout_url)}}</li>
+              <li>{{=A(iicon('signout'), T('Logout'), _href=logout_url)}}</li>
             </ul>
           </div><!--/.well -->
             {{else:}}
@@ -377,7 +385,7 @@ jQuery(function() {
                      </form>
                   </div>
               </li>
-              <li><a href="{{=CURL('person', 'account', args='request_reset_password')}}"><i class="icon-asterisk"></i>{{=T("Lost password")}}</a></li>
+              <li><a href="{{=CURL('person', 'account', args='request_reset_password')}}"><i class="icon-key"></i>{{=T("Lost password")}}</a></li>
               <li class=""><a href="{{=CURL('person', 'account', args='register')}}"><i class="icon-user"></i>{{=T("Create your account")}}</a></li>
             </ul>
           </div><!--/.well -->             
