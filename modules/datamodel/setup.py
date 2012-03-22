@@ -53,7 +53,7 @@ class Setup(object):
             Field("registration_requires_invitation", "boolean", notnull=True, default=False),
             Field("server", "string", notnull=True, default="default"),
             Field("sender", "string", notnull=True, default="mail@domain.com"),
-            Field("login", "string", notnull=True, default="teste:1234"),
+            Field("login", "string", notnull=False, default="teste:1234"),
             Field("setuptime", "datetime", notnull=True),
         ]
 
