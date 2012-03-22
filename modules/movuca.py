@@ -142,7 +142,8 @@ class Mailer(Mail):
         Mail.__init__(self)
         self.settings.server = config.mail.server
         self.settings.sender = config.mail.sender
-        self.settings.login = config.mail.login
+        if config.mail.login:
+		self.settings.login = config.mail.login
 
 
 class FormCreator(Crud):
