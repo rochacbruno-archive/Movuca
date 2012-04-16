@@ -8,7 +8,7 @@ from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
 from datamodel.article import Article, ContentType, Category, Favoriters, Subscribers, Likers, Dislikers, Comments
 from datamodel.ads import Ads
 from datamodel.contenttypes import Article as ArticleData
-from datamodel.contenttypes import CookRecipe, CookRecipeBook, CodeRecipe, Product
+from datamodel.contenttypes import CookRecipe, CookRecipeBook, CodeRecipe, Product, Video
 from datamodel.notification import NotificationPermission, Notification, EmailTemplate
 from datamodel.menu import Menu
 db = DataBase([User,
@@ -27,6 +27,7 @@ db = DataBase([User,
                CookRecipeBook,
                CodeRecipe,
                Product,
+               Video,
                Ads,
                NotificationPermission,
                Notification,

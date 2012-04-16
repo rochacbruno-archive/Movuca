@@ -54,6 +54,51 @@ class Question(ContentModel):
         self.db.article.description.widget = ckeditor.widget
 
 
+class Video(ContentModel):
+    tablename = "video_data"
+
+    def set_properties(self):
+        T = current.T
+        self.fields = [
+            Field("video_source", "string", notnull=True),
+            Field("video_embed", "string", notnull=True),
+            Field("video_width", "integer", default=600),
+            Field("video_height", "integer", default=380),
+        ]
+
+        self.labels = {
+            "video_embed": "Video embed link",
+            "video_source": "Youtube or Vimeo?"
+        }
+
+        self.comments = {
+            "video_embed": T("Please insert only the link or code ex: vimeo.com/video/345345435 or 345345435")
+        }
+
+    def set_validators(self):
+        self.db.video_data.video_source.requires = IS_IN_SET(["youtube", "vimeo"])
+
+
+    def set_fixtures(self):
+        ckeditor = CKEditor()
+        self.db.article.description.widget = ckeditor.widget
+        # virtual field <3
+        self.entity.embed_code = Field.Virtual(lambda row: self.get_embed_code(row.video_data.video_source, row.video_data.video_height, row.video_data.video_width, row.video_data.video_embed))
+
+
+    def get_embed_code(self, source, height, width, video):
+        embeds = {
+            "youtube": """<iframe width="%(width)s" height="%(height)s" src="http://www.youtube.com/embed/%(video)s" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>""",
+            "vimeo": """<iframe src="http://player.vimeo.com/video/%(video)s" width="%(width)s" height="%(height)s" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>""",
+        }
+
+        if 'http' in video or 'www' in video:
+            video = video.rstrip("/")
+            video = video.split("/")[-1]
+
+        return embeds.get(source, "ERROR") % locals()
+
+
 class CookRecipe(ContentModel):
     tablename = "cookrecipe_data"
 

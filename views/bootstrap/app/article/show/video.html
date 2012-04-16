@@ -1,0 +1,112 @@
+{{response.files.append(URL('static','bootstrap/js/question_show.js'))}}
+{{extend "bootstrap/app/layout.html"}}
+
+{{block left_sidebar}}
+   {{super}}
+{{end}}
+
+<div class="article-container">
+
+  <div class="row-fluid alert show-article-meta" style="padding:0;">
+      <div class="srow-fluid" style="padding:15px;">    
+        <ul class="thumbnails span2" style="text-align:left;">
+        <li class="author-picture span8">
+                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="thumbnail",_href=CURL('person','show', args=article.author.nickname or article.author))}}
+
+        </li>
+        </ul>
+        <div class="span10">  
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+        </div>
+        <div class="span10">  
+          <em>
+            {{if article.draft:}}
+                <span class="label label-important">{{=T("Draft")}}</span> 
+            {{pass}}
+            {{if not article.is_active:}}
+                <span class="label label-important">{{=iicon('trash icon-white')}}{{=T("Deleted")}}</span> 
+            {{pass}}
+            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
+              {{=T('in')}} 
+              {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 
+          {{pass}}
+        </div>
+        <div class="span10 action_links" style="margin-top:10px;" id="links"> 
+          {{=action_links}}
+        </div>                
+      </div>
+     
+  </div>
+
+  {{include 'bootstrap/app/share_buttons.html'}}
+  {{share()}}
+
+  <div class="row-fluid show-article-content">
+      {{=XML(article_data.embed_code)}} 
+  </div>  
+  
+  <div class="row-fluid show-article-content">
+    <blockquote class="show-article-description span10" style="margin-top:15px;">
+      {{=XML(article.description)}}
+     </blockquote> 
+  </div>  
+
+  <div class="row-fluid show-article-tags">
+       {{if article.tags:}}
+           <i class="icon-tags"></i><em>{{=tagfy(article.tags)}} </em>
+       {{pass}}
+  </div> 
+
+  {{share() if len(article.description) > 1000 else ''}} 
+
+  <div class="row-fluid show-article-comments article-box">
+        {{label = comments.elements('label')}}
+        {{if label:}}
+           {{label[0]["_style"] = "display:none;"}} 
+        {{pass}}  
+        {{comments.elements('img')[0]['_style'] = "display:none"}}
+        {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
+        {{comments.elements('h4')[0]["_style"] = "display:none"}}
+        {{=H4(iicon("question-sign"), T("Comments (%s)", lencomments))}}
+        {{lis = comments.elements('.comment_li')}}
+        {{for li in lis:}}
+          {{comment_id = li.attributes["_data-cid"]}}
+          {{if comment_id != article_data.answer:}}
+              {{li['_class'] += " well"}}
+          {{else:}}
+              {{li['_class'] += " hidden alert alert-success"}}
+          {{pass}}
+        {{pass}}
+        {{comments['_class'] += "row-fluid"}}
+        {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+        {{submit = comments.elements(_type='submit')}}
+        {{if submit:}}
+            {{submit[0]["_value"] = T("Post your answer")}}
+        {{pass}}
+
+        {{if session.auth:}}
+            {{if session.auth.user.id == article.author:}}
+              {{for li in lis:}}
+                 {{comment_id = li.attributes["_data-cid"]}}
+                 {{div = li.elements(".comment_vote_buttons")[0]}}
+                 {{div.append(BR())}}
+                 {{if comment_id != article_data.answer:}}
+                     {{div.append(A(iicon("ok"), _title=T("Mark it as the correct answer"), _href=CURL("article", "isanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
+                 {{else:}}
+                     {{div.append(A(iicon("remove"), _title=T("Unmark it as the correct answer"), _href=CURL("article", "isnotanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
+                 {{pass}} 
+              {{pass}}
+            {{pass}}
+        {{pass}}
+
+        {{=comments}}
+  </div>
+
+    <div class="row-fluid show-article-related article-box">
+    {{if related_articles:}}
+         <h4><i class="icon-magnet"></i>{{=T("Related content")}}</h4>
+        {{=related_articles}}
+    {{pass}}
+  </div>  
+
+</div>
