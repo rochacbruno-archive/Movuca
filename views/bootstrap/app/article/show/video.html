@@ -5,6 +5,13 @@
    {{super}}
 {{end}}
 
+<script>
+  $(document).ready(function(){
+    // Target your .container, .wrapper, .post, etc.
+    $(".video").fitVids();
+  });
+</script>
+
 <div class="article-container">
 
   <div class="row-fluid alert show-article-meta" style="padding:0;">
@@ -41,7 +48,7 @@
   {{include 'bootstrap/app/share_buttons.html'}}
   {{share()}}
 
-  <div class="row-fluid show-article-content">
+  <div class="row-fluid show-article-content video">
       {{=XML(article_data.embed_code)}} 
   </div>  
   

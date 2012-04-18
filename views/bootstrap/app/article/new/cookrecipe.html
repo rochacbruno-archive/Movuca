@@ -12,7 +12,15 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
             <legend>{{=T("The Basics")}}</legend>
             {{=customfield(form, 'title', css=css)}}
             {{=customfield(form, 'description', css=css)}}
+       </fieldset>
+
+    <fieldset class="span11">
+            <legend>{{=T("Video & Picture")}}</legend>
             {{=customfield(form, 'picture', css=css)}}
+            {{=customfield(form, 'video_source', css=css)}}
+            {{=customfield(form, 'video_embed', css=css)}}
+            {{=customfield(form, 'video_embed', css=css)}}
+            {{=customfield(form, 'active_tab', css=css)}}
        </fieldset>
 
        <fieldset class="span11">

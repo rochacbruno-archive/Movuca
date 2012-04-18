@@ -75,3 +75,15 @@ class CookRecipe(Base):
                             _onclick="window.location = '%s';" % URL('person', 'account',
                                  args='login', vars=dict(_next=self.CURL('article', 'show', args=self.request.args(0)))))
         return bt
+
+    def mybook(self):
+        user_id = self.db.auth.user_id
+        if user_id:
+            query = (self.db.CookRecipeBook.user_id == user_id) & (self.db.CookRecipeBook.article_id == self.db.article.id)
+            self.context.mybook = self.db(query).select()
+        elif request.args(0):
+            query = (self.db.CookRecipeBook.user_id == request.args(0)) & (self.db.CookRecipeBook.article_id == self.db.article.id)
+            self.context.mybook = self.db(query).select()
+        else:
+            self.context.mybook = []
+

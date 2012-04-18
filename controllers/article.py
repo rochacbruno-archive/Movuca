@@ -6,7 +6,31 @@ from handlers.article import Article
 def show():
     article = Article('show')
     article.context.left_sidebar_enabled = True
-    return article.render("app/article/show/%s" % article.context.article.content_type_id.viewname)
+    response.title = "test"
+    if request.extension == 'pdf':
+        import os
+        from gluon.contrib.pyfpdf import FPDF, HTMLMixin
+
+        class MyFPDF(FPDF, HTMLMixin):
+            def header(self):
+                logo=os.path.join(request.folder, "uploads", "article.picture.8168969976e73735.3532343536375f3334383232343034383534373831305f3130303030303830363533363631365f3837333137345f313637353535373235315f6e2e6a7067.jpg")
+                self.image(logo, 10, 8, 33)
+                self.set_font('Arial', 'B', 15)
+                self.cell(60, 10, response.title, 1, 0, 'C')
+                self.ln(20)
+            def footer(self):
+                self.set_y(-15)
+                self.set_font('Arial', 'I', 8)
+                txt = 'Page %s of %s' % (self.page_no(), self.alias_nb_pages())
+                self.cell(0, 10, txt, 0, 0, 'C')
+
+        pdf=MyFPDF()
+        pdf.add_page()
+        pdf.write_html(article.render("app/article/show/%s" % article.context.article.content_type_id.viewname))
+        response.headers['Content-Type'] = 'application/pdf'
+        return pdf.output(dest='S')
+    else:
+        return article.render("app/article/show/%s" % article.context.article.content_type_id.viewname)
 
 
 def edit():

@@ -102,6 +102,25 @@ class Video(ContentModel):
 class CookRecipe(ContentModel):
     tablename = "cookrecipe_data"
 
+    def set_fixtures(self):
+        self.entity.embed_code = Field.Lazy(lambda row: self.get_embed_code(row.cookrecipe_data.video_source, row.cookrecipe_data.video_embed))
+
+    def get_embed_code(self, source="vimeo", video=""):
+        width = 500
+        height = 380
+        video = video or ""
+        source = source or "vimeo"
+        embeds = {
+            "youtube": """<iframe width="%(width)s" height="%(height)s" src="http://www.youtube.com/embed/%(video)s" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>""",
+            "vimeo": """<iframe src="http://player.vimeo.com/video/%(video)s" width="%(width)s" height="%(height)s" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>""",
+        }
+
+        if 'http' in video or 'www' in video:
+            video = video.rstrip("/")
+            video = video.split("/")[-1]
+
+        return embeds.get(source, "ERROR") % locals()
+
     def set_properties(self):
         ckeditor = CKEditor()
         T = current.T
@@ -113,6 +132,9 @@ class CookRecipe(ContentModel):
             Field("ingredients", "list:string", notnull=True),
             Field("instructions", "text", notnull=True),
             Field("credits", "text"),
+            Field("video_source", "string"),
+            Field("video_embed", "string"),
+            Field("active_tab", "string", default="photo"),
         ]
 
         self.validators = {
@@ -137,6 +159,9 @@ class CookRecipe(ContentModel):
             "difficulty": T("Difficulty"),
             "servings": T("Servings"),
             "credits": T("credits"),
+            "video_source": T("Video source"),
+            "video_embed": T("Video link or code"),
+            "active_tab": T("By default show video or picture"),
         }
 
         self.comments = {
@@ -147,8 +172,16 @@ class CookRecipe(ContentModel):
             "servings": T("How many portions, plates, cups etc?"),
             "credits": T("Include links, names, books etc."),
             "difficulty": T("Easy, Medium or hard to cook?"),
+            "video_source": T("Is your video hosted at youtube or vimeo? Leave blank if you have no video."),
+            "video_embed": T("Please input only the code or link to the video i.e: http://vimeo.com/454545 or only 454545"),
+            "active_tab": T("Choose what to show or leave photo as default"),
         }
 
+    def set_validators(self):
+        T = current.T
+        self.db.cookrecipe_data.video_source.requires = IS_IN_SET(["youtube", "vimeo"])
+        self.db.cookrecipe_data.active_tab.requires = IS_IN_SET([('photo', T("Picture")),("video", T("Video"))])
+        self.db.cookrecipe_data.active_tab.default = "photo"
 
 class CookRecipeBook(BaseModel):
     tablename = "cookrecipe_book"

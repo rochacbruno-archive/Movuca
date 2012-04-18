@@ -20,3 +20,8 @@ def removefrombook():
 def addtobook():
     cookrecipe = CookRecipe('add_to_book')
     return cookrecipe.add_to_book_button()
+
+def mybook():
+	cookrecipe = CookRecipe('mybook')
+	return cookrecipe.render('app/cookrecipe/mybook')
+    
