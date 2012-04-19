@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>{{=response.meta.title}}</title>
+<style>
+BODY {
+    font-size: 11px;
+    margin: 0.4cm;
+}
+TD {
+    font-family: Verdana,Helvetica,serif;
+    font-size: 11px;
+}
+.tytul {
+    font-size: 20px;
+    font-weight: bold;
+}
+.pod_tytul {
+    font-size: 9px;
+}
+.autor {
+    font-size: 10px;
+}
+div.ng {
+    padding: 7px 7px 7px 50px;
+}
+td.km {
+    border-top-width: 1px;
+}
+td.ng1 {
+    border-bottom: 1px solid #E4CE6A;
+}
+td.ng2 {
+    background-image: url("/obr/t1.gif");
+    border-left: 1px solid #E4CE6A;
+}
+td.ng3 {
+    border-right: 1px solid #E4CE6A;
+}
+td.ng4 {
+    background-image: url("/obr/t3.jpg");
+    border-left: 1px solid #E4CE6A;
+    padding-left: 50px;
+    padding-top: 4px;
+}
+td.rg1 {
+    background-image: url("/obr/srodek_sl.png");
+}
+td.lp1 {
+    border-color: #FFC3AC;
+    border-style: solid;
+    border-width: 1px;
+    padding: 4px;
+}
+td.lp2 {
+    background-image: url("/obr/nagl_gs.png");
+    vertical-align: middle;
+}
+.l-ramka-g {
+    background-color: #FFFFFF;
+    border-top: 1px solid #E4CE6A;
+}
+.blok-gl {
+    background-image: url("/obr/blok_gl.png");
+    font-weight: bold;
+    padding-left: 23px;
+    padding-top: 6px;
+    text-align: center;
+}
+.blok-gp {
+    background-image: url("/obr/blok_gp.png");
+    font-weight: bold;
+    padding-right: 23px;
+    padding-top: 6px;
+    text-align: center;
+}
+.blok-sl {
+    background-image: url("/obr/blok_srl.png");
+    padding: 5px 10px 5px 20px;
+}
+.blok-sp {
+    background-image: url("/obr/blok_srp.png");
+    padding: 5px 20px 5px 10px;
+}
+.blok-dl {
+    background-image: url("/obr/blok_dl.png");
+}
+.blok-dp {
+    background-image: url("/obr/blok_dp.png");
+}
+P {
+    font-size: 11px;
+    margin: 0 4px 8px;
+    text-align: justify;
+    text-indent: 15px;
+    white-space: normal;
+}
+INPUT {
+    font-family: Verdana,Helvetica,serif;
+    font-size: 11px;
+}
+TEXTAREA {
+    font-family: Verdana,Helvetica,serif;
+    font-size: 11px;
+}
+SELECT {
+    font-family: Verdana,Helvetica,serif;
+    font-size: 11px;
+}
+FORM {
+    margin: 0;
+    padding: 0;
+}
+.akt_link {
+    font-weight: bold;
+    text-decoration: none;
+}
+.skladniki {
+    margin-left: 15px;
+}
+.wstep_art {
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 15px;
+}
+.kom {
+    font-weight: bold;
+    margin: 5px;
+    text-align: center;
+}
+.koma {
+    color: #AE2F35;
+    font-weight: bold;
+    margin: 5px;
+    text-align: center;
+}
+.km3 {
+    background-color: #FFF7F4;
+    font-size: 11px;
+}
+.km4 {
+    background-color: #FFE5DC;
+    font-size: 11px;
+    font-weight: bold;
+}
+img {
+    border-width: 0;
+}
+img.rys {
+    border-color: #444444;
+    border-style: solid;
+    border-width: 2px;
+    padding: 1px;
+}
+HR {
+    color: #000000;
+    height: 1px;
+}
+.srodek {
+    padding: 15px;
+}
+A.wyr:link {
+    background: none repeat scroll 0 0 transparent;
+    color: #FF0000;
+    font-size: 11px;
+    text-decoration: none;
+}
+A.wyr:active {
+    background: none repeat scroll 0 0 transparent;
+    color: #000000;
+    font-size: 11px;
+    text-decoration: none;
+}
+A.wyr:visited {
+    background: none repeat scroll 0 0 transparent;
+    color: #000000;
+    font-size: 11px;
+    text-decoration: none;
+}
+A.wyr:hover {
+    background: none repeat scroll 0 0 transparent;
+    color: #FF6A15;
+    font-size: 11px;
+    text-decoration: none;
+}
+.shade {
+    color: #777777;
+}
+.rgl {
+    background-color: #FFF7F4;
+    border-color: #E1CC5F;
+    border-style: solid;
+    border-width: 1px;
+    padding-bottom: 5px;
+    padding-top: 2px;
+}
+td.rgls {
+    background-image: url("/obr/srodek_gs.png");
+    font-weight: bold;
+    padding-top: 5px;
+}
+.ob1 {
+    text-align: right;
+    vertical-align: top;
+    width: 150px;
+}
+.rmk {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+</style>
+</head>
+{{if "print" in request.vars:}}
+<body onLoad="javascript: window.print()">
+{{else:}}
+<body>
+{{pass}}  
+
+<table cellspacing="5" align="center" cellpadding="2" width="500"><tr><td>
+<div class="tytul">{{=article.title}}</div>
+<div class="pod_tytul">{{=T("This is recipe from www.movu.ca")}}.</div>
+</td>
+<td align="right" valign="bottom">
+<div class="autor">{{=T("Recipe submitted by:")}}</div>
+<b>{{="%(first_name)s %(last_name)s (%(nickname)s)" % article.author}}</b><time class="updated" datetime="{{=article.publish_date}}" pubdate>
+              {{=ftime(article.publish_date)}} </time>
+</td>
+</tr>
+<tr><td colspan="2"><hr></td></tr>
+</table>
+
+
+<table align="center" cellspacing=5 cellpadding=2 width="500"><tr>
+<td class="rmk">{{=T("Description")}}:</td>
+</tr>
+<tr><td>
+{{=article.description}}
+</td></tr>
+</table><br>
+
+<table align="center" cellspacing="5" cellpadding="2" width="500"><tr>
+<td colspan="2"  class="rmk">{{=T("Ingredients")}}</td></tr>
+<tr><td valign="top">
+<div class="skladniki">
+  {{for item in article_data.ingredients:}}
+  {{=XML("&bull; ")}}{{=item}} <br>
+  {{pass}}
+</div>
+</td><td class="ob1">
+  {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier), _border=0,_width=267,_id=article.picture,_class="rys")}}
+</td></tr></table>
+<table align="center" cellspacing=5 cellpadding=2 width="500" style="margin-top:5px"><tr>
+<td class="rmk">{{=T("Preparation Instructions")}}</td>
+</tr>
+<tr><td>
+{{=XML(article_data.instructions)}}
+</td></tr></table>
+
+<table align="center" cellspacing=5 cellpadding=2 width="500"><tr>
+<td class="rmk"></td>
+</tr>
+<tr><td>
+Movuca 2012
+</td></tr>
+</table><br>
+
+</body>
+</html>

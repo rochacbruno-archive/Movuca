@@ -1,0 +1,55 @@
+{{left_sidebar_enabled=True}}
+{{extend 'bootstrap/app/layout.html'}}
+
+
+<div class="alert" style="padding-top:5px;margin:5px 0;">
+  <div class="span12 row-fluid" style="padding:15px;">
+              <div class="span2">
+                      <ul class="thumbnails" style="text-align:left;">
+                      <li class="author-picture span8">
+                              {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=user)), _class="thumbnail", _href=CURL('person', 'show', args=user.nickname or user.id))}}
+                      </li>
+                      </ul>
+              </div>
+              <div class="span10">
+                  <div class="span12">
+                      <h2>{{=A(get_name_of(user), _href=CURL('person', 'show', args=user.nickname or user.id))}} - {{=T("Cook Recipe Book")}}</h2>
+                      <em>{{=user.city or ''}} {{=user.country or ''}}</em>  <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
+                      <p>{{=user.tagline or ''}}</p>
+                  </div>
+                  <div class="span4">
+                  <form method="GET">	
+				  {{=CAT(INPUT(_name="q",_id="q", _placeholder=T("Search in this book"), _value=request.vars.q or ""), BR(), TAG.BUTTON(T("Search")))}}
+				  </form>
+				</div>
+				<div class="span5">
+				  <a href="{{=URL('prn', args=request.args, vars=request.vars)}}" class="btn">{{=iicon('print')}}{{=T("Print book")}}</a>
+				  </div> 
+              </div>
+  </div>
+   &nbsp;
+</div>  
+
+{{for recipe in book:}}
+{{article = recipe.article}}
+<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
+    
+    <div class="row list-article-row">
+      <div class="span2" style="padding:10px">
+         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
+         <span class="list-article-like"><i class="icon-leaf"></i>{{=T("%s likes", article.likes or 0)}}</span>
+      </div>
+      <div class="span8" style="padding:10px">
+          {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          <em><span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}} <i class="icon-time"></i> {{=pdate(article.created_on)}}</em> <br />
+          {{if article.tags:}}
+              <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
+          {{pass}}
+          <p class="list-article-description">
+              {{=A("%s ..." % remove_tags(article.description[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          </p>
+
+      </div>
+    </div>
+</div>
+{{pass}}
