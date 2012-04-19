@@ -21,6 +21,8 @@ class CookRecipe(Base):
         self.T = self.db.T
         self.CURL = self.db.CURL
         #self.view = "app/home.html"
+        self.context.content_types = self.context.content_types or self.allowed_content_types()
+
 
     def add_to_book(self):
         user = self.session.auth.user if self.session.auth else None
@@ -76,14 +78,14 @@ class CookRecipe(Base):
                                  args='login', vars=dict(_next=self.CURL('article', 'show', args=self.request.args(0)))))
         return bt
 
-    def mybook(self):
-        user_id = self.db.auth.user_id
+    def book(self):
+        user_id = self.request.args(0) or self.db.auth.user_id
         if user_id:
             query = (self.db.CookRecipeBook.user_id == user_id) & (self.db.CookRecipeBook.article_id == self.db.article.id)
-            self.context.mybook = self.db(query).select()
-        elif request.args(0):
-            query = (self.db.CookRecipeBook.user_id == request.args(0)) & (self.db.CookRecipeBook.article_id == self.db.article.id)
-            self.context.mybook = self.db(query).select()
+            if "q" in self.request.vars:
+                query &= self.db.article.search_index.like("%%%s%%" % self.request.vars.q)  
+            self.context.book = self.db(query).select()
+            self.context.user = self.db.auth_user[user_id]
         else:
-            self.context.mybook = []
+            redirect(self.CURL('home','index'))
 

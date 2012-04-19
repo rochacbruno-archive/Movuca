@@ -34,7 +34,7 @@ class Person(Base):
         self.context.use_facebook = self.db.config.auth.use_facebook
         self.context.use_google = self.db.config.auth.use_google
         self.mail = self.db.auth.settings.mailer
-        self.context.content_types = self.db(self.db.ContentType).select()
+        self.context.content_types = self.allowed_content_types()
 
     def check_if_allowed(self, row):
         if self.db.auth.user_id:

@@ -133,6 +133,10 @@ fieldset legend {text-transform:uppercase;
   width:90%;
  }
 
+.printbutton {
+  width:82%;
+ }
+
  .paginator {
   margin-left:0 !important;
   text-align:center;

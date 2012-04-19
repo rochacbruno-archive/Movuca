@@ -136,6 +136,7 @@ class ContentType(BaseModel):
             Field("tablename", notnull=True),
             Field("viewname", "string"),
             Field("childs", "integer", notnull=True, default=1),
+            Field("access_control", "list:string", default=["public"]),
         ]
 
     def set_fixtures(self):
@@ -150,6 +151,11 @@ class ContentType(BaseModel):
                )
             self.db.commit()
 
+    def set_validators(self):
+        groups = ["public", "admin", "editor", "moderator", "seller", "poweruser"]
+        self.entity.access_control.requires = IS_IN_SET(groups, multiple=True)
+        #self.entity.access_control.default = ["public"]
+        self.entity.access_control.widget = SQLFORM.widgets.checkboxes.widget
 
 class Category(BaseModel):
     tablename = "article_category"

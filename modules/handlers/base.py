@@ -38,6 +38,16 @@ class Base(object):
         for hook in hooks:
             self.__getattribute__(hook)()
 
+    def allowed_content_types(self):
+        if self.db.auth:
+            allowed_types = self.db.auth.user_groups.values()
+            query = (self.db.ContentType.access_control.contains("public"))
+            for content_type in allowed_types:
+                query |= (self.db.ContentType.access_control.contains(content_type))
+            return self.db(query).select()
+        else:
+            return []
+
     def start(self):
         pass
 

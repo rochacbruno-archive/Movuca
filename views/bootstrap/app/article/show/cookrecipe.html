@@ -34,8 +34,10 @@
             {{pass}}
             <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> 
             <time class="updated" datetime="{{=article.publish_date}}" pubdate>
-              {{=ftime(article.publish_date)}}  {{if article.category_id:}}
-            </time> 
+              {{=ftime(article.publish_date)}} </time>
+
+           {{if article.category_id:}}
+             
               {{=T('in')}}             {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 
           {{pass}}
         </div>
@@ -105,8 +107,9 @@
             <li id="addtobookbutton">
                {{=LOAD('cookrecipe','addtobookbutton',args=request.args,ajax=True)}}
             </li>
+            <br><br>
             <li>
-               <button class="btn addtobookbutton">{{=iicon('print')}}{{=T("Print Recipe")}}</button>
+               <a href="{{=URL('prn', args=request.args, vars={'print':'true'})}}" class="btn printbutton">{{=iicon('print')}}{{=T("Print Recipe")}}</a>
             </li>
         </ul>
 

@@ -204,6 +204,7 @@ jQuery(function() {
                       <li>{{=A(T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
                       <li class="divider"></li>
                       <li>{{=A(T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
+                      <li>{{=A(T('My Cook Book'), _href=CURL('cookrecipe', 'book', args=session.auth.user.id))}}</li>
                       <li>{{=A(T('My drafts'), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
                       <li>{{=A(T('My contacts'), _href=CURL('person', 'contacts'))}}</li>
                        <li class="divider"></li>
@@ -340,6 +341,7 @@ jQuery(function() {
               <li>{{=A(iicon('th-large'), T('My profile'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('cogs'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
               <li>{{=A(iicon('list-alt'), T('My articles (%s)', session.auth.user.articles), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
+              <li>{{=A(iicon('book'), T('My Cook Book'), _href=CURL('cookrecipe', 'book', args=session.auth.user.id))}}</li>
               <li>{{=A(iicon('pencil'), T('My drafts (%s)', session.auth.user.draft_articles), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
               <li>{{=A(iicon('user'), T('My contacts (%s)', session.auth.user.contacts), _href=CURL('person', 'contacts'))}}</li>
               <li>{{=A(iicon('signout'), T('Logout'), _href=logout_url)}}</li>

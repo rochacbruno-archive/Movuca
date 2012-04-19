@@ -50,4 +50,5 @@ class Admin(Base):
         self.get_image = self.db.get_image
         self.context.theme_name = self.config.theme.name
         #self.view = "app/home.html"
-        self.context.content_types = self.context.content_types or self.db(self.db.ContentType).select()
+        self.context.content_types = self.context.content_types or self.allowed_content_types()
+
