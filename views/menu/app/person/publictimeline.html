@@ -1,0 +1,36 @@
+{{left_sidebar_enabled=True}}
+{{extend 'menu/app/layout.html'}}
+
+{{include "menu/app/person/privatetimeline_events.html"}}
+
+<div class="alert" style="padding-top:5px;margin:5px 0;">
+<h2>{{=T("Public timeline")}}</h2>
+&nbsp;
+     <a href="{{=CURL('person', 'publictimeline', extension='rss', vars=request.vars, args=request.args)}}" class="pull-right">{{=iicon('signal')}}{{=T("RSS feed")}}</a>
+</div>  
+
+
+{{if events:}}
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div> 
+
+<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+ {{for event in events:}}
+    {{eventbox(event.user_timeline)}}
+ {{pass}}
+</ul>
+
+<div class="span12 pagination pagination-centered" align="center">
+  {{=paginator}}
+</div>
+
+<!--   <a href="{{=CURL('person','publictimeline', extension=False,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a> -->
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

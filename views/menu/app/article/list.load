@@ -1,0 +1,41 @@
+ <script>
+
+ $(document).ready(function () {
+  $(".list-article-wrapper").click(function(){
+     window.location = $(this).attr("data-url");
+  });
+});
+
+</script>
+
+ {{for article in articles:}}
+
+<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px 0;padding:0;">
+    
+    <div class="row list-article-row">
+      <div class="span2" style="padding:10px">
+         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100, _style="max-height:100px;"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
+         <span class="list-article-like"><i class="icon-leaf"></i>{{=T("%s likes", article.likes or 0)}}</span>
+      </div>
+      <div class="span8" style="padding:10px">
+          {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          <em><span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}} <i class="icon-time"></i> {{=pdate(article.created_on)}}</em> <br />
+          {{if article.tags:}}
+              <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
+          {{pass}}
+          <p class="list-article-description">
+              {{=A("%s ..." % remove_tags(article.description[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          </p>
+
+      </div>
+    </div>
+</div>
+
+{{pass}}
+
+{{if articles:}}
+  {{request.vars.limitby = None}}
+  <a href="{{=CURL('article','list', extension=False, vars=request.vars)}}">{{=T("View all articles")}}</a>
+{{else:}}
+  {{=T("This user has no articles.")}}
+{{pass}}

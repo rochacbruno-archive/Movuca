@@ -1,0 +1,60 @@
+{{extend 'menu/app/layout.html'}}
+{{if request.args(0) in ['register', 'profile']:}}
+    <script>
+     jQuery(function(){
+        jQuery('#auth_user_nickname').keyup(function(){
+        	ajax('{{=URL('person','check_availability')}}/nickname/'+jQuery(this).val()+'/{{=request.args(0)}}',[],':eval')
+        });
+        jQuery('#auth_user_email').blur(function(){
+        	ajax('{{=URL('person','check_availability')}}/email/'+jQuery(this).val()+'/{{=request.args(0)}}',[],':eval')
+        });
+     });
+    </script>
+{{pass}}
+
+    {{if 'profile' in request.args:}}
+    	<h2>{{=T("Your settings")}}</h2>
+    {{else:}}
+		<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+		<hr />
+    {{pass}}
+
+
+
+<div id="web2py_user_form">
+	{{submit_button = form.elements(_type="submit")[0]}}
+	{{submit_button['_class'] = "btn btn-primary"}}
+
+
+    {{if 'profile' in request.args:}}
+        {{include "menu/app/person/profile.html"}}
+    {{else:}}
+       {{=form}}
+	   <hr />
+    {{pass}}
+
+	{{if request.args(0) in ['login', 'register'] and use_facebook:}}
+       <a title="{{=T('Enter using facebook account')}}" href="{{=URL('person', 'facebook', args='login')}}" class='zocial facebook'>
+          <span>{{=T('Connect with facebook')}}</span>
+       </a>       
+	{{pass}}
+	{{if request.args(0) in ['login', 'register'] and use_google:}}
+        <a title="{{=T('Enter using google account')}}" href="{{=URL('person', 'google', args='login')}}" class='zocial google'>
+           <span>{{=T('Connect with google')}}</span>
+       </a>      
+	{{pass}}
+	{{if request.args(0)=='login':}}
+		{{if not 'register' in auth.settings.actions_disabled:}}
+			<hr/><a href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>
+		{{pass}}
+		{{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+			<a href="{{=URL(r=request, args='request_reset_password')}}" class="button">{{=T("lost password")}}</a>
+		{{pass}}
+	{{pass}}
+</div>
+
+<script language="javascript">
+<!--
+ jQuery("#web2py_user_form input:visible:enabled:first").focus();
+//-->
+</script> 

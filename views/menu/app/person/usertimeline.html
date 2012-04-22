@@ -1,0 +1,69 @@
+{{left_sidebar_enabled=True}}
+{{extend 'menu/app/layout.html'}}
+
+{{include "menu/app/person/privatetimeline_events.html"}}
+
+<script>
+$(document).ready(function () {
+  $(".removeevent").click(function() {
+      url = $(this).attr('data-url');
+      if (confirm("Delete?")) {
+        ajax(url,[],':eval');
+        //jQuery($(this)).parent().hide();
+        return false;
+        }
+  });
+});
+</script>
+
+<div class="alert" style="padding-top:5px;margin:5px 0;">
+  <div class="span12 row-fluid" style="padding:15px;">
+              <div class="span2">
+                      <ul class="thumbnails" style="text-align:left;">
+                      <li class="author-picture span8">
+                              {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=user)), _class="thumbnail", _href=CURL('person', 'show', args=user.nickname or user.id))}}
+                      </li>
+                      </ul>
+              </div>
+              <div class="span10">
+                  <div class="">
+                      <h2>{{=A(get_name_of(user), _href=CURL('person', 'show', args=user.nickname or user.id))}} - {{=T("Timeline")}}</h2>
+                      <em>{{=user.city or ''}} {{=user.country or ''}}</em>  <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
+                      <p>{{=user.tagline or ''}}</p>
+                      <em  id="relation-text">{{=relation_text}}</em>
+                  </div>
+                  <div class="btn-group">
+                      {{=buttons}}
+                  </div>
+              </div>
+
+  </div>
+  &nbsp;
+     <a href="{{=CURL('person', 'usertimeline', extension='rss', vars=request.vars, args=request.args)}}" class="pull-right">{{=iicon('signal')}}{{=T("RSS feed")}}</a>
+</div>  
+
+<hr />
+{{if events:}}
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div> 
+
+<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+ {{for event in events:}}
+    {{eventbox(event)}}
+ {{pass}}
+</ul>
+
+<div class="span12 pagination pagination-centered" align="center">
+  {{=paginator}}
+</div>
+
+  <!-- <a href="{{=CURL('person','usertimeline', extension=False, args=user.nickname or user.id,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a> -->
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

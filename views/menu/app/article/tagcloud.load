@@ -1,0 +1,54 @@
+<style>
+.tags {
+    float:left;
+    margin-top:10px;
+    padding: 5px;
+}
+.tags ul {
+    margin: 0 0;
+    margin-left: 0;
+    paddind-left:0;
+    text-align: center;
+}
+.tags li {
+    float:left;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+.tags li a {
+    
+    padding: 0 2px;
+    text-decoration: none;
+}
+.tags li a:hover {
+    color: #444;
+}
+.tag1 {
+    font-size: 100%;
+}
+.tag2 {
+    font-size: 120%;
+}
+.tag3 {
+    font-size: 160%;
+}
+.tag4 {
+    font-size: 180%;
+}
+.tag5 {
+    font-size: 200%;
+}
+.tag6 {
+    font-size: 220%;
+}
+</style>
+
+<div class="tags alert alert-info">
+{{tags_keys = sorted(tags.keys())}}
+{{=UL(*[LI(
+           A(tag, _href=CURL('article', 'list', vars={"tag": tag}, extension=False)),
+           _class="tag%s" % tags[tag]
+           )
+        for tag in tags_keys if tags[tag] > 1])}}
+</div>

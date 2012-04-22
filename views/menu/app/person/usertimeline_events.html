@@ -1,0 +1,37 @@
+{{def eventbox(event):}}
+<li class="timeline-item row well" style="padding-top:5px;margin:10px 0;" id="event_{{=event.id}}">
+	{{if session.auth and (session.auth.user.id in [event.created_by]):}}
+	<a class="close removeevent" data-url="{{=URL('person', 'removeevent', args=event.id, extension=False)}}">&times;</a>
+    {{pass}}
+   <div class="row">
+	<div class="span10 timeline-text" style="font-size:14px;line-height:14px;padding:0px;">
+
+        {{if event.event_link_to:}}
+            <a style="text-decoration:none;color:#000;" href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}">
+	            {{=event_info[event.event_type]['title'] % event}}
+	        </a>
+	    {{else:}}
+                {{=event_info[event.event_type]['title'] % event}}
+	    {{pass}}
+	    
+	    <p  onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
+	    {{if 'iconclass' in event_info[event.event_type]:}}
+            <i class="{{=event_info[event.event_type]['iconclass']}}"></i>
+	    {{pass}}
+	    {{=XML(event.event_text)}}
+	    </p>
+	</div>
+	{{if event.event_image_to:}}
+	<div class="span1 omega" style="margin-left:0;">
+	    <a href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}" title="{{=event.event_to}}"><img src="{{=event.event_image_to}}" style="max-height:50px;"></a>
+	</div>
+	{{pass}}
+  </div>
+  <div class="row">
+	<div class="span5" style="text-align:left;font-size:14px;line-height:14px;padding:0px;"><i class="icon-time"></i>{{=pdate(event.created_on)}}</div>
+<!-- 	<div class="span6" style="text-align:right;font-size:14px;line-height:14px;padding:0px;">
+	    <a><i class="icon-share-alt"></i>{{=T('reply')}}</a> | <a><i class="icon-retweet"></i>{{=T('repost')}}</a> | <a><i class="icon-edit"></i>{{=T('edit')}}</a> &nbsp;&nbsp;
+	</div> -->
+  </div>
+</li>
+{{return}}

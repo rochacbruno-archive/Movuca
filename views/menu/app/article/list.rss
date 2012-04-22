@@ -1,0 +1,26 @@
+{{
+###
+# response._vars contains the dictionary returned by the controller action
+# for this to work the action must return something like
+#
+#   dict(title=...,link=...,description=...,created_on='...',items=...)
+#
+# items is a list of dictionaries each with title, link, description, pub_date.
+###
+articles_rss = dict()
+articles_rss['title'] = title
+articles_rss['link'] = CURL('article', 'list', args=request.args, vars=request.vars, extension="rss", host=True, scheme=True) 
+articles_rss['description'] = title
+articles_rss['created_on'] = request.now
+articles_rss['entries'] = [] 
+for article in articles:
+    articles_rss['entries'].append(
+        dict(
+             title=article.title,
+             link=CURL('article', 'show', args=[article.id, article.slug], host=True, scheme=True, extension=False),
+             description="<img src='%s' /><br><p>%s</p><hr>" % (get_image(article.thumbnail, article.content_type_id.identifier, host=True, scheme=True), article.description),
+             created_on=article.created_on,
+        )
+    )
+pass
+from gluon.serializers import rss}}{{=XML(rss(articles_rss))}}

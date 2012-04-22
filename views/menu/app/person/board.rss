@@ -1,0 +1,26 @@
+{{
+###
+# response._vars contains the dictionary returned by the controller action
+# for this to work the action must return something like
+#
+#   dict(title=...,link=...,description=...,created_on='...',items=...)
+#
+# items is a list of dictionaries each with title, link, description, pub_date.
+###
+event_rss = dict()
+event_rss['title'] = get_name_of(user)
+event_rss['link'] = CURL('person', 'show', args=user.nickname or user.id, scheme=True, host=True)
+event_rss['description'] = get_name_of(user)
+event_rss['created_on'] = request.now
+event_rss['entries'] = [] 
+for msg in board:
+    event_rss['entries'].append(
+        dict(
+             title=get_name_of(msg.writer),
+             link=CURL('person', 'board', args=msg.user_id.nickname, vars={'postid': msg.id}, extension=False, scheme=True, host=True),
+             description=str(MARKMIN(msg.board_text)),
+             created_on=msg.created_on or request.now,
+        )
+    )
+pass
+from gluon.serializers import rss}}{{=XML(rss(event_rss))}}

@@ -1,0 +1,62 @@
+{{left_sidebar_enabled=True}}
+{{extend 'menu/app/layout.html'}}
+
+{{include TIMELINEFUNCTIONS}}
+
+<div class="alert" style="padding-top:5px;margin:5px 0;">
+<h2>{{=T("Your contacts timeline")}}</h2>
+</div> 
+
+
+
+<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+<script>
+$(document).ready(function () {
+  $(".removeevent").click(function() {
+      url = $(this).attr('data-url');
+      if (confirm("Delete?")) {
+        ajax(url,[],':eval');
+        //jQuery($(this)).parent().hide();
+        return false;
+        }
+  });
+});
+</script>
+ <li class="timeline-item row well" style="padding-top:5px;margin:0px;">
+    {{=form.custom.begin}}
+       
+        <div class="{{='control-group error' if form.errors else ''}}">
+            <label>{{=form.custom.label.board_text}}</label>
+            <input type="text" placeholder="Type something…" name="board_text" id="user_board_board_text" class="string span12">
+        </div>
+        <!-- label class="checkbox">
+          <input type="checkbox">{{=T("Publish on facebook")}}</label -->
+
+        <button type="submit" class="btn-info btn-large">{{=T("Post")}}</button>
+    
+    {{=form.custom.end}}
+ </li>
+
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div> 
+
+ {{for event in events:}}
+    {{eventbox(event)}}
+ {{pass}}
+</ul>
+
+<div class="span12 pagination pagination-centered" align="center">
+  {{=paginator}}
+</div>
+
+{{if events:}}
+  <!-- <a href="{{=CURL('person','privatetimeline', extension=False,vars=dict(limitby='0,25'))}}">{{=T("View all activities")}}</a> -->
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

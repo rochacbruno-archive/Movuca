@@ -1,0 +1,25 @@
+{{include TIMELINEFUNCTIONS}}
+
+<script>
+$(document).ready(function () {
+  $(".removeevent").click(function() {
+      url = $(this).attr('data-url');
+      if (confirm("Delete?")) {
+        ajax(url,[],':eval');
+        //jQuery($(this)).parent().hide();
+        return false;
+        }
+  });
+});
+</script>
+
+<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+ {{for event in events:}}
+    {{eventbox(event)}}
+ {{pass}}
+</ul>
+{{if events:}}
+  <a href="{{=CURL('person','usertimeline', extension=False, args=user.nickname or user.id,vars=dict())}}">{{=T("View all activities")}}</a>
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

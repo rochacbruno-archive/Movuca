@@ -1,0 +1,95 @@
+{{
+css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error"} 
+}}
+<div class="tabbable">
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#1" data-toggle="tab">{{=iicon('user')}}{{=T("Profile")}}</a></li>
+	<li><a href="#2" data-toggle="tab">{{=iicon('volume-up')}}{{=T("Notifications")}}</a></li>
+	<li><a href="{{=CURL('person', 'account', args='change_password')}}">{{=iicon('key')}}{{=T("Password")}}</a></li>
+</ul>
+	<div class="tab-content">
+		<div class="tab-pane active row-fluid" id="1" style="padding:0;margin:0;padding-bottom:20px;">
+			{{=form.custom.begin}}
+            <fieldset class="span5" style="margin-right:40px;">
+            	{{=customfield(form,'first_name', css=css)}}
+            	{{=customfield(form,'last_name', css=css)}}
+            	{{=customfield(form,'nickname', css=css)}}
+            	{{=customfield(form,'tagline', css=css)}}
+            	{{=customfield(form,'about', css=css)}}
+            	{{=customfield(form,'birthdate', css=css)}}
+            	{{=customfield(form,'website', css=css)}}
+            	{{=customfield(form,'extra_links', css=css)}}
+
+            </fieldset>
+             <fieldset class="span5">
+             	{{=customfield(form,'privacy',css=css)}}
+             	{{=customfield(form,'email',css=css)}}
+             	{{=customfield(form,'twitter',css=css)}}
+             	{{=customfield(form,'facebook',css=css)}}
+             	{{=customfield(form,'photo_source',css=css)}}
+             	{{=customfield(form,'avatar',css=css)}}
+            	{{=customfield(form,'gender',css=css)}}
+            	{{=customfield(form,'languages',css=css)}}
+            	{{=customfield(form,'city', css=css)}}
+            	{{=customfield(form,'country', css=css)}}
+            </fieldset>
+             <fieldset class="span12">
+             	<button class="btn btn-primary btn-large" style="width:100%">{{=T("Save changes")}}</button>
+             </fieldset>
+
+
+			{{=form.custom.end}}
+		</div>
+		<div class="tab-pane" id="2">
+			   <div class="alert">
+			   	 {{=T("Choose how do you want to get notifications")}}
+			   </div>
+			    <table class="table table-striped table-bordered table-condensed">
+			    <thead>
+					<tr>
+						<th>{{=iicon('question-sign')}}{{=T("When someone")}}</th>
+						<th>{{=iicon('exclamation-sign')}}{{=T("Site notification")}}</th>
+						<th>{{=iicon('envelope')}}{{=T("Email notification")}}</th>
+					</tr>
+				</thead>
+				<tbody>
+                {{for permission in permissions:}}
+					<tr id="row_{{=permission.id}}">
+					  <td>{{=permission_events[permission.event_type] % ("", "")}}</td>
+					  <td id="cel_site_{{=permission.id}}">
+					  	<button id="site_{{=permission.id}}" data-loading-text="loading" class="notificationpermission {{='btn btn-success' if 'site' in permission.way else 'btn btn-danger'}}" data-url="{{=URL('person', 'notificationpermission', args=[permission.id, 'site', 'disable' if 'site' in permission.way else 'enable'])}}">
+					  		{{=iicon('ok' if 'site' in permission.way else 'off')}}
+					  		{{=T('Enabled' if 'site' in permission.way else 'Disabled')}}
+                        </button>
+					  </td>
+					  <td id="cel_email_{{=permission.id}}">
+					  	<button id="email_{{=permission.id}}" data-loading-text="loading" class="notificationpermission {{='btn btn-success' if 'email' in permission.way else 'btn btn-danger'}}" data-url="{{=URL('person', 'notificationpermission', args=[permission.id, 'email', 'disable' if 'email' in permission.way else 'enable'])}}">
+					  		{{=iicon('ok' if 'email' in permission.way else 'off')}}
+					  		{{=T('Enabled' if 'email' in permission.way else 'Disabled')}}
+					  	</button>
+					  </td>
+					</tr>
+                {{pass}}
+                </tbody>
+                </table>
+		</div>
+	</div>
+</div>
+<script>
+jQuery(document).on("click", ".notificationpermission", function(){ 
+        url = jQuery(this).attr('data-url');
+    	target = jQuery(this).parent().attr("id");
+    	ajax(url,[],target);
+    	return false;
+
+}); 
+// jQuery(function() {
+//     jQuery(".notificationpermission").click(function(){
+//     	url = jQuery(this).attr('data-url');
+//     	target = jQuery(this).parent().attr("id");
+//     	ajax(url,[],target);
+//     	return false;
+//     });
+// });
+</script>

@@ -1,0 +1,55 @@
+{{response.files.append(URL('static','menu/js/article_list.js'))}}
+{{extend "menu/app/layout.html"}}
+
+<h3>{{=T("Search in articles")}}</h3>
+
+{{form.append(CAT(BR(), BUTTON(T("Find"), _class="btn btn-success")))}}
+{{=form}}
+
+{{if results:}}
+  <h3>{{=T("Results")}}</h3> 
+  {{if len(content_types) > 1:}}
+    {{=T("Filter")}}: 
+    {{=A(T("All"), _href=CURL("article","search", args=request.args, vars=dict([(k,v) for k, v in request.vars.items() if k != "content_type_id"])))}}
+    {{=CAT(*[A(" | ", T(content_type.title), _href=CURL("article","search", args=request.args, vars=dict(content_type_id=content_type.id, **dict([(k,v) for k, v in request.vars.items() if k != "content_type_id"])))) for content_type in content_types])}}
+{{pass}}
+
+
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div>  
+
+{{for article in results:}}
+<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
+    
+    <div class="row list-article-row">
+      <div class="span2" style="padding:10px">
+         {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
+         <span class="list-article-like"><i class="icon-leaf"></i>{{=T("%s likes", article.likes or 0)}}</span>
+      </div>
+      <div class="span8" style="padding:10px">
+          {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          <em><span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}} <i class="icon-time"></i> {{=pdate(article.created_on)}}</em> <br />
+          {{if article.tags:}}
+              <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
+          {{pass}}
+          <p class="list-article-description">
+              {{=A("%s ..." % article.description[:150], _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          </p>
+
+      </div>
+    </div>
+</div>
+
+  {{pass}}
+
+  <div class="span12 pagination pagination-centered" align="center">
+      {{=paginator}}
+  </div>
+
+{{pass}}  

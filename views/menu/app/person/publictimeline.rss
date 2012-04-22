@@ -1,0 +1,28 @@
+{{
+###
+# response._vars contains the dictionary returned by the controller action
+# for this to work the action must return something like
+#
+#   dict(title=...,link=...,description=...,created_on='...',items=...)
+#
+# items is a list of dictionaries each with title, link, description, pub_date.
+###
+event_rss = dict()
+event_rss['title'] = str(T("Public timeline"))
+event_rss['link'] = CURL('person', 'publictimeline', scheme=True, host=True)
+event_rss['description'] =  str(T("Public timeline"))
+event_rss['created_on'] = request.now
+event_rss['entries'] = [] 
+for event_ in events:
+    event = event_.user_timeline
+    event_rss['entries'].append(
+        dict(
+             title=event_info[event.event_type]['title'] % event,
+             link=request.env.http_host + event_info[event.event_type]['url_to'] + "/" + event.event_link_to,
+             description=event.event_text or '',
+             created_on=event.created_on or request.now,
+        )
+    )
+pass
+print event_rss
+from gluon.serializers import rss}}{{=XML(rss(event_rss))}}

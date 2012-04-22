@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>{{=response.meta.title or request.application}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="">
+    <meta name="author" content="">
+     <meta name="application-name" content="{{=request.application}}" />
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="{{=URL('static','menu/css', args='bootstrap.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','menu/css', args='font-awesome.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','menu/css', args='movuca.css')}}" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="{{=URL('static','menu/css', args='bootstrap-responsive.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','menu/css', args='calendar.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','menu/css', args='custom-theme/jquery-ui-1.8.16.custom.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','menu/css', args='jquery.tagit.css')}}" rel="stylesheet">
+    <link href="{{=URL('static','css', args='zocial.css')}}" rel="stylesheet">
+    
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="{{=URL('static','menu/favicon.ico')}}" type="image/x-icon">
+
+  
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{=URL('static', 'menu/js')}}/jquery.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/jquery.fitvids.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-transition.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-alert.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-modal.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-dropdown.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-scrollspy.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-tab.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-tooltip.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-popover.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-button.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-collapse.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-carousel.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap-typeahead.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/calendar.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/jquery-ui-1.8.17.custom.min.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/web2py.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/bootstrap.js"></script>
+    <script src="{{=URL('static', 'menu/js')}}/tag-it.js"></script>
+    {{include 'menu/app/web2py_ajax.html'}}
+
+
+    <script type="text/javascript">
+
+    {{if session.auth and session.auth.user:}}
+    $(document).ready(function () {
+       ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+    });
+
+    (function poll(){
+       setTimeout(function(){
+          ajax($("#notification-dialog").attr("data-counter-url"),[],"notification-counter");
+          poll();
+      }, 30000);
+    })();
+    {{pass}}
+  </script>
+
+   {{
+  # using sidebars need to know what sidebar you want to use
+  left_sidebar_enabled = globals().get('left_sidebar_enabled',False)
+  right_sidebar_enabled = globals().get('right_sidebar_enabled',False)
+  middle_columns = {0:'span12',1:'',2:'span9'}[
+     (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
+  header_enabled = globals().get('header_enabled',False)
+  }}
+
+  <script type="text/javascript">
+  // var uvOptions = {};
+  // (function() {
+  //   var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+  //   uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/xI7XaFvYY317GCzbHNxDQ.js';
+  //   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  // })();
+
+var _ues = {
+host:'movuca.userecho.com',
+forum:'10714',
+category:null,
+lang:'en',
+tab_corner_radius:6,
+tab_font_size:16,
+tab_image_hash:'RmVlZGJhY2s%3D',
+tab_alignment:'right',
+tab_text_color:'#FFFFFF',
+tab_bg_color:'#080707',
+tab_hover_color:'#857D7D'
+};
+
+(function() {
+    var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+    _ue.src = ('https:' == document.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
+  })();
+
+</script>
+
+{{if request.controller in ['article'] and request.function in ['show', 'edit']:}}
+<link type="text/css" rel="stylesheet" href="{{=URL('static','plugin_ckeditor')}}/plugins/insertcode/styles/prettify.css"/>
+<script type="text/javascript" src="{{=URL('static','plugin_ckeditor')}}/plugins/insertcode/styles/prettify.js"></script>
+
+<script type="text/javascript">
+jQuery(function() {
+   prettyPrint();
+});
+</script>
+{{pass}}
+
+  </head>
+
+  <body>
+
+    <div id="notification-dialog" title="Notifications" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
+
+{{if request.controller in ['article'] and request.function in ['show']:}}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=133622423420992";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+{{pass}}
+
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{{=CURL('home', 'index')}}" style="padding-bottom:0;padding-top:5px;"><img src="{{=URL('static', 'images', args='minilogo_white.png')}}" style="max-height:30px;"></a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              {{if session.auth:}}
+              {{
+              logout_url = CURL('person', 'account', args='logout')
+              if session.facebooklogin:
+                  logout_url = CURL('person', 'facebook', args='logout')
+              elif session.googlelogin:
+                  logout_url = CURL('person', 'google', args='logout')
+              pass
+              }}
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T('Create')}}<b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      {{for content_type in content_types:}}
+                          <li>{{=A(T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
+                      {{pass}} 
+                      <li class="divider"></li>
+                      <li>{{=A(T('Status update'), _href=CURL('person', 'board'))}}</li>
+<!--                       <li class="divider"></li>
+                      <li>{{=A(T('Group'), _href=CURL('group', 'new'))}}</li>
+                      <li>{{=A(T('Page'), _href=CURL('page', 'new'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
+                      <li>{{=A(T('Bundle'), _href=CURL('bundle', 'new'))}}</li> -->
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T('Explore')}}<b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>{{=A(T('Find articles'), _href=CURL('article', 'search'))}}</li>
+                      <li>{{=A(T('Find members'), _href=CURL('person', 'search'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('All articles'), _href=CURL('article', 'list'))}}</li>
+                      <li>{{=A(T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T('Me')}}<b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>{{=A(T('My profile'), _href=CURL('person', 'show'))}}</li>
+                      <li>{{=A(T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
+                      <li class="divider"></li>
+                      <li>{{=A(T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
+                      <li>{{=A(T('My Cook Book'), _href=CURL('cookrecipe', 'book', args=session.auth.user.id))}}</li>
+                      <li>{{=A(T('My drafts'), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
+                      <li>{{=A(T('My contacts'), _href=CURL('person', 'contacts'))}}</li>
+                       <li class="divider"></li>
+                      <li>{{=A(T('Logout'), _href=logout_url)}}</li>
+                     
+                  </ul>
+                </li>
+
+                {{for item in get_menu(menus, 2):}}
+                {{submenu = get_menu(menus, 2, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} logged-in-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
+                  </a>
+                  
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}   
+
+              {{if 'admin' in session.auth.user_groups.values():}}   
+                {{for item in get_menu(menus, 3):}}
+                {{submenu = get_menu(menus, 3, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} admin-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
+                  </a>
+                  
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}
+              {{pass}}   
+
+                <li><a href="#notification" id="notification-opener" title="{{=T('notifications')}}"><i class="icon-white icon-envelope"></i> (<span id="notification-counter"></span>)</a></li>
+                
+              {{else:}}
+                <li><a href="{{=CURL('person', 'account', args='login')}}">{{=T("Login")}}</a></li>
+                <li><a href="{{=CURL('person', 'account', args='register')}}">{{=T("Register")}}</a></li>
+
+                {{for item in get_menu(menus, 1):}}
+                {{submenu = get_menu(menus, 1, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} logged-out-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
+                  </a>
+                  
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}  
+
+              {{pass}}
+
+                {{for item in get_menu(menus, 4):}}
+                {{submenu = get_menu(menus, 4, item.id)}}
+                <li class="{{='dropdown' if submenu else ''}} logged-in-menu">
+                  <a href="{{=get_menu_link(item)}}" class="dropdown-toggle" data-toggle="dropdown">
+                      {{=T(item.title)}}{{if submenu:}}<b class="caret"></b>{{pass}}
+                  </a>
+                  
+                  {{if submenu:}}
+                  <ul class="dropdown-menu">
+                      {{for subitem in submenu:}}
+                      <li>{{=A(T(subitem.title), _href=get_menu_link(subitem))}}</li>
+                      {{pass}}
+                  </ul>
+                  {{pass}}
+                </li>
+                {{pass}}  
+
+            </ul>
+                <form class="navbar-search pull-right" method="GET" action="{{=CURL('home','search')}}">
+                  <select name="kind" class="search-query span2" id="kind"><option value="article">Articles</option><option value="user">Users</option></select>
+                  <input type="text" class="search-query" placeholder="{{=T('Type word or name to find')}}" name="q" id="q">
+                  <input type="submit" class="search-query" value="{{=T('Search')}}">  
+                </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        
+        {{if left_sidebar_enabled:}}
+        <div class="span3 mobilehidden">
+          {{block left_sidebar}}
+          {{if session.auth:}}
+          <div class="well sidebar-nav">
+          <div style="margin:20px;"> 
+            <ul class="thumbnails">
+              <li class="span3">
+                <a class="thumbnail" href="{{=CURL('person', 'show', args=session.auth.user.nickname)}}">
+                  {{=IMG(_src=get_image(None, 'user', themename='bootstrap', user=session.auth.user))}}
+                </a>
+                {{=A(session.auth.user.nickname, _href=CURL('person', 'show', args=session.auth.user.nickname))}}
+              </li>
+            </ul> 
+          </div>
+
+            <ul class="nav nav-list">
+              <li class="nav-header">Create</li>
+              <!-- <li class="active"><a href="#"><i class="icon-star"></i> Home</a></li> -->
+              {{for content_type in content_types:}}
+                  <li>{{=A(iicon('list-alt'), T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
+              {{pass}}
+              <li>{{=A(iicon('comment'), T('Status update'), _href=CURL('person', 'board'))}}</li>
+          <!--<li>{{=A(iicon('list-alt'), T('Group'), _href=CURL('group', 'new'))}}</li>
+              <li>{{=A(iicon('list-alt'), T('Page'), _href=CURL('page', 'new'))}}</li>
+              <li>{{=A(iicon('list-alt'), T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
+              <li>{{=A(iicon('list-alt'), T('Bundle'), _href=CURL('bundle', 'new'))}}</li> -->
+              <li class="nav-header">Explore</li>
+              <li>{{=A(iicon('search'), T('Find articles'), _href=CURL('article', 'search'))}}</li>
+              <li>{{=A(iicon('user'), T('Find members'), _href=CURL('person', 'search'))}}</li>
+              <li>{{=A(iicon('list'), T('All articles'), _href=CURL('article', 'list'))}}</li>
+              <li>{{=A(iicon('th'), T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
+              <li class="nav-header">Me</li>
+              <li>{{=A(iicon('th-large'), T('My profile'), _href=CURL('person', 'show'))}}</li>
+              <li>{{=A(iicon('cogs'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
+              <li>{{=A(iicon('list-alt'), T('My articles (%s)', session.auth.user.articles), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
+              <li>{{=A(iicon('book'), T('My Cook Book'), _href=CURL('cookrecipe', 'book', args=session.auth.user.id))}}</li>
+              <li>{{=A(iicon('pencil'), T('My drafts (%s)', session.auth.user.draft_articles), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
+              <li>{{=A(iicon('user'), T('My contacts (%s)', session.auth.user.contacts), _href=CURL('person', 'contacts'))}}</li>
+              <li>{{=A(iicon('signout'), T('Logout'), _href=logout_url)}}</li>
+            </ul>
+          </div><!--/.well -->
+            {{else:}}
+            <div class="well sidebar-nav ">
+            <ul id="usersidebar" class="nav nav-list">
+              <li class="nav-header">{{=T("Connect!")}}</li>
+              <li>
+                  <div>
+                        {{if use_facebook:}}
+                               <a title="{{=T('Enter using facebook account')}}" href="{{=URL('person', 'facebook', args='login')}}" class='zocial facebook '>
+                                  <span>Facebook</span>
+                               </a>     
+                         {{pass}}
+                         {{if use_google:}}
+                               <a title="{{=T('Enter using google account')}}" href="{{=URL('person', 'google', args='login')}}" class='zocial google '>
+                                   <span>Google</span>
+                               </a>     
+                         {{pass}}
+                         <br/><br/>
+                     <form action="{{=URL('person', 'loginbare')}}" method="post">
+                         {{if 'loginerror' in request.args:}}
+                            <label style="color:red;">{{=T("Username or password incorrect")}}</label>
+                         {{pass}}
+                         <div class="input-prepend">
+                         <span class="add-on"><i class="icon-envelope"></i></span>
+                         <input required='required' type="text" name="email" id="email" placeholder="{{=T('your email')}}" {{response.write("value=%s" % request.args(0) if request.args(1) == 'loginerror' else '')}}  style="width:70%"/>
+                         </div>
+                         <div class="input-prepend">
+                         <span class="add-on"><i class="icon-lock"></i></span>
+                         <input required='required' type="password" name="password" id="password" placeholder="{{=T('your password')}}"  style="width:70%"/>
+                         </div>
+                         <button class="btn">{{=T("Go")}}</button> 
+
+                     </form>
+                  </div>
+              </li>
+              <li><a href="{{=CURL('person', 'account', args='request_reset_password')}}"><i class="icon-key"></i>{{=T("Lost password")}}</a></li>
+              <li class=""><a href="{{=CURL('person', 'account', args='register')}}"><i class="icon-user"></i>{{=T("Create your account")}}</a></li>
+            </ul>
+          </div><!--/.well -->             
+            {{pass}}
+          {{end}}
+        </div><!--/span-->
+        {{pass}}
+        
+        {{master_columns = "span12" if not any([left_sidebar_enabled,right_sidebar_enabled]) else 'span9'}}
+        <div class="{{=master_columns}}"> <!--master-->
+
+      {{if header_enabled:}}
+         {{block header}}  
+          <div class="hero-unit">
+            <h1>Hello, world!</h1>
+            <p>This is a template for a simple marketing or 
+informational website. It includes a large callout called the hero unit 
+and three supporting pieces of content. Use it as a starting point to 
+create something more unique.</p>
+            <p><a class="btn btn-primary btn-large">Learn more »</a></p>
+          </div>
+         {{end}}
+      {{pass}}
+
+
+          <div class="row-fluid">
+
+            <div class="{{=middle_columns}}">
+
+            {{if alerts:}}
+            <div class="fade in alert alert-info">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                {{for alert in alerts:}}
+                <p>{{=alert}}</p>
+                {{pass}}
+            </div>
+            {{pass}}
+  
+            {{block center}}
+              {{include}}
+            {{end}}
+            </div><!--/span-->
+
+            {{if right_sidebar_enabled:}}
+            <div class="span3">
+              {{block right_sidebar}}
+              <h3>Right Sidebar</h3>
+              <p></p>
+              {{end}}
+            </div><!--/span-->
+            {{pass}}
+             
+          </div><!--/row-->
+          
+        </div><!--/span--><!--/master-->
+      </div><!--/row-->
+
+      <hr>
+      
+      {{block footer}}
+      <footer>
+        <p>© 2012 - Open Source Software (LGPLv3) <a target="_blank" class="zocial primary pull-right" href="http://www.web2py.com" style="margin-left:10px;"><span>web2py powered</span></a><a target="_blank" class="zocial github pull-right" href="http://github.com/rochacbruno/Movuca" style="margin-left:10px;"><span>Fork me on Github</span></a><a target="_blank" class="zocial paypal pull-right" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rochacbruno%40gmail%2ecom&lc=BR&item_name=Movuca%20Social%20CMS&no_note=0&currency_code=BRL&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest"><span>Donate with Paypal</span></a></p>
+      </footer>
+      {{end}}
+
+    </div><!--/.fluid-container-->
+  
+
+</body></html>

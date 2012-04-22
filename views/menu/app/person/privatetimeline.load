@@ -1,0 +1,40 @@
+{{include TIMELINEFUNCTIONS}}
+
+
+
+<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+<script>
+$(document).ready(function () {
+  $(".removeevent").click(function() {
+      url = $(this).attr('data-url');
+      if (confirm("Delete?")) {
+        ajax(url,[],':eval');
+        //jQuery($(this)).parent().hide();
+        return false;
+        }
+  });
+});
+</script>
+ <li class="timeline-item row well" style="padding-top:5px;margin:0px;">
+    {{=form.custom.begin}}
+       
+        <div class="{{='control-group error' if form.errors else ''}}">
+            <label>{{=form.custom.label.board_text}}</label>
+            <input type="text" placeholder="Type something…" name="board_text" id="user_board_board_text" class="string span12">
+        </div>
+        <!-- label class="checkbox">
+          <input type="checkbox">{{=T("Publish on facebook")}}</label -->
+
+        <button type="submit" class="btn-info btn-large">{{=T("Post")}}</button>
+    
+    {{=form.custom.end}}
+ </li>
+ {{for event in events:}}
+    {{eventbox(event)}}
+ {{pass}}
+</ul>
+{{if events:}}
+  <a href="{{=CURL('person','privatetimeline', extension=False,vars=dict())}}">{{=T("View all activities")}}</a>
+{{else:}}
+  {{=T("No events on this timeline")}}
+{{pass}}

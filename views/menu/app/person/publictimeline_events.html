@@ -1,0 +1,11 @@
+{{def eventbox(event):}}
+<li class="timeline-item row four columns" style="padding-top:5px;margin:0px;" onclick="window.location='{{=event_info[event.event_type]['url']}}/{{=event.event_link}}'">
+	<div class="one columns alpha">
+	    <img width="30" height="30" src="{{=event.event_image}}">
+	</div>
+	<div class="three columns omega timeline-text" style="font-size:12px;line-height:12px;padding:0px;">
+	    {{=event_info[event.event_type]['title'] % event}}
+	</div>
+	<div class="three columns" style="text-align:right;font-size:12px;line-height:12px;padding:0px;">{{=pdate(event.created_on)}}</div>
+</li>
+{{return}}

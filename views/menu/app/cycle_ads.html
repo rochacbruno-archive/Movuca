@@ -1,0 +1,82 @@
+<script>
+$(document).ready(function(){
+	$('.cycle-ads').cycle({ 
+	    fx:     'turnDown', 
+	    timeout: 3000, 
+	    prev:   '#btn_prev', 
+        next:   '#btn_next',
+	    // after:   onAfter 
+	});
+});
+</script>
+<style>
+.cycle-ads {  
+/*    height:  220px;  
+    width:   280px;  */
+    padding: 0;  
+    margin:  0; 
+    margin-left:30px; 
+} 
+ 
+.cycle-ads img {  
+    padding: 5px;  
+    /*border:  1px solid #ccc;  */
+    /*background-color: #eee;  */
+    width:  250px; 
+    height: 220px; 
+/*    top:  0; 
+    left: 0 */
+} 
+
+#ad_bar {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    height: 12px;
+    width:250px;
+    padding-bottom: 4px;
+    position: absolute;
+    top:5px;
+    right:15px;
+    z-index: 1000;
+}
+#ad_bar #title {
+  display: inline-block;
+  vertical-align: top;
+  font-size:12px;
+}
+#ad_bar #link {
+  color: lightblue;
+  cursor: pointer;
+  font-size:12px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#ad_bar #btn_next, #ad_bar #btn_prev {
+  cursor: pointer;
+  display: inline-block;
+  height: 12px;
+  margin-left: 5px;
+  width: 10px;
+}
+#ad_bar #btn_prev {
+  margin-left: 50px;
+}
+</style>
+
+    <div id="ad_bar">
+		  
+		    <div id="title">{{=T("Advertising")}} - </div>
+			<div onclick="javascript:window.open('{{=CURL('contact','ads')}}')" id="link">{{=T("Announce here")}}</div>
+			
+			<div style="background:url({{=URL('static','%s/images' % theme_name, args='btn_voltar.png')}})" id="btn_prev"></div>
+			<div style="background:url({{=URL('static','%s/images' % theme_name , args='btn_avancar.png')}})" id="btn_next"></div>
+			
+	</div>
+
+<div class="cycle-ads"> 
+
+    {{for ad in ads:}}
+        <a href="{{=ad.link}}"><img src="{{=get_image(ad.thumbnail, 'ad')}}" width="200" height="200" /></a> 
+    {{pass}}
+</div>

@@ -1,0 +1,15 @@
+<div class="span4 featuredmembers">    
+    <h6 class="span row-fluid">
+      {{=T("Featured members")}}
+     </h6>
+ <ul class="thumbnails">
+
+ {{for member in featured_members:}}   
+    <li class="span ">
+        {{=A(IMG(_style="width:60px;height:60px;max-width:92px;max-height:92px",_src=get_image(None, 'user', themename='bootstrap', user=member)), _class="thumbnail memberpicture",_href=CURL('person','show', args=member.nickname or member.id), _title=get_name_of(member),**{"_data-content": member.tagline or member.about})}}
+    </li>
+
+{{pass}}
+
+  </ul>
+</div>

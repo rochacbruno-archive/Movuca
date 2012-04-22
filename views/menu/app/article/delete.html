@@ -1,0 +1,50 @@
+{{response.files.append(URL('static','menu/js/article_show.js'))}}
+{{extend "menu/app/layout.html"}}
+
+{{block left_sidebar}}
+   {{super}}
+{{end}}
+
+<div class="article-container">
+
+  <div class="row-fluid alert show-article-meta" style="padding:0;">
+      <div class="srow-fluid" style="padding:15px;">    
+        <ul class="thumbnails span2" style="text-align:left;">
+        <li class="author-picture span8">
+                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="thumbnail",_href=CURL('person','show', args=article.author.nickname or article.author))}}
+        </li>
+        </ul>
+        <div class="span10">  
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+        </div>
+        <div class="span10">  
+          <em>
+            {{if article.draft:}}
+                <span class="label label-important">{{=T("Draft")}}</span> 
+            {{pass}}
+            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
+              {{=T('in')}} 
+              {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 
+          {{pass}}
+        </div>         
+        <blockquote class="show-article-description span10" style="margin-top:15px;">
+              <p>{{=article.description}}</p>
+        </blockquote>
+      
+      </div>
+     
+  </div>
+
+  <div class="well">
+    
+    <form method="POST" action="">
+        <h3>{{=iicon('trash')}}{{=T("are you sure you want to send this %s to the trash?", article.content_type_id.title)}}</h3>
+
+        <a href="{{=CURL('article', 'show', args=request.args, vars=request.vars)}}" class="btn btn-primary">{{=iicon('arrow-left icon-white')}} {{=T("cancel")}}</a>
+        <input type="hidden" id="confirmation" name="confirmation" value="1"> 
+        <button class="btn btn-danger">{{=iicon('trash icon-white')}} {{=T("ok delete it")}}</button>
+    
+    </form>  
+
+  </div>  
+</div>

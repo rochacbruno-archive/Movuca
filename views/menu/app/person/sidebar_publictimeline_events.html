@@ -1,0 +1,28 @@
+{{def eventbox(event):}}
+<li class="timeline-item row well" style="padding-top:5px;margin:10px 0;" onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
+<div class="row-fluid">
+	<div class="span2" style="margin-right:0;">
+	    <a href="{{=event_info[event.event_type]['url']}}/{{=event.event_link}}" title="{{=event.nickname}}"><img  src="{{=event.event_image}}" style="max-height:50px;"></a>
+	</div>
+	<div class="span6 timeline-text" style="font-size:12px;line-height:12px;padding:0px;text-align:center;">
+		
+	    <p  onclick="window.location='{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}'">
+	    {{if 'iconclass' in event_info[event.event_type]:}}
+            <i class="{{=event_info[event.event_type]['iconclass']}}"></i>
+	    {{pass}}
+	    {{=event_info[event.event_type]['smalltitle']}}
+	    </p>
+	</div>
+	{{if event.event_image_to:}}
+	<div class="span2" style="margin-left:0;">
+	    <a href="{{=event_info[event.event_type]['url_to']}}/{{=event.event_link_to}}" title="{{=event.event_to}}"><img src="{{=event.event_image_to}}" style="max-height:50px;"></a>
+	</div>
+	{{pass}}
+</div>
+
+<div class="row-fluid" style="margin:0;padding:0;">
+	<div class="" style="text-align:right;font-size:12px;line-height:12px;padding:0px;"><i class="icon-time"></i>{{=pdate(event.created_on)}} &nbsp;&nbsp;&nbsp;</div>
+</div>
+
+</li>
+{{return}}

@@ -1,0 +1,9 @@
+
+{{lis = comments.elements('.comment_li')}}
+{{for li in lis:}}
+   {{li['_class'] += " alert alert-success"}}
+{{pass}}
+{{comments['_class'] += "row-fluid"}}
+{{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+{{=comments}}
+

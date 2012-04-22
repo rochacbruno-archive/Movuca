@@ -1,0 +1,62 @@
+{{extend "menu/app/layout.html"}}
+{{block left_sidebar}}
+    {{super}}
+{{end}}
+
+{{
+css={"main": "well span5", "img": "span", "div": "four columns"}    
+}}
+
+{{following_set = [person for person in following if person.followed not in contacts_list]}}
+{{followers_set = [person for person in followers if person.follower not in contacts_list]}}
+
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+
+            <li class="active"><a href="#1" data-toggle="tab">{{=iicon('user')}}{{=T("Contacts (%s)", len(contacts))}}</a></li>
+
+            <li><a href="#2" data-toggle="tab">{{=iicon('arrow-right')}}{{=T("Following (%s)", len(following_set))}}</a></li>
+
+            <li><a href="#3" data-toggle="tab">{{=iicon('arrow-left')}}{{=T("Followers (%s)", len(followers_set))}}</a></li>
+            <li><a href="{{=CURL('person', 'contacts', args=request.args, vars={'refresh':1})}}">{{=iicon('refresh')}}{{=T("Refresh")}}</a></li>
+
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="1">
+            <div class="row-fluid" id="contact-wrapper">
+                <h4>{{=T("Contacts")}}</h4>
+                <h6>{{=T("Following each other")}}</h6>
+                <hr />
+                {{for contact in contacts:}}
+                    {{=contact_box(contact, 'contact',  css=css, themename="bootstrap")}}
+                {{pass}}
+
+            </div>
+        </div>
+        <div class="tab-pane" id="2">
+            
+            <div class="row-fluid" id="following-wrapper">
+                <h4>{{=T("Following")}}</h4>
+                 <hr />
+                {{for followed in following_set:}}
+                    {{=contact_box(followed, 'followed', where=" ",  css=css, themename="bootstrap")}}
+                {{pass}}
+            </div>
+        </div>
+        <div class="tab-pane" id="3">
+           
+            <div class="row-fluid" id="follower-wrapper">
+             <h4>{{=T("Followers")}}</h4>
+              <hr />
+                {{for follower in followers_set:}}
+                    {{=contact_box(follower, 'follower', where='contact',  css=css, themename="bootstrap")}}
+                {{pass}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,132 @@
+{{response.files.append(URL('static','menu/js/product_show.js'))}}
+{{extend "menu/app/layout.html"}}
+
+{{block left_sidebar}}
+   {{super}}
+{{end}}
+
+<div class="article-container">
+
+  <div class="row-fluid alert show-article-meta" style="padding:0;">
+      <div class="srow-fluid" style="padding:15px;">    
+        <ul class="thumbnails span2" style="text-align:left;">
+        <li class="author-picture span8">
+                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="thumbnail",_href=CURL('person','show', args=article.author.nickname or article.author))}}
+        </li>
+        </ul>
+        <div class="span10">  
+          {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
+        </div>
+        <div class="span10">  
+          <em>
+            {{if article.draft:}}
+                <span class="label label-important">{{=T("Draft")}}</span> 
+            {{pass}}
+            {{if not article.is_active:}}
+                <span class="label label-important">{{=iicon('trash icon-white')}}{{=T("Deleted")}}</span> 
+            {{pass}}
+            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> {{=ftime(article.publish_date)}}  {{if article.category_id:}}
+              {{=T('in')}}             {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 
+          {{pass}}
+        </div>
+        <div class="span10 action_links" style="margin-top:10px;" id="links"> 
+          {{=action_links}}
+        </div>                
+      </div>
+     
+  </div>
+
+  {{include 'menu/app/share_buttons.html'}}
+  {{#share()}}
+  
+<div class="row-fluid show-article-description">      
+    <div class="show-article-description article-box">
+            {{=H4(iicon('gift'), T("Product Description"))}}
+      <blockquote class="show-article-description span10" style="margin-top:15px;">
+            <p>{{=article.description}}</p>
+      </blockquote>
+    </div>
+</div>  
+
+ <div class="row-fluid show-article-content">   
+
+
+
+       <div class="span4 alert-info cook-recipe-information" style="margin:0;padding:10px 0;margin-left:0px;">
+
+        <!-- Lockerz Share BEGIN -->
+          <ul>
+            <li>
+            {{include 'menu/app/share_buttons.html'}}
+            {{share(classes="cook-recipe-share", columns="", like=False, tweet=False)}}
+            </li>
+          </ul>
+          <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+          <!-- Lockerz Share END -->
+         {{product_size = dict([("L", T("Large")), ("M", T("Medium")), ("S", T("Small"))])}}
+         {{icons=dict(fproduct_size=iicon("resize-horizontal"), manufacturer=iicon("flag"), in_stock=iicon('th'), price=iicon('barcode'))}}
+         {{article_data.fproduct_size = product_size[article_data.product_size]}}
+         {{fields=[(T("Product Size"),'fproduct_size'), (T("Manufacturer"),'manufacturer'), (T("In Stock"),'in_stock'), (T("Price"),'price')]}}
+         {{=UL(*[LI(icons[field], SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields], _class="recipe-labels")}}
+         <ul class="btn-group">
+            <li>
+              {{incart = 10}}
+              <span class="label label-info incartinfo">
+               <a href="{{=URL('product', 'cart')}}" style="color:#fff;text-decoration:none;  ">{{=T("(%s) in your cart", incart)}}</a>
+              </span>
+             </li> 
+            <li>
+              <form method="post" action="{{=URL('product', 'addtocart')}}">
+                <label for="quant">{{=T("Quantity")}}</label> 
+                <input class="span1" id="quant" name="quant" type="number" min="1" max="20" step="1" value="1" required="true" />
+                <input type="hidden" id="id" name="id"  value="{{=article.id}}" />  
+                <br/>
+                <button class="btn btn-success addtocartbutton" data-url="{{=URL('product', 'addtocart')}}">
+                  <i class="icon-shopping-cart icon-white"></i> add to cart &raquo;
+                </button>
+              </form>
+            </li>
+        </ul>
+       
+       </div>
+
+       {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="span7 recipephoto")}}
+
+ </div>
+
+ <div class="row-fluid show-article-content"> 
+
+       <div class="span12 alpha article-box"> 
+          {{=H4(iicon('folder-close'), T("Specifications"))}}
+          {{=XML(article_data.info)}}
+       </div>
+
+ </div>
+
+  <div class="row-fluid show-article-tags">
+       {{if article.tags:}}
+           <i class="icon-tags"></i><em>{{=tagfy(article.tags)}} </em>
+       {{pass}}
+  </div> 
+
+ {{share()}}
+
+  <div class="row-fluid show-article-related article-box">
+    {{if related_articles:}}
+         <h4><i class="icon-magnet"></i>{{=T("Related articles")}}</h4>
+        {{=related_articles}}
+    {{pass}}
+  </div>  
+
+  <div class="row-fluid show-article-comments article-box">
+        {{comments.elements('img')[0]['_style'] = "display:none"}}
+        {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
+        {{lis = comments.elements('.comment_li')}}
+        {{for li in lis:}}
+           {{li['_class'] += " well"}}
+        {{pass}}
+        {{comments['_class'] += "row-fluid"}}
+        {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+        {{=comments}}
+  </div>    
+</div>
