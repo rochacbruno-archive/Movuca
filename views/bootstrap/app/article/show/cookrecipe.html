@@ -18,7 +18,7 @@
       <div class="srow-fluid" style="padding:15px;">    
         <ul class="thumbnails span2" style="text-align:left;">
         <li class="author-picture span8">
-                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="",_href=CURL('person','show', args=article.author.nickname or article.author))}}
+                {{=A(IMG(_src=get_image(None, 'user', themename='bootstrap', user=article.author)), _class="thumbnail",_href=CURL('person','show', args=article.author.nickname or article.author))}}
         </li>
         </ul>
         <div class="span10">  
