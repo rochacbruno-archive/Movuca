@@ -5,13 +5,34 @@
  <div class="row-fluid hero-unit header" style="padding:0px;">
     <div style="padding:15px;">
     {{include "menu/app/featured_slider.html"}}
-    {{include "menu/app/featured_members.html"}}
+    <div class="span4 featuredmembers">
+    <h6>
+      {{=T("Produto em destaque")}}
+     </h6>
+    </div>
+    <div class="span4 featuredmembers">
+    <h6>
+      {{=T("Featured members")}}
+     </h6>
+    </div>
     </div>
 </div>
 {{end}}
 
+ {{block left_sidebar}}
+     {{super}}
+     <div class="well featured-members">
+     {{include "menu/app/featured_members.html"}}
+     </div>
 
-{{if session.auth:}}
+      <h5 class="well" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">ATIVIDADES RECENTES</h5>
+     {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
+
+
+     <div class="fb-like-box" data-href="http://www.menuvegano.com.br" data-width="194" data-show-faces="true" data-stream="true" data-header="true"></div>
+ {{end}}
+
+{{if session.auth and 1==2:}}
   <h4 class="bottom-line">
       <i class="icon-th-list"></i>
       {{=T("Your Feed")}}
@@ -26,10 +47,10 @@
       {{=T("Content")}}
   </h4>
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load')}}">{{=T("All")}}</a></li>
+      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5'))}}">{{=T("All")}}</a></li>
       {{for i, content_type in enumerate(content_types):}}
           {{if i <= 1:}}
-          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id})}}">{{=T(content_type.title)}}</a></li>
+          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id,'limitby':'0,5'})}}">{{=T(content_type.title)}}</a></li>
           {{pass}}
       {{pass}}
       {{if len(content_types) > 2:}}
@@ -42,23 +63,35 @@
                   <ul class="dropdown-menu">
                     {{for i, content_type in enumerate(content_types):}}
                          {{if i > 1:}}
-                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id})}}">{{=T(content_type.title)}}</a></li>
+                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id, 'limitby':'0,5'})}}">{{=T(content_type.title)}}</a></li>
                          {{pass}}
                     {{pass}}
  
                   </ul>
               </li>
       {{pass}}
+      <li><a class="noaction" data-toggle="tab" href="" onclick="return false;"><input class="article-search" data-url="{{=CURL('article','list.load')}}" placeholder="{{=T('Search')}}" type="text" id="sq" name="sq" style="margin:0px"></a></li>
     </ul> 
     <script>
     $(function () {
       $('.tabs a:last').tab('show')
 
       $('a[data-toggle="tab"]').on('show', function (e) {
+         if ($(e.target).hasClass("noaction")){
+          return false;
+         }
          e.target; // activated tab
          e.relatedTarget; // previous tab
          url = $(e.target).attr("href");
          web2py_ajax_page("GET", url, "", "content-placeholder")
+      })
+
+
+      $('.article-search').on('keyup', function (e) {
+        elem = $(".article-search");
+        sq = elem.val();
+        url = elem.attr("data-url");
+        web2py_ajax_page("GET", url + "?sq=" + sq + "&limitby=0,5" , "", "content-placeholder")
       })
     })
     </script>
@@ -67,19 +100,29 @@
       margin-top: -15px;
     }
     </style>
-    {{=LOAD('article','list.load',vars=dict(limitby='0,10'), ajax=True, target="content-placeholder")}}
+    {{=LOAD('article','list.load',vars=dict(limitby='0,5'), ajax=True, target="content-placeholder")}}
 
 <!-- /content tabs -->
 
 {{block right_sidebar}}
-      <h4 class="bottom-line">
-      <i class="icon-volume-up"></i>
-      {{=T("Public Feed")}}
-  </h4>
-    {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
 
-    <br/>
-        <h4 class="bottom-line">
+  <div class="well participe">
+    <img width="40" style="margin-left:-15px;float:right;margin-right:10px;" src="{{=URL('static', 'menu', args=['images','kitchen','espatula.png'])}}">
+    <h3> Participe!</h3>
+    <p>
+      <a>Envie sua receita e promova o <strong>veg</strong>etari<strong>anismo!</strong></a>
+    </p> 
+  </div>
+  <div class="well">
+    <h5> Batata </h5>
+    <img width="100" height="100" style="max-height:100px;" src="/demo/default/download/article.picture.956a3186ee6ae7b1.3330353433355f313535373630393931373934305f313736363033383834345f3734373636345f3333323233313536395f6e2e6a7067_thumb.jpg">
+    <p>Mistura tudo e come com pão....</p>
+  </div>
+  <div class="well">
+   <h5>RECEITAS POPULARES</h5>
+  </div>
+  <div class=""></div>
+          <h4 class="bottom-line" style="clear:left;">
       <i class="icon-tag"></i>
       {{=T("Tags")}}
   </h4>

@@ -96,9 +96,9 @@ fieldset legend {text-transform:uppercase;
   padding: 1px 3px 2px;
   font-size: 9.75px;
   font-weight: bold;
-  color: #ffffff;
+  color: #444444;
   text-transform: uppercase;
-  background-color: #3a87ad;
+  background-color: #AFBFA0;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -153,6 +153,7 @@ fieldset legend {text-transform:uppercase;
 
 .comment_replies{
   margin-top:15px;
+  background-color:#fff;
 }
 .comment_replies ul {
   list-style:none;
@@ -161,6 +162,7 @@ fieldset legend {text-transform:uppercase;
 
 .lireply {
   margin-bottom:10px;
+  border-bottom:1px dashed #ccc;
 }
 
 .comment_replies h5 {
@@ -188,3 +190,39 @@ fieldset legend {text-transform:uppercase;
   width:100%;
 }
 
+.navbar-search .search-query {
+
+border:none;
+color:#444444;
+
+}
+
+.btn-info, .btn-primary {
+
+background-color:#BB2244;
+
+  }
+
+.navbar .nav .dropdown-toggle .caret, .navbar .nav .open.dropdown .caret {
+    border-top-color: #000;
+}
+
+.hero-unit {
+    background-color: #E4EFDA;
+
+    }
+
+
+.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+    background-color: #A1C98D;
+    color: #FFFFFF !important;
+    text-decoration: none;
+}
+
+.featured-members ul li a, .memberpicture{
+   padding:2px;
+}
+
+.featured-members .thumbnails > li {
+  margin-left:20px;
+}

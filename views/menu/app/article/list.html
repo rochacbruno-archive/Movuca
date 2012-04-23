@@ -1,6 +1,6 @@
 {{response.files.append(URL('static','menu/js/article_list.js'))}}
 {{extend "menu/app/layout.html"}}
-<div class="alert" style="padding-top:5px;margin:5px 0;">
+<div class="well" style="padding-top:5px;margin:5px 0;">
 <h3>{{=title}}</h3>
 {{if len(content_types) > 1:}}
     {{=T("Filter")}}: 

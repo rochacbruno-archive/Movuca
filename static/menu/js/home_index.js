@@ -5,5 +5,5 @@ $(document).ready(function () {
 
   $('.carousel').carousel();
 
-  $('.memberpicture').popover({"placement": "left"});
+  $('.memberpicture').popover({"placement": "top"});
 });

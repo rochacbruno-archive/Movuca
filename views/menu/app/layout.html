@@ -134,14 +134,16 @@ jQuery(function() {
     <div id="notification-dialog" title="Notifications" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
 
 {{if request.controller in ['article'] and request.function in ['show']:}}
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=133622423420992";
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=213390132110106";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+
 {{pass}}
 
 
@@ -153,7 +155,11 @@ jQuery(function() {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="{{=CURL('home', 'index')}}" style="padding-bottom:0;padding-top:5px;"><img src="{{=URL('static', 'images', args='minilogo_white.png')}}" style="max-height:30px;"></a>
+          <a class="brand" href="{{=CURL('home', 'index')}}" style="padding-bottom:0;padding-top:5px;">
+
+            <img src="{{=URL('static', 'menu', args='melancia.png')}}" style="max-height:30px;">
+            
+          </a>
           <div class="nav-collapse">
             <ul class="nav">
               {{if session.auth:}}
@@ -165,6 +171,7 @@ jQuery(function() {
                   logout_url = CURL('person', 'google', args='logout')
               pass
               }}
+                <li><a href="{{=CURL('home', 'index')}}">Home</a></li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       {{=T('Create')}}<b class="caret"></b>
@@ -303,6 +310,14 @@ jQuery(function() {
     </div>
 
     <div class="container-fluid">
+      <div class="row-fluid logobar">
+        <div class="span3 mobilehidden">
+           <img src="/demo/static/menu/logo.png">
+        </div>
+        <div class="span9">
+
+        </div>  
+       </div> 
       <div class="row-fluid">
         
         {{if left_sidebar_enabled:}}
@@ -349,6 +364,14 @@ jQuery(function() {
           </div><!--/.well -->
             {{else:}}
             <div class="well sidebar-nav ">
+            <div>
+             <img width="50" style="margin-left:15px;float:left;margin-right:10px;" src="{{=URL('static', 'menu', args=['images','kitchen','luva.png'])}}">
+
+             <h3> Bem Vindo!</h3>
+             <p>
+               <a href="{{=CURL('person', 'account', args='register')}}">Faça parte de nossa comunidade de culinária <strong>veg</strong>etari<strong>an</strong>a!</a>
+             </p>
+            </div>
             <ul id="usersidebar" class="nav nav-list">
               <li class="nav-header">{{=T("Connect!")}}</li>
               <li>
@@ -391,7 +414,10 @@ jQuery(function() {
         {{pass}}
         
         {{master_columns = "span12" if not any([left_sidebar_enabled,right_sidebar_enabled]) else 'span9'}}
-        <div class="{{=master_columns}}"> <!--master-->
+        
+
+
+        <div class="{{=master_columns}} master_content"> <!--master-->
 
       {{if header_enabled:}}
          {{block header}}  

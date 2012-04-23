@@ -747,7 +747,7 @@ class Article(Base):
     def list(self):
         denied_fields = ['limitby', 'orderby', 'tag', 'category', 'or',
                           'page', 'paginate', 'draft', 'favorite', 'like',
-                          'dislike', 'subscribe', 'comment', 'thrash']
+                          'dislike', 'subscribe', 'comment', 'thrash','sq']
 
         self.context.title = str(self.db.T("Articles "))
         queries = []
@@ -757,6 +757,9 @@ class Article(Base):
             if field == 'tag':
                 queries.append(self.db.Article.tags.contains(value))
                 self.context.title += str(self.db.T("tagged with %s ", value))
+            if field == 'sq':
+                queries.append(self.db.Article.search_index.like("%%%s%%" % value))
+                self.context.title += str(self.db.T("containing: %s ", value))
             if field == 'category':
                 try:
                     cat_qry = self.db.Article.category_id.contains(int(value))
