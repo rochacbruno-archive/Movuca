@@ -226,3 +226,17 @@ background-color:#BB2244;
 .featured-members .thumbnails > li {
   margin-left:20px;
 }
+
+.carousel-caption {
+    /*background: none repeat scroll 0 0 rgba(51, 68, 34, 0.75);*/
+    background: none repeat scroll 0 0 rgba(237, 242, 225, 0.55);
+
+    }
+
+
+.mobilehidden .well {
+    background-image: url("/demo/static/menu/logodoido.png");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: 150px auto;
+}
