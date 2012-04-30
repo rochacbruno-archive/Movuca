@@ -282,3 +282,11 @@ hr {
     border-width: 3px 0 1px;
     margin: 18px 0;
 }
+
+.collapsed {
+  display:none;
+}
+
+.uncollapsed {
+  display:normal;
+}

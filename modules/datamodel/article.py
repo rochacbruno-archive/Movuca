@@ -53,11 +53,11 @@ class Article(BaseModel):
         }
 
         self.visibility = {
-                     'author': (False, True),
+                     #'author': (False, True),
                      'author_nickname': (False, True),
                      "content_type": (False, False),
                      "search_index": (False, False),
-                     "publish_date": (False, False),
+                     #"publish_date": (False, False),
                      "publish_tz": (False, False),
                      "content_type_id": (False, True),
                      "likes": (False, True),
@@ -98,7 +98,7 @@ class Article(BaseModel):
           "title": IS_NOT_EMPTY(),
           "description": IS_NOT_EMPTY(),
           "picture": IS_EMPTY_OR(IS_IMAGE()),
-          "license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
+          #"license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
           #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True),
           "tags": COMMA_SEPARATED_LIST()
         }

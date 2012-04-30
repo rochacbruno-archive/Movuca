@@ -33,15 +33,17 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
             {{=customfield(article_form, 'category_id', css=css)}}
             {{=customfield(article_form, 'tags', css=css)}}
         </fieldset>
-
+    
+        {{if user_is("admin"):}}       
         <fieldset class="span11">
             <legend>{{=T("options")}}</legend>
             {{#=customfield(article_form, 'privacy', css=css)}}
-            {{=customfield(article_form, 'license', css=css)}}
-
-            
+            {{#=customfield(article_form, 'license', css=css)}}
+            {{=customfield(article_form, 'featured', css=css)}}
+            {{=customfield(article_form, 'publish_date', css=css)}}
+            {{=customfield(article_form, 'author', css=css)}}
         </fieldset>
-
+        {{pass}}
         <fieldset class="span11">
             <legend>{{=T("Save")}}</legend>
             {{=customfield(article_form, 'draft', css=css)}}

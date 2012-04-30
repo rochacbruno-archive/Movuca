@@ -80,6 +80,12 @@ def has_permission_to_edit(record):
     return record.author == userid
 
 
+def user_is(group="admin"):
+    try:
+        return group in session.auth.user_groups.values()
+    except:
+        return False
+
 c = 1
 
 

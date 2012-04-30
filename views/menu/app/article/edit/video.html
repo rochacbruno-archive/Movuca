@@ -56,13 +56,16 @@ pass
             {{=customfield(article_form, 'tags', css=css)}}
         </fieldset>
 
-        <fieldset class="span11" style="display:none;">
+        {{if user_is("admin"):}}       
+        <fieldset class="span11">
             <legend>{{=T("options")}}</legend>
             {{#=customfield(article_form, 'privacy', css=css)}}
-            {{=customfield(article_form, 'license', css=css)}}
-
-            
+            {{#=customfield(article_form, 'license', css=css)}}
+            {{=customfield(article_form, 'featured', css=css)}}
+            {{=customfield(article_form, 'publish_date', css=css)}}
+            {{=customfield(article_form, 'author', css=css)}}
         </fieldset>
+        {{pass}}
 
         <fieldset class="span11">
             <legend>{{=T("Save")}}</legend>

@@ -179,9 +179,23 @@ class CookRecipe(ContentModel):
 
     def set_validators(self):
         T = current.T
-        self.db.cookrecipe_data.video_source.requires = IS_IN_SET(["youtube", "vimeo"])
-        self.db.cookrecipe_data.active_tab.requires = IS_IN_SET([('photo', T("Picture")),("video", T("Video"))])
+        self.db.cookrecipe_data.video_source.requires = IS_EMPTY_OR(IS_IN_SET(["youtube", "vimeo"]))
+        self.db.cookrecipe_data.active_tab.requires = IS_IN_SET([('photo', T("Picture")),("video", T("Video"))], zero=None)
         self.db.cookrecipe_data.active_tab.default = "photo"
+        self.db.cookrecipe_data.instructions.default = T("""<ol>
+    <li>
+        <strong><u>Step 1</u></strong><br />
+        Instructions for the step 1</li>
+    <li>
+        <strong><u>Step 2</u></strong><br />
+        Instructions for the step 2</li>
+    <li>
+        <strong><u>Step 3</u></strong><br />
+        Instructions for the step 3</li>
+    <li>
+        <strong><u>Step 4</u></strong><br />
+        Instructions for the step 4 (shift+enter to make a new line, enter to add a new step)</li>
+</ol>""")
 
 class CookRecipeBook(BaseModel):
     tablename = "cookrecipe_book"
