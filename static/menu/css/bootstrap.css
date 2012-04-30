@@ -1763,7 +1763,7 @@ table .span12 {
 .btn-info.active {
   color: rgba(255, 255, 255, 0.75);
 }
-.btn-primary {
+.btn-primary, .btn-info {
   background-color: #006dcc;
   color: #eeffff;
   background-image: -moz-linear-gradient(top, #bb5555, #880000);
@@ -1782,10 +1782,15 @@ table .span12 {
 .btn-primary:active,
 .btn-primary.active,
 .btn-primary.disabled,
-.btn-primary[disabled] {
+.btn-primary[disabled],
+.btn-info:hover,
+.btn-info:active,
+.btn-info.active,
+.btn-info.disabled,
+.btn-info[disabled] {
   background-color: #880000;
 }
-.btn-primary:active, .btn-primary.active {
+.btn-primary:active, .btn-primary.active, .btn-info:active, .btn-info.active {
   background-color: #003399 \9;
 }
 .btn-warning {
@@ -1862,7 +1867,7 @@ table .span12 {
 .btn-success:active, .btn-success.active {
   background-color: #408140 \9;
 }
-.btn-info {
+.btn-infos {
   background-color: #49afcd;
   color: #eae8e8;
   background-image: -moz-linear-gradient(top, #02b8ea, #037a9b);
@@ -1877,14 +1882,14 @@ table .span12 {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
-.btn-info:hover,
-.btn-info:active,
-.btn-info.active,
-.btn-info.disabled,
-.btn-info[disabled] {
+.btn-infos:hover,
+.btn-infos:active,
+.btn-infos.active,
+.btn-infos.disabled,
+.btn-infos[disabled] {
   background-color: #037a9b;
 }
-.btn-info:active, .btn-info.active {
+.btn-infos:active, .btn-infos.active {
   background-color: #24748c \9;
 }
 button.btn, input[type="submit"].btn {
