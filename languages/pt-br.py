@@ -49,6 +49,7 @@
 '1 minute ago': '1 minute ago',
 '1 month ago': '1 month ago',
 '1 second ago': '1 second ago',
+'1 week ago': '1 week ago',
 '11 seconds ago': '11 seconds ago',
 '2 hours ago': '2 hours ago',
 '2 likes': '2 likes',

@@ -208,13 +208,13 @@ background-color:#BB2244;
 }
 
 .hero-unit {
-    background-color: #E4EFDA;
+    background-color: #EDEDED;
 
     }
 
 
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-    background-color: #A1C98D;
+    background-color: #eeaa77;
     color: #FFFFFF !important;
     text-decoration: none;
 }
@@ -227,16 +227,58 @@ background-color:#BB2244;
   margin-left:20px;
 }
 
-.carousel-caption {
-    /*background: none repeat scroll 0 0 rgba(51, 68, 34, 0.75);*/
-    background: none repeat scroll 0 0 rgba(237, 242, 225, 0.55);
+.logobar {
+  margin-bottom:10px;
+} 
 
-    }
+.logodiv {
+  text-align:left;
+}
+
+.btn-success {
+    background-color: #880000;
+}
+
+.btn {
+  border-color:#eeaa77;
+}
 
 
-.mobilehidden .well {
+
+/*.mobilehidden .well {
     background-image: url("/demo/static/menu/logodoido.png");
     background-position: left bottom;
     background-repeat: no-repeat;
     background-size: 150px auto;
+}*/
+
+
+.toptext p{
+  font-family: 'Great Vibes', cursive;
+/*  font-size:2.5em;
+  text-align:left;
+  margin-top:165px;
+  margin-left:-50px;*/
+  font-size:3em;
+  line-height:1em;
+  text-align:center;
+  margin-top:70px;
+}
+
+.top {
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAMklEQVQYlWNoZ2BoYCAA4GrwKcaQw6YYpwHIEgSd1M7A0ECMu4lTSJTVRHmGqOAhNsABd3gUjX34N9wAAAAASUVORK5CYII=);
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAMklEQVQYlWNoZ2AwZiAA4GrwKcaQw6YYpwHIEgSd1M7AYEyMu4lTSJTVRHmGqOAhNsABrv8OiaqJIG8AAAAASUVORK5CYII=);
+  padding-top:15px;
+  /*border-bottom:1px solid #880000;*/
+}
+
+.main {
+  margin-top:15px;
+}
+
+hr {
+    border-color: #880000 -moz-use-text-color #3F3F3F;
+    border-style: solid none;
+    border-width: 3px 0 1px;
+    margin: 18px 0;
 }

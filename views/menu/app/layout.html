@@ -14,12 +14,13 @@
     <![endif]-->
 
     <!-- Le styles -->
+    
     <link href="{{=URL('static','menu/css', args='bootstrap.css')}}" rel="stylesheet">
     <link href="{{=URL('static','menu/css', args='font-awesome.css')}}" rel="stylesheet">
     <link href="{{=URL('static','menu/css', args='movuca.css')}}" rel="stylesheet">
     <style type="text/css">
       body {
-        padding-top: 60px;
+        padding-top: 40px;
         padding-bottom: 40px;
       }
       .sidebar-nav {
@@ -126,7 +127,7 @@ jQuery(function() {
 });
 </script>
 {{pass}}
-
+<link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
@@ -309,15 +310,36 @@ jQuery(function() {
       </div>
     </div>
 
-    <div class="container-fluid">
+<div class="container-fluid top"> 
       <div class="row-fluid logobar">
-        <div class="span3 mobilehidden">
+        <div class="span3 mobilehidden logodiv">
            <img src="/demo/static/menu/logo.png">
         </div>
-        <div class="span9">
+        <div class="span2">
+        <div class="toptext">
+          <p>
+         <!-- Culinária vegana para todos! -->
+        </p>
+        </div>
 
+
+        </div>
+        <div class="span7">
+           {{include "menu/app/topbanner.html"}}
         </div>  
        </div> 
+</div>
+
+
+  <!--   <div class="page-header"><hr></div> -->
+
+
+
+
+
+
+    <div class="container-fluid main">
+   
       <div class="row-fluid">
         
         {{if left_sidebar_enabled:}}
@@ -469,7 +491,7 @@ create something more unique.</p>
       
       {{block footer}}
       <footer>
-        <p>© 2012 - Open Source Software (LGPLv3) <a target="_blank" class="zocial primary pull-right" href="http://www.web2py.com" style="margin-left:10px;"><span>web2py powered</span></a><a target="_blank" class="zocial github pull-right" href="http://github.com/rochacbruno/Movuca" style="margin-left:10px;"><span>Fork me on Github</span></a><a target="_blank" class="zocial paypal pull-right" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rochacbruno%40gmail%2ecom&lc=BR&item_name=Movuca%20Social%20CMS&no_note=0&currency_code=BRL&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest"><span>Donate with Paypal</span></a></p>
+        <p>© 2012 - MenuVegano.org <a target="_blank" class="zocial primary pull-right" href="http://www.web2py.com" style="margin-left:10px;"><span>web2py powered</span></a></p>
       </footer>
       {{end}}
 
