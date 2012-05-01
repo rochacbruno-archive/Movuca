@@ -747,7 +747,7 @@ class Article(Base):
     def list(self):
         denied_fields = ['limitby', 'orderby', 'tag', 'category', 'or',
                           'page', 'paginate', 'draft', 'favorite', 'like',
-                          'dislike', 'subscribe', 'comment', 'thrash','sq']
+                          'dislike', 'subscribe', 'comment', 'thrash','sq', 'popular']
 
         self.context.title = str(self.db.T("Articles "))
         queries = []
@@ -760,6 +760,11 @@ class Article(Base):
             if field == 'sq':
                 queries.append(self.db.Article.search_index.like("%%%s%%" % value))
                 self.context.title += str(self.db.T("containing: %s ", value))
+            if field == 'popular':
+                queries.append(self.db.Article.likes > 5)
+                queries.append(self.db.Article.favorited > 1)
+                queries.append(self.db.Article.views > 100)
+                self.context.title += str(self.db.T("in popular"))
             if field == 'category':
                 try:
                     cat_qry = self.db.Article.category_id.contains(int(value))
@@ -811,7 +816,10 @@ class Article(Base):
         #### /pagination
         if self.request.vars.limitby:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
-        self.context.articles = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
+
+        orderby = ~self.db.Article.publish_date if not 'popular' in self.request.vars else self.db.Article.likes
+        
+        self.context.articles = self.db(query).select(limitby=limitby, orderby=orderby)
         if 'author' in self.request.vars and self.context.articles:
             self.context.title = str(self.db.T("Articles wrote by %s", self.context.articles[0].author.nickname))
 

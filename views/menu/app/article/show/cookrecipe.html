@@ -162,7 +162,10 @@
   </div>  
 
   <div class="row-fluid show-article-comments article-box" id="comments">
-        {{comments.elements('img')[0]['_style'] = "display:none"}}
+        {{comment_images = comments.elements('img') }}
+        {{if comment_images:}}
+            {{comments.elements('img')[0]['_style'] = "display:none"}}
+        
         {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
         {{lis = comments.elements('.comment_li')}}
         {{for li in lis:}}
@@ -170,6 +173,8 @@
         {{pass}}
         {{comments['_class'] += "row-fluid"}}
         {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+        {{pass}}
         {{=comments}}
+
   </div>    
 </article>

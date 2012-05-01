@@ -35,6 +35,7 @@ class Article(BaseModel):
                       Field("publish_date", "datetime"),
                       Field("publish_tz", "string"),
                       Field("featured", "boolean", default=False),
+                      Field("blocks", "list:string"),
                       # privacy
                       Field("privacy", "integer", default=1),
                       Field("license", "string"),
@@ -49,15 +50,16 @@ class Article(BaseModel):
                      ]
 
         self.widgets = {
-            "tags": StringListWidget.widget
+            "tags": StringListWidget.widget,
+            "blocks": SQLFORM.widgets.checkboxes.widget
         }
 
         self.visibility = {
-                     #'author': (False, True),
+                     'author': (False, True) if not current.user_is("admin") else (True, True),
                      'author_nickname': (False, True),
                      "content_type": (False, False),
                      "search_index": (False, False),
-                     #"publish_date": (False, False),
+                     "publish_date": (False, False) if not current.user_is("admin") else (True, True),
                      "publish_tz": (False, False),
                      "content_type_id": (False, True),
                      "likes": (False, True),
@@ -83,7 +85,8 @@ class Article(BaseModel):
           "tags": T("Tags"),
           "privacy": T("Privacy"),
           "license": T("License"),
-          "draft": T("Draft")
+          "draft": T("Draft"),
+          "blocks": T("Other blocks")
         }
 
         self.comments = {
@@ -100,7 +103,8 @@ class Article(BaseModel):
           "picture": IS_EMPTY_OR(IS_IMAGE()),
           #"license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
           #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True),
-          "tags": COMMA_SEPARATED_LIST()
+          "tags": COMMA_SEPARATED_LIST(),
+          "blocks": IS_EMPTY_OR(IS_IN_SET([("block1", T("Featured Products")),("block2", T("Highlights")),("block3", T("Weekly choice"))], multiple=True))
         }
 
         # representation = {'tele': lambda v: XML("<b>%s</b>" % v)}
@@ -113,7 +117,7 @@ class Article(BaseModel):
         session = self.db.session
         self.entity.publish_date.default = current.request.now
         self.entity.author_nickname.compute = lambda row: self.db.auth_user[row.author].nickname
-        self.entity.author.default = session.auth.user.id if session.auth else None
+        self.entity.author.default = self.db.auth.user_id
         # self.entity.privacy.requires = IS_IN_SET([
         #                                          ("1", T("Public")),
         #                                          ("2", T("Contacts & Groups")),

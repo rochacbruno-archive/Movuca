@@ -29,6 +29,13 @@ class Home(Base):
         from helpers.article import latest_articles
         self.context.latest_articles = latest_articles(self.db)
 
+    def homeblocks(self):
+        self.context.blocks = self.db(self.db.Article.blocks).select()
+
+        self.context.block1 = self.context.blocks.exclude(lambda row: "block1" in row.blocks)
+        self.context.block2 = self.context.blocks.exclude(lambda row: "block2" in row.blocks)
+        self.context.block3 = self.context.blocks.exclude(lambda row: "block3" in row.blocks)
+
     def ads(self):
         self.context.ads = self.db(self.db.Ads.place == "top_slider").select(limitby=(0, 5), orderby="<random>")
         if not self.context.ads:

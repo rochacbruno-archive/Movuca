@@ -86,6 +86,8 @@ def user_is(group="admin"):
     except:
         return False
 
+current.user_is = user_is
+
 c = 1
 
 
