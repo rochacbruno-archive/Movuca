@@ -1,4 +1,6 @@
 $(document).ready(function () {
+   $('.carousel').carousel();
+   
   $(".related-articles li").click(function(){
      window.location = $(this).attr("data-url");
   });

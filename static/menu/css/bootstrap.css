@@ -1842,7 +1842,7 @@ table .span12 {
 .btn-danger:active, .btn-danger.active {
   background-color: #942a25 \9;
 }
-.btn-success {
+/*.btn-success {
   background-color: #5bb75b;
   color: #eeffff;
   background-image: -moz-linear-gradient(top, #bb5555, #880000);
@@ -1866,7 +1866,34 @@ table .span12 {
 }
 .btn-success:active, .btn-success.active {
   background-color: #408140 \9;
+}*/
+
+.btn-success {
+  background-color: #5bb75b;
+  background-image: -moz-linear-gradient(top, #62c462, #51a351);
+  background-image: -ms-linear-gradient(top, #62c462, #51a351);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+  background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+  background-image: -o-linear-gradient(top, #62c462, #51a351);
+  background-image: linear-gradient(top, #62c462, #51a351);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#51a351', GradientType=0);
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+  background-color: #51a351;
+}
+.btn-success:active, .btn-success.active {
+  background-color: #408140 \9;
+}
+
+
 .btn-infos {
   background-color: #49afcd;
   color: #eae8e8;

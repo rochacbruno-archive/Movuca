@@ -9,8 +9,9 @@ class CookRecipe(Base):
         from movuca import DataBase, User
         from datamodel.article import Category, ContentType, Article
         from datamodel.contenttypes import CookRecipeBook
+        from datamodel.contenttypes import CookRecipe as CookRecipeModel
 
-        self.db = DataBase([User, ContentType, Category, Article, CookRecipeBook])
+        self.db = DataBase([User, ContentType, Category, Article, CookRecipeModel,CookRecipeBook])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -64,16 +65,16 @@ class CookRecipe(Base):
         if user:
             already = self.db.CookRecipeBook(article_id=int(self.request.args(0)), user_id=user.id)
             if already:
-                bt = BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), self.T("On your book!"),
-                            _class="button already-on-book btn btn-success addtobookbutton",
+                bt = BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), self.T("Remove from book!"),
+                            _class="button already-on-book btn btn-danger addtobookbutton",
                             _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'removefrombook', args=self.request.args(0)))
             else:
                 bt = BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
-                            _class="button button not-on-book btn btn-info addtobookbutton",
+                            _class="button button not-on-book btn btn-success addtobookbutton",
                             _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'addtobook', args=self.request.args(0)))
         else:
             bt = BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
-                            _class="button button not-on-book btn btn-info addtobookbutton",
+                            _class="button button not-on-book btn btn-success addtobookbutton",
                             _onclick="window.location = '%s';" % URL('person', 'account',
                                  args='login', vars=dict(_next=self.CURL('article', 'show', args=self.request.args(0)))))
         return bt

@@ -596,6 +596,13 @@ class Article(Base):
                                                     )
         self.response.meta.description = self.context.article.description
         self.response.meta.keywords = ",".join(self.context.article.tags)
+
+        self.response.meta.og_type = "menuvegano:receita"
+        self.response.meta.og_url = self.CURL("article", "show", args=[self.context.article.id, self.context.article.slug], scheme=True, host=True)
+        self.response.meta.og_images = self.response.meta.og_images or []
+        self.response.meta.og_images.append(self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier, host=True, scheme=True))
+        self.response.meta.og_images.append(self.get_image(None, 'user', themename='menu', user=self.context.article.author, host=True, scheme=True))
+
         self.context.article.update_record(views=self.context.article.views + 1)
         self.context.action_links = self.action_links()
         self.db.commit()
@@ -1070,7 +1077,7 @@ class Article(Base):
 
         links.append('unfavorite' if favorited else 'favorite')
         links.append('unlike' if liked else 'like')
-        links.append('undislike' if disliked else 'dislike')
+        #links.append('undislike' if disliked else 'dislike')
         if self.config.comment.system == "internal":
             links.append('unsubscribe' if subscribed else 'subscribe')
 

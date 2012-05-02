@@ -259,12 +259,35 @@ class CKEditor(object):
                      ]""",
         }
 
+        tools = {
+            'full': """[
+                        { name: 'document', items : [ 'Source' ] },
+                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                        { name: 'editing', items : [ 'Find','Replace' ] },
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                        { name: 'insert', items : [ 'Image','Table','HorizontalRule','Smiley','SpecialChar' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
+                        { name: 'links', items : [ 'Link','Unlink' ] },
+                        
+                        { name: 'styles', items : ['Format','Font','FontSize' ] },
+                        { name: 'colors', items : [ 'TextColor','BGColor' ] },
+                        { name: 'tools', items : [ 'Maximize'] }
+                     ]""",
+            'basic': """[
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList' ] },
+                        { name: 'links', items : [ 'Link','Unlink'] },
+                        { name: 'insert', items : ['Smiley'] },
+                        { name: 'colors', items : ['TextColor'] },
+                     ]""",
+        }
+
         upload_url = self.settings.url_upload
         browse_url = self.settings.url_browse
         ckeditor_js = URL('static', 'plugin_ckeditor/ckeditor.js')
         jquery_js = URL('static', 'plugin_ckeditor/adapters/jquery.js')
         ckeip_js = URL('static', 'plugin_ckeditor/ckeip.js')
-        contents_css = "['%s', '%s']" % (URL('static', '%s/css/web2py.css' % self.theme_name), URL('static', 'plugin_ckeditor/contents.css'))
+        contents_css = "['%s', '%s']" % (URL('static', '%s/css/bootstrap.css' % self.theme_name), URL('static', 'plugin_ckeditor/contents.css'))
 
         immediate = ''
         if selector:

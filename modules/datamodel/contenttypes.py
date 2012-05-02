@@ -226,17 +226,17 @@ class Product(ContentModel):
             Field("price", "double", notnull=True, default=0),
             Field("manufacturer", "string", notnull=True),
             Field("in_stock", "boolean", notnull=True, default=True),
+            Field("quantity", "integer", default=1),
             Field("info", "text", notnull=True),
-            Field("product_size", "string"),
+
+            Field("option_fields", "list:string"),
+            Field("extra_fields", "list:string"),
+            
         ]
 
         self.validators = {
             "info": IS_NOT_EMPTY(),
             "manufacturer": IS_NOT_EMPTY(),
-            "product_size": IS_EMPTY_OR(IS_IN_SET([("L", T("Large")),
-                                           ("M", T("Medium")),
-                                           ("S", T("Small"))],
-                                           zero=None)),
         }
 
         self.widgets = {
@@ -248,5 +248,5 @@ class Product(ContentModel):
             "manufacturer": T("Manufacturer name or brand"),
             "in_stock": T("Available?"),
             "info": T("Product specs"),
-            "product_size": T("Product size"),
+            "quantity": T("Quantity in stock"),
         }

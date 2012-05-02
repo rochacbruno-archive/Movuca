@@ -1,9 +1,9 @@
-  <div class="carousel slide" id="adsCarousel">
+  <div class="carousel slide" id="adsCarousel" style="margin-bottom:0;">
   <div class="carousel-inner">
     {{items = [URL('static','menu',args='ad1.png'),URL('static','menu',args='ad2.png')]}}
     {{for i,x in enumerate(items):}}
     <div class="item {{='active' if i == 0 else ''}}">
-      <a href="" ><img alt="" src="{{=x}}" style="max-height:185px;height:185px;width:100%;"></a>
+      <a href="" ><img alt="" src="{{=x}}" style="max-height:200px;height:200px;width:100%;"></a>
     </div>
     {{pass}}
   </div>

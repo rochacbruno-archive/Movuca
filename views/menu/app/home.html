@@ -19,7 +19,7 @@
             <div class="span5">
             {{=A(IMG(_src=get_image(block1[0].thumbnail, block1[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
             </div>
-            <p style="font-size:13px;">
+            <p style="font-size:13px;line-height:16px;">
             {{=A("%s ..." % remove_tags(block1[0].description[:100]), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
             
             </p>
@@ -45,7 +45,7 @@
             <div class="span5">
             {{=A(IMG(_src=get_image(block2[0].thumbnail, block2[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
             </div>
-            <p style="font-size:13px;">
+            <p style="font-size:13px;line-height:16px;">
             {{=A("%s ..." % remove_tags(block2[0].description[:100]), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
             
             </p>
@@ -90,13 +90,17 @@
   </h4>
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5'))}}">{{=T("All")}}</a></li>
+      {{if not user_is("admin"):}}
+          {{content_types = content_types.as_list()}}
+          {{content_types.append({"id":3, "title":T("Product")})}}
+      {{pass}}
       {{for i, content_type in enumerate(content_types):}}
           {{if i <= 1:}}
-          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id,'limitby':'0,5'})}}">{{=T(content_type.title)}}</a></li>
+          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'],'limitby':'0,5'})}}">{{=T(content_type['title'])}}</a></li>
           {{pass}}
       {{pass}}
       {{if len(content_types) > 2:}}
-              <!-- <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id})}}">{{=T(content_type.title)}}</a></li> -->
+              
               <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                       {{=T("More")}}
@@ -105,7 +109,7 @@
                   <ul class="dropdown-menu">
                     {{for i, content_type in enumerate(content_types):}}
                          {{if i > 1:}}
-                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type.id, 'limitby':'0,5'})}}">{{=T(content_type.title)}}</a></li>
+                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'], 'limitby':'0,5'})}}">{{=T(content_type['title'])}}</a></li>
                          {{pass}}
                     {{pass}}
  

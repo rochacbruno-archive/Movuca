@@ -27,15 +27,25 @@ class ProductHandler(Base):
     def addtocart(self):
         pid = self.request.vars.id
         quantity = self.request.vars.quant
+        if int(quantity) < 0:
+            quantity = 0
         options = self.request.vars.options or {}
-        cart_item = self.build_item_to_cart(pid, quantity, options)
+        cart_item = self.build_item_to_cart(int(pid), int(quantity), options)
         if cart_item:
-            self.session.cart[pid] = cart_item
+            self.session.cart[int(pid)] = cart_item
 
-        self.context.js = """alert("%s");""" % str(self.session.cart)
+        if int(quantity):
+            js = """$('.incartinfo').show();$('.addtext').text('update cart');$('#quant').val('%s');""" % int(quantity) or 1
+        else:
+            js = """$('.incartinfo').hide();$('.addtext').text('add to cart');$('#quant').val('1');"""
+
+        self.context.js = js
 
     def removefromcart(self):
         pass
+
+    def clearcart(self):
+        self.session.cart = {}
 
     def countcart(self):
         pass
@@ -43,5 +53,4 @@ class ProductHandler(Base):
     def build_item_to_cart(self, pid, quantity, options={}):
         query = (self.db.Article.id == pid) & (self.db.Product.article_id == self.db.Article.id)
         product = self.db(query).select().first()
-        print product
-        return {"quantity": quantity, "id": pid, "options": options}
+        return {"quantity": int(quantity), "id": int(pid), "options": options}

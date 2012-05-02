@@ -68,3 +68,16 @@ else:
     response.menu.append((T('Join'), False, CURL('person', 'account', args='register'), []))
 
 response.menu.append((T('GitHub'), False, "http://github.com/rochacbruno/Movuca", []))
+
+
+# cart
+
+session.cart = session.cart or {}
+
+# meta
+
+response.meta.title = "Movuca"
+response.meta.description = "Culinária vegetariana para todos!"
+response.meta.og_images = []
+response.meta.og_type = "website"
+response.meta.og_url = "http://www.menuvegano.com.br"

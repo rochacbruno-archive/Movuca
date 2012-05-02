@@ -499,7 +499,11 @@ class Person(Base):
                                                      self.db.config.meta.title,
                                                     )
         self.response.meta.description = str(user.tagline or user.about) + ' ' + str(user.city or '') + ' ' + str(user.country or '')
-        self.response.meta.keywords = [user.first_name, user.last_name, user.nickname]
+        self.response.meta.keywords = ",".join([user.first_name, user.last_name, user.nickname])
+        self.response.meta.og_type = "profile"
+        self.response.meta.og_url = self.CURL('person', 'show', args=user.nickname or user.id, host=True, scheme=True)
+        self.response.meta.og_images = self.response.meta.og_images or []
+        self.response.meta.og_images.append(self.get_image(None, 'user', themename='menu', user=user, host=True, scheme=True))
 
         self.context.twittername = self.context.user.twitter.split('/')[-1].strip() if self.context.user.twitter else ""
         if self.db.config.auth.use_mailhide:

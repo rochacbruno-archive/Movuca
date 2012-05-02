@@ -290,3 +290,12 @@ hr {
 .uncollapsed {
   display:normal;
 }
+
+.ui-dialog-buttonpane .ui-dialog-buttonset .ui-button {
+    background-color: #880000 !important;
+    background-image: -moz-linear-gradient(center top , #880000, #880000) !important;
+    background-repeat: repeat-x !important;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25) !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+}

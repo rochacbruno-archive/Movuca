@@ -211,12 +211,16 @@ td.rgls {
 
 </style>
 </head>
-{{if "print" in request.vars:}}
+{{if "prnt" in request.vars:}}
 <body onLoad="javascript: window.print()">
 {{else:}}
 <body>
 {{pass}}  
 
+
+{{for recipe in book:}}
+{{article = recipe.article}}
+{{article_data = article.cookrecipe_data.select().first()}}
 <table cellspacing="5" align="center" cellpadding="2" width="500"><tr><td>
 <div class="tytul">
     <a style="float:left; margin-right:10px;" href="{{=CURL("home","index")}}"><img src="{{=URL('static','menu',args='logo.png')}}" width=50></a>
@@ -266,7 +270,7 @@ td.rgls {
 <tr><td>
 Menu Vegano 2012 - Rede social de culinária vegetariana!
 </td></tr>
-</table><br>
-
+</table><hr>
+{{pass}}
 </body>
 </html>

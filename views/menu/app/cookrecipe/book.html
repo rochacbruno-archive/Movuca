@@ -23,7 +23,7 @@
 				  </form>
 				</div>
 				<div class="span5">
-				  <a href="{{=URL('prn', args=request.args, vars=request.vars)}}" class="btn">{{=iicon('print')}}{{=T("Print book")}}</a>
+				  <a href="{{=URL('book',extension='load', args=request.args, vars=dict(prnt='true', **request.vars))}}" class="btn">{{=iicon('print')}}{{=T("Print book")}}</a>
 				  </div> 
               </div>
   </div>
@@ -32,6 +32,8 @@
 
 {{for recipe in book:}}
 {{article = recipe.article}}
+{{article_data = article.cookrecipe_data.select().first()}}
+
 <div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
     
     <div class="row list-article-row">
@@ -39,7 +41,7 @@
          {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
          <span class="list-article-like"><i class="icon-leaf"></i>{{=T("%s likes", article.likes or 0)}}</span>
       </div>
-      <div class="span8" style="padding:10px">
+      <div class="span6" style="padding:10px">
           {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
           <em><span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}} <i class="icon-time"></i> {{=pdate(article.created_on)}}</em> <br />
           {{if article.tags:}}
@@ -50,6 +52,16 @@
           </p>
 
       </div>
+
+      {{if user_is("admin") or user.id == session.auth.user.id:}}
+
+      <div class="span2">
+         {{=BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), T("Remove!"),
+                            _class="button already-on-book btn btn-danger",
+                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'removefrombook', args=article.id))}}
+       </div> 
+       {{pass}}
+
     </div>
 </div>
 {{pass}}

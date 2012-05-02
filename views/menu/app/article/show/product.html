@@ -63,26 +63,34 @@
           </ul>
           <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
           <!-- Lockerz Share END -->
-         {{product_size = dict([("L", T("Large")), ("M", T("Medium")), ("S", T("Small"))])}}
-         {{icons=dict(fproduct_size=iicon("resize-horizontal"), manufacturer=iicon("flag"), in_stock=iicon('th'), price=iicon('barcode'))}}
-         {{article_data.fproduct_size = product_size[article_data.product_size]}}
-         {{fields=[(T("Product Size"),'fproduct_size'), (T("Manufacturer"),'manufacturer'), (T("In Stock"),'in_stock'), (T("Price"),'price')]}}
+         {{icons=dict(manufacturer=iicon("flag"), in_stock=iicon('th'), price=iicon('barcode'))}}
+         {{fields=[(T("Manufacturer"),'manufacturer'), (T("In Stock"),'in_stock'), (T("Price"),'price')]}}
          {{=UL(*[LI(icons[field], SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields], _class="recipe-labels")}}
          <ul class="btn-group">
             <li>
-              {{incart = 10}}
-              <span class="label label-info incartinfo">
-               <a href="{{=URL('product', 'cart')}}" style="color:#fff;text-decoration:none;  ">{{=T("(%s) in your cart", incart)}}</a>
-              </span>
+              {{item_in_cart = session.cart.get(article.id, {"quantity": 0})}}
+              {{incart = item_in_cart['quantity']}}
+           
              </li> 
             <li>
               <form method="post" action="{{=URL('product', 'addtocart')}}">
                 <label for="quant">{{=T("Quantity")}}</label> 
-                <input class="span1" id="quant" name="quant" type="number" min="1" max="20" step="1" value="1" required="true" />
+                <input class="span1" id="quant" name="quant" type="number" min="1" max="20" step="1" value="{{=incart or 1}}" required="true" />
+             
+              <span class="label label-info incartinfo" style="{{='display:none;' if not incart else ''}}">
+               <a href="{{=URL('product', 'cart')}}" style="color:#fff;text-decoration:none;  ">{{=T("in your cart")}}</a>
+              </span> 
+              
+
                 <input type="hidden" id="id" name="id"  value="{{=article.id}}" />  
                 <br/>
                 <button class="btn btn-success addtocartbutton" data-url="{{=URL('product', 'addtocart')}}">
-                  <i class="icon-shopping-cart icon-white"></i> add to cart &raquo;
+                  <i class="icon-shopping-cart icon-white"></i> 
+                  {{if incart:}}
+                     <span class="addtext">update cart</span> &raquo;
+                  {{else:}}
+                     <span class="addtext">add to cart</span> &raquo;
+                  {{pass}}
                 </button>
               </form>
             </li>

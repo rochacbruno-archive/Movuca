@@ -11,6 +11,10 @@ def addtocart():
     product = ProductHandler("addtocart")
     return product.context.js
 
+def clearcart():
+    product = ProductHandler("clearcart")
+    return str(session.cart)
+
 def removefromcart():
 	pass
 

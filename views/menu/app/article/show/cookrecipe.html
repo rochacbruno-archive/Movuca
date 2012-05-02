@@ -32,10 +32,11 @@
             {{if not article.is_active:}}
                 <span class="label label-important">{{=iicon('trash icon-white')}}{{=T("Deleted")}}</span> 
             {{pass}}
-            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}} {{=T('on')}} <i class="icon-time"></i> 
+            <span class="label label-info">{{=T(article.content_type_id.title)}}</span> {{=T("by")}} {{=A("%(first_name)s %(last_name)s (%(nickname)s)" % article.author, _href=CURL('person','show', args=article.author.nickname or article.author))}}</em> | <em> {{=T('on')}} <i class="icon-time"></i> 
             <time class="updated" datetime="{{=article.publish_date}}" pubdate>
               {{=ftime(article.publish_date)}} </time>
-
+            
+            </em> | <em>
            {{if article.category_id:}}
              
               {{=T('in')}}             {{=XML(", ".join([str(A(category_id.name, _href=CURL('article', 'list', vars=dict(category=category_id.name.replace(' ','_'))))) for category_id in article.category_id]))}}</em> 

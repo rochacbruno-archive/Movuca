@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# menuvegano: http://ogp.me/ns/fb/menuvegano#">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>{{=response.meta.title or request.application}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta name="description" content="">
-    <meta name="author" content="">
-     <meta name="application-name" content="{{=request.application}}" />
+    <meta name="description" content="{{=response.meta.description}}">
+    <meta name="keywords" content="{{=response.meta.keywords}}">
+    <meta name="application-name" content="{{=request.application}}" />
+
+  <meta property="og:author" content="Blouweb.com"/>
+
+    <meta property="og:site_name" content="menuvegano"/>
+    <meta property="fb:admins" content="1766038844,100002613617190"/>
+
+  <meta property="fb:app_id" content="213390132110106" /> 
+  <meta property="og:type"   content="{{=response.meta.og_type}}" /> 
+  <meta property="og:url"    content="{{=response.meta.og_url}}" /> 
+  <meta property="og:title"  content="{{=response.meta.title}}" />
+  <meta property="og:description"  content="{{=response.meta.description}}" />
+  {{for og_image in response.meta.og_images:}} 
+      <meta property="og:image"  content="{{=og_image}}" /> 
+  {{pass}}
+  <meta property="og:image"  content="{{=URL('static','menu',args='logo.png', host=True, scheme=True)}}" />
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -141,7 +160,7 @@ jQuery(function() {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=213390132110106";
+  js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=213390132110106";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
@@ -313,18 +332,28 @@ jQuery(function() {
 <div class="container-fluid top"> 
       <div class="row-fluid logobar">
         <div class="span3 mobilehidden logodiv">
-           <a href="{{=CURL("home","index")}}"><img src="/demo/static/menu/logo.png"></a>
+           <a href="{{=CURL("home","index")}}"><img src="{{=URL('static','menu',args='logo.png')}}"></a>
         </div>
-        <div class="span2">
+        <div class="span3">
         <div class="toptext">
           <p>
-         <!-- Culinária vegana para todos! -->
-        </p>
+           <div class="span2"> 
+        
+          <div class="fb-like" data-href="http://www.menuvegano.com.br" data-send="false" data-layout="box_count" data-width="100" data-show-faces="false" data-font="verdana"></div>
+           
+           </div>
+           <div class="span1"> 
+
+          <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.menuvegano.com.br" data-via="menuvegano" data-lang="pt" data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweetar</a>
+
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            </div>
+          </p>
         </div>
 
 
         </div>
-        <div class="span7">
+        <div class="span6">
            {{include "menu/app/topbanner.html"}}
         </div>  
        </div> 
