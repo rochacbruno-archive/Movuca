@@ -8,16 +8,19 @@
 
 </script>
 
+
+
 {{if articles:}}
-    <h5 class="well" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">RECEITAS POPULARES</h5>
-{{pass}}
+<div class="well">
+    <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">RECEITAS POPULARES</h5>
+
 
 {{for article in articles:}}
 
-<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px 0;padding:0;">
+<div class="span12 list-article-wrapper" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px 0;padding:0;">
     
     <div class="row ">
-      <div class="span4" style="padding:10px">
+      <div class="span4" style="padding:10px;margin-left:10px;">
          {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier)), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
       </div>
       <div class="span4" style="padding:10px;margin-left:0;">
@@ -27,5 +30,7 @@
       </div>
     </div>
 </div>
-
+{{=IMG(_src=URL('static','menu', args='hr.png'))}}
+{{pass}}
+</div>
 {{pass}}

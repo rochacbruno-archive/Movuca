@@ -299,3 +299,12 @@ hr {
     color: #FFFFFF !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
 }
+
+[class^="icon-"] {
+
+  vertical-align: top !important;
+  }
+
+.carousel-caption a {
+  color:#97B4ED;
+}

@@ -14,9 +14,9 @@
 .icon-large:before {
   font-size: 1.3333333333333333em;
 }
-.btn [class^="icon-"], .btn [class*=" icon-"] {
+/*.btn [class^="icon-"], .btn [class*=" icon-"] {
   line-height: .9em;
-}
+}*/
 li [class^="icon-"], li [class*=" icon-"] {
   display: inline-block;
   width: 1.25em;

@@ -2,6 +2,7 @@
 <ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
  {{for event in events:}}
     {{eventbox(event.user_timeline)}}
+    {{=IMG(_src=URL('static','menu', args='hr.png'))}}
  {{pass}}
 </ul>
 {{if events:}}

@@ -15,8 +15,8 @@
             <div class="span6">
                 <div class="">
                     <h2>{{=get_name_of(user)}}</h2>
-                    <em>{{=user.city or ''}} {{=user.country or ''}}</em>  <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
-                    <p>{{=user.tagline or ''}}</p>
+                    <em>{{=user.city or ''}} </em> | <em> {{=user.country or ''}}</em> | <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
+                    <p style="margin-top:7px;">{{=user.tagline or ''}}</p>
                     <em  id="relation-text">{{=relation_text}}</em>
                 </div>
                 <div class="btn-group">

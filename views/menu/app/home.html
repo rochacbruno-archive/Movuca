@@ -66,10 +66,11 @@
      <div class="well featured-members">
      {{include "menu/app/featured_members.html"}}
      </div>
-
-      <h5 class="well" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">ATIVIDADES RECENTES</h5>
+      
+      <div class="well">
+      <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">ATIVIDADES RECENTES</h5>
      {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
-
+     </div>
 
      <div class="fb-like-box" data-href="http://www.menuvegano.com.br" data-width="194" data-show-faces="true" data-stream="true" data-header="true"></div>
  {{end}}
