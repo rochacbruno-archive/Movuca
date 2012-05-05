@@ -308,3 +308,9 @@ hr {
 .carousel-caption a {
   color:#97B4ED;
 }
+
+.cook-recipe-ingredients li {
+      border-bottom: 1px dashed black;
+    margin-bottom: 10px;
+     padding-bottom: 5px;
+}
