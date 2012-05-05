@@ -1,0 +1,43 @@
+ <script>
+
+ $(document).ready(function () {
+  $(".list-article-wrapper").click(function(){
+     window.location = $(this).attr("data-url");
+  });
+});
+
+</script>
+<style>
+.hover_gray {
+  margin-left:60px;
+}
+.hover_gray:hover {
+  
+  border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+</style>
+
+
+{{if articles:}}
+<div class="span12 well" style="margin:0px 0px 20px;padding:0;background:#fff">
+    <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;margin-left:20px;margin-top:10px;">RECEITAS POPULARES</h5>
+
+    <ul class="thumbnails">
+    {{for article in articles:}}
+    
+    <li class="span3 hover_gray" style="margin-left:55px;">
+    <div class="thumbnail " style="text-align:center;border:none;box-shadow:none;">
+      {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier)), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+   {{=A(H5(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+          <em> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}}</em>
+          <br><br>
+          {{=IMG(_src=URL('static','menu', args='hr.png'))}}
+    </div>
+    </li>
+    {{pass}}  
+    </ul>
+</div>
+{{pass}}

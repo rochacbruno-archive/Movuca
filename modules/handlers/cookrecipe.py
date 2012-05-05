@@ -57,8 +57,10 @@ class CookRecipe(Base):
                 except Exception, e:
                     self.context.error = str(e)
                     self.db.rollback()
+                    return "alert('Error')"
                 else:
                     self.db.commit()
+                    return "jQuery('#article_%s').remove();" % str(article_id)
 
     def add_to_book_button(self):
         user = self.session.auth.user if self.session.auth else None

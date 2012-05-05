@@ -13,8 +13,8 @@ def addtobookbutton():
 
 
 def removefrombook():
-    cookrecipe = CookRecipe('remove_from_book')
-    return cookrecipe.add_to_book_button()
+    cookrecipe = CookRecipe()
+    return cookrecipe.remove_from_book()
 
 
 def addtobook():

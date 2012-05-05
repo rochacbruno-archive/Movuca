@@ -1,0 +1,38 @@
+ <script>
+
+ $(document).ready(function () {
+  $(".list-article-wrapper").click(function(){
+     window.location = $(this).attr("data-url");
+  });
+});
+
+</script>
+<style>
+.hover_gray:hover {
+  background:#eee;
+}
+
+</style>
+
+
+{{if articles:}}
+<div class="span12 well" style="margin:0px 0px 20px;padding:0;background:#fff">
+    <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;margin-left:10px;margin-top:10px;">RECEITAS POPULARES</h5>
+
+
+    {{for article in articles:}}
+    <div class="span3 hover_gray" style="margin:10px 30px 10px;padding:0;">
+        <div class="row" >
+           <div class="span5">
+               {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier)), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+           </div>
+           <div class="span4" style="margin-left:10px;">
+                 {{=A(H5(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+                  <em> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}}</em>
+            </div>
+        </div> 
+    </div>
+    {{pass}}
+
+</div>
+{{pass}}

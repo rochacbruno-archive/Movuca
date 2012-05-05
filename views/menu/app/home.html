@@ -84,6 +84,9 @@
   <br/>
 {{pass}}
 
+{{#=LOAD('article','list.populartop',vars=dict(limitby='0,3',popular="true"), ajax=True)}}
+{{=LOAD('article','list.populartop2',vars=dict(limitby='0,3',popular="true"), ajax=True)}}
+
 <!-- content tabs -->
   <h4 class="bottom-line">
       <i class="icon-list-alt"></i>

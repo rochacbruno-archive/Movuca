@@ -1,6 +1,14 @@
 {{left_sidebar_enabled=True}}
 {{extend 'menu/app/layout.html'}}
+<script type="text/javascript">
 
+function removefrombook(url) {
+  if (confirm("{{=T('Are you sure you want to remove from cook book?')}}")){
+      ajax(url, [], ':eval');
+  }
+}
+
+</script>
 
 <div class="alert" style="padding-top:5px;margin:5px 0;">
   <div class="span12 row-fluid" style="padding:15px;">
@@ -34,7 +42,7 @@
 {{article = recipe.article}}
 {{article_data = article.cookrecipe_data.select().first()}}
 
-<div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
+<div id="article_{{=article.id}}" class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px;padding:0;">
     
     <div class="row list-article-row">
       <div class="span2" style="padding:10px">
@@ -58,7 +66,7 @@
       <div class="span2">
          {{=BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), T("Remove!"),
                             _class="button already-on-book btn btn-danger",
-                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'removefrombook', args=article.id))}}
+                            _onclick="removefrombook('%s');" % URL('cookrecipe', 'removefrombook', args=article.id))}}
        </div> 
        {{pass}}
 
