@@ -16,12 +16,10 @@
                 <div class="">
                     <h2>{{=get_name_of(user)}}</h2>
                     <em>{{=user.city or ''}} </em> | <em> {{=user.country or ''}}</em> | <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
-                    <p style="margin-top:7px;">{{=user.tagline or ''}}</p>
-                    <em  id="relation-text">{{=relation_text}}</em>
-                </div>
-                <div class="btn-group">
-                    {{=buttons}}
-                </div>
+                    <p style="margin-top:7px;">{{#=user.tagline or ''}} {{=MARKMIN(user.about[:512] if user.about else '')}}</p>
+                    
+                </div>  
+
                 <div class="extra-links">
 
                 {{if hiddenmail:}}
@@ -39,7 +37,17 @@
                 </div>
             </div>
 
+
+               
             <div class="span3 nav nav-list">
+                
+                 <div class="btn-group well" style="text-align:left;">
+                    <em  class="label label-info" id="relation-text">{{=relation_text}}</em> 
+                    <div class="btn-group" style="text-align:center;margin-top:5px;">
+                    {{=buttons}}
+                    </div>
+                </div>
+                <div class="well">
                 {{resume_links = resume.elements('a')}}
                 {{icons = ['list-alt', 'heart', 'thumbs-up', 'user', 'thumbs-down', 'ok']}}
                 {{for i, link in enumerate(resume_links):}}
@@ -52,7 +60,8 @@
                     <li class="nav-header" style="padding:1px 15px;">
                         {{share(classes="columns omega", like=False, tweet=False, onlyshare=True, text="Share this profile")}}
                     </li>
-                </ul>
+                </ul>   
+               </div>
             </div> 
 
         </div>
@@ -62,10 +71,10 @@
     
     <div class="row-fluid person-data" style="margin-top:20px;">
         <div class="span6">
-            {{if user.about:}}
+            {{if user.about and 1==2:}}
             <div class="person-about person-box">
                 <h4><i class="icon-question-sign"></i>{{=T("About")}}</h4>
-                {{=MARKMIN(user.about[:300] if user.about else '')}}
+                {{=MARKMIN(user.about[:512] if user.about else '')}}
             </div>
             {{pass}}
             <div class="person-articles person-box">
