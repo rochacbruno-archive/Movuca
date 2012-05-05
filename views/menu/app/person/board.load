@@ -36,10 +36,14 @@ $(document).ready(function () {
   });
 });
 </script>
-
-	<ul class="board-messages" style="list-style: none;margin-left:0px;">
+<style>
+.board-item:hover {
+  background:#eee;
+}
+</style>
+	<ul class="board-messages well" style="list-style: none;margin-left:0px;">
 		{{for msg in board:}}
-		<li class="row board-item well" style="padding-top:5px;margin:10px 0;" id="msg_{{=msg.id}}">
+		<li class="row board-item" style="padding-top:5px;margin:10px 0;" id="msg_{{=msg.id}}">
     {{if session.auth and (session.auth.user.id in [msg.created_by, msg.user_id]):}}
 		<a class="close removeboard" data-url="{{=URL('person', 'removeboard', args=msg.id, extension=False)}}">&times;</a>
 		{{pass}}
@@ -61,7 +65,10 @@ $(document).ready(function () {
 		   </div -->
         </div>
 		</li>
-		{{pass}}
+    <li style="text-align:center;">
+    {{=IMG(_src=URL('static','menu', args='hr.png'))}}
+		</li>
+    {{pass}}
 	</ul>
   <a href="{{=CURL('person','board', extension=False, args=user.nickname or user.id,vars=dict())}}">{{=T("View all board posts")}}</a>
 {{else:}}
