@@ -20,7 +20,7 @@
             {{=A(IMG(_src=get_image(block1[0].thumbnail, block1[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
             </div>
             <p style="font-size:13px;line-height:16px;">
-            {{=A("%s ..." % remove_tags(block1[0].description[:100]), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
+            {{=A("%s ..." % remove_tags(block1[0].description[:70]), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
             
             </p>
           
@@ -46,7 +46,7 @@
             {{=A(IMG(_src=get_image(block2[0].thumbnail, block2[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
             </div>
             <p style="font-size:13px;line-height:16px;">
-            {{=A("%s ..." % remove_tags(block2[0].description[:100]), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
+            {{=A("%s ..." % remove_tags(block2[0].description[:70]), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
             
             </p>
           
