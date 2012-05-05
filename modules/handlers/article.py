@@ -631,7 +631,7 @@ class Article(Base):
             redirect(self.CURL('article', 'show', args=[self.context.article.id, self.context.article.slug]))
 
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
-        self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
+        self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=800, ny=600, name='medium_thumb')
         self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
         content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
 
@@ -678,7 +678,7 @@ class Article(Base):
             self.db.article.thumbnail.uploadfield = "thumbnail_blob"
         self.db.article.author.default = self.db.auth.user_id
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae)
-        self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=400, ny=400, name='medium_thumb')
+        self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=800, ny=600, name='medium_thumb')
 
         self.db.article.content_type_id.default = content_type.id
         category_set = self.db(self.db.Category.content_type == content_type.id)

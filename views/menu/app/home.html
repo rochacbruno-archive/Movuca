@@ -163,6 +163,36 @@
       <a href="{{=CURL('article','new',args='CookRecipe')}}">Envie sua receita e promova o <strong>veg</strong>etari<strong>anismo!</strong></a>
           </p> 
   </div>
+
+
+
+          <div id="accordion2" class="accordion">
+            <h5>CATEGORIAS</h5>
+            {{for item in categories:}}
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a href="#collapse{{=item['id']}}" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle" style="background:#FFF7DF;">
+                  {{=T(item['content_type'])}}s
+                </a>
+              </div>
+              <div class="accordion-body collapse" id="collapse{{=item['id']}}" style="height: 0px;">
+                <div class="accordion-inner">
+                    
+                  <ul class="nav nav-list">
+                    {{for category in item['categories']:}}
+                    <li><a href="{{=CURL('article', 'list', vars=dict(category=category.name))}}"><i class="i"></i> {{=T(category.name)}}</a></li>
+                    {{pass}}
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+            {{pass}}
+
+
+          </div>
+
+
   
   {{if block3:}}
   <div class="well" style="text-align:center;">

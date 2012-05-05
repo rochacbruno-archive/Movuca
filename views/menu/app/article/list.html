@@ -14,8 +14,13 @@
 
 <div class="row-fluid">
 <div class="">
-<form method="GET" enctype="multipart/form-data" action="search">
-  <input type="text" placeholder="{{='Find article'}}" value="" name="q" id="q" style="margin-bottom:0;">
+<form method="GET" enctype="multipart/form-data" action="">
+  <input type="text" placeholder="{{='Find article'}}" value="{{=request.vars.get('sq', '')}}" name="sq" id="sq" style="margin-bottom:0;">
+  {{for key, value in request.vars.items():}}
+      {{if key != 'sq':}}
+      <input type="hidden" value="{{=value}}" id="{{=key}}" name="{{=key}}">
+      {{pass}}
+  {{pass}}
   <button class="btn btn-success">Find</button>
 </form>
 </div><!--/span-->

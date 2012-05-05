@@ -14,7 +14,7 @@ else:
 #@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
 def index():
     from handlers.home import Home
-    home = Home(['featured', 'featured_members', 'ads', 'homeblocks'])
+    home = Home(['featured', 'featured_members', 'ads', 'homeblocks', 'categories'])
     home.context.left_sidebar_enabled = True
     home.context.right_sidebar_enabled = True
     home.context.header_enabled = not request.user_agent().is_mobile

@@ -36,6 +36,16 @@ class Home(Base):
         self.context.block2 = self.context.blocks.exclude(lambda row: "block2" in row.blocks)
         self.context.block3 = self.context.blocks.exclude(lambda row: "block3" in row.blocks)
 
+    def categories(self):
+        self.context.categories = []
+        categories = self.db(self.db.Category).select()
+        for content in self.context.content_types:
+            self.context.categories.append({"content_type": content.title,
+                                            "id": content.id,
+                                            "categories": categories.exclude(lambda row: row.content_type == content.id)
+                                           })
+        
+
     def ads(self):
         self.context.ads = self.db(self.db.Ads.place == "top_slider").select(limitby=(0, 5), orderby="<random>")
         if not self.context.ads:
