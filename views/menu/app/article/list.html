@@ -6,11 +6,20 @@
     {{=T("Filter")}}: 
     {{=A(T("All"), _href=CURL("article","list", args=request.args, vars=dict([(k,v) for k, v in request.vars.items() if k != "content_type_id"])))}}
     {{=CAT(*[A(" | ", T(content_type.title), _href=CURL("article","list", args=request.args,
-      vars=dict(content_type_id=content_type.id, **dict([(k,v) for k, v in request.vars.items() if k != "content_type_id"])))) for content_type in content_types])}}
+      vars=dict(content_type_id=content_type.id, **dict([(k,v) for k, v in request.vars.items() if k not in ["content_type_id", "category"]])))) for content_type in content_types])}}
 {{pass}}
 
  <a href="{{=CURL('article', 'list', extension='rss', vars=request.vars, args=request.args)}}" class="pull-right">{{=iicon('signal')}}{{=T("RSS feed")}}</a>
 </div>
+
+  {{for item in categories:}}
+     {{if item['id'] == int(request.vars.get('content_type_id', 0)):}}
+        {{for category in item['categories']:}}
+           <a class="label label-info category-link" href="{{=CURL('article', 'list', extension=False ,vars=dict(category=category.name, content_type_id=item['id']))}}" data-url="{{=CURL('article', 'list', vars=dict(category=category.name, content_type_id=item['id']))}}"><i class="i"></i> {{=T(category.name)}}</a>
+        {{pass}}
+        <hr class="thin-hr" style="margin-bottom:5px;">
+     {{pass}}
+  {{pass}}
 
 <div class="row-fluid">
 <div class="">

@@ -120,7 +120,11 @@
                   </ul>
               </li>
       {{pass}}
-      <li><a class="noaction" data-toggle="tab" href="" onclick="return false;"><input class="article-search" data-url="{{=CURL('article','list.load')}}" placeholder="{{=T('Search')}}" type="text" id="sq" name="sq" style="margin:0px"></a></li>
+      <li>
+          <a class="noaction" data-toggle="tab" href="" onclick="return false;" style="padding:0;padding-top:3px;padding-bottom:3px;">
+               <input class="article-search" data-url="{{=CURL('article','list.load')}}" placeholder="{{=T('Search')}}" type="text" id="sq" name="sq" style="margin:0px;border:none;width:100px;color:#880000;border-radius:none;box-shadow:none;">
+          </a>
+      </li>
     </ul> 
     <script>
     $(function () {
@@ -143,6 +147,8 @@
         url = elem.attr("data-url");
         web2py_ajax_page("GET", url + "?sq=" + sq + "&limitby=0,5" , "", "content-placeholder")
       })
+
+
     })
     </script>
     <style>
@@ -180,8 +186,9 @@
                     
                   <ul class="nav nav-list">
                     {{for category in item['categories']:}}
-                    <li><a href="{{=CURL('article', 'list', vars=dict(category=category.name))}}"><i class="i"></i> {{=T(category.name)}}</a></li>
+                        <li><a href="{{=CURL('article', 'list', vars=dict(category=category.name, content_type_id=item['id']))}}"><i class="i"></i> {{=T(category.name)}}</a></li>
                     {{pass}}
+                     <li><a href="{{=CURL('article', 'list', vars=dict(content_type_id=item['id']))}}"><i class="i"></i> {{=T("View all")}}</a></li>
                   </ul>
 
                 </div>

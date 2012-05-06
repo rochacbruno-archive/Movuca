@@ -19,6 +19,7 @@ class ProductHandler(Base):
         self.T = self.db.T
         self.CURL = self.db.CURL
         self.context.content_types = self.context.content_types or self.allowed_content_types()
+        self.context.categories = self.context.categories = self.allowed_categories()
 
 
     def cart(self):

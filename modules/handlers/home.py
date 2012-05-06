@@ -24,6 +24,7 @@ class Home(Base):
         self.context.theme_name = self.config.theme.name
 
         self.context.content_types = self.allowed_content_types()
+        self.context.categories = self.allowed_categories()
 
     def last_articles(self):
         from helpers.article import latest_articles
@@ -36,14 +37,14 @@ class Home(Base):
         self.context.block2 = self.context.blocks.exclude(lambda row: "block2" in row.blocks)
         self.context.block3 = self.context.blocks.exclude(lambda row: "block3" in row.blocks)
 
-    def categories(self):
-        self.context.categories = []
-        categories = self.db(self.db.Category).select()
-        for content in self.context.content_types:
-            self.context.categories.append({"content_type": content.title,
-                                            "id": content.id,
-                                            "categories": categories.exclude(lambda row: row.content_type == content.id)
-                                           })
+    # def categories(self):
+    #     self.context.categories = []
+    #     categories = self.db(self.db.Category).select()
+    #     for content in self.context.content_types:
+    #         self.context.categories.append({"content_type": content.title,
+    #                                         "id": content.id,
+    #                                         "categories": categories.exclude(lambda row: row.content_type == content.id)
+    #                                        })
         
 
     def ads(self):

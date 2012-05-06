@@ -9,7 +9,7 @@
 
 
 
-<ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
+<ul class="timeline-wrapper well" style="list-style: none;margin-left:0px;">
 <script>
 $(document).ready(function () {
   $(".removeevent").click(function() {
@@ -22,7 +22,12 @@ $(document).ready(function () {
   });
 });
 </script>
- <li class="timeline-item row well" style="padding-top:5px;margin:0px;">
+<style>
+.private-item:hover {
+  background:#eee;
+}
+</style>
+ <li class="timeline-item row" style="padding-top:5px;margin:0px;">
     {{=form.custom.begin}}
        
         <div class="{{='control-group error' if form.errors else ''}}">

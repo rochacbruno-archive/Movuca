@@ -77,7 +77,78 @@
     <div class="row-fluid person-data" style="margin-top:20px;">
         <div class="span6">
             <div class="person-articles person-box">
-                <h4><i class="icon-list-alt"></i>{{=T("Articles (%s)", user.articles)}}</h4>
+                <h4><i class="icon-list-alt"></i>{{=T("Content (%s)", user.articles)}}</h4>
+
+
+    <!-- content tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5', author=user.id))}}">{{=T("All")}}</a></li>
+      {{if not user_is("admin"):}}
+          {{content_types = content_types.as_list()}}
+          {{content_types.append({"id":3, "title":T("Product")})}}
+      {{pass}}
+      {{for i, content_type in enumerate(content_types):}}
+          {{if i <= 2:}}
+          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'],'limitby':'0,5','author':user.id})}}">{{=T(content_type['title'])}}</a></li>
+          {{pass}}
+      {{pass}}
+      {{if len(content_types) > 3:}}
+              
+              <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      {{=T("More")}}
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {{for i, content_type in enumerate(content_types):}}
+                         {{if i > 2:}}
+                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'], 'limitby':'0,5','author':user.id})}}">{{=T(content_type['title'])}}</a></li>
+                         {{pass}}
+                    {{pass}}
+ 
+                  </ul>
+              </li>
+      {{pass}}
+      <li>
+          <a class="noaction" data-toggle="tab" href="" onclick="return false;" style="padding:0;padding-top:3px;padding-bottom:3px;">
+               <input class="article-search" data-url="{{=CURL('article','list.load')}}" placeholder="{{=T('Search')}}" type="text" id="sq" name="sq" style="margin:0px;border:none;width:100px;color:#880000;border-radius:none;box-shadow:none;">
+          </a>
+      </li>
+    </ul> 
+    <script>
+    $(function () {
+      $('.tabs a:last').tab('show')
+
+      $('a[data-toggle="tab"]').on('show', function (e) {
+         if ($(e.target).hasClass("noaction")){
+          return false;
+         }
+         e.target; // activated tab
+         e.relatedTarget; // previous tab
+         url = $(e.target).attr("href");
+         web2py_ajax_page("GET", url, "", "content-placeholder")
+      })
+
+
+      $('.article-search').on('keyup', function (e) {
+        elem = $(".article-search");
+        sq = elem.val();
+        url = elem.attr("data-url");
+        web2py_ajax_page("GET", url + "?sq=" + sq + "&limitby=0,5&author={{=user.id}}" , "", "content-placeholder")
+      })
+
+
+    })
+    </script>
+    <style>
+    #content-placeholder{
+      margin-top: -15px;
+    }
+    </style>
+
+<!-- /content tabs -->
+
+
                 {{if relation == 'yourself':}}
                     <div class="btn-group">
                         {{=A(T("Write a new recipe"), _class="btn btn-info", _style="margin-bottom:5px;", _href=CURL('article', 'new', args='CookRecipe'))}}
@@ -90,19 +161,48 @@
                         {{pass}}
                         </ul>
                     </div>
+                    <hr style="margin-bottom:20px;margin-top:5px;border:1px solid;">
                 {{pass}}
-                {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,3'), ajax=True)}}
+                {{=LOAD('article','list.load',vars=dict(author=user.id,limitby='0,5'), ajax=True, target="content-placeholder")}}
             </div>
+
+
             <div class="person-timeline person-box">
                 <h4><i class="icon-th-list"></i>{{=T("Activities")}}</h4>
                 {{=LOAD('person','usertimeline.load',args=user.id ,vars=dict(limitby='0,5'), ajax=True)}}
             </div>           
         </div>
         <div class="span6">
-            <div class="person-board person-box">
-                <h4><i class="icon-comment"></i>{{=T("Board")}}</h4>
-                 {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True)}}
+
+            {{if session.auth and session.auth.user.id == user.id:}}
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#1" data-toggle="tab">{{=iicon('volume-up')}}{{=T("Your news feed")}}</a></li>
+                <li><a href="#2" data-toggle="tab">{{=iicon('user')}}{{=T("Your Board")}}</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+                  {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,5'), ajax=True)}}
+                </div>
+                 <div class="tab-pane" id="2">
+                  {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True)}}
+                </div>
             </div>
+              <br/>
+
+
+            {{else:}}
+            
+
+                <div class="person-board person-box">
+                    <h4><i class="icon-comment"></i>{{=T("Board")}}</h4>
+                     {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True)}}
+                     <br/>
+                </div>
+
+            
+            {{pass}}
+
         </div>
         {{if twittername:}}
         <div class="span6">

@@ -4,11 +4,29 @@
   $(".list-article-wrapper").click(function(){
      window.location = $(this).attr("data-url");
   });
-});
+ 
+       $('.category-link').on('click', function() {
+        elem = $(this);
+        url = elem.attr('data-url');
+        web2py_ajax_page("GET", url + "&limitby=0,5" , "", "content-placeholder");
+        return false;
+      })
+ });
 
 </script>
 
- {{for article in articles:}}
+  {{extravars = dict(author=request.vars.author) if request.vars.author else dict()}}
+  
+  {{for item in categories:}}
+     {{if item['id'] == int(request.vars.get('content_type_id', 0)):}}
+        {{for category in item['categories']:}}
+           <a class="label label-info category-link" href="{{=CURL('article', 'list', extension=False ,vars=dict(category=category.name, content_type_id=item['id'], **extravars))}}" data-url="{{=CURL('article', 'list', vars=dict(category=category.name, content_type_id=item['id'], **extravars))}}"><i class="i"></i> {{=T(category.name)}}</a>
+        {{pass}}
+        <hr class="thin-hr">
+     {{pass}}
+  {{pass}}
+
+{{for article in articles:}}
 
 <div class="span12 list-article-wrapper well" data-url="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" style="margin:5px 0;padding:0;">
     

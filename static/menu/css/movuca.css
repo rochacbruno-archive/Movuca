@@ -193,7 +193,7 @@ fieldset legend {text-transform:uppercase;
 .navbar-search .search-query {
 
 border:none;
-color:#444444;
+color:#ffffff;
 
 }
 
@@ -265,7 +265,7 @@ background-color:#BB2244;
   margin-top:70px;
 }
 
-.top {
+.top-header {
   background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAMklEQVQYlWNoZ2BoYCAA4GrwKcaQw6YYpwHIEgSd1M7A0ECMu4lTSJTVRHmGqOAhNsABd3gUjX34N9wAAAAASUVORK5CYII=);
   background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAMklEQVQYlWNoZ2AwZiAA4GrwKcaQw6YYpwHIEgSd1M7AYEyMu4lTSJTVRHmGqOAhNsABrv8OiaqJIG8AAAAASUVORK5CYII=);
   padding-top:15px;
@@ -313,4 +313,37 @@ hr {
       border-bottom: 1px dashed black;
     margin-bottom: 10px;
      padding-bottom: 5px;
+}
+
+.noactions {
+
+    line-height: 14px !important;
+    margin-right: 2px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+
+    /*border: 1px solid transparent !important;*/
+    border-radius: 4px 4px 0 0 !important;
+    padding-bottom: 9px !important;
+    padding-top: 9px !important;
+
+}
+
+.article-searchs {
+  height:12px !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+
+.thin-hr {
+
+  border-width: 0px 0 1px;
+  border-color:#DDDDDD;
+  margin:0;
+  margin-top:5px;
+
+}
+
+.category-link {
+  cursor:pointer;
 }

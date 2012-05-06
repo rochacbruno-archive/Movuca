@@ -22,6 +22,7 @@ class Base(object):
         self.context = context or Storage()
         self.context.alerts = []
         self.context.content_types = []
+        self.context.categories = []
         self.context.menus = []
         self.theme = theme
         self.view = view
@@ -47,6 +48,16 @@ class Base(object):
             return self.db(query).select()
         else:
             return []
+
+    def allowed_categories(self):
+        allowed_cats = []
+        categories = self.db(self.db.Category).select()
+        for content in self.context.content_types:
+            allowed_cats.append({"content_type": content.title,
+                                            "id": content.id,
+                                            "categories": categories.exclude(lambda row: row.content_type == content.id)
+                                           })
+        return allowed_cats
 
     def start(self):
         pass

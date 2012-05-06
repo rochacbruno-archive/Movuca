@@ -11,14 +11,14 @@ from handlers.base import Base
 from gluon import *
 from helpers.person import contact_box
 from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
-from datamodel.article import ContentType
+from datamodel.article import Category, ContentType
 from handlers.notification import Notifier
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 
 
 class Person(Base):
     def start(self):
-        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard, ContentType])
+        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard, Category, ContentType])
         self.notifier = Notifier(self.db)
 
     def pre_render(self):
@@ -35,6 +35,7 @@ class Person(Base):
         self.context.use_google = self.db.config.auth.use_google
         self.mail = self.db.auth.settings.mailer
         self.context.content_types = self.allowed_content_types()
+        self.context.categories = self.allowed_categories()
 
     def check_if_allowed(self, row):
         if self.db.auth.user_id:

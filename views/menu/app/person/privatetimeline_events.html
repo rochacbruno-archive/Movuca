@@ -1,5 +1,5 @@
 {{def eventbox(event):}}
-<li class="timeline-item row well" style="padding-top:5px;margin:10px 0;" id="event_{{=event.id}}">
+<li class="timeline-item row private-item" style="padding-top:5px;margin:10px 0;" id="event_{{=event.id}}">
 
     {{if session.auth and (session.auth.user.id in [event.created_by]):}}
     <a class="close removeevent" data-url="{{=URL('person', 'removeevent', args=event.id, extension=False)}}">&times;</a>
@@ -41,4 +41,7 @@
 	</div> -->
   </div>
 </li>
+    <li style="text-align:center;">
+    {{=IMG(_src=URL('static','menu', args='hr.png'))}}
+		</li>
 {{return}}

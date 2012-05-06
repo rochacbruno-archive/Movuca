@@ -10,6 +10,7 @@
 <style>
 .hover_gray {
   margin-left:60px;
+  border: 1px solid transparent;
 }
 .hover_gray:hover {
   

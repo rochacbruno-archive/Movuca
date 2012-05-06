@@ -51,4 +51,6 @@ class Admin(Base):
         self.context.theme_name = self.config.theme.name
         #self.view = "app/home.html"
         self.context.content_types = self.context.content_types or self.allowed_content_types()
+        self.context.categories = self.context.categories = self.allowed_categories()
+
 
