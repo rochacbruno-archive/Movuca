@@ -347,3 +347,8 @@ hr {
 .category-link {
   cursor:pointer;
 }
+
+.board-replies li{
+  list-style:none;
+  background-color:#fff;
+}

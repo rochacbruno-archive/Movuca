@@ -136,11 +136,13 @@ class UserBoard(BaseModel):
             Field("user_id", "reference auth_user"),
             Field("writer", "reference auth_user"),
             Field("board_text", "string"),
+            Field("parent_id", "integer", default=0),
         ]
 
         self.visibility = {
             "user_id": (False, False),
-            "writer": (False, False)
+            "writer": (False, False),
+            "parent_id": (False, False)
         }
 
         self.validators = {
@@ -150,9 +152,21 @@ class UserBoard(BaseModel):
     def set_fixtures(self):
         self.entity._write_on_board = self.write_on_board
 
-    def write_on_board(self, user_id, writer, text):
-        self.entity.insert(user_id=user_id, writer=writer, board_text=text)
+    def write_on_board(self, user_id, writer, text, parent_id=0):
+        self.entity.insert(user_id=user_id, writer=writer, board_text=text, parent_id=parent_id)
         self.db.commit()
+
+
+class UserMessage(BaseModel):
+    tablename = "user_message"
+
+    def set_properties(self):
+        self.fields = [
+            Field("user_id", "reference auth_user"),
+            Field("sender", "reference auth_user"),
+            Field("message_text", "text"),
+            Field("x")
+        ]
 
 
 class UserContact(BaseModel):

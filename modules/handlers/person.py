@@ -361,6 +361,16 @@ class Person(Base):
         # TODO: RENDER TEMPLATE EMAILS CHECK PREFERENCES FOR NOTIFICATIONS
 
     def board(self, uid, post_id=None):
+        self.context.extrajs = ""
+        if self.request.vars.reply:
+            try:
+                self.context.reply = self.db.UserBoard[self.request.vars.reply]
+                self.db.UserBoard.parent_id.default = self.context.reply.id
+            except Exception:
+                self.context.reply = []
+        else:
+            self.context.reply = []
+
         if self.request.extension == 'html':
             self.show(uid)
         T = self.T
@@ -382,11 +392,14 @@ class Person(Base):
         if relation in ['contacts', 'yourself', 'follower']:
             #self.db.UserBoard.board_text.label = CAT(board_text_label, A(T(" add photo "), _onclick="alert('Sorry, Photo upload is under development!');"))
             self.db.UserBoard.board_text.label = board_text_label
-            self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='').process(onsuccess=lambda form: self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation))
+            self.context.form = SQLFORM(self.db.UserBoard, formstyle='divs', submit_button=T('Post'), separator='')\
+            .process(onsuccess=lambda form: self.board_posted(form, user, relation))
         else:
             self.context.form = ''
 
-        query = self.db.UserBoard.user_id == user.id
+        self.db.UserBoard.replies = Field.Lazy(lambda row: self.db(self.db.UserBoard.parent_id == row.user_board.id).select(orderby=~self.db.UserBoard.created_on, limitby=(0, 10)))
+
+        query = (self.db.UserBoard.user_id == user.id) & (self.db.UserBoard.parent_id == 0)
 
         if post_id:
             query = query & (self.db.UserBoard.id == post_id)
@@ -412,6 +425,11 @@ class Person(Base):
         else:
             self.view = 'app/person/board'
             self.context.board = self.db(query).select(orderby=~self.db.UserBoard.created_on, limitby=limitby)
+
+    def board_posted(self, form, user=None, relation=None):
+        self.new_board_event(form, writer=self.session.auth.user.id, user=user, relation=relation)
+        if self.request.vars.isreply:
+            self.context.extrajs = "refresh_board_box();"
 
     def removeboard(self, msg_id, user_id):
         msg = self.db.UserBoard[int(msg_id)]

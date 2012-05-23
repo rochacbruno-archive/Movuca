@@ -81,7 +81,7 @@
 
 
     <!-- content tabs -->
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs user-content">
       <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5', author=user.id))}}">{{=T("All")}}</a></li>
       {{if not user_is("admin"):}}
           {{content_types = content_types.as_list()}}
@@ -119,7 +119,7 @@
     $(function () {
       $('.tabs a:last').tab('show')
 
-      $('a[data-toggle="tab"]').on('show', function (e) {
+      $('.user-content a[data-toggle="tab"]').on('show', function (e) {
          if ($(e.target).hasClass("noaction")){
           return false;
          }
@@ -177,14 +177,14 @@
             {{if session.auth and session.auth.user.id == user.id:}}
 
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#1" data-toggle="tab">{{=iicon('volume-up')}}{{=T("Your news feed")}}</a></li>
-                <li><a href="#2" data-toggle="tab">{{=iicon('user')}}{{=T("Your Board")}}</a></li>
+                <li class="active"><a href="#newsfeed" data-toggle="tab">{{=iicon('volume-up')}}{{=T("Your news feed")}}</a></li>
+                <li><a href="#yourboard" data-toggle="tab">{{=iicon('user')}}{{=T("Your Board")}}</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="1">
+                <div class="tab-pane active" id="newsfeed">
                   {{=LOAD('person','privatetimeline.load' ,vars=dict(limitby='0,5'), ajax=True)}}
                 </div>
-                 <div class="tab-pane" id="2">
+                 <div class="tab-pane" id="yourboard">
                   {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True)}}
                 </div>
             </div>
@@ -193,10 +193,15 @@
 
             {{else:}}
             
+                <script>
+                function refresh_board_box(){
+                 web2py_ajax_page("GET", "{{=CURL('person','board.load',args=user.id ,vars=dict(limitby='0,4'))}}", "", "user-board");
+                }
+                </script>
 
                 <div class="person-board person-box">
                     <h4><i class="icon-comment"></i>{{=T("Board")}}</h4>
-                     {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True)}}
+                     {{=LOAD('person','board.load',args=user.id ,vars=dict(limitby='0,4'), ajax=True, target="user-board")}}
                      <br/>
                 </div>
 

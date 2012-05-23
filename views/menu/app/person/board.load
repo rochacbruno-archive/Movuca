@@ -5,13 +5,16 @@
     {{=form.custom.begin}}
        
         <div class="{{='control-group error' if form.errors else ''}}">
-            <label>{{=form.custom.label.board_text}}</label>
+            {{if not reply:}}<label>{{=form.custom.label.board_text}}</label>{{pass}}
             <input type="text" placeholder="Type something…" name="board_text" id="user_board_board_text" class="string span12">
+            {{if reply:}}
+             <input type="hidden" name="isreply" id="isreply" value="1">
+            {{pass}}
         </div>
         <!-- label class="checkbox">
           <input type="checkbox">{{=T("Publish on facebook")}}</label -->
 
-        <button type="submit" class="btn-info btn-large">{{=T("Post")}}</button>
+        <button type="submit" class="btn-info btn-large">{{if reply:}}{{=T("reply")}}{{else:}}{{=T("Post")}}{{pass}}</button>
     
     {{=form.custom.end}}
 </div>
@@ -21,6 +24,17 @@
 
 
 
+<script>
+
+$(document).ready(function () {
+    $(".board-messages #user_board_board_text").focus();
+    {{=extrajs}}
+});
+
+</script>
+
+
+{{if not reply:}}
 
 {{if board:}}
 
@@ -34,6 +48,13 @@ $(document).ready(function () {
         return false;
         }
   });
+
+  $(document).on('click','.board-reply', function(e){
+      url = $(this).attr('data-url');
+      reply_to = $(this).attr('data-id');
+      web2py_ajax_page("GET", url, "", "reply-form_" + reply_to);
+  });
+
 });
 </script>
 <style>
@@ -60,11 +81,45 @@ $(document).ready(function () {
 		    {{=A(get_name_of(msg.writer), _href=CURL('person', 'show', args=msg.writer.nickname or msg.writer.id, extension=False))}}
 		       <i class="icon-time"></i> <a href="{{=CURL('person', 'board', args=msg.user_id.nickname, vars={'postid': msg.id}, extension=False)}}">{{=pdate(msg.created_on)}}</a>
 		   </div>
-        <!-- div class="span4" style="text-align:right">
-              <a><i class="icon-share-alt"></i>{{=T('reply')}}</a> | <a><i class="icon-retweet"></i>{{=T('repost')}}</a> | <a><i class="icon-edit"></i>{{=T('edit')}}</a> &nbsp;&nbsp;
-		   </div -->
+       {{if relation in ['contacts', 'yourself', 'follower']:}}
+        <div class="span4" style="text-align:right">
+              <a class="board-reply" style="cursor:pointer;" data-url="{{=CURL('person', 'board', args=user.nickname or user.id, vars=dict(reply=msg.id))}}" data-id="{{=msg.id}}"><i class="icon-share-alt"></i>{{=T('reply')}}</a> <!-- | <a><i class="icon-retweet"></i>{{=T('repost')}}</a> | <a><i class="icon-edit"></i>{{=T('edit')}}</a> --> &nbsp;&nbsp;
+		   </div>
+       {{pass}}
         </div>
 		</li>
+    <li>
+        <div id="reply-form_{{=msg.id}}">
+      
+        </div>
+        <ul class="board-replies">
+        {{for msgreply in msg.replies():}}
+            <li class="row board-item" style="padding-top:5px;margin:10px 0;" id="msg_{{=msgreply.id}}">
+                {{if session.auth and (session.auth.user.id in [msg.created_by, msg.user_id]):}}
+                 <a class="close removeboard" data-url="{{=URL('person', 'removeboard', args=msgreply.id, extension=False)}}">&times;</a>
+                 {{pass}}
+                  
+
+                  <div class="row-fluid">
+                  <div class="span2">
+                     {{=A(IMG(_src=get_image(None, 'user', themename=theme_name, user=msgreply.writer), _width=25, _height=25, _class="one columns alpha"), _href=CURL('person', 'show', args=msgreply.writer.nickname or msgreply.writer.id, extension=False))}}
+                     </div>
+                     <div class="span10">
+                         {{=MARKMIN(msgreply.board_text)}}
+                     </div>
+                     </div>
+                     <div class="row-fluid">
+                     <div class="span8" style="text-align:left">
+                      {{=A(get_name_of(msgreply.writer), _href=CURL('person', 'show', args=msgreply.writer.nickname or msgreply.writer.id, extension=False))}}
+                         <i class="icon-time"></i> {{=pdate(msgreply  .created_on)}}
+                     </div>
+                    </div>
+
+
+            </li>
+        {{pass}}
+        </ul>
+    </li>
     <li style="text-align:center;">
     {{=IMG(_src=URL('static','menu', args='hr.png'))}}
 		</li>
@@ -77,4 +132,6 @@ $(document).ready(function () {
    {{else:}}
       {{=T("No posts on this board!")}}
    {{pass}}
+{{pass}}
+
 {{pass}}

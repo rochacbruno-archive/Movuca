@@ -15,11 +15,11 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
             	{{=customfield(form,'first_name', css=css)}}
             	{{=customfield(form,'last_name', css=css)}}
             	{{=customfield(form,'nickname', css=css)}}
-            	{{=customfield(form,'tagline', css=css)}}
+            	{{#=customfield(form,'tagline', css=css)}}
             	{{=customfield(form,'about', css=css)}}
             	{{=customfield(form,'birthdate', css=css)}}
             	{{=customfield(form,'website', css=css)}}
-            	{{=customfield(form,'extra_links', css=css)}}
+            	{{#=customfield(form,'extra_links', css=css)}}
 
             </fieldset>
              <fieldset class="span5">
@@ -30,12 +30,12 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
              	{{=customfield(form,'photo_source',css=css)}}
              	{{=customfield(form,'avatar',css=css)}}
             	{{=customfield(form,'gender',css=css)}}
-            	{{=customfield(form,'languages',css=css)}}
+            	{{#=customfield(form,'languages',css=css)}}
             	{{=customfield(form,'city', css=css)}}
             	{{=customfield(form,'country', css=css)}}
             </fieldset>
-             <fieldset class="span12">
-             	<button class="btn btn-primary btn-large" style="width:100%">{{=T("Save changes")}}</button>
+             <fieldset class="span12" style="text-align:left;">
+             	<button class="btn btn-primary btn-large" style="width:40%">{{=T("Save changes")}}</button>
              </fieldset>
 
 
