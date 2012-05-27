@@ -1,0 +1,16 @@
+{{response.files.append(URL('static','menu/js/page_new.js'))}}
+{{extend "menu/app/layout.html"}}
+<div>
+   <h2>{{=page.title}}</h2>
+
+   <blockquote>{{=page.description}}</blockquote>
+
+   <p>
+    {{=XML(page.page_content)}}
+   </p>
+   {{for tag in page.tags:}}
+      <span class="label">{{=tag}}</span>
+   {{pass}}
+   <br>
+   <span>{{=pdate(page.created_on)}} - {{=ftime(page.created_on)}}</span>
+</div>

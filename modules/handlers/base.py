@@ -13,7 +13,7 @@ class Base(object):
         self,
         hooks=[],
         theme="%(name)s/",
-        view="generic/generic",
+        view="app/generic",
         meta=None,
         context=None
         ):
