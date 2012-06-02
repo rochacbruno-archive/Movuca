@@ -52,4 +52,7 @@ class Config(object):
     def get_list(self, table, option):
         options = self.__getattribute__(table)[option]
         assert isinstance(options, list)
-        return [(option.split(":")[0], str(self.T(option.split(":")[1]))) for option in options]
+        if not "mailhide" in option:
+            return [(option.split(":")[0], str(self.T(option.split(":")[1]))) for option in options]
+        else:
+            return [(option.split(":")[0], str(option.split(":")[1])) for option in options]
