@@ -85,7 +85,7 @@
       <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5', author=user.id))}}">{{=T("All")}}</a></li>
       {{if not user_is("admin"):}}
           {{content_types = content_types.as_list()}}
-          {{content_types.append({"id":3, "title":T("Product")})}}
+          {{content_types.append({"id":3, "title":T("Product"), "identifier":T("Product")})}}
       {{pass}}
       {{for i, content_type in enumerate(content_types):}}
           {{if i <= 2:}}
