@@ -6,7 +6,12 @@
   <div class="carousel-inner">
     {{for i,article in enumerate(featured):}}
     <div class="item {{='active' if i == 0 else ''}}">
-      <a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}" ><img alt="" src="{{=get_image(article.medium_thumbnail or article.picture, article.content_type_id.identifier)}}" style="max-height:400px;height:400px;width:100%;"></a>
+      <a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}" >
+        
+        <script src='http://src.sencha.io/screen.js'></script>
+        <img alt="" src="http://src.sencha.io/sw/{{=get_image(article.medium_thumbnail or article.picture, article.content_type_id.identifier)}}" >
+
+      </a>
       <div class="carousel-caption">
           <!-- <img width="120" style="margin-left:-5px;float:left;margin-right:10px;" src="{{=URL('static', 'menu', args=['logodoido.png'])}}"> -->
         <h4><a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}" >{{=article.title}}</a></h4>
@@ -20,3 +25,6 @@
   <a data-slide="next" href="#myCarousel" class="right carousel-control">›</a>
 </div>
 </div>
+
+
+{{'''style="max-height:400px;height:400px;width:100%;"'''}}

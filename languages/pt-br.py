@@ -193,6 +193,7 @@
 'Featured Product': 'Produto em Destaque',
 'Featured Products': 'Produtos em destaque',
 'Featured content': 'Conteúdo em destaque',
+'Featured contents': 'Featured contents',
 'Featured members': 'Membros em destaque',
 'Female': 'Feminino',
 'Filter': 'Filtro',
