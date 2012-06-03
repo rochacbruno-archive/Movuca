@@ -586,7 +586,7 @@
 'tagged with %s ': 'marcadas com %s ',
 'twitter': 'Twitter',
 'twitter - your twitter username': 'Twitter - seu nome de usuário do Twitter',
-'unable to parse csv file': 'unable to parse csv file',
+'unable to parse csv file': 'unable to parse csv files',
 'unfollow': 'deixe de seguir',
 'updated': 'atualizou',
 'upload': 'upload',
