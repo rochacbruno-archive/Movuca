@@ -548,7 +548,19 @@ create something more unique.</p>
       
       {{block footer}}
       <footer>
-        <p>© 2012 - MenuVegano.org <a target="_blank" class="zocial primary pull-right" href="http://www.web2py.com" style="margin-left:10px;"><span>web2py powered</span></a></p>
+        <p>© 2012 - MenuVegano - 
+
+{{if hasattr(T,'get_possible_languages'):}}
+<span class="pull-right">
+<select name="adminlanguage" style="width:70px;margin-left:10px;"  onchange="var date = new Date();cookieDate=date.setTime(date.getTime()+(100*24*60*60*1000));document.cookie='siteLanguage='+this.options[this.selectedIndex].value+'; expires='+cookieDate+'; path=/';window.location.reload()">
+{{for language in T.get_possible_languages():}}
+<option {{=T.accepted_language==language and 'selected' or ''}} >{{=language}}</option>
+{{pass}}
+</select>
+</span>
+{{pass}}
+
+          <a target="_blank" class="zocial primary pull-right" href="http://www.web2py.com" style="margin-left:10px;"><span>web2py powered</span></a></p>
       </footer>
       {{end}}
 
