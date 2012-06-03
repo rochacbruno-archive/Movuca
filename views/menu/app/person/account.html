@@ -45,10 +45,10 @@
 	{{pass}}
 	{{if request.args(0)=='login':}}
 		{{if not 'register' in auth.settings.actions_disabled:}}
-			<hr/><a href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>
+			<hr/><a class="btn" href="{{=URL(r=request, args='register')}}" class="button">{{=T("Create an account")}}</a>
 		{{pass}}
 		{{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-			<a href="{{=URL(r=request, args='request_reset_password')}}" class="button">{{=T("lost password")}}</a>
+			<a class="btn" href="{{=URL(r=request, args='request_reset_password')}}" class="button">{{=T("lost password")}}</a>
 		{{pass}}
 	{{pass}}
 </div>

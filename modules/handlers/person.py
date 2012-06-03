@@ -509,7 +509,7 @@ class Person(Base):
                                 )
 
         if user.id == self.db.auth.user_id:
-            self.context.resume.append(LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Disliked %s articles", user.dislikes), _href=self.CURL('article', 'list', vars={'dislike': user.id}))))
+            #self.context.resume.append(LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Disliked %s articles", user.dislikes), _href=self.CURL('article', 'list', vars={'dislike': user.id}))))
             self.context.resume.append(LI(IMG(_src=URL('static', '%s/images/icons' % self.context.theme_name, args='like_rounded.24.png')), A(T("Subscribed to %s articles", user.subscriptions), _href=self.CURL('article', 'list', vars={'subscribe': user.id}))))
 
         self.response.meta.title = "%s | %s | %s" % (
