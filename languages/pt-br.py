@@ -118,6 +118,7 @@
 'Click to unsubscribe from this article updates': 'Cancele o recebimento das atualizações desta postagem',
 'Client IP': 'Client IP',
 'Close': 'Fechar',
+'Close and mark all as read': 'Fechar e marcar tudo como lido',
 'Comment included': 'Comentário incluído',
 'Comment too long': 'Comentário excedeu o limite de caracteres',
 'Comment too short': 'Comentário muito curto',

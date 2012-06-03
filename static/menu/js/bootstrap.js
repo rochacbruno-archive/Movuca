@@ -36,7 +36,7 @@ $(document).ready(function () {
 		$("#notification-dialog").dialog( "option", "buttons", [
            
               {
-               text: "Close and mark all as read",
+               text: notification_btn,
                click: function() { $(this).dialog("close"); }
               }
                ] 

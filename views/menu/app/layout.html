@@ -59,6 +59,9 @@
   
     <!-- Le javascript
     ================================================== -->
+    <script type="text/javascript">
+    var notification_btn = "{{=T('Close and mark all as read')}}"
+    </script>
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{=URL('static', 'menu/js')}}/jquery.js"></script>
     <script src="{{=URL('static', 'menu/js')}}/jquery.fitvids.js"></script>
@@ -152,7 +155,7 @@ jQuery(function() {
 
   <body>
 
-    <div id="notification-dialog" title="Notifications" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
+    <div id="notification-dialog" title="{{=T('Notifications')}}" data-url="{{=URL('notification','list_latest.load')}}" data-mark-url="{{=URL('notification','mark_as_read')}}" data-counter-url="{{=URL('notification','count')}}"></div>
 
 {{if request.controller in ['article'] and request.function in ['show']:}}
 

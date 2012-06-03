@@ -54,7 +54,7 @@
 
                 <div class="well">
                 {{resume_links = resume.elements('a')}}
-                {{icons = ['list-alt', 'heart', 'thumbs-up', 'user', 'thumbs-down', 'ok']}}
+                {{icons = ['list-alt', 'heart', 'thumbs-up', 'user', 'ok']}}
                 {{for i, link in enumerate(resume_links):}}
                     {{link.insert(0,TAG['i'](_class="icon-%s" % icons[i], _style="margin-right:5px;"))}}
                     {{link['_style'] = "padding:0px 15px;"}}
