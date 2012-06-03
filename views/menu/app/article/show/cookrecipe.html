@@ -68,13 +68,13 @@
 
     <div class="span8">
       <ul class="nav nav-tabs">
-        <li class="{{='active' if article_data.active_tab == 'photo' else ''}}"><a href="#photo" data-toggle="tab">{{="Picture"}}</a></li>
+        <li class="{{='active' if article_data.active_tab == 'photo' else ''}}"><a href="#photo" data-toggle="tab">{{=T("Picture")}}</a></li>
 
         {{if article_data.video_embed:}}
-        <li class="{{='active' if article_data.active_tab == 'video' else ''}}"><a href="#video" data-toggle="tab">{{="Video"}}</a></li>
+        <li class="{{='active' if article_data.active_tab == 'video' else ''}}"><a href="#video" data-toggle="tab">{{=T("Video")}}</a></li>
         {{pass}}
-        <li><a href="#ingredients">{{="Ingredients & directions"}}</a></li>
-        <li><a href="#comments">{{="Comments"}}</a></li>
+        <li><a href="#ingredients">{{=T("Ingredients & directions")}}</a></li>
+        <li><a href="#comments">{{=T("Comments")}}</a></li>
       </ul>
        
       <div class="tab-content">

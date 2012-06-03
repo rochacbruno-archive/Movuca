@@ -24,7 +24,7 @@
 
 {{if articles:}}
 <div class="span12 well" style="margin:0px 0px 20px;padding:0;background:#fff">
-    <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;margin-left:20px;margin-top:10px;">RECEITAS POPULARES</h5>
+    <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;margin-left:20px;margin-top:10px;">{{=T("Popular")}}</h5>
 
     <ul class="thumbnails">
     {{for article in articles:}}

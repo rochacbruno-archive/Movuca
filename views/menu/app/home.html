@@ -7,7 +7,7 @@
     {{include "menu/app/featured_slider.html"}}
     <div class="span4 featuredmembers" style="height:50%">
           <h6>
-            {{=T("Produto em destaque")}}
+            {{=T("Featured Product")}}
           </h6>
 
         {{if block1:}}
@@ -33,7 +33,7 @@
     </div>
     <div class="span4 featuredmembers" style="height:50%">
           <h6>
-            {{=T("Dica vegana")}}
+            {{=T("Vegan tip")}}
           </h6>
 
         {{if block2:}}
@@ -68,7 +68,7 @@
      </div>
       
       <div class="well">
-      <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">ATIVIDADES RECENTES</h5>
+      <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">{{=T("Recent activities")}}</h5>
      {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
      </div>
 
@@ -164,9 +164,11 @@
 
   <div class="well participe">
     <img width="40" style="margin-left:-15px;float:right;margin-right:10px;" src="{{=URL('static', 'menu', args=['images','kitchen','espatula.png'])}}">
-    <h3> Participe!</h3>
+    <h3>{{=T("Get in!")}}</h3>
     <p>
-      <a href="{{=CURL('article','new',args='CookRecipe')}}">Envie sua receita e promova o <strong>veg</strong>etari<strong>anismo!</strong></a>
+      <a href="{{=CURL('article','new',args='CookRecipe')}}">
+           {{=XML(T("Send your recipe and help us to promote the <strong>veg</strong>etari<strong>anism!</strong>"))}}
+      </a>
           </p> 
   </div>
 
