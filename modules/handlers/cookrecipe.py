@@ -61,7 +61,12 @@ class CookRecipe(Base):
                     return "alert('Error')"
                 else:
                     self.db.commit()
-                    return "jQuery('#article_%s').remove();" % str(article_id)
+                    if not 'show' in self.request.args:
+                        return "jQuery('#article_%s').remove();" % str(article_id)
+                    else:
+                        return BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
+                            _class="button button not-on-book btn btn-success addtobookbutton",
+                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'addtobook', args=[self.request.args(0), 'show']))
 
     def add_to_book_button(self):
         user = self.session.auth.user if self.session.auth else None
@@ -70,16 +75,16 @@ class CookRecipe(Base):
             if already:
                 bt = BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), self.T("Remove from book!"),
                             _class="button already-on-book btn btn-danger addtobookbutton",
-                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'removefrombook', args=self.request.args(0)))
+                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'removefrombook', args=[self.request.args(0), 'show']))
             else:
                 bt = BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
                             _class="button button not-on-book btn btn-success addtobookbutton",
-                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'addtobook', args=self.request.args(0)))
+                            _onclick="ajax('%s', [], 'addtobookbutton');" % URL('cookrecipe', 'addtobook', args=[self.request.args(0), 'show']))
         else:
             bt = BUTTON(TAG.I(_class="icon-plus", _style="margin-right:5px"), self.T("Add to my book"),
                             _class="button button not-on-book btn btn-success addtobookbutton",
                             _onclick="window.location = '%s';" % URL('person', 'account',
-                                 args='login', vars=dict(_next=self.CURL('article', 'show', args=self.request.args(0)))))
+                                 args='login', vars=dict(_next=self.CURL('article', 'show', args=[self.request.args(0), 'show']))))
         return bt
 
     def book(self):

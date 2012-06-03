@@ -253,6 +253,9 @@ jQuery(function() {
                       <li>{{=A(T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
                       <li class="divider"></li>
                       <li>{{=A(T('My articles'), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
+                      <li>{{=A(T('My favorites'), _href=CURL('article', 'list', vars={'favorite': session.auth.user.id}))}}</li>
+                      <li>{{=A(T('My likes'), _href=CURL('article', 'list', vars={'like': session.auth.user.id}))}}</li>
+                      <li>{{=A(T('My subscription'), _href=CURL('article', 'list', vars={'subscribe': session.auth.user.id}))}}</li>
                       <li>{{=A(T('My Cook Book'), _href=CURL('cookrecipe', 'book', args=session.auth.user.id))}}</li>
                       <li>{{=A(T('My drafts'), _href=CURL('article', 'list', vars={'draft': "true"}))}}</li>
                       <li>{{=A(T('My contacts'), _href=CURL('person', 'contacts'))}}</li>

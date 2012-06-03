@@ -806,7 +806,7 @@ class Article(Base):
                 articles_ids = [article.article_id for article in articles]
                 queries.append(self.db.Article.id.belongs(articles_ids))
                 queries.append(self.db.Article.draft == False)
-                self.context.title = self.T("%s %ss", (nickname, field))
+                self.context.title = self.T("%s %ss", (nickname, self.T(field)))
 
         if not "draft" in self.request.vars:
             queries.append(self.db.Article.draft == False)
