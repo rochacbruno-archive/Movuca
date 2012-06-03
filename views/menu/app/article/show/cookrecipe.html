@@ -79,7 +79,9 @@
        
       <div class="tab-content">
         <div class="tab-pane {{='active' if article_data.active_tab == 'photo' else ''}}" id="photo">
-          {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="span11 recipephoto")}}
+          {{#=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="span11 recipephoto")}}
+          <script src='http://src.sencha.io/screen.js'></script>
+           {{=IMG(_src="http://src.sencha.io/sw/"+get_image(article.picture, article.content_type_id.identifier, host=True, scheme=True),_id=article.picture,_class="span11 recipephoto")}}
         </div>
         <div class="tab-pane {{='active' if article_data.active_tab == 'video' else ''}}" id="video">
               {{=DIV(XML(article_data.embed_code()), _class="span11 video")}}
