@@ -413,7 +413,7 @@
 'Tags': 'Tags',
 'Text to be shown at home page, email and RSS': 'Texto a ser exibido na página inicial, e-mail e RSS',
 'The "query" is a condition like "db.table1.field1==\'value\'". Something like "db.table1.field1==db.table2.field2" results in a SQL JOIN.': 'The "query" is a condition like "db.table1.field1==\'value\'". Something like "db.table1.field1==db.table2.field2" results in a SQL JOIN.',
-'The Basics': 'Dados básicos da receita',
+'The Basics': 'Dados básicos',
 'The author has choosen this as the correct answer:': 'O autor escolheu esta como a resposta correta:',
 'The number of times this page has been displayed': 'Número de vezes que esta página foi visualizada',
 'The output of the file is a dictionary that was rendered by the view': 'The output of the file is a dictionary that was rendered by the view',
