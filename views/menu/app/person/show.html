@@ -157,7 +157,7 @@
                         </a>
                         <ul class="dropdown-menu">
                         {{for content_type in content_types:}}
-                          {{=LI(A(T("Write a new %s", content_type.title), _href=CURL('article', 'new', args=content_type.identifier)))}}
+                          {{=LI(A(T("Write a new %s", content_type['title']), _href=CURL('article', 'new', args=content_type['identifier'])))}}
                         {{pass}}
                         </ul>
                     </div>
