@@ -118,7 +118,7 @@ class EmailTemplate(BaseModel):
         <html>
         <p>
             <a href="http://movu.ca/demo">
-               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+               <img alt="Movuca The Social CMS" src="http://movu.ca/demo/static/images/minilogo.png"/>
             </a>
         </p>
         <p>
@@ -140,7 +140,7 @@ class EmailTemplate(BaseModel):
         <html>
         <p>
             <a href="http://movu.ca/demo">
-               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+               <img alt="Movuca The Social CMS" src="http://movu.ca/demo/static/images/minilogo.png"/>
             </a>
         </p>
         <p>
@@ -158,7 +158,7 @@ class EmailTemplate(BaseModel):
         <html>
         <p>
             <a href="http://movu.ca/demo">
-               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+               <img alt="Movuca The Social CMS" src="http://movu.ca/demo/static/images/minilogo.png"/>
             </a>
         </p>
         <p>
@@ -176,7 +176,7 @@ class EmailTemplate(BaseModel):
         <html>
         <p>
             <a href="http://movu.ca/demo">
-               <img alt="Movuca The Social CMS" src="https://movu.ca/demo/static/images/minilogo.png"/>
+               <img alt="Movuca The Social CMS" src="http://movu.ca/demo/static/images/minilogo.png"/>
             </a>
         </p>
           <p>
