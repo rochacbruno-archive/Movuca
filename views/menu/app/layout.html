@@ -188,11 +188,11 @@ jQuery(function() {
             <ul class="nav">
               <li><a href="{{=CURL('home', 'index')}}">Home</a></li>
 
-                <li class="dropdown">
+                <li class="dropdown" >
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       {{=T('Categories')}}<b class="caret"></b>
                   </a>
-                  <ul class="dropdown-menu">
+                  <ul class="dropdown-menu" style="overflow-y:auto;max-height:500px;">
                       {{for item in categories:}}
                            <li style="margin-left:10px;font-weight:bold;">{{=item['content_type']}}</li>
                            {{for category in item['categories']:}}
@@ -549,7 +549,7 @@ create something more unique.</p>
       
       {{block footer}}
       <footer>
-        <p>© 2012 - MenuVegano - 
+        <p>© Menu Vegano | 2012 
 
 {{if hasattr(T,'get_possible_languages'):}}
 <span class="pull-right">

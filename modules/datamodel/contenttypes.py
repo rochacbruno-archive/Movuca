@@ -166,7 +166,7 @@ class CookRecipe(ContentModel):
 
         self.comments = {
             "ingredients": T("Include one item then press enter or click in 'add new' to include more"),
-            "instructions": T("You can include pictures."),
+            "instructions": T("Describe the steps to cook the recipe, also you can include aditional photos and links."),
             "prep_time": T("The whole time considering ingredients preparation."),
             "cook_time": T("The time needed after all ingredients are ready."),
             "servings": T("How many portions, plates, cups etc?"),

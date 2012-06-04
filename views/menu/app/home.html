@@ -7,7 +7,7 @@
     {{include "menu/app/featured_slider.html"}}
     <div class="span4 featuredmembers" style="height:50%">
           <h6>
-            {{=T("Featured Product")}}
+            {{#=T("Featured Product")}}
           </h6>
 
         {{if block1:}}
@@ -16,7 +16,7 @@
           {{=A(H4(block1[0].title, _class="list-article-title"), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
           <div class="row" style="margin-top:10px;"> 
             
-            <div class="span5">
+            <div class="span5" style="margin-right:5px;">
             {{=A(IMG(_src=get_image(block1[0].thumbnail, block1[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
             </div>
             <p style="font-size:13px;line-height:16px;">
@@ -33,7 +33,7 @@
     </div>
     <div class="span4 featuredmembers" style="height:50%">
           <h6>
-            {{=T("Vegan tip")}}
+            {{#=T("Vegan tip")}}
           </h6>
 
         {{if block2:}}
@@ -42,7 +42,7 @@
           {{=A(H4(block2[0].title, _class="list-article-title"), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
           <div class="row" style="margin-top:10px;"> 
             
-            <div class="span5">
+            <div class="span5" style="margin-right:5px;">
             {{=A(IMG(_src=get_image(block2[0].thumbnail, block2[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
             </div>
             <p style="font-size:13px;line-height:16px;">
