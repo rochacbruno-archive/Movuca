@@ -26,9 +26,18 @@
                 </div>
             {{pass}}
             {{if like:}}
+                {{pinurl=URL(args=request.args, vars=request.vars, scheme=True, host=True)}}
+                {{if response.meta.og_images:}}
+                    {{pinimg=response.meta.og_images[0]}}
+                {{else:}}
+                    {{pinimg=URL('static','menu',args='logo.png', host=True, scheme=True)}}
+                {{pass}}
+                <a href="http://pinterest.com/pin/create/button/?url={{=pinurl}}&media={{=pinimg}}&description={{=response.meta.description}}" class="pin-it-button" count-layout="none"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a>
+
                 <div class="fb-like {{=columns}}" data-href="{{=item_url}}" data-send="{{='true' if send else 'false'}}" data-layout="button_count" data-width="160" data-show-faces="false" data-font="verdana" data-action="{{=data_action}}"></div>
             {{pass}}
 
+            
         </div>
     {{pass}}
     <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>

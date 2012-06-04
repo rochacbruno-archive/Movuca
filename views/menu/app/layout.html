@@ -84,7 +84,7 @@
     <script src="{{=URL('static', 'menu/js')}}/tag-it.js"></script>
     {{include 'menu/app/web2py_ajax.html'}}
 
-
+    <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
     <script type="text/javascript">
 
     {{if session.auth and session.auth.user:}}
@@ -192,13 +192,15 @@ jQuery(function() {
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       {{=T('Categories')}}<b class="caret"></b>
                   </a>
-                  <ul class="dropdown-menu" style="overflow-y:auto;max-height:500px;">
+                  <ul class="dropdown-menu" style="min-width:420px;" styleold="overflow-y:auto;max-height:500px;">
                       {{for item in categories:}}
+                          <div style="float:left;height:100%;overflow-y:auto;max-height:500px;">
                            <li style="margin-left:10px;font-weight:bold;">{{=item['content_type']}}</li>
                            {{for category in item['categories']:}}
                             <li> <a class="" href="{{=CURL('article', 'list', extension=False ,vars=dict(category=category.name, content_type_id=item['id']))}}" data-url="{{=CURL('article', 'list', vars=dict(category=category.name, content_type_id=item['id']))}}"><i class="i"></i> {{=T(category.name)}}</a></li>
                           {{pass}}
-                          <li class="divider"></li>
+                          <!-- <li class="divider"></li> -->
+                       </div>
                       {{pass}}
                   </ul>
                 </li>
