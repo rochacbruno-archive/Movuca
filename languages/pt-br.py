@@ -674,7 +674,7 @@
 'order by: ': 'ordenar por:',
 'please input your password again': 'Por favor, insira a sua novamente',
 'posted on board': 'Publicou no mural',
-'previous 100 rows': 'previous 100 rows',
+'previous 100 rows': 'previous 100 rows ',
 'read more': 'ler mais',
 'record': 'record',
 'record does not exist': 'Registro não existente',
