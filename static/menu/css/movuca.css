@@ -309,6 +309,10 @@ hr {
   color:#97B4ED;
 }
 
+.carousel-caption {
+   background: none repeat scroll 0 0 rgba(0, 0, 0, 0.55) !important;
+}
+
 .cook-recipe-ingredients li {
       border-bottom: 1px dashed black;
     margin-bottom: 10px;

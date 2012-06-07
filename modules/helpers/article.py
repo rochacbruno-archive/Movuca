@@ -7,11 +7,22 @@ def latest_articles(db, query="article.id greater than 0", orderfield='created_o
 
 
 def related_articles(db, tags, category, exclude):
+    denied_tags = ["vegan",
+                   "vegetarian",
+                   "vegetariano",
+                   "vegano",
+                   "vegetal",
+                   "veg",
+                   "vegana",
+                   "vegetariana"]
     if not tags:
         tags = ['default']
+    else:
+        tags = [tag for tag in tags if not tag in denied_tags]
+
     from gluon import current
     if not current.request.env.web2py_runtime_gae:
-        query = (db.article.tags.contains(tags)) & (db.article.id != exclude) & (db.article.draft == False)
+        query = (db.article.tags.contains(tags)) & (db.article.id != exclude) & (db.article.draft == False) & (db.article.is_active == True)
         rows = related(db, query)
     else:
         query = (db.article.category_id == category) & (db.article.id != exclude) & (db.article.draft == False)
