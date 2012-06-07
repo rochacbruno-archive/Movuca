@@ -20,6 +20,9 @@ def related_articles(db, tags, category, exclude):
     else:
         tags = [tag for tag in tags if not tag.strip().lower() in denied_tags]
 
+    if not tags:
+        tags = ['default']
+
     from gluon import current
     if not current.request.env.web2py_runtime_gae:
         query = (db.article.tags.contains(tags)) & (db.article.id != exclude) & (db.article.draft == False) & (db.article.is_active == True)
