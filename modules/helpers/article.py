@@ -18,7 +18,7 @@ def related_articles(db, tags, category, exclude):
     if not tags:
         tags = ['default']
     else:
-        tags = [tag for tag in tags if not tag in denied_tags]
+        tags = [tag for tag in tags if not tag.strip().lower() in denied_tags]
 
     from gluon import current
     if not current.request.env.web2py_runtime_gae:
