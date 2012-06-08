@@ -10,7 +10,7 @@ class Page(Base):
         from datamodel.page import Page
         from datamodel.article import ContentType, Category, Article
         self.db = DataBase([User, Page, Category, ContentType, Article])
-        if not self.db.auth.has_membership("admin"):
+        if self.request.function != "show" and not self.db.auth.has_membership("admin"):
             redirect(self.db.CURL("home", "index"))
 
     def pre_render(self):
@@ -32,6 +32,9 @@ class Page(Base):
             self.context.page = self.db.Page[int(self.request.args(0))]
         except Exception:
             self.context.page = self.db(self.db.Page.slug == self.request.args(0)).select().first()
+
+        if not self.context.page:
+            redirect(self.CURL('home', 'index'))
 
     def show(self):
         self.get()

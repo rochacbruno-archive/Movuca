@@ -13,7 +13,14 @@ else:
 #@auth.requires_login()
 #@cache(request.env.path_info, time_expire=time_expire, cache_model=cache.ram)
 def index():
-    redirect(URL('home', 'index'))
+    #redirect(URL('home', 'index'))
+    from handlers.home import Home
+    home = Home(['featured', 'featured_members', 'ads', 'homeblocks'])
+    home.context.left_sidebar_enabled = True
+    home.context.right_sidebar_enabled = True
+    home.context.header_enabled = True
+    home.context.toparea_enabled = True
+    return home.render("app/home")
 
 
 def user():
