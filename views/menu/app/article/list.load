@@ -45,8 +45,9 @@
           </blockquote>
 
           
-          <span class="list-article-like"><i class="icon-thumbs-up"></i>{{=T("%s likes", article.likes or 0)}}</span><br>
-          {{if article.tags:}}
+          <span class="list-article-like"><i class="icon-thumbs-up"></i>{{=T("%s likes", article.likes or 0)}}</span>
+          {{if article.tags and 1==2:}}
+          <br>
               <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
           {{pass}}
 
