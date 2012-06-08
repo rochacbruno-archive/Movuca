@@ -61,10 +61,12 @@ class Base(object):
         allowed_cats = []
         categories = self.db(self.db.Category.id.belongs(used_categories)).select()
         for content in self.context.content_types:
-            allowed_cats.append({"content_type": content.title,
-                                            "id": content.id,
-                                            "categories": categories.exclude(lambda row: row.content_type == content.id)
-                                           })
+            this_categories = categories.exclude(lambda row: row.content_type == content.id)
+            if this_categories:
+                allowed_cats.append({"content_type": content.title,
+                                     "id": content.id,
+                                     "categories": this_categories
+                                    })
         return allowed_cats
 
     def start(self):
