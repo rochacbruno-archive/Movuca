@@ -400,6 +400,7 @@
 'Or': 'Or',
 'Origin': 'Origem',
 'Other blocks': 'Outro blocos',
+'POPULAR': 'POPULAR',
 'Page': 'Página',
 'Pages & Groups': 'Páginas & Grupos',
 'Parent': 'Parent',

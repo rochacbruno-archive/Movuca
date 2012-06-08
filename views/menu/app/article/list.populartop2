@@ -4,6 +4,9 @@
   $(".list-article-wrapper").click(function(){
      window.location = $(this).attr("data-url");
   });
+
+  $('.captioned2').popover({"placement": "top"});
+
 });
 
 </script>
@@ -21,24 +24,22 @@
 
 </style>
 
-
 {{if articles:}}
-<div class="span12 well" style="margin:0px 0px 20px;padding:0;background:#fff">
-    <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;margin-left:20px;margin-top:10px;">{{=T("Popular")}}</h5>
+<h5>{{=T("POPULAR")}}</h5>
+<ul class="thumbnails">
+{{for article in articles:}}
+        <li >
+          <a class="thumbnail captioned2" href="{{=CURL('article', 'show', args=[article.id, article.slug], extension=False)}}" title="{{=article.title}}" data-content="{{=article.description}}">
+            <div class="" style="width:150px;height:100px;overflow:hidden;">
+             {{=IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=150, _height=100)}}
+            </div>
+            <div class="caption" style="width:110px;min-height:36px;overflow:hidden;">
+              <h5>{{=article.title}}</h5>
+            </div>
+  
+          </a>
+        </li>
+{{pass}}
+</ul>
 
-    <ul class="thumbnails">
-    {{for article in articles:}}
-    
-    <li class="span3 hover_gray" style="margin-left:55px;">
-    <div class="thumbnail " style="text-align:center;border:none;box-shadow:none;">
-      {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier)), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
-   {{=A(H5(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
-          <em> {{=T("by")}} {{=A(article.author.nickname, _href=CURL('person','show', args=article.author.nickname or article.author, extension=False))}}</em>
-          <br><br>
-          {{=IMG(_src=URL('static','menu', args='hr.png'))}}
-    </div>
-    </li>
-    {{pass}}  
-    </ul>
-</div>
 {{pass}}

@@ -33,7 +33,7 @@
      </div>
       
       <div class="well">
-      <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">{{=T("Recent activities")}}</h5>
+      <h5 class="" style="margin-bottom:0px;padding-top:2px;padding-bottom:2px;">{{=T("Recent activities").upper()}}</h5>
      {{=LOAD('person','publictimeline.load',args='sidebar' ,vars=dict(limitby='0,5'), ajax=True)}}
      </div>
 
@@ -53,19 +53,19 @@
 {{=LOAD('article','list.populartop2',vars=dict(limitby='0,3',popular="true"), ajax=True)}}
 
 <!-- content tabs -->
-  <h4 class="bottom-line">
+  <h5 class="bottom-line">
       <i class="icon-list-alt"></i>
-      {{=T("Content")}}
-  </h4>
+      {{=T("Content").upper()}}
+  </h5>
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5'))}}">{{=T("All")}}</a></li>
+      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,6'))}}">{{=T("All")}}</a></li>
       {{if not user_is("admin"):}}
           {{content_types = content_types.as_list()}}
           {{content_types.append({"id":3, "title":T("Product")})}}
       {{pass}}
       {{for i, content_type in enumerate(content_types):}}
           {{if i <= 1:}}
-          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'],'limitby':'0,5'})}}">{{=T(content_type['title'])}}</a></li>
+          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'],'limitby':'0,6'})}}">{{=T(content_type['title'])}}</a></li>
           {{pass}}
       {{pass}}
       {{if len(content_types) > 2:}}
@@ -78,7 +78,7 @@
                   <ul class="dropdown-menu">
                     {{for i, content_type in enumerate(content_types):}}
                          {{if i > 1:}}
-                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'], 'limitby':'0,5'})}}">{{=T(content_type['title'])}}</a></li>
+                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'], 'limitby':'0,6'})}}">{{=T(content_type['title'])}}</a></li>
                          {{pass}}
                     {{pass}}
  
@@ -121,15 +121,15 @@
       margin-top: -15px;
     }
     </style>
-    {{=LOAD('article','list.load',vars=dict(limitby='0,5'), ajax=True, target="content-placeholder")}}
+    {{=LOAD('article','list.load',vars=dict(limitby='0,7'), ajax=True, target="content-placeholder")}}
 
 <!-- /content tabs -->
 
 {{block right_sidebar}}
-
+<h5>{{=T("Get in!").upper()}}</h5>
   <div class="well participe">
-    <img width="40" style="margin-left:-15px;float:right;margin-right:10px;" src="{{=URL('static', 'menu', args=['images','kitchen','espatula.png'])}}">
-    <h3>{{=T("Get in!")}}</h3>
+    <img width="25" style="margin-left:-15px;float:right;margin-right:10px;" src="{{=URL('static', 'menu', args=['images','kitchen','espatula.png'])}}">
+    
     <p>
       <a href="{{=CURL('article','new',args='CookRecipe')}}">
            {{=XML(T("Send your recipe and help us to promote the <strong>veg</strong>etari<strong>anism!</strong>"))}}
@@ -169,14 +169,19 @@
 
   
   {{if block3:}}
-  <div class="well" style="text-align:center;">
-    {{=A(H4(block3[0].title, _class="list-article-title"), _href=CURL('article', 'show', args=[block3[0].id, block3[0].slug], extension=False))}}
-    {{=A(IMG(_src=get_image(block3[0].thumbnail, block3[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block3[0].id, block3[0].slug], extension=False))}}
-    <p>
-    {{=A("%s ..." % remove_tags(block3[0].description[:150]), _href=CURL('article', 'show', args=[block3[0].id, block3[0].slug], extension=False))}}
-    </p>
-    {{=T("by")}} {{=A(block3[0].author.nickname, _href=CURL('person','show', args=block3[0].author.nickname or block3[0].author, extension=False))}}
-  </div>
+   <ul class="thumbnails">
+        <li>
+          <a class="thumbnail captioned" href="{{=CURL('article', 'show', args=[block3[0].id, block3[0].slug], extension=False)}}" title="{{=block3[0].title}}" data-content="{{=block3[0].description}}">
+            <div class="" style="width:155px;overflow:hidden;">
+             {{=IMG(_src=get_image(block3[0].thumbnail, block3[0].content_type_id.identifier), _width=155)}}
+            </div>
+            <div class="caption" style="width:115px;overflow:hidden;">
+              <h5>{{=block3[0].title}}</h5>
+            </div>
+  
+          </a>
+        </li>
+      </ul>
   {{pass}}
 
   
@@ -185,7 +190,7 @@
   <div class=""></div>
           <h4 class="bottom-line" style="clear:left;">
       <i class="icon-tag"></i>
-      {{=T("Tags")}}
+      {{=T("Tags").upper()}}
   </h4>
     {{=LOAD('article','tagcloud.load', ajax=True)}}
 {{end}}
