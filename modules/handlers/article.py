@@ -26,6 +26,9 @@ class Article(Base):
         self.T = self.db.T
         self.CURL = self.db.CURL
         self.get_image = self.db.get_image
+        self.response.meta.title = self.db.config.meta.title
+        self.response.meta.description = self.db.config.meta.description
+        self.response.meta.keywords = self.db.config.meta.keywords
         self.context.theme_name = self.config.theme.name
         #self.view = "app/home.html"
         self.context.content_types = self.context.content_types or self.allowed_content_types()
@@ -733,6 +736,10 @@ class Article(Base):
         self.context.category = category
 
     def search(self):
+        self.response.meta.title = "%s | %s" % (
+                                       self.db.T("Search in articles"),
+                                       self.db.config.meta.title,
+                                      )
         q = self.request.vars.q or None
         self.context.form = FORM(INPUT(_type="text", _name="q", _id="q", _value=q or ''), _method="GET")
         if q:
@@ -785,7 +792,7 @@ class Article(Base):
                         catqueries.append(self.db.Article.category_id.contains(catid))
                     cat_qry = reduce(lambda a, b: (a | b), catqueries)
                 queries.append((cat_qry))
-                self.context.title += str(self.db.T("in %s category ", value.replace('_', ' ')))
+                self.context.title += str(self.db.T("in %s category ", self.db.T(value.replace('_', ' '))))
             if field == "draft":
                 queries.append(self.db.Article.draft == True)
                 queries.append(self.db.Article.author == self.db.auth.user_id)
@@ -830,6 +837,11 @@ class Article(Base):
         self.context.articles = self.db(query).select(limitby=limitby, orderby=orderby)
         if 'author' in self.request.vars and self.context.articles:
             self.context.title = str(self.db.T("Articles wrote by %s", self.context.articles[0].author.nickname))
+
+        self.response.meta.title = "%s | %s" % (
+                                               self.context.title,
+                                               self.db.config.meta.title,
+                                              )
 
     def new_article_event(self, event_type, user=None, data={}):
         if not user:

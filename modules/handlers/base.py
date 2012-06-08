@@ -45,7 +45,7 @@ class Base(object):
             query = (self.db.ContentType.access_control.contains("public"))
             for content_type in allowed_types:
                 query |= (self.db.ContentType.access_control.contains(content_type))
-            return self.db(query).select()
+            return self.db(query).select(orderby=self.db.ContentType.id)
         else:
             return []
 

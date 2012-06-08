@@ -74,6 +74,7 @@ class Person(Base):
         else:
             user = self.db.auth_user[self.session.auth.user.id]
         self.context.user = user
+
         if self.request.extension == "html":
             self.show(user.id)
         if user:
@@ -89,10 +90,17 @@ class Person(Base):
                 limitby = [int(item) for item in self.request.vars.limitby.split(',')]
             self.get_timeline(query, limitby=limitby, public=user.privacy == 1)
             #self.context.paginator.records = self.context.paginate_info.records = len(self.context.events)
-
+            self.response.meta.title = "%s | %s" % (
+               self.db.T("%s's timeline", user.nickname.title() or user.first_name.title()),
+               self.db.config.meta.title,
+              )
         self.context.TIMELINEFUNCTIONS = '%s/app/person/usertimeline_events.html' % self.context.theme_name
 
     def publictimeline(self):
+        self.response.meta.title = "%s | %s" % (
+               self.db.T("Public timeline"),
+               self.db.config.meta.title,
+              )
         query = (self.db.UserTimeLine.user_id == self.db.auth_user.id) & (self.db.auth_user.privacy == 1)
         #### pagination
         self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
@@ -131,6 +139,10 @@ class Person(Base):
             self.context.TIMELINEFUNCTIONS = '%s/app/person/sidebar_privatetimeline_events.html' % self.context.theme_name
         else:
             self.context.TIMELINEFUNCTIONS = '%s/app/person/privatetimeline_events.html' % self.context.theme_name
+        self.response.meta.title = "%s | %s" % (
+               self.db.T("%s's private timeline", self.context.user.nickname.title() or self.context.user.first_name.title()),
+               self.db.config.meta.title,
+              )
 
     def update_contact_counter(self, follower=None, followed=None, arg=None):
         if arg:
@@ -268,6 +280,10 @@ class Person(Base):
             self.context.following = self.db(self.db.UserContact.follower == follower.id).select()
 
     def contacts(self, arg=None):
+        self.response.meta.title = "%s | %s" % (
+               self.db.T("Contacts"),
+               self.db.config.meta.title,
+              )
         if 'refresh' in self.request.vars:
             self.update_contact_counter(arg=arg)
         self.followers(arg)
@@ -301,6 +317,10 @@ class Person(Base):
         self.context.contact_box = contact_box
 
     def search(self, q):
+        self.response.meta.title = "%s | %s" % (
+                               self.db.T("Search in members"),
+                               self.db.config.meta.title,
+                              )
         self.contacts()
         self.context.results = []
 
@@ -379,6 +399,10 @@ class Person(Base):
         except Exception:
             user = self.db.auth_user(nickname=uid)
         self.context.user = user
+        self.response.meta.title = "%s | %s" % (
+               self.db.T("%s's board", user.nickname.title() or user.first_name.title()),
+               self.db.config.meta.title,
+              )
         self.db.UserBoard.user_id.default = user.id
         self.db.UserBoard.writer.default = self.session.auth.user.id if self.session.auth else 0
 
@@ -570,6 +594,10 @@ class Person(Base):
             self.view = 'app/person/show'
 
     def account(self):
+        self.response.meta.title = "%s | %s" % (
+                       self.db.T("Me"),
+                       self.db.config.meta.title,
+                      )
         self.db.auth.notifier = self.notifier
 
         verify_email = self.notifier.build_message_from_template("verify_email")

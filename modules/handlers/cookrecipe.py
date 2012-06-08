@@ -95,6 +95,10 @@ class CookRecipe(Base):
                 query &= self.db.article.search_index.like("%%%s%%" % self.request.vars.q)  
             self.context.book = self.db(query).select()
             self.context.user = self.db.auth_user[user_id]
+            self.response.meta.title = "%s | %s" % (
+               self.db.T("%s's cook book", self.context.user.nickname.title() or self.context.user.first_name.title()),
+               self.db.config.meta.title,
+              )
         else:
             redirect(self.CURL('home','index'))
 
