@@ -36,6 +36,11 @@ class Page(Base):
         if not self.context.page:
             redirect(self.CURL('home', 'index'))
 
+        self.response.meta.title = "%s | %s" % (
+                                             self.context.page.title,
+                                             self.db.config.meta.title,
+                                            )
+
     def show(self):
         self.get()
 
