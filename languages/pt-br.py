@@ -112,6 +112,7 @@
 'Article dislikerses for article_id': 'Article dislikerses for article_id',
 'Article favoriterses': 'Article favoriterses',
 'Article favoriterses for article_id': 'Article favoriterses for article_id',
+'Article included.': 'Article included.',
 'Article likerses': 'Article likerses',
 'Article optionses': 'Article optionses',
 'Article subscriberses': 'Article subscriberses',

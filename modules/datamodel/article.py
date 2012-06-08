@@ -36,6 +36,7 @@ class Article(BaseModel):
                       Field("publish_tz", "string"),
                       Field("featured", "boolean", default=False),
                       Field("blocks", "list:string"),
+                      Field("text_language", default="pt-br"),
                       # privacy
                       Field("privacy", "integer", default=1),
                       Field("license", "string"),
@@ -70,6 +71,7 @@ class Article(BaseModel):
                      "subscriptions": (False, True),
                      #"draft": (False, False),
                      "keywords": (False, False),
+                     "text_language": (False, False)
                      }
 
         self.computations = {
@@ -104,6 +106,7 @@ class Article(BaseModel):
           #"license": IS_IN_SET(self.db.config.get_list('article', 'license'), zero=None),
           #"tags": IS_IN_SET(['teste', 'bla', 'bruno'], multiple=True),
           "tags": COMMA_SEPARATED_LIST(),
+          "text_language": IS_IN_SET(["pt-br", "en", "es"]),
           "blocks": IS_EMPTY_OR(IS_IN_SET([("block1", T("Featured Products")),("block2", T("Highlights")),("block3", T("Weekly choice"))], multiple=True))
         }
 

@@ -781,18 +781,19 @@ class Article(Base):
                 queries.append(self.db.Article.views > 100)
                 self.context.title += str(self.db.T("in popular"))
             if field == 'category':
-                try:
-                    cat_qry = self.db.Article.category_id.contains(int(value))
-                except:
-                    #cat_id = self.db(self.db.Category.name == value.replace('_', ' ')).select().first().id
-                    cats = self.db(self.db.Category.name == value.replace('_', ' ')).select()
-                    cat_ids = [cat.id for cat in cats]
-                    catqueries = []
-                    for catid in cat_ids:
-                        catqueries.append(self.db.Article.category_id.contains(catid))
-                    cat_qry = reduce(lambda a, b: (a | b), catqueries)
-                queries.append((cat_qry))
-                self.context.title += str(self.db.T("in %s category ", self.db.T(value.replace('_', ' '))))
+                if not value == "ALL":
+                    try:
+                        cat_qry = self.db.Article.category_id.contains(int(value))
+                    except:
+                        #cat_id = self.db(self.db.Category.name == value.replace('_', ' ')).select().first().id
+                        cats = self.db(self.db.Category.name == value.replace('_', ' ')).select()
+                        cat_ids = [cat.id for cat in cats]
+                        catqueries = []
+                        for catid in cat_ids:
+                            catqueries.append(self.db.Article.category_id.contains(catid))
+                        cat_qry = reduce(lambda a, b: (a | b), catqueries)
+                    queries.append((cat_qry))
+                    self.context.title += str(self.db.T("in %s category ", self.db.T(value.replace('_', ' '))))
             if field == "draft":
                 queries.append(self.db.Article.draft == True)
                 queries.append(self.db.Article.author == self.db.auth.user_id)

@@ -199,8 +199,9 @@ jQuery(function() {
                           <div style="float:left;height:100%;overflow-y:auto;max-height:500px;">
                            <li style="margin-left:10px;font-weight:bold;">{{=item['content_type']}}</li>
                            {{for category in item['categories']:}}
-                            <li> <a class="" href="{{=CURL('article', 'list', extension=False ,vars=dict(category=category.name, content_type_id=item['id']))}}" data-url="{{=CURL('article', 'list', vars=dict(category=category.name, content_type_id=item['id']))}}"><i class="i"></i> {{=T(category.name)}}</a></li>
+                            <li> <a class="" href="{{=CURL('article', 'list', extension=False ,vars=dict(category=category['name'], content_type_id=item['id']))}}" data-url="{{=CURL('article', 'list', vars=dict(category=category['name'], content_type_id=item['id']))}}"><i class="i"></i> {{=T(category['name'])}}</a></li>
                           {{pass}}
+                           <li> <a class="" href="{{=CURL('article', 'list', extension=False ,vars=dict(content_type_id=item['id']))}}" data-url="{{=CURL('article', 'list', vars=dict(content_type_id=item['id']))}}"><i class="i"></i> {{=T('View all')}}</a></li>
                           <!-- <li class="divider"></li> -->
                        </div>
                       {{pass}}
