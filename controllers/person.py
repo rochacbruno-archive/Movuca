@@ -6,6 +6,7 @@ from handlers.person import Person
 
 def usertimeline():
     person = Person('usertimeline')
+    person.context.leftlogo_enabled = True
     return person.render("app/person/usertimeline")
 
 
@@ -16,6 +17,7 @@ def publictimeline():
 
 def privatetimeline():
     person = Person('privatetimeline')
+    person.context.leftlogo_enabled = True
     return person.render("app/person/privatetimeline")
 
 
@@ -77,6 +79,7 @@ def board():
     else:
         user_id = None
     person = Person()
+    person.context.leftlogo_enabled = True
     person.board(request.args(0) or user_id or redirect(login_url), request.vars.postid)
     return person.render()
 
@@ -96,6 +99,7 @@ def removeevent():
 def account():
     person = Person("account")
     person.context.left_sidebar_enabled = True if 'profile' in request.args else False
+    person.context.leftlogo_enabled = True
     return person.render('app/person/account')
 
 

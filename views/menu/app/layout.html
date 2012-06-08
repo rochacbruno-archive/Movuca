@@ -108,6 +108,8 @@
   middle_columns = {0:'span12',1:'',2:'span9'}[
      (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
   header_enabled = globals().get('header_enabled',False)
+  toparea_enabled = globals().get('toparea_enabled',False)
+  leftlogo_enabled = globals().get('leftlogo_enabled',False)
   }}
 
   <script type="text/javascript">
@@ -356,6 +358,7 @@ jQuery(function() {
       </div>
     </div>
 
+{{if toparea_enabled:}}
 {{block toparea}}
 <div class="top-wrapper">
   <div class="container top-header"> 
@@ -389,7 +392,7 @@ jQuery(function() {
   </div>
 </div>
 {{end}}
-
+{{pass}}
   <!--   <div class="page-header"><hr></div> -->
 
 
@@ -402,7 +405,21 @@ jQuery(function() {
       <div class="row-fluid">
         
         {{if left_sidebar_enabled:}}
+
         <div class="span3 mobilehidden">
+
+        {{if leftlogo_enabled:}}
+           {{block leftlogo}}
+           <div class="container top-header"> 
+               <div class="row-fluid logobar">
+                  <div class="span3 mobilehidden logodiv">
+                     <a href="{{=CURL("home","index")}}"><img src="{{=URL('static','menu',args='logo.png')}}"></a>
+                  </div>
+                </div>
+          </div>
+           {{end}}
+        {{pass}}
+
           {{block left_sidebar}}
           {{if session.auth:}}
           <div class="well sidebar-nav">

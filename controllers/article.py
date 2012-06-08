@@ -6,6 +6,7 @@ from handlers.article import Article
 def show():
     article = Article('show')
     article.context.left_sidebar_enabled = True
+    article.context.leftlogo_enabled = True
     return article.render("app/article/show/%s" % article.context.article.content_type_id.viewname)
 
 def prn():
@@ -28,18 +29,21 @@ def new():
 def delete():
     article = Article('delete')
     article.context.left_sidebar_enabled = True
+    article.context.leftlogo_enabled = True
     return article.render("app/article/delete")
 
 
 def list():
     article = Article('list')
     article.context.left_sidebar_enabled = True
+    article.context.leftlogo_enabled = True
     return article.render("app/article/list")
 
 
 def search():
     article = Article('search')
     article.context.left_sidebar_enabled = True
+    article.context.leftlogo_enabled = True
     return article.render("app/article/search")
 
 
@@ -110,6 +114,7 @@ def undislike():
 def showcomment():
     article = Article('showcomment')
     article.context.left_sidebar_enabled = True
+    article.context.leftlogo_enabled = True
     return article.render("app/article/showcomment")
 
 
