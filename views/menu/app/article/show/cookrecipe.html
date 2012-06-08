@@ -141,14 +141,16 @@
 
  </div>
 
+{{if article_data.credits:}}
  <div class="row-fluid show-article-ref"> 
 
        <div class="span12 alpha article-box"> 
           {{=H4(iicon('folder-close'), T("References"))}}
-          {{=MARKMIN(article_data.credits)}}
+          {{=XML(str(MARKMIN(article_data.credits)).replace("<a href", "<a target='_blank' href"))}}
        </div>
 
  </div>
+ {{pass}}
 
   <div class="row-fluid show-article-tags">
        {{if article.tags:}}

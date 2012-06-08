@@ -51,6 +51,11 @@ css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control
         {{pass}}
 
         <fieldset class="span11">
+            <legend>{{=T("References")}}</legend>
+            {{=customfield(form, 'credits', css=css2)}}
+        </fieldset>
+
+        <fieldset class="span11">
             <legend>{{=T("Save")}}</legend>
             {{=customfield(form, 'draft', css=css2)}}
             <br />

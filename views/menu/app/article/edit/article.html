@@ -45,6 +45,12 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
             {{=customfield(article_form, 'author', css=css)}}
         </fieldset>
         {{pass}}
+
+        <fieldset class="span11">
+            <legend>{{=T("References")}}</legend>
+            {{=customfield(content_form, 'credits', css=css)}}
+        </fieldset>
+
         <fieldset class="span11">
             <legend>{{=T("Save")}}</legend>
             {{=customfield(article_form, 'draft', css=css)}}

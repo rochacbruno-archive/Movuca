@@ -17,6 +17,7 @@ class Article(ContentModel):
         self.fields = [
             Field("markup", default="html"),
             Field("body", "text", notnull=True),
+            Field("credits", "text"),
         ]
 
         self.validators = {
@@ -25,7 +26,12 @@ class Article(ContentModel):
         }
 
         self.labels = {
-            "body": T("Article Text")
+            "body": T("Article Text"),
+            "credits": T("credits")
+        }
+
+        self.comments = {
+            "credits": T("Include links, names, books etc.")
         }
 
         self.visibility = {
