@@ -1,15 +1,13 @@
-<div class="span7 featured">
-     <h6>
-      {{#=T("Featured content")}}
-     </h6> 
-  <div class="carousel slide" id="myCarousel">
+
+  <div class="carousel slide thumbnail" id="myCarousel">
   <div class="carousel-inner">
     {{for i,article in enumerate(featured):}}
     <div class="item {{='active' if i == 0 else ''}}">
       <a href="{{=CURL('article', 'show', args=[article.id, article.slug])}}" >
         
         <script src='http://src.sencha.io/screen.js'></script>
-        <img alt="" src="http://src.sencha.io/saw/sah/{{=get_image(article.medium_thumbnail or article.picture, article.content_type_id.identifier,host=True, scheme=True)}}" >
+        <!--http://src.sencha.io/saw/sah/-->
+        <img alt="" src="{{=get_image(article.medium_thumbnail or article.picture, article.content_type_id.identifier,host=True, scheme=True)}}" >
 
       </a>
       <div class="carousel-caption">
@@ -23,7 +21,6 @@
   </div>
   <a data-slide="prev" href="#myCarousel" class="left carousel-control">‹</a>
   <a data-slide="next" href="#myCarousel" class="right carousel-control">›</a>
-</div>
 </div>
 
 

@@ -2,62 +2,27 @@
 {{extend "menu/app/layout.html"}}
 
 {{block header}}
- <div class="row-fluid hero-unit header" style="padding:0px;">
-    <div style="padding:15px;">
-    {{include "menu/app/featured_slider.html"}}
-    <div class="span4 featuredmembers" style="height:50%">
-          <h6>
-            {{#=T("Featured Product")}}
-          </h6>
-
-        {{if block1:}}
-        <div class="well" style="text-align:left;background-color: #EDEDED;">
-        
-          {{=A(H4(block1[0].title, _class="list-article-title"), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
-          <div class="row" style="margin-top:10px;"> 
-            
-            <div class="span5" style="margin-right:5px;">
-            {{=A(IMG(_src=get_image(block1[0].thumbnail, block1[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
+ <div class="row-fluid hero-unit header" style="padding:0;padding-left:2px;padding-top:25px;">
+   <ul class="thumbnails" style="margin-left:10px;">
+        <li class="span7">
+          {{include "menu/app/featured_slider.html"}}
+        </li>
+        <li class="span4" >
+          <a class="thumbnail captioned" href="{{=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False)}}" title="{{=block1[0].title}}" data-content="{{=block1[0].description}}">
+            <div class="" style="width:210px;height:132px;overflow:hidden;">
+             {{=IMG(_src=get_image(block1[0].thumbnail, block1[0].content_type_id.identifier), _width=210, _height=132)}}
             </div>
-            <p style="font-size:13px;line-height:16px;">
-            {{=A("%s ..." % remove_tags(block1[0].description[:70]), _href=CURL('article', 'show', args=[block1[0].id, block1[0].slug], extension=False))}}
-            
-            </p>
-          
-          </div>
-          <div class="pull-right">
-          {{=T("by")}} {{=A(block1[0].author.nickname, _href=CURL('person','show', args=block1[0].author.nickname or block1[0].author, extension=False))}}
-          </div>
-        </div>
-        {{pass}}
-    </div>
-    <div class="span4 featuredmembers" style="height:50%">
-          <h6>
-            {{#=T("Vegan tip")}}
-          </h6>
-
-        {{if block2:}}
-        <div class="well" style="text-align:left;background-color: #EDEDED;">
-        
-          {{=A(H4(block2[0].title, _class="list-article-title"), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
-          <div class="row" style="margin-top:10px;"> 
-            
-            <div class="span5" style="margin-right:5px;">
-            {{=A(IMG(_src=get_image(block2[0].thumbnail, block2[0].content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
+  
+          </a>
+        </li>
+        <li class="span4">
+          <a class="thumbnail captioned" href="{{=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False)}}" title="{{=block2[0].title}}" data-content="{{=block2[0].description}}">
+            <div class="captioned" style="width:210px;height:132px;overflow:hidden;">
+             {{=IMG(_src=get_image(block2[0].thumbnail, block2[0].content_type_id.identifier), _width=210, _height=132)}}
             </div>
-            <p style="font-size:13px;line-height:16px;">
-            {{=A("%s ..." % remove_tags(block2[0].description[:70]), _href=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False))}}
-            
-            </p>
-          
-          </div>
-          <div class="pull-right">
-          {{=T("by")}} {{=A(block2[0].author.nickname, _href=CURL('person','show', args=block2[0].author.nickname or block2[0].author, extension=False))}}
-          </div>
-        </div>
-        {{pass}}
-    </div>
-    </div>
+          </a>
+        </li>
+      </ul>
 </div>
 {{end}}
 

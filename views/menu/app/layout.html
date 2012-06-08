@@ -9,7 +9,7 @@
     <title>{{=response.meta.title or request.application}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="description" content="{{=response.meta.description}}">
-    <meta name="keywords" content="{{=response.meta.keywords}}">
+    <meta name="keywords" content="{{=response.meta.keywords}},vegan,vegetariano,vegano,vegana,vegetariana,saudável,ecológico">
     <meta name="application-name" content="{{=request.application}}" />
 
   <meta property="og:author" content="Blouweb.com"/>
@@ -47,7 +47,7 @@
         padding: 9px 0;
       }
     </style>
-    <link href="{{=URL('static','menu/css', args='bootstrap-responsive.css')}}" rel="stylesheet">
+    <!-- link href="{{=URL('static','menu/css', args='bootstrap-responsive.css')}}" rel="stylesheet" -->
     <link href="{{=URL('static','menu/css', args='calendar.css')}}" rel="stylesheet">
     <link href="{{=URL('static','menu/css', args='custom-theme/jquery-ui-1.8.16.custom.css')}}" rel="stylesheet">
     <link href="{{=URL('static','menu/css', args='jquery.tagit.css')}}" rel="stylesheet">
@@ -173,7 +173,7 @@ jQuery(function() {
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container-fluid">
+        <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -347,7 +347,7 @@ jQuery(function() {
 
             </ul>
                 <form class="navbar-search pull-right" method="GET" action="{{=CURL('home','search')}}">
-                  <select name="kind" class="search-query span2" id="kind"><option value="article">{{=T("Articles")}}</option><option value="user">{{=T("Users")}}</option></select>
+                  <select style="display:none" name="kind" class="search-query span2" id="kind"><option value="article">{{=T("Articles")}}</option><option value="user">{{=T("Users")}}</option></select>
                   <input type="text" class="search-query" placeholder="{{=T('Type word or name to find')}}" name="q" id="q">
                   <input type="submit" class="search-query" value="{{=T('Search')}}">  
                 </form>
@@ -357,34 +357,36 @@ jQuery(function() {
     </div>
 
 {{block toparea}}
-<div class="container-fluid top-header"> 
-      <div class="row-fluid logobar">
-        <div class="span3 mobilehidden logodiv">
-           <a href="{{=CURL("home","index")}}"><img src="{{=URL('static','menu',args='logo.png')}}"></a>
-        </div>
-        <div class="span3">
-        <div class="toptext">
-          <p>
-           <div class="span2"> 
-        
-          <div class="fb-like" data-href="http://www.menuvegano.com.br" data-send="false" data-layout="box_count" data-width="100" data-show-faces="false" data-font="verdana"></div>
-           
-           </div>
-           <div class="span1"> 
+<div class="top-wrapper">
+  <div class="container top-header"> 
+        <div class="row-fluid logobar">
+          <div class="span3 mobilehidden logodiv">
+             <a href="{{=CURL("home","index")}}"><img src="{{=URL('static','menu',args='logo.png')}}"></a>
+          </div>
+          <div class="span2">
+          <div class="toptext">
+            <p>
+             <div class="span2"> 
+          
+            <div class="fb-like" data-href="http://www.menuvegano.com.br" data-send="false" data-layout="box_count" data-width="100" data-show-faces="false" data-font="verdana"></div>
+             
+             </div>
+             <div class="span1"> 
 
-          <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.menuvegano.com.br" data-via="menuvegano" data-lang="pt" data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweetar</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.menuvegano.com.br" data-via="menuvegano" data-lang="pt" data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweetar</a>
 
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-            </div>
-          </p>
-        </div>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+              </div>
+            </p>
+          </div>
 
 
-        </div>
-        <div class="span6">
-           {{include "menu/app/topbanner.html"}}
-        </div>  
-       </div> 
+          </div>
+          <div class="span7">
+             {{include "menu/app/topbanner.html"}}
+          </div>  
+         </div> 
+  </div>
 </div>
 {{end}}
 
@@ -395,7 +397,7 @@ jQuery(function() {
 
 
 
-    <div class="container-fluid main">
+    <div class="container main">
    
       <div class="row-fluid">
         

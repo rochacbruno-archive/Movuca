@@ -6,4 +6,6 @@ $(document).ready(function () {
   $('.carousel').carousel();
 
   $('.memberpicture').popover({"placement": "top"});
+  $('.captioned').popover({"placement": "left"});
+
 });
