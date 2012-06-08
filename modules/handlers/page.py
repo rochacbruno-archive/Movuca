@@ -10,7 +10,7 @@ class Page(Base):
         from datamodel.page import Page
         from datamodel.article import ContentType, Category, Article
         self.db = DataBase([User, Page, Category, ContentType, Article])
-        if self.request.function != "show" and not self.db.auth.has_membership("admin"):
+        if self.db.request.function != "show" and not self.db.auth.has_membership("admin"):
             redirect(self.db.CURL("home", "index"))
 
     def pre_render(self):
