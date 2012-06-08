@@ -50,8 +50,16 @@ class Base(object):
             return []
 
     def allowed_categories(self):
+        qry = (self.db.Article.is_active == True) & (self.db.Article.draft == False)
+        articles_categories = self.db(qry).select(self.db.article.category_id, cache=(self.db.cache.ram, 300))
+        used_categories = []
+        for cat in articles_categories:
+            if cat.category_id:
+                used_categories += cat.category_id
+        used_categories = list(set(used_categories))
+
         allowed_cats = []
-        categories = self.db(self.db.Category).select()
+        categories = self.db(self.db.Category.id.belongs(used_categories)).select()
         for content in self.context.content_types:
             allowed_cats.append({"content_type": content.title,
                                             "id": content.id,

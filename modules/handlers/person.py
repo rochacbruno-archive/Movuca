@@ -11,14 +11,14 @@ from handlers.base import Base
 from gluon import *
 from helpers.person import contact_box
 from movuca import DataBase, User, UserTimeLine, UserContact, UserBoard
-from datamodel.article import Category, ContentType
+from datamodel.article import Category, ContentType, Article
 from handlers.notification import Notifier
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 
 
 class Person(Base):
     def start(self):
-        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard, Category, ContentType])
+        self.db = DataBase([User, UserTimeLine, UserContact, UserBoard, Category, ContentType, Article])
         self.notifier = Notifier(self.db)
 
     def pre_render(self):
