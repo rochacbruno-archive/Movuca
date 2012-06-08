@@ -3,6 +3,11 @@
 from handlers.page import Page
 
 
+def list():
+    page = Page("list")
+    return page.render("app/page/list")
+
+
 def show():
     page = Page("show")
     return page.render("app/page/show")

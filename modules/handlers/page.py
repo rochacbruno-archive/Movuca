@@ -8,8 +8,10 @@ class Page(Base):
     def start(self):
         from movuca import DataBase, User
         from datamodel.page import Page
-        from datamodel.article import ContentType, Category
-        self.db = DataBase([User, Page, Category, ContentType])
+        from datamodel.article import ContentType, Category, Article
+        self.db = DataBase([User, Page, Category, ContentType, Article])
+        if not self.db.auth.has_membership("admin"):
+            redirect(self.db.CURL("home", "index"))
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -35,8 +37,15 @@ class Page(Base):
         self.get()
 
     def new(self):
-        self.context.form = SQLFORM(self.db.Page, formstyle='divs').process()
+        self.context.form = SQLFORM(self.db.Page, formstyle='divs')
+        if self.context.form.process().accepted:
+            redirect(self.CURL("show", args=self.context.form.vars.id))
 
     def edit(self):
         self.get()
-        self.context.form = SQLFORM(self.db.Page, self.context.page, formstyle='divs').process()
+        self.context.form = SQLFORM(self.db.Page, self.context.page, formstyle='divs')
+        if self.context.form.process().accepted:
+            redirect(self.CURL("show", args=self.context.form.vars.id))
+
+    def list(self):
+        self.context.form = SQLFORM.grid(self.db.Page)
