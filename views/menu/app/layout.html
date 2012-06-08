@@ -408,9 +408,9 @@ jQuery(function() {
           <div class="well sidebar-nav">
           <div style="margin:20px;"> 
             <ul class="thumbnails">
-              <li class="span3">
+              <li class="span4">
                 <a class="thumbnail" href="{{=CURL('person', 'show', args=session.auth.user.nickname)}}">
-                  {{=IMG(_src=get_image(None, 'user', themename='bootstrap', user=session.auth.user))}}
+                  {{=IMG(_src=get_image(None, 'user', themename='menu', user=session.auth.user))}}
                 </a>
                 {{=A(session.auth.user.nickname, _href=CURL('person', 'show', args=session.auth.user.nickname))}}
               </li>

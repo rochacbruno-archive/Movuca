@@ -351,7 +351,7 @@ class Article(Base):
         if not self.context.article:
             self.context.article_id = comment.article_id
         return CAT(
-                  DIV(H5(self.T("replies (%s)", comment.replies)), _class="span1 comment_replies"),
+                  DIV(H5(self.T("replies (%s)", comment.replies)), _class="span2 comment_replies"),
                   DIV(
                      UL(*[LI(
                              A(
@@ -370,7 +370,7 @@ class Article(Base):
                             ),
                             _class="lireply",
                             ) for reply in replies]),
-                     _class="comment_replies span10 well",
+                     _class="comment_replies span8 well",
                      _id="comment_replies_%s" % comment.id)
                    )
 
@@ -401,7 +401,7 @@ class Article(Base):
     def remove_reply_button(self, reply):
         user_id = self.db.auth.user_id
         if (user_id == reply.user_id) or ('admin' in self.db.auth.user_groups) or (user_id == self.context.article.author):
-            return TAG.I(_class="icon-remove remove-reply", **{"_data-url": URL('article', 'removereply', args="reply_%s" % reply.id)})
+            return TAG.I(_class="icon-remove remove-reply pull-right", **{"_data-url": URL('article', 'removereply', args="reply_%s" % reply.id)})
         else:
             return ""
 
@@ -1067,6 +1067,7 @@ class Article(Base):
             "unsubscribe": ICONLINK(userid, "check", T("Subscribe (%s)", article.subscriptions or 0), "ajax('%s',[], 'links')" % CURL('unsubscribe', args=request.args), T("Click to unsubscribe from this article updates"), theme_name=self.context.theme_name),
             "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args), T("Click to edit"), theme_name=self.context.theme_name),
             "delete": ICONLINK(userid, "remove-sign", T("Delete"), "window.location = '%s'" % CURL('delete', args=request.args), T("Click to delete"), theme_name=self.context.theme_name),
+            "divider": BR(),
         }
 
         links = ['views']
@@ -1083,11 +1084,13 @@ class Article(Base):
             links.append('unsubscribe' if subscribed else 'subscribe')
 
         if has_permission_to_edit(self.session, self.context.article):
+            links.append('divider')
             links.append('edit')
             if self.context.article.is_active:
                 links.append('delete')
         elif self.session.auth and \
             (self.db.auth.has_membership("admin", self.db.auth.user_id) or self.db.auth.has_membership("editor", self.db.auth.user_id)):
+            links.append('divider')
             links.append('edit')
             if self.context.article.is_active:
                 links.append('delete')

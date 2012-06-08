@@ -1,6 +1,10 @@
 {{response.files.append(URL('static','menu/js/person_show.js'))}}
 {{extend "menu/app/layout.html"}}
 
+{{block toparea}}
+
+{{end}}
+
 <div class="row-fluid" id="contact-wrapper">
 
     <div class="well person-main-info row-fluid" style="margin:0;padding:0">
@@ -22,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="span6" style="margin-left:0;margin-right:0">
+            <div class="span5" style="margin-left:0;margin-right:0">
                 <div class="">
                     <h2>{{=get_name_of(user)}}</h2>
                     <em>{{=user.city or ''}} </em> | <em> {{=user.country or ''}}</em> | <a href="{{=user.website or ''}}" target="_blank">{{=user.website or ''}}</a>
@@ -49,7 +53,7 @@
 
 
                
-            <div class="span3 nav nav-list" style="margin-left:5px;margin-right:0">
+            <div class="span4 nav nav-list" style="margin-left:5px;margin-right:0">
                 
 
                 <div class="well">

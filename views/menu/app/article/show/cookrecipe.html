@@ -66,7 +66,7 @@
  <div class="row-fluid show-article-content entry-content">   
 
 
-    <div class="span8">
+    <div class="span8" style="margin-right:0;margin-left:0">
       <ul class="nav nav-tabs">
         <li class="{{='active' if article_data.active_tab == 'photo' else ''}}"><a href="#photo" data-toggle="tab">{{=T("Picture")}}</a></li>
 
@@ -74,14 +74,15 @@
         <li class="{{='active' if article_data.active_tab == 'video' else ''}}"><a href="#video" data-toggle="tab">{{=T("Video")}}</a></li>
         {{pass}}
         <li><a href="#ingredients">{{=T("Ingredients & directions")}}</a></li>
-        <li><a href="#comments">{{=T("Comments")}}</a></li>
+        <!-- <li><a href="#comments">{{=T("Comments")}}</a></li> -->
       </ul>
        
       <div class="tab-content">
-        <div class="tab-pane {{='active' if article_data.active_tab == 'photo' else ''}}" id="photo">
+        <div class="tab-pane {{='active' if article_data.active_tab == 'photo' else ''}}" id="photo" style="padding-right:10px;">
           {{#=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="span11 recipephoto")}}
+          <!--"http://src.sencha.io/sw/"+-->
           <script src='http://src.sencha.io/screen.js'></script>
-           {{=IMG(_src="http://src.sencha.io/sw/"+get_image(article.picture, article.content_type_id.identifier, host=True, scheme=True),_id=article.picture,_class="span11 recipephoto")}}
+           {{=IMG(_src=get_image(article.picture, article.content_type_id.identifier, host=True, scheme=True),_id=article.picture,_class=" recipephoto",_style="margin:5px;")}}
         </div>
         <div class="tab-pane {{='active' if article_data.active_tab == 'video' else ''}}" id="video">
               {{=DIV(XML(article_data.embed_code()), _class="span11 video")}}
@@ -89,13 +90,13 @@
       </div>
      
     </div>
-       <div class="span4 alert alert-success cook-recipe-information" style="margin:0;padding:10px 0;margin-left:10px;margin-top:55px;">
+       <div class="span4 alert alert-success cook-recipe-information" style="margin:0;padding:0;padding-top:10px;margin-left:0px;margin-top:55px;">
 
         <!-- Lockerz Share BEGIN -->
-          <ul>
+          <ul style="margin:5px;">
             <li>
             {{include 'menu/app/share_buttons.html'}}
-            {{share(classes="cook-recipe-share", columns="", like=False, tweet=False)}}
+            {{share(classes="cook-recipe-share", columns="", like=True,lockerz=False, tweet=False,data_action="like")}}
             </li>
           </ul>
           <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
@@ -105,8 +106,8 @@
          {{article_data.fdifficulty = difficulty[article_data.difficulty]}}
          {{article_data.fservings = "%g" % article_data.servings}}
          {{fields=[(T("Prep Time"),'prep_time'), (T("Cook Time"),'cook_time'), (T("Difficulty"),'fdifficulty'), (T("Servings"),'fservings')]}}
-         {{=UL(*[LI(icons[field], SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields], _class="recipe-labels")}}
-         <ul class="btn-group">
+         {{=UL(*[LI(icons[field], SPAN(label, _class="cook-recipe-label"),": ",article_data[field]) for label,field in fields], _class="recipe-labels", _style="margin:5px;")}}
+         <ul class="btn-group" style="margin:5px;">
             <li id="addtobookbutton">
                {{=LOAD('cookrecipe','addtobookbutton',args=request.args,ajax=True)}}
             </li>
