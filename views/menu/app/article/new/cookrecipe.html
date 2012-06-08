@@ -41,11 +41,13 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
        </fieldset>
         <fieldset class="span11">
             <legend>{{=T("Ingredients")}}</legend>
-                {{=customfield(form, 'ingredients', css=css)}}
+            {{ingredients_css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error", "label": "hidden"}
+                }}
+                {{=customfield(form, 'ingredients', css=ingredients_css)}}
        </fieldset>
         <fieldset class="span11">
             <legend>{{=T("Directions")}}</legend>
-                {{=customfield(form, 'instructions', css=css)}}
+                {{=customfield(form, 'instructions', css=ingredients_css)}}
        </fieldset>
     </div>
 

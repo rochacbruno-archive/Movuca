@@ -555,6 +555,7 @@
 'This person follows you': 'Esta pessoa segue você',
 'This person is in your contact list (following each other)': 'Esta pessoa está na sua lista de contatos (seguindo um ao outro)',
 'This profile is protected': 'Este perfil é privado',
+'This recipe serves how many people?': 'This recipe serves how many people?',
 'Timeline': 'Linha do tempo',
 'Timestamp': 'Timestamp',
 'Title': 'Título',
