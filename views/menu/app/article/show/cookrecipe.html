@@ -23,7 +23,7 @@
         </ul>
         <div class="span10"> 
         <a href="{{=CURL('page','reportcontent', args=[article.content_type_id.identifier,article.id,article.slug])}}" title="{{=T('Ajude a moderar o conteúdo e garantir que nossas receitas sejam 100% veganas!')}}" style="position:relative;top:0;right:0;" class="pull-right"><i style="margin-right:5px" class="icon-flag"></i>{{=T("Report")}}</a>
-         
+
           {{=A(H3(article.title, _class="list-article-title entry-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
         </div>
         <div class="span10">  
@@ -84,7 +84,7 @@
           {{#=IMG(_src=get_image(article.picture, article.content_type_id.identifier),_id=article.picture,_class="span11 recipephoto")}}
           <!--"http://src.sencha.io/sw/"+-->
           <script src='http://src.sencha.io/screen.js'></script>
-           {{=IMG(_src="http://src.sencha.io/sw/"+get_image(article.picture, article.content_type_id.identifier, host=True, scheme=True),_id=article.picture,_class=" recipephoto",_style="margin:5px;")}}
+           {{=IMG(_src="http://src.sencha.io/451/"+get_image(article.picture, article.content_type_id.identifier, host=True, scheme=True),_id=article.picture,_class=" recipephoto",_style="margin:5px;")}}
         </div>
         <div class="tab-pane {{='active' if article_data.active_tab == 'video' else ''}}" id="video">
               {{=DIV(XML(article_data.embed_code()), _class="span11 video")}}
