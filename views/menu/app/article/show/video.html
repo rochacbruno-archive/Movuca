@@ -23,6 +23,8 @@
         </li>
         </ul>
         <div class="span10">  
+          <a href="{{=CURL('page','reportcontent', args=[article.content_type_id.identifier,article.id,article.slug])}}" title="{{=T('Ajude a moderar o conteúdo e garantir que nossas receitas sejam 100% veganas!')}}" style="position:relative;top:0;right:0;" class="pull-right"><i style="margin-right:5px" class="icon-flag"></i>{{=T("Report")}}</a>
+          
           {{=A(H3(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug]))}}
         </div>
         <div class="span10">  

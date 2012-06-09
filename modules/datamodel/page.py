@@ -9,6 +9,41 @@ from helpers.images import THUMB2
 from plugin_ckeditor import CKEditor
 
 
+class Report(BaseModel):
+    tablename = "report_content"
+
+    def set_properties(self):
+        self.fields = [
+            Field("content_type"),
+            Field("item_id", "integer"),
+            Field("slug"),
+            Field("reason"),
+            Field("details", "text")
+        ]
+
+        reasons = ["Publicação não é vegana",
+                   "Violação de direitos autorais",
+                   "Falta de referências/fontes",
+                   "Conteúdo ofensivo",
+                   "Publicação falsa/mentirosa",
+                   "Usuário falso",
+                   "Usuário ofensivo",
+                   "Usuário desrespeita os termos e condições da rede",
+                   "Outro motivo (Justifique abaixo)"]
+
+        self.validators = {
+            "reason": IS_IN_SET(reasons)
+        }
+
+        self.labels = {
+            "content_type": self.db.T("Content Type"),
+            "item_id": self.db.T("Item id"),
+            "slug": self.db.T("Item url slug"),
+            "reason": self.db.T("Reason"),
+            "details": self.db.T("Details")
+        }
+
+
 class Page(BaseModel):
     tablename = "internal_page"
 

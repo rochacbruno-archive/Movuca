@@ -32,7 +32,7 @@
                 {{else:}}
                     {{pinimg=URL('static','menu',args='logo.png', host=True, scheme=True)}}
                 {{pass}}
-                <a href="http://pinterest.com/pin/create/button/?url={{=pinurl}}&media={{=pinimg}}&description={{=response.meta.description}}" class="pin-it-button" count-layout="none"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a>
+                <a target="_blank" href="http://pinterest.com/pin/create/button/?url={{=pinurl}}&media={{=pinimg}}&description={{=response.meta.description}}" class="pin-it-button" count-layout="none"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a>
 
                 <div class="fb-like {{=columns}}" data-href="{{=item_url}}" data-send="{{='true' if send else 'false'}}" data-layout="button_count" data-width="160" data-show-faces="false" data-font="verdana" data-action="{{=data_action}}"></div>
             {{pass}}

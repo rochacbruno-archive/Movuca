@@ -21,3 +21,8 @@ def new():
 def edit():
     page = Page("edit")
     return page.render("app/page/edit")
+
+
+def reportcontent():
+    page = Page("reportcontent")
+    return page.render("app/page/new")

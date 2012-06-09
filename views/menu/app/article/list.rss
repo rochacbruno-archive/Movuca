@@ -8,9 +8,9 @@
 # items is a list of dictionaries each with title, link, description, pub_date.
 ###
 articles_rss = dict()
-articles_rss['title'] = title
+articles_rss['title'] = "Menu vegano feed"
 articles_rss['link'] = CURL('article', 'list', args=request.args, vars=request.vars, extension="rss", host=True, scheme=True) 
-articles_rss['description'] = title
+articles_rss['description'] = "Receitas e dicas de nutrição vegetariana"
 articles_rss['created_on'] = request.now
 articles_rss['entries'] = [] 
 for article in articles:

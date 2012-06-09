@@ -12,7 +12,7 @@
     <meta name="keywords" content="{{=response.meta.keywords}},vegan,vegetariano,vegano,vegana,vegetariana,saudável,ecológico">
     <meta name="application-name" content="{{=request.application}}" />
 
-  <meta property="og:author" content="Blouweb.com"/>
+  <meta property="og:author" content="Bruno Cezar Rocha"/>
 
     <meta property="og:site_name" content="menuvegano"/>
     <meta property="fb:admins" content="1766038844,100002613617190"/>
@@ -22,10 +22,12 @@
   <meta property="og:url"    content="{{=response.meta.og_url}}" /> 
   <meta property="og:title"  content="{{=response.meta.title}}" />
   <meta property="og:description"  content="{{=response.meta.description}}" />
-  <meta property="og:image"  content="{{=URL('static','menu',args='logo.png', host=True, scheme=True)}}" />
+  
   {{for og_image in response.meta.og_images:}} 
       <meta property="og:image"  content="{{=og_image}}" /> 
   {{pass}}
+
+  <meta property="og:image"  content="{{=URL('static','menu',args='logo.png', host=True, scheme=True)}}" />
   
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -247,6 +249,12 @@ jQuery(function() {
                       <li class="divider"></li>
                       <li>{{=A(T('All articles'), _href=CURL('article', 'list'))}}</li>
                       <li>{{=A(T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
+                      <li class="divider"></li>
+                      <li>
+                        <a target="_blank" href="http://feeds.feedburner.com/menuvegano">
+                         <i class="icon-signal"></i>RSS
+                        </a>
+                      </li>
                   </ul>
                 </li>
                 <li class="dropdown">
@@ -512,6 +520,8 @@ jQuery(function() {
             </ul>
           </div><!--/.well -->             
             {{pass}}
+
+            <div class="fb-like-box" data-href="http://www.facebook.com/menuvegano" data-width="216" data-show-faces="true" data-stream="false" data-header="false"></div>
           {{end}}
         </div><!--/span-->
         {{pass}}
@@ -585,6 +595,8 @@ create something more unique.</p>
 {{pass}}
 
           </p>
+
+
       </footer>
       {{end}}
 

@@ -517,7 +517,7 @@ class Person(Base):
 
             buttons.append(TAG.BUTTON(text[relation], _onclick="jQuery(this).text('%s');ajax('%s', [], ':eval');jQuery('#relation-text').text('%s');" % (post_text[relation], url[relation], post_text[relation]), _class="btn btn-danger" if relation in ['following', 'contacts'] else 'btn btn-success'))
             #buttons.append(TAG.BUTTON(T("Message"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
-            buttons.append(TAG.BUTTON(T("Report/Block"), _class="btn", _onclick="alert('Sorry, it is not implemented yet')"))
+            buttons.append(A(T("Report/Block"), _class="btn", _href=CURL('page', 'reportcontent', args=["Person", user.id, user.nickname or user.first_name])))
         else:
             buttons.append(A(T("Edit Profile"), _class="button btn", _href=CURL('default', 'user', args='profile')))
             #buttons.append(A(T("My Messages"), _class="button btn", _href=CURL('person', 'messages', args=user.nickname or user.id)))

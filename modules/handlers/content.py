@@ -1,16 +1,16 @@
 # coding: utf-8
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, H1
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL
 
 
-class Page(Base):
+class Content(Base):
     def start(self):
         from movuca import DataBase, User
-        from datamodel.page import Page, Report
+        from datamodel.content import report
         from datamodel.article import ContentType, Category, Article
-        self.db = DataBase([User, Page, Report, Category, ContentType, Article])
-        if self.db.request.function not in ["show", "reportcontent"] and not self.db.auth.has_membership("admin"):
+        self.db = DataBase([User, Page, Category, ContentType, Article])
+        if self.db.request.function != "show" and not self.db.auth.has_membership("admin"):
             redirect(self.db.CURL("home", "index"))
 
     def pre_render(self):
@@ -57,27 +57,3 @@ class Page(Base):
 
     def list(self):
         self.context.form = SQLFORM.grid(self.db.Page)
-
-    def reportcontent(self):
-        if not self.db.auth.user:
-            vrs = {"_next": self.CURL('page', 'reportcontent', args=self.db.request.args)}
-            redirect(self.CURL('person', 'account', args=['login'], vars=vrs))
-
-        self.response.meta.title = "%s | %s" % (
-                                     self.db.T("Report content"),
-                                     self.db.config.meta.title,
-                                    )
-
-        self.db.Report.content_type.default = self.db.T(self.db.request.args(0))
-        self.db.Report.item_id.default = int(self.db.request.args(1))
-        self.db.Report.slug.default = self.db.request.args(2)
-
-        self.db.Report.content_type.writable = \
-        self.db.Report.item_id.writable = \
-        self.db.Report.slug.writable = False
-
-        self.context.form = SQLFORM(self.db.Report, formstyle='divs')
-        self.context.form.insert(0, H1(self.db.T("Report content or user")))
-
-        if self.context.form.process().accepted:
-            self.db.response.flash = self.db.T("Thank you for reporting this content")
