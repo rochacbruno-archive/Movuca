@@ -87,7 +87,7 @@
     <!-- content tabs -->
     <ul class="nav nav-tabs user-content">
       <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,5', author=user.id))}}">{{=T("All")}}</a></li>
-      {{if not user_is("admin"):}}
+      {{if 1==2 and not user_is("admin"):}}
           {{content_types = content_types.as_list()}}
           {{content_types.append({"id":3, "title":T("Product"), "identifier":T("Product")})}}
       {{pass}}

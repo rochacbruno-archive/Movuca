@@ -59,7 +59,7 @@
   </h5>
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,6'))}}">{{=T("All")}}</a></li>
-      {{if not user_is("admin"):}}
+      {{if 1==2 and not user_is("admin"):}}
           {{content_types = content_types.as_list()}}
            {{content_types.append({"id":3, "title":T("Product"), "identifier":T("Product")})}}
       {{pass}}
