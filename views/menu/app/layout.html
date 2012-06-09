@@ -23,11 +23,10 @@
   <meta property="og:title"  content="{{=response.meta.title}}" />
   <meta property="og:description"  content="{{=response.meta.description}}" />
   
+  {{response.meta.og_images.append(URL('static','menu',args='logo.png', host=True, scheme=True))}}
   {{for og_image in response.meta.og_images:}} 
       <meta property="og:image"  content="{{=og_image}}" /> 
   {{pass}}
-
-  <meta property="og:image"  content="{{=URL('static','menu',args='logo.png', host=True, scheme=True)}}" />
   
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
