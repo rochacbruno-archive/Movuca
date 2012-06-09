@@ -604,7 +604,7 @@ class Article(Base):
         self.response.meta.og_type = "menuvegano:receita"
         self.response.meta.og_url = self.CURL("article", "show", args=[self.context.article.id, self.context.article.slug], scheme=True, host=True)
         self.response.meta.og_images = self.response.meta.og_images or []
-        self.response.meta.og_images.append(self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier, host=True, scheme=True))
+        self.response.meta.og_images.append(self.get_image(self.context.article.medium_thumbnail, self.context.article.content_type_id.identifier, host=True, scheme=True))
         self.response.meta.og_images.append(self.get_image(None, 'user', themename='menu', user=self.context.article.author, host=True, scheme=True))
 
         self.context.article.update_record(views=self.context.article.views + 1)
