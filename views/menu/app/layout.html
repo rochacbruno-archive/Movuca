@@ -444,7 +444,7 @@ jQuery(function() {
           </div>
 
             <ul class="nav nav-list">
-              <li class="nav-header">Create</li>
+              <li class="nav-header">{{=T('Create')}}</li>
               <!-- <li class="active"><a href="#"><i class="icon-star"></i> Home</a></li> -->
               {{for content_type in content_types:}}
                   <li>{{=A(iicon('list-alt'), T(content_type.title), _href=CURL('article', 'new', args=content_type.identifier))}}</li>
@@ -454,12 +454,12 @@ jQuery(function() {
               <li>{{=A(iicon('list-alt'), T('Page'), _href=CURL('page', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Photo Gallery'), _href=CURL('gallery', 'new'))}}</li>
               <li>{{=A(iicon('list-alt'), T('Bundle'), _href=CURL('bundle', 'new'))}}</li> -->
-              <li class="nav-header">Explore</li>
+              <li class="nav-header">{{=T('Explore')}}</li>
               <li>{{=A(iicon('search'), T('Find articles'), _href=CURL('article', 'search'))}}</li>
               <li>{{=A(iicon('user'), T('Find members'), _href=CURL('person', 'search'))}}</li>
               <li>{{=A(iicon('list'), T('All articles'), _href=CURL('article', 'list'))}}</li>
               <li>{{=A(iicon('th'), T('All members'), _href=CURL('person', 'search', vars=dict(q='@')))}}</li>
-              <li class="nav-header">Me</li>
+              <li class="nav-header">{{=T('Me')}}</li>
               <li>{{=A(iicon('th-large'), T('My profile'), _href=CURL('person', 'show'))}}</li>
               <li>{{=A(iicon('cogs'), T('My settings'), _href=CURL('person', 'account', args='profile'))}}</li>
               <li>{{=A(iicon('list-alt'), T('My articles (%s)', session.auth.user.articles), _href=CURL('article', 'list', vars={'author': session.auth.user.id}))}}</li>
