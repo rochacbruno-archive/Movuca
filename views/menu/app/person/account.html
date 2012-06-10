@@ -10,12 +10,23 @@
         });
      });
     </script>
+    <style type="text/css">
+    #auth_user_password_two__row .w2p_fc {
+      display:none;
+    }
+    #submit_record__row {
+      margin-top:20px;
+    }
+    </style>
 {{pass}}
 
     {{if 'profile' in request.args:}}
     	<h2>{{=T("Your settings")}}</h2>
     {{else:}}
 		<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+       {{if 'register' in request.args:}}
+          <h5>{{=iicon('exclamation-sign')}}{{=XML(T("By registering you will automatically agree with our <a href='%s' target='_blank'>terms and conditions</a>", CURL('page','show',args="termos-e-condicoes")))}}</h5>
+       {{pass}}
 		<hr />
     {{pass}}
 
@@ -34,6 +45,7 @@
     {{pass}}
 
 	{{if request.args(0) in ['login', 'register'] and use_facebook:}}
+       {{=T("or")}} <br /><br />
        <a title="{{=T('Enter using facebook account')}}" href="{{=URL('person', 'facebook', args='login')}}" class='zocial facebook'>
           <span>{{=T('Connect with facebook')}}</span>
        </a>       
