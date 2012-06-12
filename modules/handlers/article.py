@@ -776,9 +776,9 @@ class Article(Base):
                 queries.append(self.db.Article.search_index.like("%%%s%%" % value))
                 self.context.title += str(self.db.T("containing: %s ", value))
             if field == 'popular':
-                queries.append(self.db.Article.likes > 5)
-                queries.append(self.db.Article.favorited > 1)
-                queries.append(self.db.Article.views > 100)
+                # queries.append(self.db.Article.likes > 5)
+                # queries.append(self.db.Article.favorited > 1)
+                # queries.append(self.db.Article.views > 100)
                 self.context.title += str(self.db.T("in popular"))
             if field == 'category':
                 if not value == "ALL":
@@ -833,7 +833,7 @@ class Article(Base):
         if self.request.vars.limitby:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
 
-        orderby = ~self.db.Article.publish_date if not 'popular' in self.request.vars else self.db.Article.likes
+        orderby = ~self.db.Article.publish_date if not 'popular' in self.request.vars else self.db.Article.likes | self.db.Article.views
         
         self.context.articles = self.db(query).select(limitby=limitby, orderby=orderby)
         if 'author' in self.request.vars and self.context.articles:
