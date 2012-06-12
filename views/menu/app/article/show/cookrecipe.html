@@ -129,7 +129,7 @@
 
       <div class="span4 cook-recipe-ingredients article-box" style="margin:0;padding:10px 0;">
               {{=H4(iicon('th-list'), T("Ingredients"))}}
-              {{=UL(*[LI(item) for item in article_data.ingredients],_style="margin:0;", _class="well")}}
+              {{=UL(*[LI(MARKMIN(item)) for item in article_data.ingredients],_style="margin:0;list-style:none;", _class="well")}}
         
        
        </div>

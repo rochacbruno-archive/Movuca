@@ -367,3 +367,7 @@ hr {
   font-size:16px !important;
 }
 
+.cook-recipe-ingredients h1 {
+  font-size:20px;
+  color:#800000;
+}
