@@ -833,7 +833,7 @@ class Article(Base):
         if self.request.vars.limitby:
             limitby = [int(item) for item in self.request.vars.limitby.split(',')]
 
-        orderby = ~self.db.Article.publish_date if not 'popular' in self.request.vars else self.db.Article.likes | self.db.Article.views
+        orderby = ~self.db.Article.publish_date if not 'popular' in self.request.vars else self.db.Article.views | self.db.Article.likes
         
         self.context.articles = self.db(query).select(limitby=limitby, orderby=orderby)
         if 'author' in self.request.vars and self.context.articles:
