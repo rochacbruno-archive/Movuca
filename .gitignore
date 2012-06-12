@@ -40,3 +40,4 @@ languages/pt-br.py
 languages/*
 languages/en.py
 languages/hu.py
+controllers/setup.py
