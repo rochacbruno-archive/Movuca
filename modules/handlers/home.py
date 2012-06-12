@@ -7,8 +7,9 @@ class Home(Base):
     def start(self):
         from movuca import DataBase, User
         from datamodel.article import Article, ContentType, Category
+        from datamodel.page import Page
         from datamodel.ads import Ads
-        self.db = DataBase([User, ContentType, Category, Article, Ads])
+        self.db = DataBase([User, ContentType, Category, Article, Ads, Page])
 
     def pre_render(self):
         # obrigatorio ter um config, um self.response|request, que tenha um render self.response.render
@@ -36,6 +37,9 @@ class Home(Base):
         self.context.block1 = self.context.blocks.exclude(lambda row: "block1" in row.blocks)
         self.context.block2 = self.context.blocks.exclude(lambda row: "block2" in row.blocks)
         self.context.block3 = self.context.blocks.exclude(lambda row: "block3" in row.blocks)
+
+    def pages(self):
+        self.context.pages = self.db(self.db.Page.visibility == 'footer').select()
 
     # def categories(self):
     #     self.context.categories = []

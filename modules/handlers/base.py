@@ -24,6 +24,7 @@ class Base(object):
         self.context.content_types = []
         self.context.categories = []
         self.context.menus = []
+        self.context.internalpages = []
         self.theme = theme
         self.view = view
 
@@ -92,10 +93,15 @@ class Base(object):
         if not "menu" in self.db.tables:
             from datamodel.menu import Menu
             Menu(self.db)
+        if not 'internal_page' in self.db.tables:
+            from datamodel.page import Page
+            Page(self.db)
         # load menus
         if not self.context.menus:
             self.context.menus = self.db(self.db.menu.is_active == True).select(cache=(self.db.cache.ram, 300))
-
+        #load pages
+        if not self.context.internalpages:
+            self.context.internalpages = self.db(self.db.internal_page.visibility == 'footer').select(cache=(self.db.cache.ram, 300))
         if self.response.flash:
             self.context.alerts.append(self.response.flash)
 

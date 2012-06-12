@@ -599,6 +599,12 @@ create something more unique.</p>
       </footer>
       {{end}}
 
+<ul style="list-style:none;margin-left:0px;">
+{{for i,page in enumerate(internalpages, 1):}}
+ <li style="float:left;"><a href="{{=CURL('page','show', args=page.slug)}}">{{=page.title}}</a>{{if i == 1 or not i%2:}}<span style="margin-left:5px;margin-right:5px;">|</span>{{pass}}</li>
+{{pass}}
+</ul> 
+
     </div><!--/.fluid-container-->
   
 
