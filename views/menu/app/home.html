@@ -3,7 +3,7 @@
 
 {{block header}}
  <div class="row-fluid hero-unit header" style="padding:0;padding-left:2px;padding-top:25px;">
-   <ul class="thumbnails" style="margin-left:10px;">
+   <ul class="thumbnails" style="margin-left:10px;display:inline-block;margin-bottom:-55px;">
         <li class="span7">
           {{include "menu/app/featured_slider.html"}}
         </li>
@@ -20,7 +20,7 @@
              </a>
            </div>
         </li>
-        <li class="span4">
+        <li class="span4" style="margin-top: -56px;">
           <a class="thumbnail" href="{{=CURL('article', 'show', args=[block2[0].id, block2[0].slug], extension=False)}}" title="{{=block2[0].title}}" data-content="{{=block2[0].description}}">
             <div class="captioned" style="width:210px;height:132px;overflow:hidden;">
              {{=IMG(_src=get_image(block2[0].thumbnail, block2[0].content_type_id.identifier), _width=210, _height=132)}}
@@ -65,7 +65,7 @@
 <!-- content tabs -->
   <h5 class="bottom-line">
       <i class="icon-list-alt"></i>
-      {{=T("Content").upper()}}
+      {{=T("Content")}}
   </h5>
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,6'))}}">{{=T("All")}}</a></li>
