@@ -38,3 +38,5 @@ pip-log.txt
 languages
 languages/pt-br.py
 languages/*
+languages/en.py
+languages/hu.py
