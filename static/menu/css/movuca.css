@@ -371,3 +371,7 @@ hr {
   font-size:20px;
   color:#800000;
 }
+
+.contact-item .button {
+  font-size:10px !important;
+}
