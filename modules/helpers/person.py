@@ -51,8 +51,8 @@ def contact_box(row,
         infodiv.append(BR())
         infodiv.append(SPAN(T("Follows you!"), _class="label label-info"))
     infodiv.append(BR())
-    infodiv.append(text)
-    infodiv.append(BR())
+    #infodiv.append(text)
+    #infodiv.append(BR())
     buttondiv = DIV(_class="btn-group")
 
     if kind != 'search':
