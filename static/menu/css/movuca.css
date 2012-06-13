@@ -375,3 +375,7 @@ hr {
 .contact-item .button, .userbtns .btn {
   font-size:10px !important;
 }
+
+#comment_order a {
+  margin-left:5px !important;
+}
