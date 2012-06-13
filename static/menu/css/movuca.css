@@ -372,6 +372,6 @@ hr {
   color:#800000;
 }
 
-.contact-item .button {
+.contact-item .button, .userbtns .btn {
   font-size:10px !important;
 }
