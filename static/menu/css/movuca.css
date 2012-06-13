@@ -376,6 +376,11 @@ hr {
   font-size:10px !important;
 }
 
+.contact-item div.four {
+   overflow: hidden;
+   word-wrap: break-word;
+}
+
 #comment_order a {
   margin-left:5px !important;
 }
