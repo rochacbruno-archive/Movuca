@@ -195,17 +195,7 @@
       </ul>
   {{pass}}
 
-  
-  {{#=LOAD('article','list.popular',vars=dict(limitby='0,4',popular="true"), ajax=True)}}
-
   <div class=""></div>
-          <h4 class="bottom-line" style="clear:left;">
-      <i class="icon-tag"></i>
-      {{=T("Tags").upper()}}
-  </h4>
-    {{=LOAD('article','tagcloud.load', ajax=True)}}
-
-<hr>
 <div>
   <form style="border:1px solid #ccc;padding:3px;text-align:center;" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=menuvegano', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
     <p>Receba as atualizações do Menu Vegano por email:</p>
@@ -217,4 +207,14 @@
     <input type="submit" value="Subscribe" />
   </form>
 </div>
+  {{#=LOAD('article','list.popular',vars=dict(limitby='0,4',popular="true"), ajax=True)}}
+
+  <div class=""></div>
+          <h4 class="bottom-line" style="clear:left;">
+      <i class="icon-tag"></i>
+      {{=T("Tags").upper()}}
+  </h4>
+    {{=LOAD('article','tagcloud.load', ajax=True)}}
+
+
 {{end}}
