@@ -197,14 +197,17 @@
 
   <div class=""></div>
 <div>
-  <form class="thumbnails" style="border:1px solid #ccc;padding:3px;text-align:center;" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=menuvegano', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
-    <p>Receba as atualizações do Menu Vegano por email:</p>
+  <form style="border:1px solid #ccc;padding:3px;" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=menuvegano', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
     <p>
-      <input type="text" style="width:140px" name="email"/>
+      <h6 style="color:#000000;margin-bottom:3px;">{{=iicon('envelope')}}Cadastre seu e-mail</h6>
+      <small style="font-size:10px;color:gray;">receba até um e-mail por dia com as novidades do Menu!</small>
+    </p>
+    <p>
+      <input type="text" style="width:140px" name="email" placeholder="você@dominio.com" required='required'/>
     </p>
     <input type="hidden" value="menuvegano" name="uri"/>
     <input type="hidden" name="loc" value="pt_BR"/>
-    <input type="submit" value="Subscribe" />
+    <input type="submit" value="OK" class="btn" />
   </form>
 </div>
   {{#=LOAD('article','list.popular',vars=dict(limitby='0,4',popular="true"), ajax=True)}}
