@@ -28,28 +28,30 @@ class Notifications(Base):
         self.CURL = self.db.CURL
         self.get_image = self.db.get_image
         self.context.theme_name = self.config.theme.name
+        self.user_id = self.db.auth.user_id
 
-    def list_unread(self, user_id):
-        self.context.notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).select(orderby=~self.db.Notification.created_on)
+    def list_unread(self):
+        self.context.notifications = self.db((self.db.Notification.user_id == self.user_id) & (self.db.Notification.is_read == False)).select(orderby=~self.db.Notification.created_on)
         self.context.notifications_ids = [row.id for row in self.context.notifications]
 
-    def list_latest(self, user_id, limitby="0,10"):
+    def list_latest(self, limitby="0,10"):
         if isinstance(limitby, str):
             limitby = [int(index) for index in limitby.split(",")]
 
-        self.context.notifications = self.db((self.db.Notification.user_id == user_id)).select(orderby=self.db.Notification.is_read | ~self.db.Notification.created_on, limitby=limitby)
+        self.context.notifications = self.db((self.db.Notification.user_id == self.user_id)).select(orderby=self.db.Notification.is_read | ~self.db.Notification.created_on, limitby=limitby)
         self.context.notifications_ids = [row.id for row in self.context.notifications if row.is_read == False]
 
-    def counter(self, user_id):
+    def counter(self):
         try:
-            self.context.count = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False)).count()
+            self.context.count = self.db((self.db.Notification.user_id == self.user_id) & (self.db.Notification.is_read == False)).count()
         except Exception:
             self.context.count = 0
 
-    def mark_as_read(self, user_id, ids):
+    def mark_as_read(self):
+        ids = self.request.vars.get('notifications_ids', '')
         ids = ids.split(",")
         if ids:
-            notifications = self.db((self.db.Notification.user_id == user_id) & (self.db.Notification.is_read == False) & (self.db.Notification.id.belongs(ids))).select()
+            notifications = self.db((self.db.Notification.user_id == self.user_id) & (self.db.Notification.is_read == False) & (self.db.Notification.id.belongs(ids))).select()
             for notification in notifications:
                 notification.update_record(is_read=True)
                 self.db.commit()
