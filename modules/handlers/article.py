@@ -791,7 +791,11 @@ class Article(Base):
                         catqueries = []
                         for catid in cat_ids:
                             catqueries.append(self.db.Article.category_id.contains(catid))
-                        cat_qry = reduce(lambda a, b: (a | b), catqueries)
+                        if catqueries:
+                            cat_qry = reduce(lambda a, b: (a | b), catqueries)
+                        else:
+                            cat_qry = self.db.Article.category_id == 1
+                        # todo: BEtter solution here!
                     queries.append((cat_qry))
                     self.context.title += str(self.db.T("in %s category ", self.db.T(value.replace('_', ' '))))
             if field == "draft":
