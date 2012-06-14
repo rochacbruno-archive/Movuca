@@ -289,6 +289,9 @@ class Person(Base):
         self.followers(arg)
         self.following(arg)
 
+        self.context.followers = self.context.followers or []
+        self.context.following = self.context.following or []
+
         followers = [follower.follower for follower in self.context.followers]
         following = [followed.followed for followed in self.context.following]
 
