@@ -125,7 +125,7 @@ class Access(Auth):
         if 'family_name' in user:
             user['lart_name'] = user['family_name']
 
-        self.notifier.notify_user("welcome_on_register", user['email'], **user)
+        self.notifier.notify_user("welcome_on_register", user.get('email', 'rochacbruno+erromenuveganoregister@gmail.com'), **user)
 
 
 User = Access  # It is just for direct imports
