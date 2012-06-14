@@ -47,14 +47,22 @@ class FaceBookAccount(OAuthAccount):
 
         if user:
             current.session.facebooklogin = True
-            existent = self.db(self.db.auth_user.email == user["email"]).select().first()
+            try:
+                user_email = user.get("email", False)
+                if user_email:
+                    existent = self.db(self.db.auth_user.email == user_email).select().first()
+                else:
+                    existent = False
+            except:
+                existent = False
+
             if existent:
                 current.session["%s_setpassword" % existent.id] = existent.password
                 return dict(first_name=user.get('first_name', ""),
                             last_name=user.get('last_name', ""),
                             facebookid=user['id'],
                             facebook=user.get('username', user['id']),
-                            email=user['email'],
+                            email=user.get('email', existent.email),
                             password=existent.password
                             )
             else:
@@ -70,7 +78,7 @@ class FaceBookAccount(OAuthAccount):
                             facebookid=user['id'],
                             facebook=user.get('username', user['id']),
                             nickname=IS_SLUG()(user.get('username', "%(first_name)s-%(last_name)s" % user) + "-" + user['id'][:5])[0],
-                            email=user['email'],
+                            email=user.get('email', "noemail@menuvegano.com.br"),
                             # birthdate=birthday,
                             about=user.get("bio", ""),
                             website=user.get("website", ""),
