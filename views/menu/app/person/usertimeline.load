@@ -12,14 +12,17 @@ $(document).ready(function () {
   });
 });
 </script>
-
+{{if 'events' in globals():}}
+{{if events:}}
 <ul class="timeline-wrapper" style="list-style: none;margin-left:0px;">
  {{for event in events:}}
     {{eventbox(event)}}
  {{pass}}
 </ul>
+{{pass}}
 {{if events:}}
   <a href="{{=CURL('person','usertimeline', extension=False, args=user.nickname or user.id,vars=dict())}}">{{=T("View all activities")}}</a>
 {{else:}}
   {{=T("No events on this timeline")}}
+{{pass}}
 {{pass}}
