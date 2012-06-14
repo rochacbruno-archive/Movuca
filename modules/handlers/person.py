@@ -630,9 +630,9 @@ class Person(Base):
             redirect(self.CURL('person', 'account', args=self.request.args, vars=self.request.vars))
         self.context.auth = self.db.auth
         self.context.auth.settings.controller = 'person'
-        self.context.auth.settings.login_url = self.CURL('person', 'facebook', args='login')
-        self.context.auth.settings.login_next = self.CURL('person', 'show')
-        self.context.auth.settings.register_next = self.CURL('person', 'show')
+        self.context.auth.settings.login_url = self.CURL('person', 'facebook', args='login', host=True, scheme=True)
+        self.context.auth.settings.login_next = self.CURL('person', 'show', host=True, scheme=True)
+        self.context.auth.settings.register_next = self.CURL('person', 'show', host=True, scheme=True)
         from helpers.facebook import FaceBookAccount
         self.context.auth.settings.login_form = FaceBookAccount(self.db)
         self.context.form = self.context.auth()
