@@ -57,6 +57,7 @@ class User(BaseAuth):
                       Field("country", "string"),
                       Field("city", "string"),
                       Field("languages", "list:string"),
+                      self.auth.signature
                      ]
 
         self.register_visibility = {

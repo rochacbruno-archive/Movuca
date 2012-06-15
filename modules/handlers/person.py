@@ -329,7 +329,7 @@ class Person(Base):
 
         if q:
             words = q.split()
-            queries = []
+            queries = [self.db.auth_user.is_active == True]
 
             for word in words:
                 queries.append(self.db.auth_user.first_name.like("%" + word + "%"))

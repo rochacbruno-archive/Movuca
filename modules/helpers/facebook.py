@@ -63,7 +63,8 @@ class FaceBookAccount(OAuthAccount):
                             facebookid=user['id'],
                             facebook=user.get('username', user['id']),
                             email=user.get('email', existent.email),
-                            password=existent.password
+                            password=existent.password,
+                            is_active=True
                             )
             else:
                 # b = user["birthday"]
@@ -86,6 +87,7 @@ class FaceBookAccount(OAuthAccount):
                             photo_source=3,
                             tagline=user.get("link", ""),
                             registration_type=2,
+                            is_active=True
                             )
 
 
