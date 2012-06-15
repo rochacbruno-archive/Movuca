@@ -476,6 +476,29 @@ class Person(Base):
         else:
             self.context.eval = "alert('%s')" % self.T("It is not possible to delete")
 
+    def delete_account(self):
+        self.db.auth_user.is_active.readable = self.db.auth_user.is_active.writable = True
+        uid = self.db.auth.user_id or redirect(self.CURL('home', 'index'))
+        try:
+            user = self.db.auth_user[int(uid)]
+        except Exception:
+            user = self.db.auth_user(nickname=uid)
+        self.context.user = user or redirect(self.CURL('home', 'index'))
+        self.context.form = SQLFORM(self.db.auth_user,
+                                   user.id,
+                                   formstyle='divs',
+                                   submit_button=self.T('Delete my account'),
+                                   fields=['id'],
+                                   hidden={'delete': '1'}
+                                   )
+        if self.context.form.process().accepted:
+            if self.request.vars.delete == '1':
+                self.context.user.update_record(is_active=False)
+                self.db(self.db.user_timeline.created_by == user.id).delete()
+                self.db.commit()
+                self.response.flash = self.session.flash = "Deleted"
+                redirect(self.CURL('person', 'account', args='logout'))
+
     def show(self, uid):
         T = self.T
         CURL = self.CURL

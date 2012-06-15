@@ -59,6 +59,11 @@ def unfollow():
 login_url = CURL('person', 'account', args='login')
 
 
+def delete_account():
+    person = Person('delete_account')
+    return person.render('app/person/account')
+
+
 def show():
     auth = session.get("auth", {})
     user = auth.get("user", None)
