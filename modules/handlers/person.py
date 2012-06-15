@@ -329,7 +329,7 @@ class Person(Base):
 
         if q:
             words = q.split()
-            queries = [self.db.auth_user.is_active == True]
+            queries = []
 
             for word in words:
                 queries.append(self.db.auth_user.first_name.like("%" + word + "%"))
@@ -340,7 +340,7 @@ class Person(Base):
                 queries.append(self.db.auth_user.tagline.like("%" + word + "%"))
 
             query = reduce(lambda a, b: (a | b), queries)
-            finalquery = query & (self.db.auth_user.id != self.session.auth.user.id)
+            finalquery = query & (self.db.auth_user.id != self.session.auth.user.id) & (self.db.auth_user.is_active == True)
             #### pagination
             self.context.paginate_selector = PaginateSelector(paginates=(26, 50, 100))
             self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
