@@ -76,8 +76,8 @@ class FaceBookAccount(OAuthAccount):
                 # self.db.auth.initial_user_permission(user)  # Called on profile page
                 return dict(first_name=user.get('first_name', ""),
                             last_name=user.get('last_name', ""),
-                            facebookid=user['id'],
-                            facebook=user.get('username', user['id']),
+                            facebookid=user.get('id', 0),
+                            facebook=user.get('username', user.get('id', 0)),
                             nickname=IS_SLUG()(user.get('username', "%(first_name)s-%(last_name)s" % user) + "-" + user['id'][:5])[0],
                             email=user.get('email', "noemail@menuvegano.com.br"),
                             # birthdate=birthday,

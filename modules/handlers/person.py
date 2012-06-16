@@ -72,11 +72,14 @@ class Person(Base):
             except Exception:
                 user = self.db.auth_user(nickname=self.request.args(0))
         else:
-            user = self.db.auth_user[self.session.auth.user.id]
+            user = self.db.auth_user[self.db.auth.user_id]
         self.context.user = user
 
         if self.request.extension == "html":
-            self.show(user.id)
+            if user:
+                self.show(user.id)
+            else:
+                redirect(self.CURL('home', 'index'))
         if user:
             query = self.db.UserTimeLine.user_id == user.id
             #### pagination
@@ -119,7 +122,10 @@ class Person(Base):
             self.context.TIMELINEFUNCTIONS = '%s/app/person/publictimeline_events.html' % self.context.theme_name
 
     def privatetimeline(self):
-        self.board(self.session.auth.user.id)
+        try:
+            self.board(self.db.auth.user_id)
+        except:
+            redirect(self.CURL('home', 'index'))
         self.contacts()
         allowed = list(self.context.following_list) + list(self.context.contacts_list)
         allowed.append(self.session.auth.user.id)
@@ -352,8 +358,9 @@ class Person(Base):
 
             from helpers.person import contact_box
             self.context.contact_box = contact_box
-
-        self.context.form = SQLFORM.factory(Field('q', default=q or '', label=self.T("Search Term"), comment=self.T("In name, email, nickname, about")), formstyle='divs', _method="GET")
+        
+        qdefault = q if q and q != '@' else ''
+        self.context.form = SQLFORM.factory(Field('q', default=qdefault, label=self.T("Search Term"), comment=self.T("In name, email, nickname, about")), formstyle='divs', _method="GET")
 
     def new_board_event(self, form=None, writer=None, user=None, relation=None):
         writer_user = self.db.auth_user[writer]
@@ -402,7 +409,8 @@ class Person(Base):
         except Exception:
             user = self.db.auth_user(nickname=uid)
         self.context.user = user
-        self.response.meta.title = "%s | %s" % (
+        if user:
+            self.response.meta.title = "%s | %s" % (
                self.db.T("%s's board", user.nickname.title() or user.first_name.title()),
                self.db.config.meta.title,
               )

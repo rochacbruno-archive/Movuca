@@ -82,7 +82,11 @@ class Admin(Base):
 
     def tables(self):
         tablename = self.request.function
-        self.context.object = SQLFORM.smartgrid(self.db[tablename])
+        if 'view' in self.request.args or 'edit' in self.request.args:
+            ignore_rw = True
+        else:
+            ignore_rw = False
+        self.context.object = SQLFORM.smartgrid(self.db[tablename], ignore_rw=ignore_rw)
 
     def simpletables(self):
         tablename = self.request.function

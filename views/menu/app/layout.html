@@ -12,8 +12,6 @@
     <meta name="keywords" content="{{=response.meta.keywords}},vegan,vegetariano,vegano,vegana,vegetariana,saudável,ecológico">
     <meta name="application-name" content="{{=request.application}}" />
 
-  <meta property="og:author" content="Bruno Cezar Rocha"/>
-
     <meta property="og:site_name" content="menuvegano"/>
     <meta property="fb:admins" content="1766038844,100002613617190"/>
 
@@ -197,14 +195,14 @@ jQuery(function() {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="{{=CURL('home', 'index')}}" style="padding-bottom:0;padding-top:5px;">
+          <a class="brand" href="/" style="padding-bottom:0;padding-top:5px;">
 
             <img src="{{=URL('static', 'menu', args='melancia.png')}}" style="max-height:30px;">
             
           </a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li><a href="{{=CURL('home', 'index')}}">Home</a></li>
+              <li><a href="/">Home</a></li>
 
                 <li class="dropdown" >
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -387,7 +385,7 @@ jQuery(function() {
   <div class="container top-header"> 
         <div class="row-fluid logobar">
           <div class="span3 mobilehidden logodiv">
-             <a href="{{=CURL("home","index")}}"><img src="{{=URL('static','menu',args='logo.png')}}"></a>
+             <a href="/"><img src="{{=URL('static','menu',args='logo.png')}}"></a>
           </div>
           <div class="span2">
           <div class="toptext">

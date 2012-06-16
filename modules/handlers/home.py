@@ -34,9 +34,9 @@ class Home(Base):
     def homeblocks(self):
         self.context.blocks = self.db(self.db.Article.blocks).select()
 
-        self.context.block1 = self.context.blocks.exclude(lambda row: "block1" in row.blocks)
-        self.context.block2 = self.context.blocks.exclude(lambda row: "block2" in row.blocks)
-        self.context.block3 = self.context.blocks.exclude(lambda row: "block3" in row.blocks)
+        self.context.block1 = self.context.blocks.exclude(lambda row: "block1" in row.blocks) or self.context.featured
+        self.context.block2 = self.context.blocks.exclude(lambda row: "block2" in row.blocks) or self.context.featured
+        self.context.block3 = self.context.blocks.exclude(lambda row: "block3" in row.blocks) or self.context.featured
 
     def pages(self):
         self.context.pages = self.db(self.db.Page.visibility == 'footer').select()

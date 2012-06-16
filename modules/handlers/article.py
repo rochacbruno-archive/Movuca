@@ -599,7 +599,7 @@ class Article(Base):
                                                      self.db.config.meta.title,
                                                     )
         self.response.meta.description = self.context.article.description
-        self.response.meta.keywords = ",".join(self.context.article.tags)
+        self.response.meta.keywords = "vegan, vegetarian, vegano, vegetariano, vegetariana, receita, rede social," + ",".join(self.context.article.tags)
 
         self.response.meta.og_type = "menuvegano:receita"
         self.response.meta.og_url = self.CURL("article", "show", args=[self.context.article.id, self.context.article.slug], scheme=True, host=True)

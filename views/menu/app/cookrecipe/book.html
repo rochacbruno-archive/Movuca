@@ -61,7 +61,7 @@ function removefrombook(url) {
 
       </div>
 
-      {{if user_is("admin") or user.id == session.auth.user.id:}}
+      {{if user_is("admin") or user.id == session.get('auth', {}).get('user', {}).get('id', 0):}}
 
       <div class="span2">
          {{=BUTTON(TAG.I(_class="icon-minus", _style="margin-right:5px"), T("Remove!"),

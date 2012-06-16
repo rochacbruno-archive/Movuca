@@ -1,3 +1,4 @@
+{{if 'user' in globals():}}
 {{
 ###
 # response._vars contains the dictionary returned by the controller action
@@ -23,4 +24,4 @@ for event in events:
         )
     )
 pass
-from gluon.serializers import rss}}{{=XML(rss(event_rss))}}
+from gluon.serializers import rss}}{{=XML(rss(event_rss))}}{{pass}}

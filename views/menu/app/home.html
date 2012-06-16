@@ -181,17 +181,20 @@
   
   {{if block3:}}
    <ul class="thumbnails">
-        <li>
-          <a class="thumbnail captioned" href="{{=CURL('article', 'show', args=[block3[0].id, block3[0].slug], extension=False)}}" title="{{=block3[0].title}}" data-content="{{=block3[0].description}}">
-            <div class="" style="width:155px;overflow:hidden;">
-             {{=IMG(_src=get_image(block3[0].thumbnail, block3[0].content_type_id.identifier), _width=155)}}
-            </div>
-            <div class="caption" style="width:115px;overflow:hidden;">
-              <h5>{{=block3[0].title}}</h5>
-            </div>
-  
-          </a>
-        </li>
+        {{for i, b3item in enumerate(block3, 1):}}
+          {{if i < 3:}}
+          <li>
+            <a class="thumbnail captioned" href="{{=CURL('article', 'show', args=[b3item.id, b3item.slug], extension=False)}}" title="{{=b3item.title}}" data-content="{{=b3item.description}}">
+              <div class="" style="width:155px;overflow:hidden;">
+               {{=IMG(_src=get_image(b3item.thumbnail, b3item.content_type_id.identifier), _width=155)}}
+              </div>
+              <div class="caption" style="width:115px;overflow:hidden;">
+                <h5>{{=b3item.title}}</h5>
+              </div>
+            </a>
+          </li>
+          {{pass}}
+        {{pass}}
       </ul>
   {{pass}}
 

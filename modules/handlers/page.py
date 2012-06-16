@@ -40,6 +40,9 @@ class Page(Base):
                                              self.context.page.title,
                                              self.db.config.meta.title,
                                             )
+        self.response.meta.description = self.context.page.description
+        self.response.meta.keywords = "vegan, vegetarian, vegano, vegetariano, vegetariana, receita, rede social," + ",".join(self.context.page.tags)
+        self.response.meta.og_url = self.CURL("page", "show", args=[self.context.page.slug], scheme=True, host=True)
 
     def show(self):
         self.get()
@@ -56,7 +59,11 @@ class Page(Base):
             redirect(self.CURL("show", args=self.context.form.vars.id))
 
     def list(self):
-        self.context.form = SQLFORM.grid(self.db.Page)
+        if 'view' in self.request.args or 'edit' in self.request.args:
+            ignore_rw = True
+        else:
+            ignore_rw = False
+        self.context.form = SQLFORM.grid(self.db.Page, ignore_rw=ignore_rw)
 
     def reportcontent(self):
         if not self.db.auth.user:

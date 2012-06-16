@@ -3,7 +3,7 @@
 <div>
    <h2><a href="{{=CURL('page','show', args=page.slug)}}">{{=page.title}}</a></h2>
 
-   <blockquote>{{=page.description}}</blockquote>
+   <blockquote>{{=XML(str(MARKMIN(page.description)).replace("<a href", "<a target='_blank' href"))}}</blockquote>
 
    <p>
     {{=XML(page.page_content)}}
