@@ -534,6 +534,7 @@ jQuery(function() {
             {{pass}}
 
             <div class="fb-like-box" data-href="http://www.facebook.com/menuvegano" data-width="216" data-show-faces="true" data-stream="false" data-header="false"></div>
+            <!-- div class="fb-activity" data-site="menuvegano.com.br" data-app-id="213390132110106" data-width="216" data-height="300" data-header="false" data-font="verdana" data-recommendations="false"></div -->
           {{end}}
         </div><!--/span-->
         {{pass}}
@@ -615,9 +616,14 @@ create something more unique.</p>
 <ul style="list-style:none;margin-left:0px;">
 {{for i,page in enumerate(internalpages, 1):}}
  <li style="float:left;">
-  {{if i != 1:}}<span style="margin-left:5px;margin-right:5px;">|</span>{{pass}}
-  <a href="{{=CURL('page','show', args=page.slug)}}">{{=page.title}}</a></li>
+  <a href="{{=CURL('page','show', args=page.slug)}}">{{=page.title}}</a>
+  <span style="margin-left:5px;margin-right:5px;">|</span>
+ </li>  
 {{pass}}
+<li style="float:left;">
+  <a href="http://feeds.feedburner.com/menuvegano" target="_blank">Feed RSS</a>
+</li>
+
 </ul> 
 
     </div><!--/.fluid-container-->
