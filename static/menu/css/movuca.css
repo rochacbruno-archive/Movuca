@@ -320,7 +320,12 @@ hr {
 .cook-recipe-ingredients li {
       border-bottom: 1px dashed black;
     margin-bottom: 10px;
-     padding-bottom: 5px;
+     /*padding-bottom: 5px;*/
+}
+
+.cook-recipe-ingredients li p {
+   font-size: 14px;
+   line-height: 10px;
 }
 
 .noactions {
@@ -368,7 +373,8 @@ hr {
 }
 
 .cook-recipe-ingredients h1 {
-  font-size:20px;
+  font-size: 16px;
+  line-height: 16px;
   color:#800000;
 }
 
