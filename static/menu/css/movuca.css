@@ -384,3 +384,7 @@ hr {
 #comment_order a {
   margin-left:5px !important;
 }
+
+.action_links {
+  font-size: 17px !important;
+}
