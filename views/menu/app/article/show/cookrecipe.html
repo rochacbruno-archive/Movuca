@@ -127,14 +127,14 @@
 
   <div class="row-fluid show-article-content" id="ingredients">   
 
-      <div class="span4 cook-recipe-ingredients article-box" style="margin:0;padding:10px 0;">
+      <div class="span12 cook-recipe-ingredients article-box" style="margin:0;padding:10px 0;">
               {{=H4(iicon('th-list'), T("Ingredients"))}}
               {{=UL(*[LI(MARKMIN(item)) for item in article_data.ingredients],_style="margin:0;list-style:none;", _class="well")}}
         
        
        </div>
 
-       <div class="span8 cook-recipe-instructions article-box" style="margin:0;padding:10px 0;margin-left:10px;">
+       <div class="span12 cook-recipe-instructions article-box" style="margin:0;padding:10px 0;margin-left:10px;">
               {{=H4(iicon('question-sign'), T("Preparation Instructions"))}}
               {{=XML(article_data.instructions)}}
         
