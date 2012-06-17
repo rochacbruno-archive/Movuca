@@ -734,6 +734,7 @@
 'no photo': 'sem foto',
 'not authorized': 'not authorized',
 'notifications': 'notificações',
+'now': 'now',
 'ok delete it': 'Sim, apague isso',
 'oldest ': 'Mais antigos',
 'on': 'em',

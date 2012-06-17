@@ -77,37 +77,9 @@
         {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
         {{comments.elements('h4')[0]["_style"] = "display:none"}}
         {{=H4(iicon("question-sign"), T("Comments (%s)", lencomments))}}
-        {{lis = comments.elements('.comment_li')}}
-        {{for li in lis:}}
-          {{comment_id = li.attributes["_data-cid"]}}
-          {{if comment_id != article_data.answer:}}
-              {{li['_class'] += " well"}}
-          {{else:}}
-              {{li['_class'] += " hidden alert alert-success"}}
-          {{pass}}
-        {{pass}}
         {{comments['_class'] += "row-fluid"}}
         {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
         {{submit = comments.elements(_type='submit')}}
-        {{if submit:}}
-            {{submit[0]["_value"] = T("Post your answer")}}
-        {{pass}}
-
-        {{if session.auth:}}
-            {{if session.auth.user.id == article.author:}}
-              {{for li in lis:}}
-                 {{comment_id = li.attributes["_data-cid"]}}
-                 {{div = li.elements(".comment_vote_buttons")[0]}}
-                 {{div.append(BR())}}
-                 {{if comment_id != article_data.answer:}}
-                     {{div.append(A(iicon("ok"), _title=T("Mark it as the correct answer"), _href=CURL("article", "isanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
-                 {{else:}}
-                     {{div.append(A(iicon("remove"), _title=T("Unmark it as the correct answer"), _href=CURL("article", "isnotanswer", args=comment_id, extension=False, vars=dict(_next=request.url))))}}
-                 {{pass}} 
-              {{pass}}
-            {{pass}}
-        {{pass}}
-
         {{=comments}}
   </div>
 
