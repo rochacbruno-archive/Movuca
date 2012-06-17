@@ -59,7 +59,7 @@
 {{pass}}
 {{
 if request.controller in ['home', 'default']:
-    paginate = 8
+    paginate = 7
 elif 'limitby' in request.vars:
     paginate = int(request.vars.limitby.split(',')[1])
 pass
