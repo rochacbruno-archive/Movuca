@@ -833,7 +833,7 @@ class Article(Base):
         #### pagination
         self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
         self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
-        self.context.paginator.records = self.db(query).count()
+        self.context.paginator.records = self.context.totalrecords = self.db(query).count()
         self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
         limitby = self.context.paginator.limitby()
         #### /pagination

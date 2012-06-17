@@ -49,7 +49,6 @@ class Home(Base):
     #                                         "id": content.id,
     #                                         "categories": categories.exclude(lambda row: row.content_type == content.id)
     #                                        })
-        
 
     def ads(self):
         self.context.ads = self.db(self.db.Ads.place == "top_slider").select(limitby=(0, 5), orderby="<random>")
@@ -69,3 +68,8 @@ class Home(Base):
     def featured_members(self):
         query = self.db.auth_user.is_active == True
         self.context.featured_members = self.db(query).select(limitby=(0, 8), orderby="<random>")
+
+    def articles(self):
+        query = (self.db.Article.draft == False) & (self.db.Article.is_active == True)
+        self.context.totalrecords = self.db(query).count()
+        self.context.articles = self.db(query).select(limitby=(0, 7), orderby=~self.db.Article.publish_date)

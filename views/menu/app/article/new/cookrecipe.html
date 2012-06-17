@@ -14,7 +14,7 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
     <div class="span8 alert" style="padding:0;margin:0;padding-bottom:20px;">
        
        <fieldset class="span11">
-            <legend>{{=T("The Basics")}}</legend>
+            <legend>{{=T("The Basics")}} {{=helpmodallink("#helprecipe")}}</legend>
             {{=customfield(form, 'title', css=css)}}
             {{=customfield(form, 'description', css=css)}}
        </fieldset>
@@ -34,7 +34,9 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
        </fieldset>
 
        <fieldset class="span11">
-            <legend>{{=T("Information")}}</legend>
+            <legend>{{=T("Information")}}
+                  {{=helpmodallink("#helpinformation")}}
+              </legend>
             <div class="span5"> 
                 {{=customfield(form, 'prep_time', css=css)}}
                 {{=customfield(form, 'cook_time', css=css)}}
@@ -45,13 +47,13 @@ css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-
             </div>
        </fieldset>
         <fieldset class="span11">
-            <legend>{{=T("Ingredients")}}</legend>
+            <legend>{{=T("Ingredients")}} {{=helpmodallink("#helpingredients")}}</legend>
             {{ingredients_css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error", "label": "hidden"}
                 }}
                 {{=customfield(form, 'ingredients', css=ingredients_css)}}
        </fieldset>
         <fieldset class="span11">
-            <legend>{{=T("Directions")}}</legend>
+            <legend>{{=T("Directions")}} {{=helpmodallink("#helptext")}}</legend>
                 {{=customfield(form, 'instructions', css=ingredients_css)}}
        </fieldset>
     </div>
@@ -65,7 +67,7 @@ css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control
         
 
         <fieldset class="span11">
-            <legend>{{=T("Category & Tags")}}</legend>
+            <legend>{{=T("Category & Tags")}} {{=helpmodallink("#helpcategories")}}</legend>
             {{=customfield(form, 'category_id', css=css2)}}
             {{=customfield(form, 'tags', css=css2)}}
         </fieldset>
@@ -104,3 +106,8 @@ css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control
 </div>
 {{=form.custom.end}}
 
+{{=helpmodal("helpinformation",IMG(_src=CURL('static','menu', args=['images', 'helpinformation.png'])),T("Help"), "width:600px;")}}
+{{=helpmodal("helpcategories",IMG(_src=CURL('static','menu', args=['images', 'helpcategories.png'])),T("Help"), "width:600px;")}}
+{{=helpmodal("helptext",IMG(_src=CURL('static','menu', args=['images', 'helptext.png'])),T("Help"), "width:700px;")}}
+{{=helpmodal("helpingredients",IMG(_src=CURL('static','menu', args=['images', 'helpingredients.png'])),T("Help"), "width:700px;")}}
+{{=helpmodal("helprecipe",IMG(_src=CURL('static','menu', args=['images', 'helprecipe.png'])),T("Help"), "width:800px;margin: -250px 0 0 -430px;")}}

@@ -69,14 +69,14 @@
       {{=T("Content")}}
   </h5>
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,6'))}}">{{=T("All")}}</a></li>
+      <li class="active"><a data-toggle="tab" href="{{=CURL('article','list.load',vars=dict(limitby='0,7'))}}">{{=T("All")}}</a></li>
       {{if 1==2 and not user_is("admin"):}}
           {{content_types = content_types.as_list()}}
            {{content_types.append({"id":3, "title":T("Product"), "identifier":T("Product")})}}
       {{pass}}
       {{for i, content_type in enumerate(content_types):}}
           {{if i <= 1:}}
-          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'],'limitby':'0,6'})}}">{{=T(content_type['title'])}}</a></li>
+          <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'],'limitby':'0,7'})}}">{{=T(content_type['title'])}}</a></li>
           {{pass}}
       {{pass}}
       {{if len(content_types) > 2:}}
@@ -89,7 +89,7 @@
                   <ul class="dropdown-menu">
                     {{for i, content_type in enumerate(content_types):}}
                          {{if i > 1:}}
-                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'], 'limitby':'0,6'})}}">{{=T(content_type['title'])}}</a></li>
+                             <li><a data-toggle="tab" href="{{=CURL('article','list.load', vars={'content_type_id':content_type['id'], 'limitby':'0,7'})}}">{{=T(content_type['title'])}}</a></li>
                          {{pass}}
                     {{pass}}
  
@@ -121,7 +121,7 @@
         elem = $(".article-search");
         sq = elem.val();
         url = elem.attr("data-url");
-        web2py_ajax_page("GET", url + "?sq=" + sq + "&limitby=0,5" , "", "content-placeholder")
+        web2py_ajax_page("GET", url + "?sq=" + sq + "&limitby=0,7" , "", "content-placeholder")
       })
 
 
@@ -132,8 +132,10 @@
       margin-top: -15px;
     }
     </style>
-    {{=LOAD('article','list.load',vars=dict(limitby='0,7'), ajax=True, target="content-placeholder")}}
-
+    {{#=LOAD('article','list.load',vars=dict(limitby='0,7'), ajax=True, target="content-placeholder")}}
+    <div id="content-placeholder">
+      {{include 'menu/app/article/list.load'}}
+    </div>  
 <!-- /content tabs -->
 
 {{block right_sidebar}}

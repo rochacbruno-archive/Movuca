@@ -57,17 +57,7 @@
 </div>
 
 {{pass}}
-{{
-if request.controller in ['home', 'default']:
-    paginate = 8
-elif 'limitby' in request.vars:
-    paginate = int(request.vars.limitby.split(',')[1])
-pass
-if totalrecords > paginate:
-    request.vars.page = 2
-    request.vars.paginate = paginate
-pass
-}}
+
 {{if articles:}}
   {{request.vars.limitby = None}}
   <a href="{{=CURL('article','list', extension=False, vars=request.vars)}}">{{=T("View all articles")}}</a>

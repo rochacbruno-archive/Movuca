@@ -166,3 +166,23 @@ def remove_tags(s):
         s = s.replace("<pre>", "")
         s = s.replace("</pre>", "")
         return s
+
+
+def helpmodallink(href,
+                  content=iicon('question-sign'),
+                  title="help",
+                  cls="help-popup",
+                  style=""):
+    return A(content, _class=cls, _style=style, _href=href, **{"_data-toggle": "modal"})
+
+
+def helpmodal(mid, content, header=None, style=""):
+    ret = DIV(_class="modal hide", _id=mid)
+    if style:
+        ret.append(XML("<style>#%s { %s }</style>" % (mid, style)))
+    if header:
+        ret.append(TAG.BUTTON("×", _class="close", _type="button", **{'_data-dismiss': 'modal'}))
+        ret.append(DIV(header, _class="modal-header"))
+    ret.append(DIV(content, _class="modal-body"))
+    ret.append(DIV(A(T('Close'), _href="#", _class="btn", **{'_data-dismiss': 'modal'}), _class="modal-footer"))
+    return ret

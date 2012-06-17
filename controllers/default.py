@@ -15,7 +15,7 @@ else:
 def index():
     #redirect(URL('home', 'index'))
     from handlers.home import Home
-    home = Home(['featured', 'featured_members', 'ads', 'homeblocks'])
+    home = Home(['featured', 'featured_members', 'ads', 'homeblocks', 'articles'])
     home.context.left_sidebar_enabled = True
     home.context.right_sidebar_enabled = True
     home.context.header_enabled = True
