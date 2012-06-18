@@ -583,7 +583,10 @@ class Article(Base):
         query = reduce(lambda a, b: (a & b), queries)
         self.context.article = self.db(query).select().first()
         if not self.context.article and redir:
-            redirect(self.CURL('home', 'index'))
+            if article_slug:
+                redirect(self.CURL('article', 'show', args=article_id))
+            else:
+                redirect(self.CURL('home', 'index'))
 
     def show(self):
         self.get()
