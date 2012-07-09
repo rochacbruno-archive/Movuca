@@ -149,23 +149,52 @@ def get_menu_link(menu):
             return CURL()
 
 
+from HTMLParser import HTMLParser
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)
+
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+
+
 def remove_tags(s):
     try:
-        import lxml.html
-        return lxml.html.fromstring(s).text_content()
+        # import lxml.html
+        # return lxml.html.fromstring(s).text_content()
+        print 're'
+        import re
+        p = re.compile(r'<.*?>')
+        return p.sub('', s)
     except Exception:
-        # is there a better way?
-        s = s.replace("<p>", "")
-        s = s.replace("</p>", "")
-        s = s.replace("<div>", "")
-        s = s.replace("</div>", "")
-        s = s.replace("<strong>", "")
-        s = s.replace("</strong>", "")
-        s = s.replace("<b>", "")
-        s = s.replace("</b>", "")
-        s = s.replace("<pre>", "")
-        s = s.replace("</pre>", "")
-        return s
+        try:
+            print "strip_tags"
+            return strip_tags(s)
+        except Exception:
+            # is there a better way?
+            s = s.replace("<p>", "")
+            s = s.replace("</p>", "")
+            s = s.replace("<div>", "")
+            s = s.replace("</div>", "")
+            s = s.replace("<strong>", "")
+            s = s.replace("</strong>", "")
+            s = s.replace("<b>", "")
+            s = s.replace("</b>", "")
+            s = s.replace("<pre>", "")
+            s = s.replace("</pre>", "")
+            return s
 
 
 def helpmodallink(href,
