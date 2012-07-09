@@ -84,7 +84,7 @@ class Home(Base):
         if most_liked_authors:
             active_members = active_members & (self.db.auth_user.id.belongs(most_liked_authors))
 
-        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=~self.db.auth_user.articles, cache=(self.db.cache.ram, 0))
+        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby="<random>", cache=(self.db.cache.ram, 0))
         active_members_ids = [user.id for user in self.context.active_members]
 
         members_query = (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs(active_members_ids))
