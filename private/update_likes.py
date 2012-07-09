@@ -38,7 +38,7 @@ while True:
             #print bool(likes)
             #message = ["Likes not updated", "null", article.id, article.slug, datetime.datetime.now(), "\n"]
             message = None
-            if likes:
+            if likes and int(likes) != int(article.likes):
                 article.update_record(likes=likes)
                 message = ["Likes updated", likes, article.id, article.slug, datetime.datetime.now(), "\n"]
         except Exception, e:
