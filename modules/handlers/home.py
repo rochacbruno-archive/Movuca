@@ -27,6 +27,8 @@ class Home(Base):
         self.context.content_types = self.allowed_content_types()
         self.context.categories = self.allowed_categories()
 
+        self.context.most_liked_articles = []
+
     def last_articles(self):
         from helpers.article import latest_articles
         self.context.latest_articles = latest_articles(self.db)
@@ -65,8 +67,23 @@ class Home(Base):
         if not self.context.featured:
             self.context.featured = self.db((self.db.Article.draft == False) & (self.db.Article.is_active == True)).select(limitby=(0, 4), orderby=~self.db.Article.likes)
 
+    def get_most_liked_articles(self):
+        query = (self.db.article.is_active == True) & (self.db.article.draft == False) & (self.db.article.likes > 5) & (~self.db.article.author.belongs((1, 2, 3, 4)))
+        self.context.most_liked_articles = self.db(query).select(limitby=(0, 30), orderby=~self.db.article.likes, cache=(self.db.cache.ram, 1200))
+
     def featured_members(self):
+        if not self.context.most_liked_articles:
+            self.get_most_liked_articles()
+
+        if self.context.most_liked_articles:
+            most_liked_authors = [article.author for article in self.context.most_liked_articles]
+        else:
+            most_liked_authors = []
+
         active_members = (self.db.auth_user.articles > 2) & (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs((1, 2, 3, 4)))
+        if most_liked_authors:
+            active_members = active_members & (self.db.auth_user.id.belongs(most_liked_authors))
+
         self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=~self.db.auth_user.articles, cache=(self.db.cache.ram, 1200))
         active_members_ids = [user.id for user in self.context.active_members]
 
