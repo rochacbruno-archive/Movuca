@@ -1139,7 +1139,7 @@ class Article(Base):
 def get_tag_count(count):
     if count <= 1:
         return 1
-    elif count <= 4:
+    elif count <= 3:
         return 2
     elif count <= 6:
         return 3
