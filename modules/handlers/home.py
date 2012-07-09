@@ -67,7 +67,7 @@ class Home(Base):
 
     def featured_members(self):
         active_members = (self.db.auth_user.articles > 2) & (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs((1, 2, 3, 4)))
-        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=self.db.auth_user.articles, cache=(self.db.cache.ram, 1200))
+        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=~self.db.auth_user.articles, cache=(self.db.cache.ram, 1200))
         active_members_ids = [user.id for user in self.context.active_members]
 
         members_query = (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs(active_members_ids))
