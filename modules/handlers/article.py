@@ -1121,7 +1121,7 @@ class Article(Base):
         return CAT(*[icons[link] for link in links])
 
     def tagcloud(self):
-        articles = self.db((self.db.Article.draft == False) & (self.db.Article.is_active == True)).select()
+        articles = self.db((self.db.Article.draft == False) & (self.db.Article.is_active == True)).select(cache=(self.db.cache.ram, 1200))
         tags = []
         for article in articles:
             if article.tags:
@@ -1129,7 +1129,9 @@ class Article(Base):
         tagset = set(tags)
         self.context.tags = {}
         for tag in tagset:
-            self.context.tags[tag] = get_tag_count(tags.count(tag))
+            tag_count = get_tag_count(tags.count(tag))
+            if tag_count > 2:
+                self.context.tags[tag] = tag_count
         # bypass content_types query
         self.context.content_types = True
 
@@ -1141,9 +1143,9 @@ def get_tag_count(count):
         return 2
     elif count <= 6:
         return 3
-    elif count <= 15:
+    elif count <= 10:
         return 4
-    elif count <= 20:
+    elif count <= 15:
         return 5
     else:
         return 6
