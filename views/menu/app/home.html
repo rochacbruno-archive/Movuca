@@ -40,7 +40,7 @@
      {{super}}
      <div class="well featured-members" style="margin-top:20px;">
      {{include "menu/app/featured_members.html"}}
-     <a href="{{=CURL('person','search', vars={'q':'@'})}}">{{=T("View more")}}</a>
+     <a class="btn pull-right" href="{{=CURL('person','search', vars={'q':'@'})}}">{{=T("View more")}}</a>
      </div>
       
       <div class="well">
