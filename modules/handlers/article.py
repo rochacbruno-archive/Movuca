@@ -755,13 +755,6 @@ class Article(Base):
         self.context.form = FORM(INPUT(_type="text", _name="q", _id="q", _value=q or ''), _method="GET")
         if q:
             query = (self.db.Article.search_index.like("%" + q + "%")) | (self.db.Article.tags.contains(q))
-            #### pagination
-            self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
-            self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
-            self.context.paginator.records = self.db(query).count()
-            self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
-            limitby = self.context.paginator.limitby()
-            #### /pagination
 
             ########### SMART SPLIT QUERY
             qlist = q.split()
@@ -775,6 +768,14 @@ class Article(Base):
                 query &= self.db.Article.content_type_id == self.request.vars.content_type_id
             if not 'unsearchable' in self.request.vars:
                 query &= self.db.Article.content_type_id.belongs(self.context.searchable_content_types)
+
+            #### pagination
+            self.context.paginate_selector = PaginateSelector(paginates=(10, 25, 50, 100))
+            self.context.paginator = Paginator(paginate=self.context.paginate_selector.paginate)
+            self.context.paginator.records = self.db(query).count()
+            self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
+            limitby = self.context.paginator.limitby()
+            #### /pagination
             self.context.results = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
         else:
             self.context.results = []
