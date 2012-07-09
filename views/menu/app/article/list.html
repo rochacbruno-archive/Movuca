@@ -59,7 +59,7 @@
               <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
           {{pass}}
           <p class="list-article-description">
-              {{=A(XML("%s ..." % remove_tags(article.description)[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+              {{=A(XML("%s ..." % remove_tags(XML(article.description))[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
           </p>
 
       </div>

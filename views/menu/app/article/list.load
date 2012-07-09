@@ -41,7 +41,7 @@
           {{=A(H4(article.title, _class="list-article-title"), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
           
           <blockquote class="list-article-description">
-              {{=A(XML("%s ..." % remove_tags(article.description)[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
+              {{=A(XML("%s ..." % remove_tags(XML(article.description))[:150]), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}
           </blockquote>
 
           

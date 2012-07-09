@@ -773,6 +773,7 @@
 'value already in database or empty': 'value already in database or empty',
 'value not allowed': 'value not allowed',
 'video': 'video',
+'video included.': 'video included.',
 'website - your primary link on the web': 'Seu site',
 'welcome': 'Bem-vindo(a)',
 'what do you want to know? be short and specific': 'O que você quer saber? Seja breve e específico.',
