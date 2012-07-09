@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from handlers.base import Base
-from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR, TAG, MARKMIN
+from gluon import SQLFORM, redirect, A, IMG, SPAN, URL, CAT, UL, LI, DIV, XML, H4, H5, LABEL, FORM, INPUT, BR, TAG, MARKMIN, URL
 from gluon.validators import IS_SLUG, IS_IN_DB, IS_EMAIL
 from helpers.images import THUMB2
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
@@ -1091,6 +1091,7 @@ class Article(Base):
             "edit": ICONLINK(userid, "edit", T("Edit"), "window.location = '%s'" % CURL('edit', args=request.args), T("Click to edit"), theme_name=self.context.theme_name),
             "delete": ICONLINK(userid, "remove-sign", T("Delete"), "window.location = '%s'" % CURL('delete', args=request.args), T("Click to delete"), theme_name=self.context.theme_name),
             "divider": BR(),
+            "flike": facebook_like_button(article, CURL)
         }
 
         links = ['views']
@@ -1101,19 +1102,20 @@ class Article(Base):
         subscribed = self.db.Subscribers(article_id=self.context.article.id, user_id=userid) if userid else None
 
         links.append('unfavorite' if favorited else 'favorite')
+        links.append('flike')
         #links.append('unlike' if liked else 'like')
         #links.append('undislike' if disliked else 'dislike')
         #if self.config.comment.system == "internal":
         #    links.append('unsubscribe' if subscribed else 'subscribe')
 
         if has_permission_to_edit(self.session, self.context.article):
-            #links.append('divider')
+            links.append('divider')
             links.append('edit')
             if self.context.article.is_active:
                 links.append('delete')
         elif self.session.auth and \
             (self.db.auth.has_membership("admin", self.db.auth.user_id) or self.db.auth.has_membership("editor", self.db.auth.user_id)):
-            #links.append('divider')
+            links.append('divider')
             links.append('edit')
             if self.context.article.is_active:
                 links.append('delete')
@@ -1150,6 +1152,11 @@ def get_tag_count(count):
     else:
         return 6
 
+
+def facebook_like_button(article, URLER=URL):
+    s = """<div class="fb-like" data-href="%s" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="like"></div>"""
+    url = URLER('article', 'show', args=[article.id, article.slug], scheme=True, host=True)
+    return XML(s % url)
 
 def ICONLINK(user, icon, text, action=None, title="Click", theme_name="basic"):
     from gluon import current
