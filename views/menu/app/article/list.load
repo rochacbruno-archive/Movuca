@@ -71,7 +71,9 @@ pass
 }}
 {{if articles:}}
   {{request.vars.limitby = None}}
-  <a class="btn" href="{{=CURL('article','list', extension=False, vars=request.vars)}}">{{=T("View all articles")}}</a>
+  <div>
+  <a class="btn pull-right" href="{{=CURL('article','list', extension=False, vars=request.vars)}}">{{=T("View all articles")}}</a>
+  </div>
 {{else:}}
   {{=T("No articles.")}}
 {{pass}}
