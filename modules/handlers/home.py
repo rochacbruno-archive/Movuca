@@ -72,19 +72,21 @@ class Home(Base):
         self.context.most_liked_articles = self.db(query).select(limitby=(0, 30), orderby=~self.db.article.likes, cache=(self.db.cache.ram, 0))
 
     def featured_members(self):
-        if not self.context.most_liked_articles:
-            self.get_most_liked_articles()
+        likesum = self.db.article.likes.sum()
+        most_liked_query = ~self.db.auth_user.id.belongs((1, 2, 3, 4)) & (self.db.auth_user.articles > 2) & (self.db.auth_user.is_active == True)
+        most_liked_authors = self.db(most_liked_query).select(
+                                                self.db.auth_user.id,
+                                                likesum,
+                                                orderby=~likesum,
+                                                groupby=self.db.auth_user.id,
+                                                limitby=(0, 4),
+                                                left=self.db.auth_user.on(self.db.auth_user.id == self.db.article.author),
+                                                cache=(self.db.cache.ram, 0)
+                                                )
+        most_liked_authors_ids = [row.auth_user.id for row in most_liked_authors]
+        active_members_query = self.db.auth_user.id.belongs(most_liked_authors_ids)
 
-        if self.context.most_liked_articles:
-            most_liked_authors = [article.author for article in self.context.most_liked_articles]
-        else:
-            most_liked_authors = []
-
-        active_members = (self.db.auth_user.articles > 2) & (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs((1, 2, 3, 4)))
-        if most_liked_authors:
-            active_members = active_members & (self.db.auth_user.id.belongs(most_liked_authors))
-
-        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby="<random>", cache=(self.db.cache.ram, 0))
+        self.context.active_members = self.db(active_members_query).select(orderby=~self.db.auth_user.articles, cache=(self.db.cache.ram, 0))
         active_members_ids = [user.id for user in self.context.active_members]
 
         members_query = (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs(active_members_ids))
