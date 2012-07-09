@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# TODO: Check security
 
-def install():
+def install(x):
     from config import Config
     config = Config(autogetconfig=False)
     config.set_default_config()
@@ -11,19 +12,19 @@ def install():
     return config.theme.name
 
 
-def getlist():
+def getlist(x):
     from config import Config
     config = Config()
     return str(config.get_list('auth', 'privacy'))
 
 
-def test():
+def test(x):
     from config import Config
     config = Config()
     return config.mail.sender
 
 
-def reload():
+def reload(x):
     from config import Config
     config = Config(autogetconfig=False)
     config.get_config(expire=0)
