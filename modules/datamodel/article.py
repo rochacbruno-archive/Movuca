@@ -144,6 +144,8 @@ class ContentType(BaseModel):
             Field("viewname", "string"),
             Field("childs", "integer", notnull=True, default=1),
             Field("access_control", "list:string", default=["public"]),
+            Field("searchable", "boolean", default=True),
+            Field("listable", "boolean", default=True),
         ]
 
     def set_fixtures(self):
