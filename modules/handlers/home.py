@@ -66,8 +66,12 @@ class Home(Base):
             self.context.featured = self.db((self.db.Article.draft == False) & (self.db.Article.is_active == True)).select(limitby=(0, 4), orderby=~self.db.Article.likes)
 
     def featured_members(self):
-        query = self.db.auth_user.is_active == True
-        self.context.featured_members = self.db(query).select(limitby=(0, 8), orderby="<random>")
+        active_members = (self.db.auth_user.articles > 2) & (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs((1, 2, 3, 4)))
+        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=self.db.auth_user.articles, cache=(self.db.cache.ram, 1200))
+        active_members_ids = [user.id for user in self.context.active_members]
+
+        members_query = (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs(active_members_ids))
+        self.context.members = self.db(members_query).select(limitby=(0, 4), orderby="<random>", cache=(self.db.cache.ram, 600))
 
     def articles(self):
         query = (self.db.Article.draft == False) & (self.db.Article.is_active == True)
