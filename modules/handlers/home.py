@@ -68,8 +68,8 @@ class Home(Base):
             self.context.featured = self.db((self.db.Article.draft == False) & (self.db.Article.is_active == True)).select(limitby=(0, 4), orderby=~self.db.Article.likes)
 
     def get_most_liked_articles(self):
-        query = (self.db.article.is_active == True) & (self.db.article.draft == False) & (self.db.article.likes > 5) & (~self.db.article.author.belongs((1, 2, 3, 4)))
-        self.context.most_liked_articles = self.db(query).select(limitby=(0, 30), orderby=~self.db.article.likes, cache=(self.db.cache.ram, 0))
+        query = (self.db.article.is_active == True) & (self.db.article.draft == False) & (self.db.article.likes > 25) & (~self.db.article.author.belongs((1, 2, 3, 4)))
+        self.context.most_liked_articles = self.db(query).select(limitby=(0, 20), orderby=~self.db.article.likes, cache=(self.db.cache.ram, 0))
 
     def featured_members(self):
         if not self.context.most_liked_articles:
