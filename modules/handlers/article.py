@@ -1101,19 +1101,19 @@ class Article(Base):
         subscribed = self.db.Subscribers(article_id=self.context.article.id, user_id=userid) if userid else None
 
         links.append('unfavorite' if favorited else 'favorite')
-        links.append('unlike' if liked else 'like')
+        #links.append('unlike' if liked else 'like')
         #links.append('undislike' if disliked else 'dislike')
-        if self.config.comment.system == "internal":
-            links.append('unsubscribe' if subscribed else 'subscribe')
+        #if self.config.comment.system == "internal":
+        #    links.append('unsubscribe' if subscribed else 'subscribe')
 
         if has_permission_to_edit(self.session, self.context.article):
-            links.append('divider')
+            #links.append('divider')
             links.append('edit')
             if self.context.article.is_active:
                 links.append('delete')
         elif self.session.auth and \
             (self.db.auth.has_membership("admin", self.db.auth.user_id) or self.db.auth.has_membership("editor", self.db.auth.user_id)):
-            links.append('divider')
+            #links.append('divider')
             links.append('edit')
             if self.context.article.is_active:
                 links.append('delete')

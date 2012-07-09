@@ -174,13 +174,11 @@ def remove_tags(s):
     try:
         # import lxml.html
         # return lxml.html.fromstring(s).text_content()
-        print 're'
         import re
         p = re.compile(r'<.*?>')
         return p.sub('', s)
     except Exception:
         try:
-            print "strip_tags"
             return strip_tags(s)
         except Exception:
             # is there a better way?
