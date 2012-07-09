@@ -31,7 +31,15 @@ class Article(Base):
         self.response.meta.keywords = self.db.config.meta.keywords
         self.context.theme_name = self.config.theme.name
         #self.view = "app/home.html"
+
         self.context.content_types = self.context.content_types or self.allowed_content_types()
+
+        self.context.searchable_content_types = []
+        self.context.listable_content_types = []
+        if hasattr(self.context.content_types, 'find'):
+            self.context.searchable_content_types = [item.id for item in self.context.content_types if item.searchable == True]
+            self.context.listable_content_types = [item.id for item in self.context.content_types if item.listable == True]
+
         self.context.categories = self.context.categories = self.allowed_categories()
 
     def lastest_articles(self):
@@ -754,10 +762,19 @@ class Article(Base):
             self.context.paginate_info = PaginateInfo(self.context.paginator.page, self.context.paginator.paginate, self.context.paginator.records)
             limitby = self.context.paginator.limitby()
             #### /pagination
+
+            ########### SMART SPLIT QUERY
+            qlist = q.split()
+            for term in qlist:
+                query |= self.db.Article.search_index.like("%" + term + "%")
+                query |= self.db.Article.tags.contains(term)
+            ###########
             query &= self.db.Article.draft == False
             query &= self.db.Article.is_active == True
             if "content_type_id" in self.request.vars:
                 query &= self.db.Article.content_type_id == self.request.vars.content_type_id
+            if not 'unsearchable' in self.request.vars:
+                query &= self.db.Article.content_type_id.belongs(self.context.searchable_content_types)
             self.context.results = self.db(query).select(limitby=limitby, orderby=~self.db.Article.publish_date)
         else:
             self.context.results = []
@@ -765,7 +782,8 @@ class Article(Base):
     def list(self):
         denied_fields = ['limitby', 'orderby', 'tag', 'category', 'or',
                           'page', 'paginate', 'draft', 'favorite', 'like',
-                          'dislike', 'subscribe', 'comment', 'thrash','sq', 'popular']
+                          'dislike', 'subscribe', 'comment', 'thrash', 'sq', 'popular',
+                          'unsearchable', 'unlistable']
 
         self.context.title = str(self.db.T("Articles "))
         queries = []
@@ -830,6 +848,10 @@ class Article(Base):
             queries.append(self.db.Article.draft == False)
         if not "thrash" in self.request.vars:
             queries.append(self.db.Article.is_active == True)
+        #if not 'unsearchable' in self.request.vars:
+        #    queries.append(self.db.Article.content_type_id.belongs(self.context.searchable_content_types))
+        if not 'unlistable' in self.request.vars:
+            queries.append(self.db.Article.content_type_id.belongs(self.context.listable_content_types))
 
         query = reduce(lambda a, b: (a & b), queries)
 

@@ -27,6 +27,12 @@ class Home(Base):
         self.context.content_types = self.allowed_content_types()
         self.context.categories = self.allowed_categories()
 
+        #self.context.searchable_content_types = []
+        self.context.listable_content_types = []
+        if hasattr(self.context.content_types, 'find'):
+            #self.context.searchable_content_types = [item.id for item in self.context.content_types if item.searchable == True]
+            self.context.listable_content_types = [item.id for item in self.context.content_types if item.listable == True]
+
         self.context.most_liked_articles = []
 
     def last_articles(self):
@@ -90,5 +96,6 @@ class Home(Base):
 
     def articles(self):
         query = (self.db.Article.draft == False) & (self.db.Article.is_active == True)
+        query &= self.db.Article.content_type_id.belongs(self.context.listable_content_types)
         self.context.totalrecords = self.db(query).count()
         self.context.articles = self.db(query).select(limitby=(0, 7), orderby=~self.db.Article.publish_date)
