@@ -1130,7 +1130,7 @@ class Article(Base):
         self.context.tags = {}
         for tag in tagset:
             tag_count = get_tag_count(tags.count(tag))
-            if tag_count > 2:
+            if tag_count > 1:
                 self.context.tags[tag] = tag_count
         # bypass content_types query
         self.context.content_types = True
