@@ -46,7 +46,7 @@
 
           
           <!-- span class="list-article-like"><i class="icon-thumbs-up"></i>{{=T("%s likes", article.likes or 0)}}</span -->
-          <div class="fb-like" data-href="{{=CURL('article','show',args=[article.id, article.slug], scheme=True, host=True)}}" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="like"></div>
+          <!-- div class="fb-like" data-href="{{=CURL('article','show',args=[article.id, article.slug], scheme=True, host=True)}}" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="like"></div -->
           {{if article.tags and 1==2:}}
           <br>
               <em><i class="icon-tags"></i> {{=tagfy(article.tags, extension=False)}}</em> 
