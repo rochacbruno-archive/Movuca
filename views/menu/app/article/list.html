@@ -50,7 +50,7 @@
     <div class="row list-article-row">
       <div class="span2" style="padding:10px">
          {{=A(IMG(_src=get_image(article.thumbnail, article.content_type_id.identifier), _width=100, _height=100), _href=CURL('article', 'show', args=[article.id, article.slug], extension=False))}}<br />
-         <!-- span class="list-article-like"><i class="icon-thumbs-up"></i>{{=T("%s likes", article.likes or 0)}}</span -->
+         <span class="list-article-like"><i class="icon-thumbs-up"></i>{{=T("%s likes", article.likes or 0)}}</span>
          <!-- div class="fb-like" data-href="{{=CURL('article','show',args=[article.id, article.slug], scheme=True, host=True)}}" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="like"></div -->
       </div>
       <div class="span8" style="padding:10px">
