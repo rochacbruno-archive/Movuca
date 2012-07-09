@@ -69,7 +69,7 @@ class Home(Base):
 
     def get_most_liked_articles(self):
         query = (self.db.article.is_active == True) & (self.db.article.draft == False) & (self.db.article.likes > 5) & (~self.db.article.author.belongs((1, 2, 3, 4)))
-        self.context.most_liked_articles = self.db(query).select(limitby=(0, 30), orderby=~self.db.article.likes, cache=(self.db.cache.ram, 1200))
+        self.context.most_liked_articles = self.db(query).select(limitby=(0, 30), orderby=~self.db.article.likes, cache=(self.db.cache.ram, 0))
 
     def featured_members(self):
         if not self.context.most_liked_articles:
@@ -84,11 +84,11 @@ class Home(Base):
         if most_liked_authors:
             active_members = active_members & (self.db.auth_user.id.belongs(most_liked_authors))
 
-        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=~self.db.auth_user.articles, cache=(self.db.cache.ram, 1200))
+        self.context.active_members = self.db(active_members).select(limitby=(0, 4), orderby=~self.db.auth_user.articles, cache=(self.db.cache.ram, 0))
         active_members_ids = [user.id for user in self.context.active_members]
 
         members_query = (self.db.auth_user.is_active == True) & (~self.db.auth_user.id.belongs(active_members_ids))
-        self.context.members = self.db(members_query).select(limitby=(0, 4), orderby="<random>", cache=(self.db.cache.ram, 600))
+        self.context.members = self.db(members_query).select(limitby=(0, 4), orderby="<random>", cache=(self.db.cache.ram, 0))
 
     def articles(self):
         query = (self.db.Article.draft == False) & (self.db.Article.is_active == True)
