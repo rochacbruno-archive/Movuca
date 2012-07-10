@@ -653,7 +653,7 @@ class Article(Base):
         content, article_data = self.get_content(content_type.classname, self.context.article.id)
         # PREPROCESS EXEC
         try:
-            exec(str(content_type.preprocess.replace('\r\n', '\n')) or "") in locals()
+            exec(content_type.preprocess or "") in locals()
         except Exception, e:
             with open("preprocess_error.log", "a") as log:
                 log.write(str(traceback.format_exc()))
@@ -662,7 +662,7 @@ class Article(Base):
 
         def validate_form(form, self=self):
             try:
-                exec(str(content_type.postprocess) or "") in locals()
+                exec(content_type.postprocess or "") in locals()
             except Exception, e:
                 with open("postprocess_error.log", "a") as log:
                     log.write(str(traceback.format_exc()))
@@ -670,7 +670,7 @@ class Article(Base):
         if self.context.article_form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
             try:
-                exec(str(content_type.acceptedprocess) or "") in locals()
+                exec(content_type.acceptedprocess or "") in locals()
             except Exception, e:
                 with open("acceptedprocess_error.log", "a") as log:
                     log.write(str(traceback.format_exc()))
@@ -723,30 +723,33 @@ class Article(Base):
         category_set = self.db(self.db.Category.content_type == content_type.id)
         self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s", multiple=True)
 
-        # PREPROCESS EXEC
-        try:
-            exec(str(content_type.preprocess) or "") in locals()
-        except Exception, e:
-            with open("preprocess_error.log", "a") as log:
-                log.write(str(traceback.format_exc()))
-        # END PREPROCESS EXEC
+        if content_type.preprocess:
+            # PREPROCESS EXEC
+            try:
+                exec(content_type.preprocess.replace('\r\n', '\n')) in locals()
+            except Exception, e:
+                with open("preprocess_error.log", "a") as log:
+                    log.write(str(traceback.format_exc()))
+            # END PREPROCESS EXEC
 
         def validate_form(form, self=self):
-            try:
-                exec(str(content_type.postprocess) or "") in locals()
-            except Exception, e:
-                with open("postprocess_error.log", "a") as log:
-                    log.write(str(traceback.format_exc()))
+            if content_type.postprocess:
+                try:
+                    exec(content_type.postprocess.replace('\r\n', '\n')) in locals()
+                except Exception, e:
+                    with open("postprocess_error.log", "a") as log:
+                        log.write(str(traceback.format_exc()))
 
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='', _id="article_form")
         self.context.customfield = customfield
         if self.context.form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
-            try:
-                exec(str(content_type.acceptedprocess) or "") in locals()
-            except Exception, e:
-                with open("acceptedprocess_error.log", "a") as log:
-                    log.write(str(traceback.format_exc()))
+            if content_type.acceptedprocess:
+                try:
+                    exec(content_type.acceptedprocessreplace('\r\n', '\n')) in locals()
+                except Exception, e:
+                    with open("acceptedprocess_error.log", "a") as log:
+                        log.write(str(traceback.format_exc()))
             # END acceptedROCESS EXEC
             try:
                 article_id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
