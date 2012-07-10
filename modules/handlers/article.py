@@ -662,7 +662,7 @@ class Article(Base):
         self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
 
         def validate_form(form, self=self):
-            if content_type.postproces:
+            if content_type.postprocess:
                 try:
                     exec(content_type.postprocess.replace('\r\n', '\n')) in locals()
                 except Exception, e:
