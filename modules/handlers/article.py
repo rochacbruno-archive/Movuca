@@ -654,7 +654,8 @@ class Article(Base):
         try:
             exec(content_type.preprocess or "") in locals()
         except Exception, e:
-            print str(e)
+            with open("preprocess_error.log", "a") as log:
+                log.write(str(e))
         # END PREPROCESS EXEC
         self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
 
@@ -662,14 +663,16 @@ class Article(Base):
             try:
                 exec(content_type.postprocess or "") in locals()
             except Exception, e:
-                print str(e)
+                with open("postprocess_error.log", "a") as log:
+                    log.write(str(e))
 
         if self.context.article_form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
             try:
                 exec(content_type.acceptedprocess or "") in locals()
             except Exception, e:
-                print str(e)
+                with open("acceptedprocess_error.log", "a") as log:
+                    log.write(str(e))
             # END acceptedROCESS EXEC
             if self.context.article.is_active == False:
                 self.context.article.update_record(is_active=True)
@@ -723,14 +726,16 @@ class Article(Base):
         try:
             exec(content_type.preprocess or "") in locals()
         except Exception, e:
-            print str(e)
+            with open("preprocess_error.log", "a") as log:
+                log.write(str(e))
         # END PREPROCESS EXEC
 
         def validate_form(form, self=self):
             try:
                 exec(content_type.postprocess or "") in locals()
             except Exception, e:
-                print str(e)
+                with open("postprocess_error.log", "a") as log:
+                    log.write(str(e))
 
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='', _id="article_form")
         self.context.customfield = customfield
@@ -739,7 +744,8 @@ class Article(Base):
             try:
                 exec(content_type.acceptedprocess or "") in locals()
             except Exception, e:
-                print str(e)
+                with open("acceptedprocess_error.log", "a") as log:
+                    log.write(str(e))
             # END acceptedROCESS EXEC
             try:
                 article_id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
