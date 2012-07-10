@@ -60,6 +60,7 @@ class Page(BaseModel):
             Field("page_scope", "list:string", default=["public", "sitemap"]),
             Field("visibility"),
             Field("text_language", default="pt-br"),
+            Field("redirect_url"),
         ]
 
         self.widgets = {

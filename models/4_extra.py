@@ -213,3 +213,24 @@ def helpmodal(mid, content, header=None, style=""):
     ret.append(DIV(content, _class="modal-body"))
     ret.append(DIV(A(T('Close'), _href="#", _class="btn", **{'_data-dismiss': 'modal'}), _class="modal-footer"))
     return ret
+
+htmlcolors = ["FF0000", "00FFFF", "0000FF", "0000A0", "ADD8E6", "800080", "FFFF00", "00FF00", "FF00FF", "FFA500", "800000", "808000", "008000"]
+
+
+# temporary
+def get_random_colors(n):
+    import random
+    return random.sample(htmlcolors, n)
+
+
+# temporary
+def get_google_chart_img(items):
+    items = [item for item in items if not item.startswith('#')]
+    url = "http://chart.apis.google.com/chart?chf=a,s,000000|bg,s,00000000&chxs=0,00000000,11.5&chxt=x&chs=451x451&cht=p&chco=%(colors)s&chd=t:%(data)s&chdl=%(label)s&chdlp=r"
+    colors = "|".join(get_random_colors(len(items)))
+    porcentagem = 100 / len(items)
+    data = ','.join([str(porcentagem) for item in items])
+    label = "|".join(items)
+
+    d = dict(label=label, data=data, colors=colors)
+    return url % d

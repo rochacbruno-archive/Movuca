@@ -46,6 +46,8 @@ class Page(Base):
 
     def show(self):
         self.get()
+        if self.context.page.redirect_url:
+            redirect(self.context.page.redirect_url)
 
     def new(self):
         self.context.form = SQLFORM(self.db.Page, formstyle='divs')

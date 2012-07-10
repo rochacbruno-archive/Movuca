@@ -1,9 +1,14 @@
-  <div class="carousel_ slide_" id="adsCarousel" style="margin-bottom:0;">
+  <div class="carousel slide topcarousel" id="adsCarousel" style="margin-bottom:0;">
   <div class="carousel-inner">
-    {{items = [URL('static','menu',args=['images','ads','banner_eric.png'])]}}
+    {{
+    items = [
+              [URL('static','menu',args=['images','ads','banner_eric.png']), CURL('page','show', args='concorra-ao-livro-alimentacao-sem-carne-do-dr-eric-slywitch')],
+              [URL('static','menu',args=['banner_invente.png']), CURL('page','show', args='mandiokejo')],
+            ]
+    }}
     {{for i,x in enumerate(items):}}
     <div class="item {{='active' if i == 0 else ''}}">
-      <a href="{{=CURL('page','show', args='concorra-ao-livro-alimentacao-sem-carne-do-dr-eric-slywitch')}}" ><img alt="" src="{{=x}}" style="max-height:200px;height:200px;width:100%;"></a>
+      <a href="{{=x[1]}}"><img alt="" src="{{=x[0]}}" style="max-height:200px;height:200px;width:100%;"></a>
     </div>
     {{pass}}
   </div>

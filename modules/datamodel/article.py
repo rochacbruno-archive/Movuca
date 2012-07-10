@@ -146,6 +146,9 @@ class ContentType(BaseModel):
             Field("access_control", "list:string", default=["public"]),
             Field("searchable", "boolean", default=True),
             Field("listable", "boolean", default=True),
+            Field('preprocess', 'text'),
+            Field('postprocess', 'text'),
+            Field('acceptedprocess', 'text'),
         ]
 
     def set_fixtures(self):

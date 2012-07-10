@@ -639,6 +639,7 @@ class Article(Base):
         self.context.customfield = customfield
         self.get()
         category_set = self.db(self.db.Category.content_type == self.context.article.content_type_id)
+        content_type = self.db.ContentType[self.context.article.content_type_id]
         self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s", multiple=True)
         if not (has_permission_to_edit(self.session, self.context.article) \
                     or (self.db.auth.has_membership("admin", self.db.auth.user_id) \
@@ -647,16 +648,35 @@ class Article(Base):
 
         self.db.article.thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=300, ny=300)
         self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=800, ny=600, name='medium_thumb')
-        self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
-        content, article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
 
-        if self.context.article_form.process().accepted:
+        content, article_data = self.get_content(content_type.classname, self.context.article.id)
+        # PREPROCESS EXEC
+        try:
+            exec(content_type.preprocess or "") in locals()
+        except Exception, e:
+            print str(e)
+        # END PREPROCESS EXEC
+        self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
+
+        def validate_form(form, self=self):
+            try:
+                exec(content_type.postprocess or "") in locals()
+            except Exception, e:
+                print str(e)
+
+        if self.context.article_form.process(onvalidation=validate_form).accepted:
+            # acceptedROCESS EXEC
+            try:
+                exec(content_type.acceptedprocess or "") in locals()
+            except Exception, e:
+                print str(e)
+            # END acceptedROCESS EXEC
             if self.context.article.is_active == False:
                 self.context.article.update_record(is_active=True)
             article_data.update_record(**content.entity._filter_fields(self.request.vars))
             self.new_article_event('update_article', data={'event_link_to': "%s/%s" % (self.context.article.id, IS_SLUG()(self.context.article_form.vars.title)[0]),
                                                            'event_text': self.context.article_form.vars.description,
-                                                           'event_to': "%s (%s)" % (self.context.article.content_type_id.title, self.context.article.title),
+                                                           'event_to': "%s (%s)" % (content_type.title, self.context.article.title),
                                                            'event_image_to': self.get_image(self.context.article.thumbnail, self.context.article.content_type_id.identifier)})
             self.session.flash = self.T("%s updated." % self.context.article.content_type_id.title)
             self.context.article.update_record(search_index="|".join(str(value) for value in self.request.vars.values()))
@@ -698,9 +718,29 @@ class Article(Base):
         self.db.article.content_type_id.default = content_type.id
         category_set = self.db(self.db.Category.content_type == content_type.id)
         self.db.article.category_id.requires = IS_IN_DB(category_set, self.db.Category.id, "%(name)s", multiple=True)
+
+        # PREPROCESS EXEC
+        try:
+            exec(content_type.preprocess or "") in locals()
+        except Exception, e:
+            print str(e)
+        # END PREPROCESS EXEC
+
+        def validate_form(form, self=self):
+            try:
+                exec(content_type.postprocess or "") in locals()
+            except Exception, e:
+                print str(e)
+
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='', _id="article_form")
         self.context.customfield = customfield
-        if self.context.form.process().accepted:
+        if self.context.form.process(onvalidation=validate_form).accepted:
+            # acceptedROCESS EXEC
+            try:
+                exec(content_type.acceptedprocess or "") in locals()
+            except Exception, e:
+                print str(e)
+            # END acceptedROCESS EXEC
             try:
                 article_id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
                 self.context.form.vars.article_id = article_id
