@@ -653,7 +653,7 @@ class Article(Base):
         content, article_data = self.get_content(content_type.classname, self.context.article.id)
         # PREPROCESS EXEC
         try:
-            exec(str(content_type.preprocess) or "") in locals()
+            exec(str(content_type.preprocess.replace('\r\n', '\n')) or "") in locals()
         except Exception, e:
             with open("preprocess_error.log", "a") as log:
                 log.write(str(traceback.format_exc()))
