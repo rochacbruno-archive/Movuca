@@ -605,11 +605,10 @@ class Article(Base):
         self.related_articles()
         self.comments()
         content, self.context.article_data = self.get_content(self.context.article.content_type_id.classname, self.context.article.id)
-        self.response.meta.title = "%s | %s | %s" % (
+        self.response.meta.title = "%s | %s " % (
                                                      self.context.article.title,
-                                                     self.T(self.context.article.content_type_id.title),
-                                                     self.db.config.meta.title,
-                                                    )
+                                                     self.T(self.context.article.content_type_id.title)
+                                                     )
         self.response.meta.description = self.context.article.description
         self.response.meta.keywords = "vegan, vegetarian, vegano, vegetariano, vegetariana, receita, rede social," + ",".join(self.context.article.tags)
 
