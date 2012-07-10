@@ -1,0 +1,118 @@
+{{response.files.append(URL('static','menu/js/article_new.js'))}}
+{{extend "menu/app/layout.html"}}
+{{
+css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error"} 
+}}
+
+<a href="http://www.menuvegano.com.br/page/show/mandiokejo">
+    <img src="{{=CURL('static','menu',args='invente.png')}}" />
+</a>
+
+<blockquote>
+{{=iicon('exclamation-sign')}} 
+{{=XML(T("Before adding a cook recipe ensure that it follows our <a href='%s' target='_blank'>terms and conditions</a>", CURL('page','show',args="termos-e-condicoes")))}}
+</blockquote>
+{{=form.custom.begin}}
+<div class="row-fluid edit-article-wrapper">
+    <div class="span8 alert" style="padding:0;margin:0;padding-bottom:20px;">
+       
+       <fieldset class="span11">
+            <legend>{{=T("The Basics")}}</legend>
+            {{=customfield(form, 'title', css=css)}}
+            {{=customfield(form, 'description', css=css)}}
+       </fieldset>
+
+       <!--fieldset class="span11 collapsable">
+            <legend>{{=T("Video")}} <a onclick="jQuery('#videooptions').toggleClass('collapsed');"><small style="font-size:13px;cursor:pointer;">{{=T("(video options)")}}</small></a></legend>
+            <div class="collapsed" id="videooptions">
+            {{=customfield(form, 'video_source', css=css)}}
+            {{=customfield(form, 'video_embed', css=css)}}
+            {{=customfield(form, 'active_tab', css=css)}}
+            </div>
+       </fieldset -->
+       <input type="hidden" value="photo" id="article_active_tab" name="active_tab" />
+
+       <!-- fieldset class="span11">
+            <legend>{{=T("Information")}}
+                  {{=helpmodallink("#helpinformation")}}
+              </legend>
+            <div class="span5"> 
+                {{=customfield(form, 'prep_time', css=css)}}
+                {{=customfield(form, 'cook_time', css=css)}}
+            </div>
+            <div class="span5">
+                {{=customfield(form, 'difficulty', css=css)}}
+                {{=customfield(form, 'servings', css=css)}}
+            </div>
+       </fieldset -->
+       <input id="article_prep_time" name="prep_time" type="hidden" value="0" />
+       <input id="article_cook_time" name="cook_time" type="hidden" value="0" />
+       <input id="article_difficulty" name="difficulty" type="hidden" value="1" />
+       <input id="article_servings" name="servings" type="hidden" value="0">
+
+        <fieldset class="span11">
+            <legend>{{=T("Ingredients")}} {{=helpmodallink("#helpingredients")}}</legend>
+            {{ingredients_css = {"main": "row-fluid", "widget": "", "input":" span12", "error": " control-group error", "label": "hidden"}
+                }}
+                {{=customfield(form, 'ingredients', css=ingredients_css)}}
+       </fieldset>
+        <!-- fieldset class="span11">
+            <legend>{{=T("Directions")}} {{=helpmodallink("#helptext")}}</legend>
+                {{#=customfield(form, 'instructions', css=ingredients_css)}}
+       </fieldset -->
+       <input id="article_instructions" name="instructions" type="hidden" value="Modo de preparo será adicionado depois." />
+    </div>
+
+{{
+css2 = {"main": "row-fluid", "widget": "", "input":" span10", "error": " control-group error"}
+}}    
+
+
+    <div class="span3 form-actions" style="margin-top:0;">
+        
+
+        <!-- fieldset class="span11">
+            <legend>{{=T("Category & Tags")}} {{=helpmodallink("#helpcategories")}}</legend>
+            {{#=customfield(form, 'category_id', css=css2)}}
+            {{#=customfield(form, 'tags', css=css2)}}
+        </fieldset -->
+        {{if user_is("admin"):}}       
+        <fieldset class="span11">
+            <legend>{{=T("options")}}</legend>
+            {{#=customfield(form, 'privacy', css=css)}}
+            {{#=customfield(form, 'license', css=css)}}
+            {{=customfield(form, 'featured', css=css)}}
+            {{=customfield(form, 'blocks', css=css)}}
+            {{=customfield(form, 'publish_date', css=css)}}
+            {{=customfield(form, 'author', css=css)}}
+        </fieldset>
+        {{pass}}
+
+        <!-- fieldset class="span11">
+            <legend>{{=T("References")}}</legend>
+            {{=customfield(form, 'credits', css=css2)}}
+        </fieldset -->
+
+        <fieldset class="span11" >
+            <legend>{{=T("Save")}}</legend>
+            {{#=customfield(form, 'draft', css=css2)}}
+            <br />
+            <button class="full-width btn-primary btn-large" id="publish">{{=T("Publish")}}</button>
+            <button class="full-width btn-primary btn-large" id="draft">{{=T("Save as a draft")}}</button>
+
+            
+        </fieldset>
+
+
+
+    </div>
+
+
+</div>
+{{=form.custom.end}}
+
+{{=helpmodal("helpinformation",IMG(_src=CURL('static','menu', args=['images', 'helpinformation.png'])),T("Help"), "width:600px;")}}
+{{=helpmodal("helpcategories",IMG(_src=CURL('static','menu', args=['images', 'helpcategories.png'])),T("Help"), "width:600px;")}}
+{{=helpmodal("helptext",IMG(_src=CURL('static','menu', args=['images', 'helptext.png'])),T("Help"), "width:700px;")}}
+{{=helpmodal("helpingredients",IMG(_src=CURL('static','menu', args=['images', 'helpingredients.png'])),T("Help"), "width:700px;")}}
+{{=helpmodal("helprecipe",IMG(_src=CURL('static','menu', args=['images', 'helprecipe.png'])),T("Help"), "width:800px;margin: -250px 0 0 -430px;")}}

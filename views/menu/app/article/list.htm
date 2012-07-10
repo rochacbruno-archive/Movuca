@@ -1,0 +1,57 @@
+{{response.files.append(URL('static','menu/js/article_list.js'))}}
+{{extend "menu/app/layout.html"}}
+<a href="http://www.menuvegano.com.br/page/show/mandiokejo">
+    <img src="{{=CURL('static','menu',args='invente.png')}}" />
+</a>
+
+<blockquote>
+  <h3>
+Ajude-nos a escolher a melhor combinação com Mandiokejo!<br>
+Clique em "curtir" e compartilhe no facebook! Quem tiver a sugestão mais curtida e mais compartilhada ganhará 1 kg de Mandiokejo!<br>
+</h3>
+</blockquote>
+
+<a class="btn btn-primary" href="http://www.menuvegano.com.br/article/new/ReceitaDiaDaPizza">Envie sua sugestão!</a>
+<hr>
+<div class="row-fluid">
+   <div class="span6">
+    {{=paginate_info}}
+   </div> 
+   <div class="span6" style="text-align:right">
+    {{=paginate_selector}}
+   </div>
+</div>  
+
+
+
+<ul class="thumbnails">
+{{for article in articles:}}
+        <li>
+          <a class="thumbnail" style="width:330px;height:400px;" href="{{=CURL('article','show', args=[article.id,article.slug], extension=False)}}" data-content="Hamburguer bom de pular o pica pau" data-original-title="Hamburguer vegano do capeta">
+            <h4>{{=article.title}}  
+             <div class="fb-like" data-href="{{=CURL('article','show',args=[article.id, article.slug], scheme=True, host=True)}}" data-send="true" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="like"></div>
+            </h4>
+            <div class="" style="width:300px;height:300px;overflow:hidden;">
+             <img src="{{=article.thumbnail.replace('451','300') if article.thumbnail else ''}}" />
+            </div>
+            <div class="caption" style="width:310px;min-height:36px;overflow:hidden;margin-top:-30px;">            
+               <p class="pull-left" style="max-width:200px;">
+                    <strong>{{=get_name_of(article.author)}}</strong>
+                    <br />
+                    <small>
+                    "{{=article.description[:80]}}..."
+                  </small>
+               </p>
+               {{=IMG(_class="pull-right", _style="width:100px;height:100px",_src=get_image(None, 'user', themename='bootstrap', user=article.author))}}
+            
+            </div>
+            
+          </a>
+        </li>
+{{pass}}
+</ul>
+
+<div class="span12 pagination pagination-centered" align="center">
+    {{=paginator}}
+</div>
+
