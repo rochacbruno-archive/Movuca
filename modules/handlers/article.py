@@ -6,6 +6,7 @@ from gluon.validators import IS_SLUG, IS_IN_DB, IS_EMAIL
 from helpers.images import THUMB2
 from plugin_paginator import Paginator, PaginateSelector, PaginateInfo
 import os
+import traceback
 
 
 class Article(Base):
@@ -655,7 +656,7 @@ class Article(Base):
             exec(content_type.preprocess or "") in locals()
         except Exception, e:
             with open("preprocess_error.log", "a") as log:
-                log.write(str(e))
+                log.write(str(traceback.format_exc()))
         # END PREPROCESS EXEC
         self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
 
@@ -664,7 +665,7 @@ class Article(Base):
                 exec(content_type.postprocess or "") in locals()
             except Exception, e:
                 with open("postprocess_error.log", "a") as log:
-                    log.write(str(e))
+                    log.write(str(traceback.format_exc()))
 
         if self.context.article_form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
@@ -672,7 +673,7 @@ class Article(Base):
                 exec(content_type.acceptedprocess or "") in locals()
             except Exception, e:
                 with open("acceptedprocess_error.log", "a") as log:
-                    log.write(str(e))
+                    log.write(str(traceback.format_exc()))
             # END acceptedROCESS EXEC
             if self.context.article.is_active == False:
                 self.context.article.update_record(is_active=True)
@@ -727,7 +728,7 @@ class Article(Base):
             exec(content_type.preprocess or "") in locals()
         except Exception, e:
             with open("preprocess_error.log", "a") as log:
-                log.write(str(e))
+                log.write(str(traceback.format_exc()))
         # END PREPROCESS EXEC
 
         def validate_form(form, self=self):
@@ -735,7 +736,7 @@ class Article(Base):
                 exec(content_type.postprocess or "") in locals()
             except Exception, e:
                 with open("postprocess_error.log", "a") as log:
-                    log.write(str(e))
+                    log.write(str(traceback.format_exc()))
 
         self.context.form = SQLFORM.factory(self.db.article, content.entity, table_name="article", formstyle='divs', separator='', _id="article_form")
         self.context.customfield = customfield
@@ -745,7 +746,7 @@ class Article(Base):
                 exec(content_type.acceptedprocess or "") in locals()
             except Exception, e:
                 with open("acceptedprocess_error.log", "a") as log:
-                    log.write(str(e))
+                    log.write(str(traceback.format_exc()))
             # END acceptedROCESS EXEC
             try:
                 article_id = self.db.article.insert(**self.db.article._filter_fields(self.context.form.vars))
