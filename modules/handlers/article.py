@@ -653,7 +653,7 @@ class Article(Base):
         content, article_data = self.get_content(content_type.classname, self.context.article.id)
         # PREPROCESS EXEC
         try:
-            exec(content_type.preprocess or "") in locals()
+            exec(str(content_type.preprocess) or "") in locals()
         except Exception, e:
             with open("preprocess_error.log", "a") as log:
                 log.write(str(traceback.format_exc()))
@@ -662,7 +662,7 @@ class Article(Base):
 
         def validate_form(form, self=self):
             try:
-                exec(content_type.postprocess or "") in locals()
+                exec(str(content_type.postprocess) or "") in locals()
             except Exception, e:
                 with open("postprocess_error.log", "a") as log:
                     log.write(str(traceback.format_exc()))
@@ -670,7 +670,7 @@ class Article(Base):
         if self.context.article_form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
             try:
-                exec(content_type.acceptedprocess or "") in locals()
+                exec(str(content_type.acceptedprocess) or "") in locals()
             except Exception, e:
                 with open("acceptedprocess_error.log", "a") as log:
                     log.write(str(traceback.format_exc()))
@@ -725,7 +725,7 @@ class Article(Base):
 
         # PREPROCESS EXEC
         try:
-            exec(content_type.preprocess or "") in locals()
+            exec(str(content_type.preprocess) or "") in locals()
         except Exception, e:
             with open("preprocess_error.log", "a") as log:
                 log.write(str(traceback.format_exc()))
@@ -733,7 +733,7 @@ class Article(Base):
 
         def validate_form(form, self=self):
             try:
-                exec(content_type.postprocess or "") in locals()
+                exec(str(content_type.postprocess) or "") in locals()
             except Exception, e:
                 with open("postprocess_error.log", "a") as log:
                     log.write(str(traceback.format_exc()))
@@ -743,7 +743,7 @@ class Article(Base):
         if self.context.form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
             try:
-                exec(content_type.acceptedprocess or "") in locals()
+                exec(str(content_type.acceptedprocess) or "") in locals()
             except Exception, e:
                 with open("acceptedprocess_error.log", "a") as log:
                     log.write(str(traceback.format_exc()))
