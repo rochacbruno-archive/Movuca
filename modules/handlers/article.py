@@ -651,29 +651,32 @@ class Article(Base):
         self.db.article.medium_thumbnail.compute = lambda r: THUMB2(r['picture'], gae=self.request.env.web2py_runtime_gae, nx=800, ny=600, name='medium_thumb')
 
         content, article_data = self.get_content(content_type.classname, self.context.article.id)
-        # PREPROCESS EXEC
-        try:
-            exec(content_type.preprocess or "") in locals()
-        except Exception, e:
-            with open("preprocess_error.log", "a") as log:
-                log.write(str(traceback.format_exc()))
-        # END PREPROCESS EXEC
+        if content_type.preprocess:
+            # PREPROCESS EXEC
+            try:
+                exec(content_type.preprocess.replace('\r\n', '\n')) in locals()
+            except Exception, e:
+                with open("preprocess_error.log", "a") as log:
+                    log.write(str(traceback.format_exc()))
+            # END PREPROCESS EXEC
         self.context.article_form = SQLFORM(self.db.article, self.context.article, _id="article_form")
 
         def validate_form(form, self=self):
-            try:
-                exec(content_type.postprocess or "") in locals()
-            except Exception, e:
-                with open("postprocess_error.log", "a") as log:
-                    log.write(str(traceback.format_exc()))
+            if content_type.postproces:
+                try:
+                    exec(content_type.postprocess.replace('\r\n', '\n')) in locals()
+                except Exception, e:
+                    with open("postprocess_error.log", "a") as log:
+                        log.write(str(traceback.format_exc()))
 
         if self.context.article_form.process(onvalidation=validate_form).accepted:
             # acceptedROCESS EXEC
-            try:
-                exec(content_type.acceptedprocess or "") in locals()
-            except Exception, e:
-                with open("acceptedprocess_error.log", "a") as log:
-                    log.write(str(traceback.format_exc()))
+            if content_type.acceptedprocess:
+                try:
+                    exec(content_type.acceptedprocess.replace('\r\n', '\n')) in locals()
+                except Exception, e:
+                    with open("acceptedprocess_error.log", "a") as log:
+                        log.write(str(traceback.format_exc()))
             # END acceptedROCESS EXEC
             if self.context.article.is_active == False:
                 self.context.article.update_record(is_active=True)
