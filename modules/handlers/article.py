@@ -1229,7 +1229,7 @@ def get_tag_count(count):
 
 
 def facebook_like_button(article, URLER=URL):
-    s = """<div class="fb-like" data-href="%s" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="like"></div>"""
+    s = """<div class="fb-like" data-href="%s" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="verdana" data-action="recommend"></div>"""
     url = URLER('article', 'show', args=[article.id, article.slug], scheme=True, host=True)
     return XML(s % url)
 

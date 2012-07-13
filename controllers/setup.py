@@ -2,7 +2,7 @@
 
 # TODO: Check security
 
-def install(x):
+def install():
     from config import Config
     config = Config(autogetconfig=False)
     config.set_default_config()
