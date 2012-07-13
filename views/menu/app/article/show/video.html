@@ -69,17 +69,17 @@
   {{share() if len(article.description) > 1000 else ''}} 
 
   <div class="row-fluid show-article-comments article-box">
-        {{label = comments.elements('label')}}
-        {{if label:}}
-           {{label[0]["_style"] = "display:none;"}} 
-        {{pass}}  
-        {{comments.elements('img')[0]['_style'] = "display:none"}}
-        {{comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
-        {{comments.elements('h4')[0]["_style"] = "display:none"}}
-        {{=H4(iicon("question-sign"), T("Comments (%s)", lencomments))}}
-        {{comments['_class'] += "row-fluid"}}
-        {{comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
-        {{submit = comments.elements(_type='submit')}}
+        {{#label = comments.elements('label')}}
+        {{#if label:}}
+           {{#label[0]["_style"] = "display:none;"}} 
+        {{#pass}}  
+        {{#comments.elements('img')[0]['_style'] = "display:none"}}
+        {{#comments.elements('h4')[0].insert(0, TAG['i'](_class="icon-comment"))}}
+        {{#comments.elements('h4')[0]["_style"] = "display:none"}}
+        {{#=H4(iicon("question-sign"), T("Comments (%s)", lencomments))}}
+        {{#comments['_class'] += "row-fluid"}}
+        {{#comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
+        {{#submit = comments.elements(_type='submit')}}
         {{=comments}}
   </div>
 
