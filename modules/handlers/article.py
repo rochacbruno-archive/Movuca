@@ -579,7 +579,7 @@ class Article(Base):
         """ % dict(
                    facebook_appid=self.config.comment.facebook_appid,
                    facebook_numposts=self.config.comment.facebook_numposts,
-                   url=self.request.url
+                   url=self.CURL('article', 'show', args=[self.context.article.id, self.context.article.slug], scheme=True, host=True)#self.request.url
                   )
         return XML(js)
 
