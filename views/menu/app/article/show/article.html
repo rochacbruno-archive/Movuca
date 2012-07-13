@@ -87,7 +87,7 @@
         {{#pass}}
         {{#comments['_class'] += "row-fluid"}}
         {{#comments.elements('.comment_ul')[0]['_style'] = "list-style:none;margin-left:0;"}}
-
+        <h4>{{=iicon('comment')}} Comentários </h4>
         {{=comments}}
 
         {{#=LOAD('article', 'comment.load', args=request.args, vars=request.vars, ajax=True, ajax_trap=True)}}
