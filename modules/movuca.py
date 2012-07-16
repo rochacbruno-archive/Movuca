@@ -31,8 +31,8 @@ class DataBase(DAL):
             DAL.__init__(self, self.config.db.uri,
                          migrate_enabled=self.config.db.migrate_enabled,
                          check_reserved=['all'])
-            #testing this
-            current.session.connect(current.request, current.response, db=self)
+            #session does not works well in db (why?)
+            #current.session.connect(current.request, current.response, db=self)
         else:
             DAL.__init__(self, self.config.db.gaeuri)
             current.session.connect(current.request, current.response, db=self)
