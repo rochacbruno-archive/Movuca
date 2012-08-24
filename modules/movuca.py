@@ -28,6 +28,7 @@ class DataBase(DAL):
         from config import Config
         self.config = Config()
         if not current.request.env.web2py_runtime_gae:
+            self._LAZY_TABLES = [] # needed because of lazydal
             DAL.__init__(self, self.config.db.uri,
                          migrate_enabled=self.config.db.migrate_enabled,
                          check_reserved=['all'])
