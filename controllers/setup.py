@@ -2,29 +2,30 @@
 
 # TODO: Check security
 
-def install(x):
+def install():
     from config import Config
     config = Config(autogetconfig=False)
     config.set_default_config()
     config.get_config(expire=0)
     #at = ['db', 'auth', 'mail', 'crud', 'theme']
     #return dict(message=[config.__getattribute__(item) for item in at])
-    return config.theme.name
+    #return config.theme.name
+    redirect(CURL('home', "index"))
 
 
-def getlist(x):
+def getlist():
     from config import Config
     config = Config()
     return str(config.get_list('auth', 'privacy'))
 
 
-def test(x):
+def test():
     from config import Config
     config = Config()
     return config.mail.sender
 
 
-def reload(x):
+def reload():
     from config import Config
     config = Config(autogetconfig=False)
     config.get_config(expire=0)
