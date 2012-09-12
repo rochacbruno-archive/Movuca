@@ -13,6 +13,9 @@ from gluon.dal import DAL
 
 class DataBase(DAL):
     def __init__(self, classes=[]):
+        self._LAZY_TABLES = {}
+        self._lazy_tables = {}
+        self._tables = {}
         from gluon import current
         self.request = current.request
         self.session = current.session
@@ -42,6 +45,8 @@ class DataBase(DAL):
             self.define_classes(classes)
 
     def define_classes(self, classes):
+        self._LAZY_TABLES = {}
+        self._lazy_tables = {}
         for cls in classes:
             obj = cls(self)
             self.__setattr__(cls.__name__, obj.entity)
