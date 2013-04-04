@@ -66,7 +66,9 @@ def delete_account():
 
 def show():
     auth = session.get("auth", {})
-    user = auth.get("user", None)
+    user = None
+    if auth:
+        user = auth.get("user", None)
     if user:
         user_id = user.id
     else:
@@ -78,7 +80,9 @@ def show():
 
 def board():
     auth = session.get("auth", {})
-    user = auth.get("user", None)
+    user = None
+    if auth:
+        user = auth.get("user", None)
     if user:
         user_id = user.id
     else:
