@@ -20,6 +20,7 @@ def index():
     home.context.right_sidebar_enabled = True
     home.context.header_enabled = True
     home.context.toparea_enabled = True
+    theme_name = home.context.theme_name
     return home.render("app/home")
 
 
