@@ -138,6 +138,7 @@ class Notifier(object):
             user = user or self.db.auth_user[user_id]
             self.permission.initial_user_permission(user)
             row = self.permission.entity(user_id=user.id, event_type=event_type)
+            #object Nonetype has not atribute 'way'
         return row.way
 
     def insert_site_notification(self, **kwargs):
