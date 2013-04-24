@@ -4,7 +4,7 @@
 - Powered by web2py Python web framework
 
 - needs Python 2.7+
-- needs pycripto
+- needs pycrypto
 - needs PIL
 - needs web2py trunk
 
