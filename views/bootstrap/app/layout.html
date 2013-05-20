@@ -293,7 +293,7 @@ jQuery(function() {
 
             </ul>
                 <form class="navbar-search pull-right" method="GET" action="{{=CURL('home','search')}}">
-                  <select name="kind" class="search-query span2" id="kind"><option value="article">Articles</option><option value="user">Users</option></select>
+                  <select name="kind" class="search-query span2" id="kind"><option value="article">{{=T("Articles")}}</option><option value="user">{{=T("Users")}}</option></select>
                   <input type="text" class="search-query" placeholder="{{=T('Type word or name to find')}}" name="q" id="q">
                   <input type="submit" class="search-query" value="{{=T('Search')}}">  
                 </form>
