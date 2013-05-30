@@ -18,6 +18,7 @@
 '%d hours ago': '%d 小时前',
 '%d minutes ago': '%d 分钟前',
 '%d seconds ago': '%d 秒前',
+'%d week ago': '%d 星期前',
 '%d weeks ago': '%d 星期前',
 '%H:%M:%S': '%H:%M:%S',
 '%s commented your publication %s': '%s 评论了我的日志 %s',
