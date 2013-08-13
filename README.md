@@ -1,3 +1,11 @@
+# WARNING!!
+
+This project is not maintained anymore, if you want to fork, copy, rename, adopt go ahead and do what you want!
+Some things are not working on newer web2py version, we made http://www.web2pyslices.com and http://www.menuvegano.com.br ro tun with new web2py but a lot of things need to be simplified in the core.
+
+If you want a stable CMS for web2py take a look at PyNUke http://www.pynuke.net/
+
+
 - Movuca is a Social CMS Engine
 - [Demo Page](http://movu.ca/demo)
 - Inpired by Vikuit.com
