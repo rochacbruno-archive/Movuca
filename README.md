@@ -35,3 +35,7 @@ Copyright (C) 2012  Bruno Cezar Rocha <rochacbruno@gmail.com>
 License: LGPLv3 (http://www.gnu.org/licenses/lgpl.html)
 
 """
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rochacbruno/movuca/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
